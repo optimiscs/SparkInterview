@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>逻辑思维测试报告 - 智能面试评分系统</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#2196F3',secondary:'#FF5722'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: "Noto Sans SC", "Roboto", sans-serif;
+}
+.progress-ring {
+position: relative;
+width: 160px;
+height: 160px;
+}
+.progress-ring-circle {
+transform: rotate(-90deg);
+transform-origin: center;
+}
+.score-display {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+text-align: center;
+}
+.custom-progress {
+height: 6px;
+background-color: #E5E7EB;
+border-radius: 3px;
+overflow: hidden;
+}
+.custom-progress-bar {
+height: 100%;
+border-radius: 3px;
+transition: width 0.3s ease;
+}
+.ability-card {
+transition: transform 0.2s, box-shadow 0.2s;
+}
+.ability-card:hover {
+transform: translateY(-4px);
+box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.strength-weakness-item {
+position: relative;
+padding-left: 28px;
+}
+.strength-weakness-item::before {
+content: '';
+position: absolute;
+left: 0;
+top: 50%;
+transform: translateY(-50%);
+width: 20px;
+height: 20px;
+background-position: center;
+background-repeat: no-repeat;
+}
+.strength-item::before {
+background-color: rgba(34, 197, 94, 0.1);
+border-radius: 50%;
+}
+.weakness-item::before {
+background-color: rgba(249, 115, 22, 0.1);
+border-radius: 50%;
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- 顶部导航栏 -->
+<div class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="flex justify-between items-center h-16">
+  <a href="assessment-options.html" class="flex items-center">
+    <img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
+    <p class="text-sm text-gray-600 ml-2">职面星火</p>
+  </a>
+  <nav class="flex space-x-8">
+  <a href="../index.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-home-line"></i>
+  </div>
+  首页
+  </a>
+  <a href="./setting_page1.html" class="flex items-center px-3 py-2 text-sm font-medium text-primary">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-video-chat-line"></i>
+  </div>
+  面试模拟
+  </a>
+  <a href="./assessment-options.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-bar-chart-line"></i>
+  </div>
+  能力评估
+  </a>
+  <a href="./learning-resources.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-book-open-line"></i>
+  </div>
+  学习资源
+  </a>
+  <a href="./user-profile.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-user-settings-line"></i>
+  </div>
+  个人中心
+  </a>
+  </nav>
+  <div class="flex items-center">
+  <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+  <i class="ri-user-line text-white"></i>
+  </div>
+  <div class="ml-2">
+  <p class="text-sm font-medium text-gray-900">李明华</p>
+  <p class="text-xs text-gray-500">高级用户</p>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+<!-- 主要内容区域 -->
+<main class="container mx-auto px-4 py-8">
+<div class="flex items-center mb-8">
+<a href="/assessment" class="flex items-center text-gray-600 hover:text-primary transition-colors">
+<div class="w-8 h-8 flex items-center justify-center">
+<i class="ri-arrow-left-line"></i>
+</div>
+<span>返回能力评估</span>
+</a>
+</div>
+
+<!-- 测试概述模块 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+<div>
+<h1 class="text-2xl font-bold text-gray-900 mb-2">逻辑思维测试报告</h1>
+<div class="flex items-center text-sm text-gray-500">
+<span>完成时间: 2025-07-01 14:35</span>
+<span class="mx-3">|</span>
+<span>用时: 38 分钟</span>
+<span class="mx-3">|</span>
+<span>总分: 92 分</span>
+</div>
+</div>
+<div>
+<span class="px-3 py-1.5 bg-green-100 text-green-800 rounded-full font-medium text-sm">优秀</span>
+</div>
+</div>
+<p class="text-gray-700">逻辑思维测试旨在评估您分析问题、推理判断和解决复杂问题的能力。该测试涵盖了分析能力、推理能力、判断能力、空间思维、数理逻辑和抽象思维等多个维度，全面衡量您的逻辑思维水平。</p>
+<div class="mt-4 flex flex-wrap gap-4">
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-2">
+<i class="ri-time-line text-primary"></i>
+</div>
+<div>
+<div class="text-xs text-gray-500">测试用时</div>
+<div class="text-sm font-medium">38 分钟</div>
+</div>
+</div>
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-2">
+<i class="ri-question-line text-primary"></i>
+</div>
+<div>
+<div class="text-xs text-gray-500">题目数量</div>
+<div class="text-sm font-medium">40 题</div>
+</div>
+</div>
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-2">
+<i class="ri-check-line text-primary"></i>
+</div>
+<div>
+<div class="text-xs text-gray-500">正确率</div>
+<div class="text-sm font-medium">92.5%</div>
+</div>
+</div>
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-2">
+<i class="ri-bar-chart-line text-primary"></i>
+</div>
+<div>
+<div class="text-xs text-gray-500">超过人数</div>
+<div class="text-sm font-medium">87%</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 得分分析模块 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+<h2 class="text-xl font-semibold text-gray-900 mb-6">得分分析</h2>
+<div class="flex flex-col lg:flex-row">
+<div class="flex-1 flex flex-col items-center justify-center mb-8 lg:mb-0">
+<div class="progress-ring mb-4">
+<svg width="160" height="160" viewBox="0 0 160 160">
+<circle cx="80" cy="80" r="70" fill="none" stroke="#E5E7EB" stroke-width="12"/>
+<circle class="progress-ring-circle" cx="80" cy="80" r="70" fill="none" stroke="#2196F3" stroke-width="12" stroke-dasharray="439.6" stroke-dashoffset="35.17" stroke-linecap="round"/>
+</svg>
+<div class="score-display">
+<div class="text-4xl font-bold text-gray-900">92</div>
+<div class="text-sm text-gray-500">总分</div>
+</div>
+</div>
+<div class="text-center">
+<div class="text-sm font-medium text-gray-900 mb-1">优秀</div>
+<p class="text-xs text-gray-500 max-w-xs">您的逻辑思维能力处于优秀水平，超过了87%的测试者</p>
+</div>
+</div>
+<div class="flex-1">
+<div class="mb-6">
+<div class="flex justify-between items-center mb-2">
+<div class="text-sm font-medium text-gray-900">得分区间分布</div>
+<div class="text-xs text-gray-500">您的得分: 92分</div>
+</div>
+<div class="relative h-16">
+<div class="absolute inset-0 flex">
+<div class="flex-1 bg-red-100 rounded-l-md"></div>
+<div class="flex-1 bg-orange-100"></div>
+<div class="flex-1 bg-yellow-100"></div>
+<div class="flex-1 bg-blue-100"></div>
+<div class="flex-1 bg-green-100 rounded-r-md"></div>
+</div>
+<div class="absolute left-0 bottom-0 w-full flex justify-between text-xs text-gray-500 px-1">
+<span>0</span>
+<span>60</span>
+<span>70</span>
+<span>80</span>
+<span>90</span>
+<span>100</span>
+</div>
+<div class="absolute" style="left: 92%; top: 0; transform: translateX(-50%);">
+<div class="w-0.5 h-10 bg-primary"></div>
+<div class="w-4 h-4 rounded-full bg-primary -mt-1 -ml-1.5"></div>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between items-center mb-2">
+<div class="text-sm font-medium">与行业平均水平对比</div>
+<div class="text-xs text-gray-500">行业平均: 78分</div>
+</div>
+<div class="custom-progress">
+<div class="custom-progress-bar bg-primary" style="width: 92%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<div class="text-sm font-medium">与历史最高分对比</div>
+<div class="text-xs text-gray-500">历史最高: 95分</div>
+</div>
+<div class="custom-progress">
+<div class="custom-progress-bar bg-primary" style="width: 96.8%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<div class="text-sm font-medium">与目标分数对比</div>
+<div class="text-xs text-gray-500">目标分数: 85分</div>
+</div>
+<div class="custom-progress">
+<div class="custom-progress-bar bg-green-500" style="width: 108.2%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 能力指标详情 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+<h2 class="text-xl font-semibold text-gray-900 mb-6">能力指标详情</h2>
+<div class="flex flex-col lg:flex-row">
+<div class="lg:w-2/5 mb-6 lg:mb-0">
+<div id="radar-chart" class="w-full h-80"></div>
+</div>
+<div class="lg:w-3/5 lg:pl-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="ability-card p-4 border border-gray-200 rounded-lg">
+<div class="flex items-center mb-3">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-search-line text-primary"></i>
+</div>
+<div>
+<h3 class="font-medium text-gray-900">分析能力</h3>
+<div class="text-sm text-gray-500">95分 - 优秀</div>
+</div>
+</div>
+<p class="text-sm text-gray-700">您能够出色地分解复杂问题，识别关键要素并进行系统分析。</p>
+</div>
+<div class="ability-card p-4 border border-gray-200 rounded-lg">
+<div class="flex items-center mb-3">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-mind-map-line text-primary"></i>
+</div>
+<div>
+<h3 class="font-medium text-gray-900">推理能力</h3>
+<div class="text-sm text-gray-500">90分 - 优秀</div>
+</div>
+</div>
+<p class="text-sm text-gray-700">您能够从已知信息推导出合理结论，具备良好的归纳和演绎推理能力。</p>
+</div>
+<div class="ability-card p-4 border border-gray-200 rounded-lg">
+<div class="flex items-center mb-3">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-scales-3-line text-primary"></i>
+</div>
+<div>
+<h3 class="font-medium text-gray-900">判断能力</h3>
+<div class="text-sm text-gray-500">93分 - 优秀</div>
+</div>
+</div>
+<p class="text-sm text-gray-700">您能够在多种选择中做出准确判断，评估不同方案的优劣。</p>
+</div>
+<div class="ability-card p-4 border border-gray-200 rounded-lg">
+<div class="flex items-center mb-3">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-shape-line text-primary"></i>
+</div>
+<div>
+<h3 class="font-medium text-gray-900">空间思维</h3>
+<div class="text-sm text-gray-500">85分 - 良好</div>
+</div>
+</div>
+<p class="text-sm text-gray-700">您能够理解和操作空间关系，具备良好的空间想象和转换能力。</p>
+</div>
+<div class="ability-card p-4 border border-gray-200 rounded-lg">
+<div class="flex items-center mb-3">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-calculator-line text-primary"></i>
+</div>
+<div>
+<h3 class="font-medium text-gray-900">数理逻辑</h3>
+<div class="text-sm text-gray-500">88分 - 良好</div>
+</div>
+</div>
+<p class="text-sm text-gray-700">您能够理解数学关系和规律，解决涉及数字和逻辑的问题。</p>
+</div>
+<div class="ability-card p-4 border border-gray-200 rounded-lg">
+<div class="flex items-center mb-3">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-bubble-chart-line text-primary"></i>
+</div>
+<div>
+<h3 class="font-medium text-gray-900">抽象思维</h3>
+<div class="text-sm text-gray-500">92分 - 优秀</div>
+</div>
+</div>
+<p class="text-sm text-gray-700">您能够从具体事物中提取共性，形成概念并进行抽象思考。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 答题情况统计 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+<h2 class="text-xl font-semibold text-gray-900 mb-6">答题情况统计</h2>
+<div class="flex flex-col lg:flex-row">
+<div class="lg:w-1/2 mb-6 lg:mb-0">
+<div id="answer-chart" class="w-full h-80"></div>
+</div>
+<div class="lg:w-1/2 lg:pl-8">
+<div class="mb-6">
+<h3 class="font-medium text-gray-900 mb-4">答题时间分布</h3>
+<div id="time-chart" class="w-full h-60"></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 bg-green-50 rounded-lg">
+<div class="text-sm font-medium text-gray-900 mb-1">最佳表现题型</div>
+<div class="text-xl font-bold text-green-600 mb-1">分析推理</div>
+<div class="text-xs text-gray-500">正确率 100%</div>
+</div>
+<div class="p-4 bg-orange-50 rounded-lg">
+<div class="text-sm font-medium text-gray-900 mb-1">需提升题型</div>
+<div class="text-xl font-bold text-orange-600 mb-1">空间关系</div>
+<div class="text-xs text-gray-500">正确率 80%</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 优势与不足分析 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+<h2 class="text-xl font-semibold text-gray-900 mb-6">优势与不足分析</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div>
+<div class="flex items-center mb-4">
+<div class="w-8 h-8 flex items-center justify-center bg-green-100 rounded-full mr-3">
+<i class="ri-check-line text-green-600"></i>
+</div>
+<h3 class="font-medium text-gray-900">优势能力</h3>
+</div>
+<ul class="space-y-4">
+<li class="strength-weakness-item strength-item">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-green-600 mr-2">
+<i class="ri-check-line"></i>
+</div>
+<div class="font-medium text-gray-900">分析问题能力</div>
+</div>
+<p class="text-sm text-gray-700 mt-1">您能够迅速识别问题的核心，并将复杂问题分解为可管理的部分。在测试中，您在分析类题目上表现出色，几乎全部正确。</p>
+</li>
+<li class="strength-weakness-item strength-item">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-green-600 mr-2">
+<i class="ri-check-line"></i>
+</div>
+<div class="font-medium text-gray-900">逻辑推理能力</div>
+</div>
+<p class="text-sm text-gray-700 mt-1">您的演绎推理能力非常强，能够从给定前提中推导出合理结论。在逻辑推理题中，您的正确率达到93%，远高于平均水平。</p>
+</li>
+<li class="strength-weakness-item strength-item">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-green-600 mr-2">
+<i class="ri-check-line"></i>
+</div>
+<div class="font-medium text-gray-900">抽象概念理解</div>
+</div>
+<p class="text-sm text-gray-700 mt-1">您能够轻松理解抽象概念并应用于实际问题。在涉及概念抽象的题目中，您的表现优于92%的测试者。</p>
+</li>
+</ul>
+</div>
+<div>
+<div class="flex items-center mb-4">
+<div class="w-8 h-8 flex items-center justify-center bg-orange-100 rounded-full mr-3">
+<i class="ri-error-warning-line text-orange-600"></i>
+</div>
+<h3 class="font-medium text-gray-900">需提升能力</h3>
+</div>
+<ul class="space-y-4">
+<li class="strength-weakness-item weakness-item">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-orange-600 mr-2">
+<i class="ri-arrow-up-line"></i>
+</div>
+<div class="font-medium text-gray-900">空间关系理解</div>
+</div>
+<p class="text-sm text-gray-700 mt-1">在空间旋转和变换类题目中，您的正确率为80%，虽然高于平均水平，但相比您的其他能力还有提升空间。建议多练习空间想象类题目。</p>
+</li>
+<li class="strength-weakness-item weakness-item">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-orange-600 mr-2">
+<i class="ri-arrow-up-line"></i>
+</div>
+<div class="font-medium text-gray-900">复杂数列规律发现</div>
+</div>
+<p class="text-sm text-gray-700 mt-1">在涉及多重规律的数列题中，您偶尔会遗漏某些隐藏规律。建议加强对复杂数列规律的训练，提高发现多重模式的能力。</p>
+</li>
+<li class="strength-weakness-item weakness-item">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-orange-600 mr-2">
+<i class="ri-arrow-up-line"></i>
+</div>
+<div class="font-medium text-gray-900">答题速度</div>
+</div>
+<p class="text-sm text-gray-700 mt-1">您在某些题型上的答题速度略慢于平均水平，特别是在空间关系题目上。通过有针对性的练习可以提高解题速度，同时保持准确率。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- 提升建议模块 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+<h2 class="text-xl font-semibold text-gray-900 mb-6">提升建议</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="p-5 border border-gray-200 rounded-lg">
+<div class="flex items-center mb-4">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-book-open-line text-primary"></i>
+</div>
+<h3 class="font-medium text-gray-900">推荐学习资源</h3>
+</div>
+<ul class="space-y-3">
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+<i class="ri-book-2-line"></i>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">《思维导图与逻辑思维训练》</div>
+<p class="text-xs text-gray-500">系统提升逻辑思维和分析能力的经典教材</p>
+</div>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+<i class="ri-video-line"></i>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">《空间思维训练视频课程》</div>
+<p class="text-xs text-gray-500">针对空间关系理解的专项训练课程</p>
+</div>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+<i class="ri-global-line"></i>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">LeetCode 算法训练</div>
+<p class="text-xs text-gray-500">通过编程题提升逻辑思维和问题解决能力</p>
+</div>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+<i class="ri-gamepad-line"></i>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">《数独大师》应用</div>
+<p class="text-xs text-gray-500">提升数理逻辑和规律发现能力的益智游戏</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="p-5 border border-gray-200 rounded-lg">
+<div class="flex items-center mb-4">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-lightbulb-line text-primary"></i>
+</div>
+<h3 class="font-medium text-gray-900">能力提升方法</h3>
+</div>
+<ul class="space-y-3">
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+<i class="ri-mental-health-line"></i>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">空间思维训练</div>
+<p class="text-xs text-gray-500">每天练习空间旋转和变换类题目，逐步提高空间关系理解能力</p>
+</div>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+<i class="ri-numbers-line"></i>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">数列规律训练</div>
+<p class="text-xs text-gray-500">系统学习各类数列规律，提高发现复杂规律的能力</p>
+</div>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+<i class="ri-timer-line"></i>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">限时训练</div>
+<p class="text-xs text-gray-500">进行有计时的练习，提高解题速度和压力下的思考能力</p>
+</div>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+<i class="ri-group-line"></i>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">小组讨论</div>
+<p class="text-xs text-gray-500">参与逻辑思维小组，通过讨论学习多种解题思路</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="p-5 border border-gray-200 rounded-lg md:col-span-2">
+<div class="flex items-center mb-4">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-road-map-line text-primary"></i>
+</div>
+<h3 class="font-medium text-gray-900">能力提升路线图</h3>
+</div>
+<div class="relative">
+<div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+<div class="space-y-6 relative">
+<div class="flex">
+<div class="w-8 h-8 flex items-center justify-center bg-primary rounded-full text-white relative z-10 mr-4">1</div>
+<div class="flex-1 p-4 bg-gray-50 rounded-lg">
+<h4 class="font-medium text-gray-900 mb-1">基础能力巩固 (1-2周)</h4>
+<p class="text-sm text-gray-700">系统复习逻辑思维基础知识，完成基础题库训练，建立解题思路框架</p>
+</div>
+</div>
+<div class="flex">
+<div class="w-8 h-8 flex items-center justify-center bg-primary rounded-full text-white relative z-10 mr-4">2</div>
+<div class="flex-1 p-4 bg-gray-50 rounded-lg">
+<h4 class="font-medium text-gray-900 mb-1">弱项专项突破 (2-4周)</h4>
+<p class="text-sm text-gray-700">针对空间思维和复杂数列规律发现进行专项训练，每天至少完成10道相关题目</p>
+</div>
+</div>
+<div class="flex">
+<div class="w-8 h-8 flex items-center justify-center bg-primary rounded-full text-white relative z-10 mr-4">3</div>
+<div class="flex-1 p-4 bg-gray-50 rounded-lg">
+<h4 class="font-medium text-gray-900 mb-1">综合能力提升 (1个月)</h4>
+<p class="text-sm text-gray-700">进行全面的逻辑思维训练，结合实际问题解决，提高应用能力</p>
+</div>
+</div>
+<div class="flex">
+<div class="w-8 h-8 flex items-center justify-center bg-primary rounded-full text-white relative z-10 mr-4">4</div>
+<div class="flex-1 p-4 bg-gray-50 rounded-lg">
+<h4 class="font-medium text-gray-900 mb-1">能力巩固与应用 (持续)</h4>
+<p class="text-sm text-gray-700">将逻辑思维能力应用到实际工作和学习中，持续练习和反思，形成思维习惯</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 相关测评推荐 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-semibold text-gray-900">相关测评推荐</h2>
+<a href="#" class="text-primary hover:text-primary-dark text-sm font-medium">查看更多</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="ability-card bg-white border border-gray-200 rounded-lg p-5 hover:border-primary cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full">
+<i class="ri-lightbulb-line text-primary"></i>
+</div>
+<div class="flex">
+<i class="ri-star-fill text-yellow-400"></i>
+<i class="ri-star-fill text-yellow-400"></i>
+<i class="ri-star-fill text-yellow-400"></i>
+<i class="ri-star-fill text-yellow-400"></i>
+<i class="ri-star-line text-gray-300"></i>
+</div>
+</div>
+<h3 class="font-medium text-gray-900 mb-1">创新思维测试</h3>
+<p class="text-sm text-gray-500 mb-3">评估创意和创新解决方案能力</p>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-500">预计用时: 50 分钟</span>
+<button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">开始测试</button>
+</div>
+</div>
+<div class="ability-card bg-white border border-gray-200 rounded-lg p-5 hover:border-primary cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full">
+<i class="ri-calculator-line text-primary"></i>
+</div>
+<div class="flex">
+<i class="ri-star-fill text-yellow-400"></i>
+<i class="ri-star-fill text-yellow-400"></i>
+<i class="ri-star-fill text-yellow-400"></i>
+<i class="ri-star-line text-gray-300"></i>
+<i class="ri-star-line text-gray-300"></i>
+</div>
+</div>
+<h3 class="font-medium text-gray-900 mb-1">数学能力测试</h3>
+<p class="text-sm text-gray-500 mb-3">评估数学计算和应用能力</p>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-500">预计用时: 45 分钟</span>
+<button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">开始测试</button>
+</div>
+</div>
+<div class="ability-card bg-white border border-gray-200 rounded-lg p-5 hover:border-primary cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full">
+<i class="ri-puzzle-line text-primary"></i>
+</div>
+<div class="flex">
+<i class="ri-star-fill text-yellow-400"></i>
+<i class="ri-star-fill text-yellow-400"></i>
+<i class="ri-star-fill text-yellow-400"></i>
+<i class="ri-star-fill text-yellow-400"></i>
+<i class="ri-star-line text-gray-300"></i>
+</div>
+</div>
+<h3 class="font-medium text-gray-900 mb-1">问题解决能力测试</h3>
+<p class="text-sm text-gray-500 mb-3">评估解决复杂问题的综合能力</p>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-500">预计用时: 60 分钟</span>
+<button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">开始测试</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 页面底部操作区 -->
+<div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+<div class="flex space-x-4">
+<button class="flex items-center px-4 py-2 border border-gray-200 rounded-button text-gray-700 bg-white hover:bg-gray-50 whitespace-nowrap">
+<i class="ri-download-line mr-2"></i>
+<span>下载报告</span>
+</button>
+<button class="flex items-center px-4 py-2 border border-gray-200 rounded-button text-gray-700 bg-white hover:bg-gray-50 whitespace-nowrap">
+<i class="ri-share-line mr-2"></i>
+<span>分享报告</span>
+</button>
+</div>
+<a href="./assessment-options.html" class="px-5 py-2 bg-primary text-white rounded-button whitespace-nowrap">前往能力评估</a>
+</div>
+</main>
+
+<script id="chart-script">
+document.addEventListener('DOMContentLoaded', function() {
+  // 雷达图
+  const radarChart = echarts.init(document.getElementById('radar-chart'));
+  const radarOption = {
+    animation: false,
+    radar: {
+      indicator: [
+        { name: '分析能力', max: 100 },
+        { name: '推理能力', max: 100 },
+        { name: '判断能力', max: 100 },
+        { name: '空间思维', max: 100 },
+        { name: '数理逻辑', max: 100 },
+        { name: '抽象思维', max: 100 }
+      ],
+      radius: '65%',
+      splitNumber: 4,
+      axisName: {
+        color: '#1f2937',
+        fontSize: 12
+      },
+      splitLine: {
+        lineStyle: {
+          color: 'rgba(224, 225, 228, 0.5)'
+        }
+      },
+      splitArea: {
+        show: true,
+        areaStyle: {
+          color: ['rgba(255, 255, 255, 0.9)', 'rgba(245, 246, 248, 0.6)']
+        }
+      },
+      axisLine: {
+        lineStyle: {
+          color: 'rgba(224, 225, 228, 0.5)'
+        }
+      }
+    },
+    tooltip: {
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      borderColor: '#e0e1e4',
+      textStyle: {
+        color: '#1f2937'
+      }
+    },
+    series: [{
+      name: '能力评估',
+      type: 'radar',
+      data: [
+        {
+          value: [95, 90, 93, 85, 88, 92],
+          name: '个人能力',
+          symbol: 'none',
+          lineStyle: {
+            width: 2,
+            color: 'rgba(87, 181, 231, 1)'
+          },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: 'rgba(87, 181, 231, 0.3)'
+              },
+              {
+                offset: 1,
+                color: 'rgba(87, 181, 231, 0.1)'
+              }
+            ])
+          }
+        }
+      ]
+    }]
+  };
+  radarChart.setOption(radarOption);
+
+  // 答题情况图表
+  const answerChart = echarts.init(document.getElementById('answer-chart'));
+  const answerOption = {
+    animation: false,
+    tooltip: {
+      trigger: 'item',
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      borderColor: '#e0e1e4',
+      textStyle: {
+        color: '#1f2937'
+      }
+    },
+    legend: {
+      top: '5%',
+      left: 'center',
+      textStyle: {
+        color: '#1f2937'
+      }
+    },
+    series: [
+      {
+        name: '题型分布',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 8,
+          borderColor: '#fff',
+          borderWidth: 2
+        },
+        label: {
+          show: false,
+          position: 'center'
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: '14',
+            fontWeight: 'bold',
+            color: '#1f2937'
+          }
+        },
+        labelLine: {
+          show: false
+        },
+        data: [
+          { value: 10, name: '分析推理', itemStyle: { color: 'rgba(87, 181, 231, 1)' } },
+          { value: 8, name: '逻辑判断', itemStyle: { color: 'rgba(141, 211, 199, 1)' } },
+          { value: 7, name: '数学运算', itemStyle: { color: 'rgba(251, 191, 114, 1)' } },
+          { value: 7, name: '空间关系', itemStyle: { color: 'rgba(252, 141, 98, 1)' } },
+          { value: 8, name: '抽象思维', itemStyle: { color: 'rgba(179, 179, 179, 1)' } }
+        ]
+      }
+    ]
+  };
+  answerChart.setOption(answerOption);
+
+  // 答题时间分布图
+  const timeChart = echarts.init(document.getElementById('time-chart'));
+  const timeOption = {
+    animation: false,
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      borderColor: '#e0e1e4',
+      textStyle: {
+        color: '#1f2937'
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      data: ['分析推理', '逻辑判断', '数学运算', '空间关系', '抽象思维'],
+      axisLine: {
+        lineStyle: {
+          color: '#e0e1e4'
+        }
+      },
+      axisLabel: {
+        color: '#1f2937',
+        fontSize: 10,
+        interval: 0,
+        rotate: 30
+      }
+    },
+    yAxis: {
+      type: 'value',
+      name: '平均时间(秒)',
+      nameTextStyle: {
+        color: '#1f2937',
+        fontSize: 10
+      },
+      axisLine: {
+        show: false
+      },
+      axisTick: {
+        show: false
+      },
+      axisLabel: {
+        color: '#1f2937',
+        fontSize: 10
+      },
+      splitLine: {
+        lineStyle: {
+          color: '#e0e1e4',
+          type: 'dashed'
+        }
+      }
+    },
+    series: [
+      {
+        name: '平均答题时间',
+        type: 'bar',
+        barWidth: '40%',
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(87, 181, 231, 0.8)' },
+            { offset: 1, color: 'rgba(87, 181, 231, 0.3)' }
+          ]),
+          borderRadius: [4, 4, 0, 0]
+        },
+        data: [45, 52, 58, 68, 50]
+      },
+      {
+        name: '平均正确时间',
+        type: 'line',
+        symbol: 'circle',
+        symbolSize: 6,
+        itemStyle: {
+          color: 'rgba(141, 211, 199, 1)'
+        },
+        lineStyle: {
+          width: 2,
+          color: 'rgba(141, 211, 199, 1)'
+        },
+        data: [42, 48, 55, 60, 47]
+      }
+    ]
+  };
+  timeChart.setOption(timeOption);
+
+  // 窗口大小变化时重新调整图表大小
+  window.addEventListener('resize', function() {
+    radarChart.resize();
+    answerChart.resize();
+    timeChart.resize();
+  });
+});
+</script>
+
+<!-- 通用导航脚本 -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 导航链接点击事件处理
+    const navLinks = document.querySelectorAll('nav a, a[href*="/"]');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href && (href.includes('.html') || href.startsWith('/'))) {
+          console.log('导航到:', href);
+        }
+      });
+    });
+    
+    // 移动端菜单切换
+    const mobileMenuBtn = document.querySelector('.md\\:hidden');
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', function() {
+        console.log('切换移动端菜单');
+      });
+    }
+  });
+</script>
+</body>
+</html>

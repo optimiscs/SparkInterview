@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智能面试助手 - 面试准备配置</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#3b82f6',
+secondary: '#6366f1'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+<style>
+:where([class^="ri-"])::before {
+content: "\f3c2";
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 顶部导航栏 -->
+<div class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="flex justify-between items-center h-16">
+  <a href="assessment-options.html" class="flex items-center">
+    <img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
+    <p class="text-sm text-gray-600 ml-2">职面星火</p>
+  </a>
+  <nav class="flex space-x-8">
+  <a href="../index.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-home-line"></i>
+  </div>
+  首页
+  </a>
+  <a href="./setting_page1.html" class="flex items-center px-3 py-2 text-sm font-medium text-primary">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-video-chat-line"></i>
+  </div>
+  面试模拟
+  </a>
+  <a href="./assessment-options.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-bar-chart-line"></i>
+  </div>
+  能力评估
+  </a>
+  <a href="./learning-resources.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-book-open-line"></i>
+  </div>
+  学习资源
+  </a>
+  <a href="./user-profile.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-user-settings-line"></i>
+  </div>
+  个人中心
+  </a>
+  </nav>
+  <div class="flex items-center">
+  <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+  <i class="ri-user-line text-white"></i>
+  </div>
+  <div class="ml-2">
+  <p class="text-sm font-medium text-gray-900">李明华</p>
+  <p class="text-xs text-gray-500">高级用户</p>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+<div class="flex h-screen">
+
+<!-- 中间主要内容区 -->
+<div class="flex-1 flex flex-col overflow-hidden">
+
+<div class="bg-white border-b border-gray-200 px-8 py-6">
+<h1 class="text-2xl font-bold text-gray-900">面试准备配置</h1>
+<p class="text-gray-600 mt-1">配置您的面试目标和上传简历，系统将为您推荐最适合的面试题目</p>
+</div>
+
+<div class="flex-1 overflow-y-auto p-8 h-[calc(100vh-64px)]">
+<!-- 进度指示器 -->
+<div class="mb-8">
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm font-medium">1</div>
+<span class="ml-2 text-sm font-medium text-primary">基础信息</span>
+</div>
+<div class="flex-1 mx-4 h-px bg-gray-300"></div>
+<div class="flex items-center">
+<div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-sm font-medium">2</div>
+<span class="ml-2 text-sm text-gray-500">简历解析</span>
+</div>
+<div class="flex-1 mx-4 h-px bg-gray-300"></div>
+<div class="flex items-center">
+<div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-sm font-medium">3</div>
+<span class="ml-2 text-sm text-gray-500">题目生成</span>
+</div>
+</div>
+</div>
+<!-- 表单区域 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- 左侧表单 -->
+<div class="space-y-6">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">目标领域</label>
+<div class="relative">
+<button class="w-full px-4 py-3 text-left bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" id="domainSelect">
+<span class="text-gray-500" id="domainText">请选择目标领域</span>
+<div class="w-5 h-5 flex items-center justify-center absolute right-3 top-1/2 transform -translate-y-1/2">
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</div>
+</button>
+<div class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg hidden" id="domainDropdown">
+<div class="py-1">
+<div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-value="ai">人工智能</div>
+<div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-value="frontend">前端开发</div>
+<div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-value="backend">后端开发</div>
+<div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-value="mobile">移动开发</div>
+<div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-value="data">数据科学</div>
+<div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-value="product">产品管理</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">具体岗位</label>
+<div class="relative">
+<button class="w-full px-4 py-3 text-left bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" id="positionSelect" disabled>
+<span class="text-gray-400" id="positionText">请先选择目标领域</span>
+<div class="w-5 h-5 flex items-center justify-center absolute right-3 top-1/2 transform -translate-y-1/2">
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</div>
+</button>
+<div class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg hidden" id="positionDropdown">
+<div class="py-1" id="positionOptions">
+</div>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">工作经验</label>
+<div class="grid grid-cols-4 gap-2">
+<button class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:border-primary hover:text-primary experience-btn" data-value="0-1">0-1年</button>
+<button class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:border-primary hover:text-primary experience-btn" data-value="1-3">1-3年</button>
+<button class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:border-primary hover:text-primary experience-btn" data-value="3-5">3-5年</button>
+<button class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:border-primary hover:text-primary experience-btn" data-value="5+">5年以上</button>
+</div>
+</div>
+</div>
+<!-- 右侧简历上传 -->
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">简历上传</label>
+<div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary transition-colors" id="uploadArea">
+<div class="w-12 h-12 flex items-center justify-center mx-auto mb-4 text-gray-400">
+<i class="ri-upload-cloud-2-line ri-2x"></i>
+</div>
+<p class="text-gray-600 mb-2">拖拽文件到此处或点击上传</p>
+<p class="text-sm text-gray-500">支持 PDF、DOC、DOCX 格式，大小不超过 10MB</p>
+<input type="file" class="hidden" id="resumeFile" accept=".pdf,.doc,.docx">
+<button class="mt-4 px-6 py-2 bg-primary text-white rounded-button hover:bg-primary/90 whitespace-nowrap !rounded-button" id="uploadBtn">选择文件</button>
+</div>
+<!-- 文件预览区 -->
+<div class="mt-4 hidden" id="filePreview">
+<div class="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center bg-red-100 rounded mr-3">
+<i class="ri-file-pdf-line text-red-600"></i>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-900" id="fileName">简历.pdf</p>
+<p class="text-xs text-gray-500" id="fileSize">2.5 MB</p>
+</div>
+</div>
+<button class="text-gray-400 hover:text-red-500" id="removeFile">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-close-line"></i>
+</div>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- 操作按钮 -->
+<div class="flex justify-between items-center mt-8 pt-6 border-t border-gray-200">
+<button class="px-6 py-3 text-gray-600 border border-gray-300 rounded-button hover:bg-gray-50 whitespace-nowrap !rounded-button">
+保存草稿
+</button>
+<div class="flex space-x-4">
+<button class="px-6 py-3 text-gray-600 border border-gray-300 rounded-button hover:bg-gray-50 whitespace-nowrap !rounded-button">
+重置
+</button>
+<a href="./setting_page2.html" data-readdy="true">
+<button class="px-8 py-3 bg-primary text-white rounded-button hover:bg-primary/90 whitespace-nowrap !rounded-button" id="nextStep">
+下一步
+</button>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 右侧信息展示区 -->
+<div class="w-80 bg-white border-l border-gray-200 flex flex-col">
+<div class="p-6 border-b border-gray-200">
+<h3 class="text-lg font-semibold text-gray-900">配置摘要</h3>
+</div>
+<div class="flex-1 overflow-y-auto p-6 space-y-6 h-full min-h-0">
+<!-- 已配置信息 -->
+<div class="bg-gray-50 rounded-lg p-4">
+<h4 class="text-sm font-medium text-gray-900 mb-3">当前配置</h4>
+<div class="space-y-2 text-sm">
+<div class="flex justify-between">
+<span class="text-gray-600">目标领域:</span>
+<span class="text-gray-900" id="summaryDomain">未选择</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">具体岗位:</span>
+<span class="text-gray-900" id="summaryPosition">未选择</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">工作经验:</span>
+<span class="text-gray-900" id="summaryExperience">未选择</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">简历状态:</span>
+<span class="text-gray-900" id="summaryResume">未上传</span>
+</div>
+</div>
+</div>
+<!-- 简历解析结果 -->
+<div class="hidden" id="resumeAnalysis">
+<h4 class="text-sm font-medium text-gray-900 mb-3">简历解析</h4>
+<div class="bg-blue-50 rounded-lg p-4">
+<div class="flex items-center mb-2">
+<div class="w-4 h-4 flex items-center justify-center mr-2">
+<i class="ri-check-line text-blue-600"></i>
+</div>
+<span class="text-sm text-blue-900">解析完成</span>
+</div>
+<p class="text-xs text-blue-700">已识别 8 个技能点和 3 个项目经验</p>
+</div>
+</div>
+<!-- 技能点展示 -->
+<div class="hidden" id="skillsSection">
+<h4 class="text-sm font-medium text-gray-900 mb-3">识别技能</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">Python</span>
+<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">机器学习</span>
+<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">深度学习</span>
+<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">TensorFlow</span>
+<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">数据分析</span>
+<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">算法优化</span>
+</div>
+</div>
+<!-- 项目经验 -->
+<div class="hidden" id="projectsSection">
+<h4 class="text-sm font-medium text-gray-900 mb-3">项目经验</h4>
+<div class="space-y-3">
+<div class="bg-gray-50 rounded-lg p-3">
+<h5 class="text-sm font-medium text-gray-900">智能推荐系统</h5>
+<p class="text-xs text-gray-600 mt-1">基于深度学习的个性化推荐算法</p>
+</div>
+<div class="bg-gray-50 rounded-lg p-3">
+<h5 class="text-sm font-medium text-gray-900">图像识别平台</h5>
+<p class="text-xs text-gray-600 mt-1">计算机视觉在工业检测中的应用</p>
+</div>
+<div class="bg-gray-50 rounded-lg p-3">
+<h5 class="text-sm font-medium text-gray-900">数据挖掘工具</h5>
+<p class="text-xs text-gray-600 mt-1">大数据处理与分析系统开发</p>
+</div>
+</div>
+</div>
+<!-- 推荐题目预览 -->
+<div class="hidden" id="questionsPreview">
+<h4 class="text-sm font-medium text-gray-900 mb-3">推荐题目</h4>
+<div class="bg-green-50 rounded-lg p-4">
+<div class="flex items-center mb-2">
+<div class="w-4 h-4 flex items-center justify-center mr-2">
+<i class="ri-lightbulb-line text-green-600"></i>
+</div>
+<span class="text-sm text-green-900">已生成 25 道题目</span>
+</div>
+<div class="text-xs text-green-700 space-y-1">
+<p>• 基础理论: 8 题</p>
+<p>• 算法实现: 10 题</p>
+<p>• 项目经验: 7 题</p>
+</div>
+</div>
+</div>
+</div>
+<!-- 帮助信息 -->
+<div class="p-6 border-t border-gray-200">
+<div class="bg-yellow-50 rounded-lg p-4">
+<div class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center mr-2 mt-0.5">
+<i class="ri-information-line text-yellow-600"></i>
+</div>
+<div>
+<h5 class="text-sm font-medium text-yellow-900">使用提示</h5>
+<p class="text-xs text-yellow-700 mt-1">
+上传简历后，系统会自动解析您的技能和经验，并据此推荐最适合的面试题目。
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script id="dropdown-handlers">
+document.addEventListener('DOMContentLoaded', function() {
+const domainSelect = document.getElementById('domainSelect');
+const domainDropdown = document.getElementById('domainDropdown');
+const domainText = document.getElementById('domainText');
+const positionSelect = document.getElementById('positionSelect');
+const positionDropdown = document.getElementById('positionDropdown');
+const positionText = document.getElementById('positionText');
+const positionOptions = document.getElementById('positionOptions');
+const positions = {
+ai: ['算法工程师', '机器学习工程师', '深度学习工程师', 'AI 产品经理', '数据科学家'],
+frontend: ['前端工程师', 'React 开发工程师', 'Vue 开发工程师', 'UI 工程师', '前端架构师'],
+backend: ['后端工程师', 'Java 开发工程师', 'Python 开发工程师', '系统架构师', 'DevOps 工程师'],
+mobile: ['iOS 开发工程师', 'Android 开发工程师', 'Flutter 开发工程师', '移动端架构师'],
+data: ['数据分析师', '数据工程师', '商业分析师', '数据产品经理'],
+product: ['产品经理', '高级产品经理', '产品总监', 'B端产品经理', 'C端产品经理']
+};
+domainSelect.addEventListener('click', function() {
+domainDropdown.classList.toggle('hidden');
+});
+positionSelect.addEventListener('click', function() {
+if (!positionSelect.disabled) {
+positionDropdown.classList.toggle('hidden');
+}
+});
+domainDropdown.addEventListener('click', function(e) {
+if (e.target.dataset.value) {
+const value = e.target.dataset.value;
+const text = e.target.textContent;
+domainText.textContent = text;
+domainText.classList.remove('text-gray-500');
+domainText.classList.add('text-gray-900');
+domainDropdown.classList.add('hidden');
+positionSelect.disabled = false;
+positionText.textContent = '请选择具体岗位';
+positionText.classList.remove('text-gray-400');
+positionText.classList.add('text-gray-500');
+positionOptions.innerHTML = '';
+positions[value].forEach(pos => {
+const div = document.createElement('div');
+div.className = 'px-4 py-2 hover:bg-gray-100 cursor-pointer';
+div.dataset.value = pos;
+div.textContent = pos;
+positionOptions.appendChild(div);
+});
+document.getElementById('summaryDomain').textContent = text;
+}
+});
+positionDropdown.addEventListener('click', function(e) {
+if (e.target.dataset.value) {
+const text = e.target.textContent;
+positionText.textContent = text;
+positionText.classList.remove('text-gray-500');
+positionText.classList.add('text-gray-900');
+positionDropdown.classList.add('hidden');
+document.getElementById('summaryPosition').textContent = text;
+}
+});
+document.addEventListener('click', function(e) {
+if (!domainSelect.contains(e.target) && !domainDropdown.contains(e.target)) {
+domainDropdown.classList.add('hidden');
+}
+if (!positionSelect.contains(e.target) && !positionDropdown.contains(e.target)) {
+positionDropdown.classList.add('hidden');
+}
+});
+});
+</script>
+<script id="experience-handler">
+document.addEventListener('DOMContentLoaded', function() {
+const experienceBtns = document.querySelectorAll('.experience-btn');
+experienceBtns.forEach(btn => {
+btn.addEventListener('click', function() {
+experienceBtns.forEach(b => {
+b.classList.remove('border-primary', 'text-primary', 'bg-primary/10');
+b.classList.add('border-gray-300', 'text-gray-700');
+});
+this.classList.remove('border-gray-300', 'text-gray-700');
+this.classList.add('border-primary', 'text-primary', 'bg-primary/10');
+document.getElementById('summaryExperience').textContent = this.textContent;
+});
+});
+});
+</script>
+<script id="file-upload-handler">
+document.addEventListener('DOMContentLoaded', function() {
+const uploadArea = document.getElementById('uploadArea');
+const uploadBtn = document.getElementById('uploadBtn');
+const resumeFile = document.getElementById('resumeFile');
+const filePreview = document.getElementById('filePreview');
+const fileName = document.getElementById('fileName');
+const fileSize = document.getElementById('fileSize');
+const removeFile = document.getElementById('removeFile');
+let currentTaskId = null;
+
+uploadBtn.addEventListener('click', function() {
+resumeFile.click();
+});
+
+uploadArea.addEventListener('click', function() {
+resumeFile.click();
+});
+
+uploadArea.addEventListener('dragover', function(e) {
+e.preventDefault();
+uploadArea.classList.add('border-primary', 'bg-primary/5');
+});
+
+uploadArea.addEventListener('dragleave', function(e) {
+e.preventDefault();
+uploadArea.classList.remove('border-primary', 'bg-primary/5');
+});
+
+uploadArea.addEventListener('drop', function(e) {
+e.preventDefault();
+uploadArea.classList.remove('border-primary', 'bg-primary/5');
+const files = e.dataTransfer.files;
+if (files.length > 0) {
+handleFile(files[0]);
+}
+});
+
+resumeFile.addEventListener('change', function(e) {
+if (e.target.files.length > 0) {
+handleFile(e.target.files[0]);
+}
+});
+
+removeFile.addEventListener('click', function() {
+filePreview.classList.add('hidden');
+uploadArea.classList.remove('hidden');
+resumeFile.value = '';
+document.getElementById('summaryResume').textContent = '未上传';
+document.getElementById('resumeAnalysis').classList.add('hidden');
+document.getElementById('skillsSection').classList.add('hidden');
+document.getElementById('projectsSection').classList.add('hidden');
+document.getElementById('questionsPreview').classList.add('hidden');
+if (currentTaskId) {
+fetch(`/api/v1/resume/cleanup/${currentTaskId}`, { method: 'DELETE' });
+currentTaskId = null;
+}
+});
+
+async function handleFile(file) {
+// 验证文件类型
+if (!file.name.toLowerCase().endsWith('.pdf')) {
+showError('只支持PDF格式的简历文件');
+return;
+}
+
+// 验证文件大小（10MB）
+if (file.size > 10 * 1024 * 1024) {
+showError('文件大小不能超过10MB');
+return;
+}
+
+fileName.textContent = file.name;
+fileSize.textContent = (file.size / 1024 / 1024).toFixed(1) + ' MB';
+filePreview.classList.remove('hidden');
+uploadArea.classList.add('hidden');
+document.getElementById('summaryResume').textContent = '正在分析...';
+
+// 显示加载动画
+showLoadingAnimation();
+
+try {
+// 获取表单数据
+const domain = document.getElementById('summaryDomain').textContent;
+const position = document.getElementById('summaryPosition').textContent;
+const experience = document.getElementById('summaryExperience').textContent;
+
+// 创建FormData
+const formData = new FormData();
+formData.append('file', file);
+if (domain !== '未选择') formData.append('domain', domain);
+if (position !== '未选择') formData.append('position', position);
+if (experience !== '未选择') formData.append('experience', experience);
+
+// 上传文件
+const response = await fetch('/api/v1/resume/upload', {
+method: 'POST',
+body: formData
+});
+
+const result = await response.json();
+
+if (result.success) {
+currentTaskId = result.task_id;
+// 开始轮询分析状态
+pollAnalysisStatus(result.task_id);
+} else {
+throw new Error(result.message || '上传失败');
+}
+
+} catch (error) {
+console.error('文件处理失败:', error);
+showError('文件处理失败: ' + error.message);
+hideLoadingAnimation();
+document.getElementById('summaryResume').textContent = '上传失败';
+}
+}
+
+async function pollAnalysisStatus(taskId) {
+const maxAttempts = 120; // 最多等待10分钟
+let attempts = 0;
+
+const poll = async () => {
+try {
+const response = await fetch(`/api/v1/resume/status/${taskId}`);
+const result = await response.json();
+
+if (result.success) {
+if (result.status === 'completed') {
+// 分析完成，强制进度100%并显示完成文本
+updateProgress(100);
+const progressText = document.getElementById('progressText');
+const progressDetail = document.getElementById('progressDetail');
+if (progressText) progressText.textContent = '分析完成！';
+if (progressDetail) progressDetail.textContent = '简历分析已完成，正在渲染结果...';
+updateAnalysisResults(result.result);
+document.getElementById('summaryResume').textContent = '分析完成';
+hideLoadingAnimation();
+console.log('✅ 简历分析完成');
+return;
+} else if (result.status === 'failed') {
+// 分析失败
+hideLoadingAnimation();
+showError('简历分析失败: ' + (result.error || '未知错误'));
+document.getElementById('summaryResume').textContent = '分析失败';
+console.log('❌ 简历分析失败');
+} else {
+// 更新进度
+updateProgress(result.progress);
+console.log(`📊 分析进度: ${result.progress}%`);
+// 继续轮询
+if (attempts < maxAttempts) {
+attempts++;
+// 根据进度调整轮询间隔
+let pollInterval = 3000; // 默认3秒
+if (result.progress > 80) {
+pollInterval = 2000; // 接近完成时2秒
+} else if (result.progress > 50) {
+pollInterval = 2500; // 中期2.5秒
+}
+setTimeout(poll, pollInterval);
+} else {
+hideLoadingAnimation();
+showError('分析超时，请重试');
+document.getElementById('summaryResume').textContent = '分析超时';
+console.log('⏰ 分析超时');
+}
+}
+} else {
+throw new Error(result.message || '获取状态失败');
+}
+} catch (error) {
+console.error('轮询状态失败:', error);
+hideLoadingAnimation();
+showError('获取分析状态失败');
+document.getElementById('summaryResume').textContent = '状态获取失败';
+}
+};
+
+poll();
+}
+
+function updateProgress(progress) {
+// 更新进度条
+const progressBar = document.querySelector('.progress-bar');
+const progressText = document.getElementById('progressText');
+const progressDetail = document.getElementById('progressDetail');
+
+if (progressBar) {
+progressBar.style.width = progress + '%';
+}
+
+if (progressText) {
+progressText.textContent = `分析进度: ${progress}%`;
+}
+
+// 根据进度显示不同的详细信息
+if (progressDetail) {
+let detailText = '';
+if (progress <= 10) {
+detailText = '任务初始化中...';
+} else if (progress <= 30) {
+detailText = '正在加载PDF文件...';
+} else if (progress <= 50) {
+detailText = '正在合并文本内容...';
+} else if (progress <= 90) {
+detailText = '正在调用AI模型进行综合分析...';
+} else if (progress < 100) {
+detailText = '正在整理分析结果...';
+} else {
+detailText = '分析完成！';
+}
+progressDetail.textContent = detailText;
+}
+}
+
+function updateAnalysisResults(result) {
+// 更新基本信息
+if (result.basic_info) {
+const basicInfo = result.basic_info;
+document.getElementById('summaryDomain').textContent = basicInfo.current_position || '已识别';
+}
+
+// 更新技能点
+if (result.skills && result.skills.length > 0) {
+const skillsContainer = document.getElementById('skillsSection');
+const skillsList = skillsContainer.querySelector('.flex.flex-wrap.gap-2');
+skillsList.innerHTML = '';
+result.skills.forEach(skill => {
+const skillTag = document.createElement('span');
+skillTag.className = 'px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded';
+skillTag.textContent = skill;
+skillsList.appendChild(skillTag);
+});
+skillsContainer.classList.remove('hidden');
+}
+
+// 更新项目经验
+if (result.projects && result.projects.length > 0) {
+const projectsContainer = document.getElementById('projectsSection');
+const projectsList = projectsContainer.querySelector('.space-y-3');
+projectsList.innerHTML = '';
+result.projects.forEach(project => {
+const projectDiv = document.createElement('div');
+projectDiv.className = 'bg-gray-50 rounded-lg p-3';
+projectDiv.innerHTML = `
+<h5 class="text-sm font-medium text-gray-900">${project.name}</h5>
+<p class="text-xs text-gray-600 mt-1">${project.description}</p>
+`;
+projectsList.appendChild(projectDiv);
+});
+projectsContainer.classList.remove('hidden');
+}
+
+// 显示分析完成提示
+document.getElementById('resumeAnalysis').classList.remove('hidden');
+}
+
+function showLoadingAnimation() {
+// 创建加载动画
+const loadingOverlay = document.createElement('div');
+loadingOverlay.id = 'loadingOverlay';
+loadingOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+loadingOverlay.innerHTML = `
+<div class="bg-white rounded-lg p-8 max-w-md w-full mx-4 text-center">
+<div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
+<h3 class="text-lg font-medium text-gray-900 mb-2">正在分析简历</h3>
+<p class="text-gray-600 mb-4">请稍候，系统正在调用Spark Pro智能解析您的简历...</p>
+<div class="w-full bg-gray-200 rounded-full h-2">
+<div class="bg-primary h-2 rounded-full progress-bar transition-all duration-300" style="width: 0%"></div>
+</div>
+<div class="mt-2 text-sm text-gray-500" id="progressText">正在初始化...</div>
+<div class="mt-1 text-xs text-gray-400" id="progressDetail">准备开始分析</div>
+</div>
+`;
+document.body.appendChild(loadingOverlay);
+}
+
+function hideLoadingAnimation() {
+const loadingOverlay = document.getElementById('loadingOverlay');
+if (loadingOverlay) {
+loadingOverlay.remove();
+}
+}
+
+function showError(message) {
+// 显示错误提示
+const errorDialog = document.createElement('div');
+errorDialog.className = 'fixed inset-0 flex items-center justify-center z-50';
+errorDialog.innerHTML = `
+<div class="fixed inset-0 bg-black/50"></div>
+<div class="relative bg-white rounded-lg p-6 max-w-sm w-full mx-4">
+<div class="flex items-center mb-4">
+<div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-3">
+<i class="ri-error-warning-line text-red-600"></i>
+</div>
+<h3 class="text-lg font-medium text-gray-900">错误</h3>
+</div>
+<p class="text-gray-600 mb-4">${message}</p>
+<button class="w-full px-4 py-2 bg-primary text-white rounded-button hover:bg-primary/90" onclick="this.closest('.fixed').remove()">确定</button>
+</div>
+`;
+document.body.appendChild(errorDialog);
+}
+});
+</script>
+<script id="next-step-handler">
+document.addEventListener('DOMContentLoaded', function() {
+const nextStep = document.getElementById('nextStep');
+const nextStepLink = nextStep.parentElement;
+nextStep.addEventListener('click', function(e) {
+const domain = document.getElementById('summaryDomain').textContent;
+const position = document.getElementById('summaryPosition').textContent;
+const experience = document.getElementById('summaryExperience').textContent;
+const resume = document.getElementById('summaryResume').textContent;
+if (domain === '未选择' || position === '未选择' || experience === '未选择') {
+e.preventDefault();
+const dialog = document.createElement('div');
+dialog.className = 'fixed inset-0 flex items-center justify-center z-50';
+dialog.innerHTML = `
+<div class="fixed inset-0 bg-black/50"></div>
+<div class="relative bg-white rounded-lg p-6 max-w-sm w-full mx-4">
+<h3 class="text-lg font-medium text-gray-900 mb-2">提示</h3>
+<p class="text-gray-600 mb-4">请完善基础信息配置</p>
+<button class="w-full px-4 py-2 bg-primary text-white rounded-button">确定</button>
+</div>
+`;
+document.body.appendChild(dialog);
+dialog.querySelector('button').onclick = () => dialog.remove();
+return;
+}
+if (resume === '未上传' || resume === '正在分析...' || resume === '上传失败' || resume === '分析失败' || resume === '分析超时' || resume === '状态获取失败') {
+e.preventDefault();
+const dialog = document.createElement('div');
+dialog.className = 'fixed inset-0 flex items-center justify-center z-50';
+dialog.innerHTML = `
+<div class="fixed inset-0 bg-black/50"></div>
+<div class="relative bg-white rounded-lg p-6 max-w-sm w-full mx-4">
+<h3 class="text-lg font-medium text-gray-900 mb-2">提示</h3>
+<p class="text-gray-600 mb-4">请上传并完成简历分析</p>
+<button class="w-full px-4 py-2 bg-primary text-white rounded-button">确定</button>
+</div>
+`;
+document.body.appendChild(dialog);
+dialog.querySelector('button').onclick = () => dialog.remove();
+return;
+}
+
+// 如果有分析结果，传递到下一页
+if (currentTaskId && resume === '分析完成') {
+  window.location.href = `./setting_page2.html?taskId=${currentTaskId}`;
+} else {
+  e.preventDefault();
+  alert('请先完成简历上传和分析！');
+}
+});
+});
+</script>
+</body>
+</html>

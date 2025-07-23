@@ -1,0 +1,437 @@
+2025-07-23 12:00:59,862 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 12:01:04,079 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:01:04,079 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:07:10,861 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 12:07:14,483 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:07:14,483 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:13:56,557 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:13:58,527 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:16:28,494 - watchfiles.main - INFO - 2 changes detected
+2025-07-23 12:16:38,725 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:16:45,427 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 12:16:49,027 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:16:49,027 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:17:24,681 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:17:44,278 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 12:17:47,949 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:17:47,950 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:18:58,867 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:19:20,704 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:19:30,959 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:20:59,323 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:21:10,201 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 12:21:13,924 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:21:13,924 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:21:49,484 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:21:58,490 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 12:22:02,696 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:22:02,696 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:23:30,123 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 12:28:44,071 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:28:44,197 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:28:45,991 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:28:50,937 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:28:50,937 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:29:30,588 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:29:49,988 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:29:58,074 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:30:02,577 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:30:24,424 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:30:45,774 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:32:37,319 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 12:32:42,460 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:32:42,460 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:33:13,340 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 12:33:23,508 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 12:33:27,168 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:33:27,169 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:35:38,419 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 500 Internal Server Error"
+2025-07-23 12:35:38,419 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 500 Internal Server Error"
+2025-07-23 12:35:38,419 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 500 Internal Server Error"
+2025-07-23 12:35:38,420 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 500 Internal Server Error"
+2025-07-23 12:35:38,420 - openai._base_client - INFO - Retrying request to /chat/completions in 0.493841 seconds
+2025-07-23 12:35:38,420 - openai._base_client - INFO - Retrying request to /chat/completions in 0.464215 seconds
+2025-07-23 12:35:38,421 - openai._base_client - INFO - Retrying request to /chat/completions in 0.490266 seconds
+2025-07-23 12:35:38,421 - openai._base_client - INFO - Retrying request to /chat/completions in 0.484023 seconds
+2025-07-23 12:35:38,945 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 500 Internal Server Error"
+2025-07-23 12:35:38,946 - openai._base_client - INFO - Retrying request to /chat/completions in 0.950392 seconds
+2025-07-23 12:35:38,949 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 500 Internal Server Error"
+2025-07-23 12:35:38,949 - openai._base_client - INFO - Retrying request to /chat/completions in 0.802735 seconds
+2025-07-23 12:35:56,772 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 12:36:20,018 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 12:36:43,157 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 12:36:55,065 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 12:37:10,521 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 12:38:45,005 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 12:38:45,011 - api.routers.resume_parser - INFO - 简历分析完成: resume_analysis_20250723_123537_-7392198780955943773
+2025-07-23 12:39:17,920 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:39:18,053 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:39:23,738 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 12:39:23,920 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:39:23,921 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:39:31,887 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:39:42,761 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:39:50,167 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:39:54,711 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:40:03,899 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 12:40:08,538 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:40:08,538 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:43:36,659 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 12:44:00,716 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 12:45:09,261 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 12:47:17,926 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 12:48:36,468 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 12:49:07,235 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 12:53:25,140 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:53:25,277 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:53:31,807 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 12:53:32,002 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:53:32,002 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:53:56,834 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:53:56,995 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:54:02,403 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 12:54:02,585 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:54:02,586 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:54:07,736 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:54:18,659 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:54:18,859 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:54:23,665 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 12:54:23,839 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:54:23,839 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:54:27,794 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:54:27,982 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:54:32,443 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 12:54:32,569 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:54:32,569 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:54:45,045 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:54:45,200 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:54:49,455 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 12:54:49,581 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:54:49,581 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:54:51,096 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:54:59,050 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 12:55:03,340 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 12:55:03,340 - main - INFO - ✅ 系统启动完成
+2025-07-23 12:56:33,779 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 12:58:58,894 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:58:59,026 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 12:59:07,125 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:59:17,584 - watchfiles.main - INFO - 1 change detected
+2025-07-23 12:59:45,544 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 13:00:09,891 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 13:00:09,892 - main - INFO - ✅ 系统启动完成
+2025-07-23 13:01:43,986 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 13:03:54,338 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:03:54,507 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 13:03:59,810 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 13:04:18,804 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:04:24,503 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 13:04:24,698 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 13:04:24,698 - main - INFO - ✅ 系统启动完成
+2025-07-23 13:04:25,665 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:04:25,811 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 13:04:31,225 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 13:04:31,408 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 13:04:31,408 - main - INFO - ✅ 系统启动完成
+2025-07-23 13:04:36,155 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:04:36,276 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 13:04:41,294 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 13:04:41,502 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 13:04:41,502 - main - INFO - ✅ 系统启动完成
+2025-07-23 13:04:55,654 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 13:05:04,737 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 13:05:08,614 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 13:05:08,614 - main - INFO - ✅ 系统启动完成
+2025-07-23 13:05:54,835 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 13:07:15,299 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 13:09:48,868 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 13:13:13,416 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:13:13,619 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 13:13:20,388 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 13:13:20,546 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 13:13:20,546 - main - INFO - ✅ 系统启动完成
+2025-07-23 13:15:34,027 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:15:34,219 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 13:16:01,706 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 13:16:03,207 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 13:16:03,208 - main - INFO - ✅ 系统启动完成
+2025-07-23 13:16:10,297 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:16:30,702 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:16:49,813 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:18:37,358 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 13:20:13,420 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 13:20:25,232 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 13:20:28,978 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 13:20:28,978 - main - INFO - ✅ 系统启动完成
+2025-07-23 13:22:15,868 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:22:37,877 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 13:23:53,170 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:24:04,081 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:24:13,992 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:24:30,274 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:24:36,025 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:24:55,656 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:25:07,411 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:27:03,948 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 13:32:56,524 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 13:36:34,881 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:37:00,194 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:37:19,693 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:37:26,913 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:37:52,051 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:37:52,251 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 13:37:54,362 - watchfiles.main - INFO - 1 change detected
+2025-07-23 13:37:59,393 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 13:37:59,393 - main - INFO - ✅ 系统启动完成
+2025-07-23 13:38:54,728 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 13:39:00,818 - fastapi - WARNING - email-validator not installed, email fields will be treated as str.
+To install, run: pip install email-validator
+2025-07-23 13:39:14,665 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 13:42:35,379 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 13:43:10,506 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 13:43:10,507 - main - INFO - ✅ 系统启动完成
+2025-07-23 13:44:59,234 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 13:45:49,595 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 13:50:30,292 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 13:51:14,092 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 13:51:14,094 - main - INFO - ✅ 系统启动完成
+2025-07-23 13:53:31,769 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 13:54:02,159 - watchfiles.main - INFO - 1 change detected
+2025-07-23 14:15:04,712 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 14:15:08,700 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 14:15:08,700 - main - INFO - ✅ 系统启动完成
+2025-07-23 14:17:03,526 - watchfiles.main - INFO - 1 change detected
+2025-07-23 14:17:03,685 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 14:17:08,338 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 14:17:08,500 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 14:17:08,500 - main - INFO - ✅ 系统启动完成
+2025-07-23 14:17:10,036 - watchfiles.main - INFO - 1 change detected
+2025-07-23 14:17:10,218 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 14:17:14,406 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 14:17:14,623 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 14:17:14,623 - main - INFO - ✅ 系统启动完成
+2025-07-23 14:17:30,217 - watchfiles.main - INFO - 1 change detected
+2025-07-23 14:17:30,388 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 14:17:36,041 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 14:17:36,167 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 14:17:36,168 - main - INFO - ✅ 系统启动完成
+2025-07-23 14:17:50,246 - watchfiles.main - INFO - 1 change detected
+2025-07-23 14:17:50,409 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 14:17:54,706 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 14:17:54,880 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 14:17:54,880 - main - INFO - ✅ 系统启动完成
+2025-07-23 14:17:58,743 - watchfiles.main - INFO - 1 change detected
+2025-07-23 14:18:13,484 - watchfiles.main - INFO - 1 change detected
+2025-07-23 14:18:24,784 - watchfiles.main - INFO - 1 change detected
+2025-07-23 14:18:33,484 - watchfiles.main - INFO - 1 change detected
+2025-07-23 14:18:43,680 - watchfiles.main - INFO - 1 change detected
+2025-07-23 14:19:34,651 - watchfiles.main - INFO - 1 change detected
+2025-07-23 14:19:36,832 - watchfiles.main - INFO - 1 change detected
+2025-07-23 14:19:48,689 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 14:19:54,161 - pypdf._reader - WARNING - invalid pdf header: b'\n    '
+2025-07-23 14:19:54,161 - pypdf._reader - WARNING - EOF marker not found
+2025-07-23 14:19:54,162 - api.routers.resume_parser - ERROR - 简历分析失败: PDF加载失败: Stream has ended unexpectedly
+2025-07-23 14:20:23,781 - pypdf._reader - WARNING - invalid pdf header: b'\n    '
+2025-07-23 14:20:23,781 - pypdf._reader - WARNING - EOF marker not found
+2025-07-23 14:20:23,781 - api.routers.resume_parser - ERROR - 简历分析失败: PDF加载失败: Stream has ended unexpectedly
+2025-07-23 14:22:02,500 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 14:31:00,501 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 14:37:05,563 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 14:45:01,706 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 14:45:33,875 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 14:45:37,582 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 14:45:37,583 - main - INFO - ✅ 系统启动完成
+2025-07-23 14:49:07,729 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 14:52:35,106 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 14:56:04,458 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 14:56:08,657 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 14:56:08,661 - main - WARNING - ⚠️ 持久化管理器初始化失败，使用传统方式: No module named 'aioredis'
+2025-07-23 14:56:08,661 - main - INFO - ✅ 系统启动完成
+2025-07-23 14:56:08,759 - watchfiles.main - INFO - 4 changes detected
+2025-07-23 15:07:27,033 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 15:09:54,479 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 15:11:14,901 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:11:29,631 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:12:01,827 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:12:46,439 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:12:54,150 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 15:12:54,152 - main - WARNING - ⚠️ 关闭持久化管理器失败: No module named 'aioredis'
+2025-07-23 15:13:04,928 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 15:13:09,676 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 15:13:09,679 - main - WARNING - ⚠️ 持久化管理器初始化失败，使用传统方式: No module named 'aioredis'
+2025-07-23 15:13:09,679 - main - INFO - ✅ 系统启动完成
+2025-07-23 15:14:04,231 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:14:53,995 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 15:15:26,437 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:15:52,406 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:16:15,913 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:16:34,857 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:16:47,538 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:17:02,375 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:17:12,406 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:17:20,506 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:17:29,794 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 15:17:29,795 - main - WARNING - ⚠️ 关闭持久化管理器失败: No module named 'aioredis'
+2025-07-23 15:17:36,481 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 15:17:40,708 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 15:17:40,710 - main - WARNING - ⚠️ 持久化管理器初始化失败，使用传统方式: No module named 'aioredis'
+2025-07-23 15:17:40,710 - main - INFO - ✅ 系统启动完成
+2025-07-23 15:20:22,485 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 15:37:49,560 - watchfiles.main - INFO - 1 change detected
+2025-07-23 15:37:49,667 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 15:37:49,668 - main - WARNING - ⚠️ 关闭持久化管理器失败: No module named 'aioredis'
+2025-07-23 15:37:54,488 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 15:48:55,992 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 15:49:02,967 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 15:49:02,970 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-23 15:49:02,971 - src.persistence.optimal_manager - WARNING - ⚠️ Redis连接失败，使用内存缓存: Error 61 connecting to localhost:6379. 61.
+2025-07-23 15:49:02,971 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 15:49:02,971 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 15:49:02,971 - main - INFO - ✅ 系统启动完成
+2025-07-23 15:49:48,413 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 15:49:48,413 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-23 15:51:38,780 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 15:51:43,986 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 15:51:43,987 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-23 15:51:43,988 - src.persistence.optimal_manager - WARNING - ⚠️ Redis连接失败，使用内存缓存: Error 61 connecting to localhost:6379. 61.
+2025-07-23 15:51:43,988 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 15:51:43,988 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 15:51:43,988 - main - INFO - ✅ 系统启动完成
+2025-07-23 15:52:14,814 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 15:52:14,814 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-23 16:01:32,725 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 16:01:38,226 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 16:01:38,229 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-23 16:01:38,231 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-23 16:01:38,231 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 16:01:38,231 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 16:01:38,231 - main - INFO - ✅ 系统启动完成
+2025-07-23 16:09:53,078 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_160953_3728629390469533600
+2025-07-23 16:09:53,082 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_160953_3728629390469533600
+2025-07-23 16:12:06,651 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 16:12:06,658 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_160953_3728629390469533600
+2025-07-23 16:12:06,660 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_160953_3728629390469533600.json
+2025-07-23 16:12:06,664 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_160953_3728629390469533600
+2025-07-23 16:12:06,667 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_160953_3728629390469533600
+2025-07-23 16:12:06,669 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_160953_3728629390469533600
+2025-07-23 16:15:16,245 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_161516_3728629390469533600
+2025-07-23 16:15:16,249 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_161516_3728629390469533600
+2025-07-23 16:16:46,581 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 16:16:46,585 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_161516_3728629390469533600
+2025-07-23 16:16:46,586 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_161516_3728629390469533600.json
+2025-07-23 16:16:46,589 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_161516_3728629390469533600
+2025-07-23 16:16:46,593 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_161516_3728629390469533600
+2025-07-23 16:16:46,596 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_161516_3728629390469533600
+2025-07-23 16:20:27,798 - watchfiles.main - INFO - 1 change detected
+2025-07-23 16:20:53,699 - watchfiles.main - INFO - 1 change detected
+2025-07-23 16:26:21,911 - watchfiles.main - INFO - 1 change detected
+2025-07-23 16:27:30,629 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:00:19,095 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:00:41,636 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:01:02,435 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:01:08,577 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:01:15,961 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:04:47,594 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:05:13,551 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:05:38,487 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:06:13,397 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 17:06:13,397 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-23 17:06:22,485 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 17:06:28,038 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 17:06:28,039 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-23 17:06:28,042 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-23 17:06:28,042 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 17:06:28,042 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 17:06:28,042 - main - INFO - ✅ 系统启动完成
+2025-07-23 17:06:54,987 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_170654_-8492378874607140399
+2025-07-23 17:06:54,993 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_170654_-8492378874607140399
+2025-07-23 17:08:31,313 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 17:08:31,321 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_170654_-8492378874607140399
+2025-07-23 17:08:31,323 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_170654_-8492378874607140399.json
+2025-07-23 17:08:31,326 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_170654_-8492378874607140399
+2025-07-23 17:08:31,327 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_170654_-8492378874607140399
+2025-07-23 17:08:31,328 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_170654_-8492378874607140399
+2025-07-23 17:14:37,027 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:14:47,290 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_170654_-8492378874607140399
+2025-07-23 17:14:52,575 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_171452_-8492378874607140399
+2025-07-23 17:14:52,578 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_171452_-8492378874607140399
+2025-07-23 17:15:10,649 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_171510_-8492378874607140399
+2025-07-23 17:15:10,659 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_171510_-8492378874607140399
+2025-07-23 17:16:28,178 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 17:16:28,182 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_171452_-8492378874607140399
+2025-07-23 17:16:28,183 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_171452_-8492378874607140399.json
+2025-07-23 17:16:28,187 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_171452_-8492378874607140399
+2025-07-23 17:16:28,190 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_171452_-8492378874607140399
+2025-07-23 17:16:28,192 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_171452_-8492378874607140399
+2025-07-23 17:17:19,114 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 17:17:19,121 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_171510_-8492378874607140399
+2025-07-23 17:17:19,124 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_171510_-8492378874607140399.json
+2025-07-23 17:17:19,129 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_171510_-8492378874607140399
+2025-07-23 17:17:19,132 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_171510_-8492378874607140399
+2025-07-23 17:17:19,137 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_171510_-8492378874607140399
+2025-07-23 17:20:52,078 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172052_1323938137105206363
+2025-07-23 17:20:52,080 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172052_1323938137105206363
+2025-07-23 17:20:52,081 - pypdf._reader - WARNING - incorrect startxref pointer(1)
+2025-07-23 17:20:52,082 - pypdf._reader - WARNING - parsing for Object Streams
+2025-07-23 17:21:44,260 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 17:21:44,266 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_172052_1323938137105206363
+2025-07-23 17:21:44,268 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_172052_1323938137105206363.json
+2025-07-23 17:21:44,272 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_172052_1323938137105206363
+2025-07-23 17:21:44,275 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172052_1323938137105206363
+2025-07-23 17:21:44,276 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172052_1323938137105206363
+2025-07-23 17:23:42,221 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 17:23:42,221 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-23 17:23:51,690 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 17:23:57,320 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 17:23:57,321 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-23 17:23:57,324 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-23 17:23:57,324 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 17:23:57,324 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 17:23:57,324 - main - INFO - ✅ 系统启动完成
+2025-07-23 17:24:11,195 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172411_6669120665255074995
+2025-07-23 17:24:11,232 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172411_6669120665255074995
+2025-07-23 17:25:41,498 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 17:25:41,506 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_172411_6669120665255074995
+2025-07-23 17:25:41,510 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_172411_6669120665255074995.json
+2025-07-23 17:25:41,515 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172411_6669120665255074995
+2025-07-23 17:25:41,518 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_172411_6669120665255074995
+2025-07-23 17:25:41,522 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172411_6669120665255074995
+2025-07-23 17:25:51,088 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 17:25:51,088 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-23 17:25:59,393 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 17:26:05,460 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 17:26:05,461 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-23 17:26:05,464 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-23 17:26:05,464 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 17:26:05,464 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 17:26:05,464 - main - INFO - ✅ 系统启动完成
+2025-07-23 17:26:34,040 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172634_-629996087295316455
+2025-07-23 17:26:34,051 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172634_-629996087295316455
+2025-07-23 17:28:00,460 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 17:28:00,471 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_172634_-629996087295316455
+2025-07-23 17:28:00,473 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_172634_-629996087295316455.json
+2025-07-23 17:28:00,478 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172634_-629996087295316455
+2025-07-23 17:28:00,479 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_172634_-629996087295316455
+2025-07-23 17:28:00,482 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172634_-629996087295316455
+2025-07-23 17:29:32,465 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:29:32,653 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 17:29:32,653 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-23 17:29:39,725 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 17:29:39,781 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 17:29:39,783 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-23 17:29:39,784 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-23 17:29:39,784 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 17:29:39,784 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 17:29:39,784 - main - INFO - ✅ 系统启动完成
+2025-07-23 17:29:40,471 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172940_1488180341051347627
+2025-07-23 17:29:40,473 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172940_1488180341051347627
+2025-07-23 17:29:40,506 - pypdf._reader - WARNING - incorrect startxref pointer(1)
+2025-07-23 17:29:40,506 - pypdf._reader - WARNING - parsing for Object Streams
+2025-07-23 17:30:40,172 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 17:30:40,179 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_172940_1488180341051347627
+2025-07-23 17:30:40,180 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_172940_1488180341051347627.json
+2025-07-23 17:30:40,182 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_172940_1488180341051347627
+2025-07-23 17:30:40,187 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172940_1488180341051347627
+2025-07-23 17:30:40,189 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172940_1488180341051347627
+2025-07-23 17:30:40,681 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_172940_1488180341051347627
+2025-07-23 17:30:40,685 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_172940_1488180341051347627

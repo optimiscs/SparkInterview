@@ -1,0 +1,47 @@
+{
+  "basic_info": {
+    "name": "未提供",
+    "phone": "",
+    "email": "",
+    "experience_years": "未知",
+    "current_position": "未明确",
+    "city": "未提及"
+  },
+  "skills": [],
+  "experience": [],
+  "projects": [],
+  "education": {
+    "school": "",
+    "major": "",
+    "degree": "",
+    "graduation_year": "",
+    "gpa": ""
+  },
+  "skills_categories": {
+    "programming_languages": [],
+    "frameworks": [],
+    "databases": [],
+    "tools": []
+  },
+  "analysis": {
+    "skill_match": 0,
+    "experience_match": 0,
+    "project_relevance": 0,
+    "overall_match": 0,
+    "strengths": [
+      "无有效信息支撑优势分析"
+    ],
+    "weaknesses": [
+      "缺少联系方式",
+      "未提供任何技能/经历/项目/教育背景",
+      "无法评估岗位匹配度"
+    ],
+    "suggestions": [
+      "补充完整联系方式",
+      "添加与人工智能相关的技能描述",
+      "列举算法工程方向的项目经验",
+      "完善教育背景信息"
+    ]
+  },
+  "resume_content": ""
+}

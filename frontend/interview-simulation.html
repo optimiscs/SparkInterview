@@ -1,0 +1,3778 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模拟面试 - 智能面试评分系统</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#2196F3',secondary:'#FF5722'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: "Noto Sans SC", "Roboto", sans-serif;
+}
+.code-editor {
+font-family: "Consolas", "Monaco", "Courier New", monospace;
+}
+.code-editor:focus {
+outline: none;
+}
+.volume-indicator {
+width: 3px;
+height: 15px;
+background-color: #2196F3;
+margin: 0 1px;
+border-radius: 1px;
+transition: height 0.1s ease;
+}
+.avatar-pulse {
+animation: pulse 2s infinite;
+}
+@keyframes pulse {
+0% {
+box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.4);
+}
+70% {
+box-shadow: 0 0 0 10px rgba(33, 150, 243, 0);
+}
+100% {
+box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+}
+}
+.network-indicator {
+display: inline-block;
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background-color: #4CAF50;
+}
+.custom-switch {
+position: relative;
+display: inline-block;
+width: 44px;
+height: 24px;
+}
+.custom-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.switch-slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #e5e7eb;
+transition: .4s;
+border-radius: 24px;
+}
+.switch-slider:before {
+position: absolute;
+content: "";
+height: 18px;
+width: 18px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+}
+input:checked + .switch-slider {
+background-color: #2196F3;
+}
+input:checked + .switch-slider:before {
+transform: translateX(20px);
+}
+.progress-bar {
+height: 4px;
+background-color: #e5e7eb;
+border-radius: 2px;
+overflow: hidden;
+}
+.progress-value {
+height: 100%;
+background-color: #2196F3;
+border-radius: 2px;
+transition: width 0.3s ease;
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+<!-- 顶部导航栏 -->
+<div class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+    <a href="assessment-options.html" class="flex items-center">
+      <img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
+      <p class="text-sm text-gray-600 ml-2">职面星火</p>
+    </a>
+    <nav class="flex space-x-8">
+    <a href="../index.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+    <div class="w-5 h-5 flex items-center justify-center mr-2">
+    <i class="ri-home-line"></i>
+    </div>
+    首页
+    </a>
+    <a href="./setting_page1.html" class="flex items-center px-3 py-2 text-sm font-medium text-primary">
+    <div class="w-5 h-5 flex items-center justify-center mr-2">
+    <i class="ri-video-chat-line"></i>
+    </div>
+    面试模拟
+    </a>
+    <a href="./assessment-options.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+    <div class="w-5 h-5 flex items-center justify-center mr-2">
+    <i class="ri-bar-chart-line"></i>
+    </div>
+    能力评估
+    </a>
+    <a href="./learning-resources.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+    <div class="w-5 h-5 flex items-center justify-center mr-2">
+    <i class="ri-book-open-line"></i>
+    </div>
+    学习资源
+    </a>
+    <a href="./user-profile.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+    <div class="w-5 h-5 flex items-center justify-center mr-2">
+    <i class="ri-user-settings-line"></i>
+    </div>
+    个人中心
+    </a>
+    </nav>
+    <div class="flex items-center">
+    <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+    <i class="ri-user-line text-white"></i>
+    </div>
+    <div class="ml-2">
+    <p class="text-sm font-medium text-gray-900">李明华</p>
+    <p class="text-xs text-gray-500">高级用户</p>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+<!-- 主要内容区域 -->
+<main class="flex-1 flex overflow-hidden relative h-[calc(100vh-8.5rem)]">
+<!-- 左侧内容区域 -->
+<div class="flex-1 flex flex-col p-6 transition-all duration-300 overflow-y-auto" id="main-content">
+<button id="toggle-panel" class="absolute right-0 top-1/2 -translate-y-1/2 w-6 h-24 bg-white border border-gray-200 rounded-l-lg shadow-sm flex items-center justify-center hover:bg-gray-50 z-10">
+<i class="ri-arrow-right-s-line text-gray-500" id="panel-arrow"></i>
+</button>
+<!-- 面试官区域 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+<div class="flex items-start">
+<div class="w-16 h-16 rounded-full bg-primary bg-opacity-10 flex items-center justify-center avatar-pulse mr-4">
+<i class="ri-user-line ri-xl text-primary"></i>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-2">
+<h3 class="text-lg font-medium text-gray-900">李教授 (AI面试官)</h3>
+<div class="flex items-center">
+<div class="flex space-x-0.5 mr-2">
+<div class="volume-indicator" style="height: 5px;"></div>
+<div class="volume-indicator" style="height: 10px;"></div>
+<div class="volume-indicator" style="height: 15px;"></div>
+<div class="volume-indicator" style="height: 8px;"></div>
+<div class="volume-indicator" style="height: 4px;"></div>
+</div>
+<span class="text-xs text-gray-500">正在说话</span>
+</div>
+</div>
+<div class="bg-gray-50 p-4 rounded-lg">
+<div class="flex justify-between items-start mb-2">
+<span id="question-meta" class="text-xs text-gray-500">欢迎来到智能面试系统</span>
+<button id="question-settings-btn" class="text-gray-400 hover:text-gray-600 transition-colors">
+<i class="ri-settings-3-line"></i>
+</button>
+</div>
+<p id="current-question" class="text-gray-800 leading-relaxed">您好！我是李教授，您的AI面试官。欢迎参加我们的智能面试系统！🎉
+
+在开始正式面试之前，我想先了解一下您的基本情况。请您用30秒时间简单介绍一下自己，包括您的教育背景、技术栈以及您最感兴趣的技术领域。这样我就能为您准备更合适的面试题目。
+
+请确保您的摄像头和麦克风已开启，我会实时分析您的表情、肢体语言和语音情感，为您提供全面的面试反馈。
+
+准备好了吗？请开始您的自我介绍！</p>
+</div>
+</div>
+</div>
+</div>
+<!-- 用户摄像头区域 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6 flex justify-center items-center" style="height:420px;">
+  <div class="relative bg-gray-900 rounded-lg overflow-hidden flex justify-center items-center" style="width: 100%; height: 100%;">
+    <video id="user-video" class="w-full h-full object-contain bg-black" style="max-width:100%;max-height:100%;" autoplay muted></video>
+  </div>
+<div class="absolute bottom-4 right-4 flex space-x-2">
+<button class="w-10 h-10 bg-black bg-opacity-50 hover:bg-opacity-70 rounded-full flex items-center justify-center text-white transition-colors">
+<i class="ri-fullscreen-line"></i>
+</button>
+<button class="w-10 h-10 bg-black bg-opacity-50 hover:bg-opacity-70 rounded-full flex items-center justify-center text-white transition-colors">
+<i class="ri-camera-line"></i>
+</button>
+<button class="w-10 h-10 bg-black bg-opacity-50 hover:bg-opacity-70 rounded-full flex items-center justify-center text-white transition-colors">
+<i class="ri-mic-line"></i>
+</button>
+</div>
+</div>
+<!-- 编程题答题区域 -->
+<div class="bg-white rounded-lg shadow-sm p-6 hidden" id="coding-area">
+<h3 class="text-lg font-medium text-gray-900 mb-3">编程题解答</h3>
+<div class="mb-3 flex space-x-2">
+<button class="px-3 py-1 bg-primary text-white rounded-button whitespace-nowrap">Python</button>
+<button class="px-3 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-button whitespace-nowrap">JavaScript</button>
+<button class="px-3 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-button whitespace-nowrap">Java</button>
+<button class="px-3 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-button whitespace-nowrap">C++</button>
+</div>
+<div class="bg-gray-900 rounded-lg p-4 text-white">
+<pre class="code-editor" contenteditable="true" spellcheck="false">def backpropagation(network, X, y, learning_rate):
+# 前向传播
+output = forward_propagation(network, X)
+# 计算输出层的误差
+output_error = y - output
+output_delta = output_error * sigmoid_derivative(output)
+# 反向传播误差
+for layer in reversed(range(len(network) - 1)):
+# 计算当前层的误差
+current_layer = network[layer]
+next_layer = network[layer + 1]
+# 计算当前层的delta
+current_delta = np.dot(next_layer['weights'].T, next_layer['delta']) * sigmoid_derivative(current_layer['output'])
+# 更新权重和偏置
+current_layer['weights'] += learning_rate * np.outer(current_delta, current_layer['input'])
+current_layer['bias'] += learning_rate * current_delta
+return network</pre>
+</div>
+<div class="mt-3 flex justify-end">
+<button class="bg-primary text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap">
+运行代码
+</button>
+</div>
+</div>
+</div>
+<!-- 右侧实时指标区域 -->
+<div class="w-[30%] bg-gray-50 p-6 border-l border-gray-200 overflow-y-auto transition-all duration-300" id="right-panel">
+<!-- 表情检测 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-medium text-gray-900">表情检测</h3>
+<div class="flex items-center">
+<div class="w-2 h-2 bg-green-500 rounded-full mr-2 transition-colors duration-300"></div>
+<span class="text-sm text-gray-500 transition-colors duration-300">实时检测中</span>
+</div>
+</div>
+<div class="space-y-3">
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-gray-700">当前表情</span>
+<span class="text-primary font-medium">自然</span>
+</div>
+<div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 85%"></div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="text-xs text-gray-500">置信度</span>
+<span class="text-xs text-gray-700">85%</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-700">微笑 12%</span>
+<span class="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-700">专注 8%</span>
+<span class="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-700">思考 5%</span>
+</div>
+</div>
+</div>
+<!-- 动作检测 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-medium text-gray-900">动作检测</h3>
+<div class="flex items-center">
+<div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+<span class="text-sm text-gray-500">实时检测中</span>
+</div>
+</div>
+<div class="space-y-3">
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-gray-700">当前姿态</span>
+<span class="text-primary font-medium">正坐</span>
+</div>
+<div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 92%"></div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="text-xs text-gray-500">置信度</span>
+<span class="text-xs text-gray-700">92%</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-700">手势活跃度 中等</span>
+<span class="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-700">视线交互 良好</span>
+</div>
+</div>
+</div>
+<!-- 语音情感分析 -->
+<div class="bg-white rounded-lg shadow-sm p-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-medium text-gray-900">语音情感分析</h3>
+<div class="flex items-center">
+<div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+<span class="text-sm text-gray-500">实时分析中</span>
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-gray-700">当前情感</span>
+<span class="text-primary font-medium">自信</span>
+</div>
+<div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 88%"></div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="text-xs text-gray-500">置信度</span>
+<span class="text-xs text-gray-700">88%</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm text-gray-700">语速</span>
+<span class="text-sm text-primary">适中</span>
+</div>
+<div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 75%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm text-gray-700">音调</span>
+<span class="text-sm text-primary">自然</span>
+</div>
+<div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 82%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm text-gray-700">清晰度</span>
+<span class="text-sm text-primary">优秀</span>
+</div>
+<div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 90%"></div>
+</div>
+</div>
+</div>
+<div class="mt-4">
+<h4 class="text-sm font-medium text-gray-900 mb-2">实时语音识别</h4>
+<div class="bg-gray-50 p-3 rounded-lg text-sm text-gray-700 h-20 overflow-y-auto">
+反向传播算法是深度学习中的一个核心算法，它通过计算损失函数对各层参数的梯度来更新网络权重...
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- 底部控制栏 -->
+<footer class="bg-white border-t border-gray-200 py-4 px-6">
+<div class="container mx-auto flex justify-between items-center">
+<div class="flex items-center space-x-4">
+<button class="bg-primary text-white px-4 py-2 rounded-button flex items-center hover:bg-opacity-90 transition-colors whitespace-nowrap">
+<i class="ri-pause-line mr-1"></i>
+<span>暂停面试</span>
+</button>
+<button id="next-question-btn" class="bg-blue-500 text-white px-4 py-2 rounded-button flex items-center hover:bg-opacity-90 transition-colors whitespace-nowrap">
+<i class="ri-arrow-right-line mr-1"></i>
+<span>下一道题</span>
+</button>
+<button class="bg-red-500 text-white px-4 py-2 rounded-button flex items-center hover:bg-opacity-90 transition-colors whitespace-nowrap">
+<i class="ri-close-line mr-1"></i>
+<span>结束面试</span>
+</button>
+</div>
+<div class="flex items-center space-x-6">
+<div class="flex items-center">
+<span class="text-gray-700 mr-2">麦克风</span>
+<label class="custom-switch">
+<input type="checkbox" checked>
+<span class="switch-slider"></span>
+</label>
+</div>
+<div class="flex items-center">
+<span class="text-gray-700 mr-2">摄像头</span>
+<label class="custom-switch">
+<input type="checkbox" checked>
+<span class="switch-slider"></span>
+</label>
+</div>
+<div class="flex items-center">
+<span class="text-gray-700 mr-2">全屏</span>
+<label class="custom-switch">
+<input type="checkbox">
+<span class="switch-slider"></span>
+</label>
+</div>
+<button id="settings-btn-footer" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-button flex items-center hover:bg-gray-200 transition-colors whitespace-nowrap">
+<i class="ri-settings-line mr-1"></i>
+<span>设置</span>
+</button>
+</div>
+</div>
+</footer>
+<!-- 统一设置面板样式 -->
+<style>
+.custom-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.custom-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .switch-slider {
+    background-color: #2196F3;
+}
+
+input:checked + .switch-slider:before {
+    transform: translateX(26px);
+}
+
+.settings-tab.active {
+color: #2196F3;
+border-color: #2196F3;
+}
+
+.config-section {
+transition: all 0.3s ease;
+}
+
+.config-section:hover {
+transform: translateY(-2px);
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+</style>
+
+<script id="camera-script">
+document.addEventListener('DOMContentLoaded', function() {
+const userVideo = document.getElementById('user-video');
+    
+    // 添加加载状态指示
+    const videoContainer = userVideo.parentElement;
+    const loadingIndicator = document.createElement('div');
+    loadingIndicator.className = 'absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 text-white';
+    loadingIndicator.innerHTML = '<div class="text-center"><i class="ri-loader-4-line animate-spin text-2xl mb-2"></i><div>正在初始化摄像头...</div></div>';
+    videoContainer.appendChild(loadingIndicator);
+    
+    // 全局音频流变量
+    let audioStream = null;
+    let microphonePermissionGranted = false;
+    
+    // 尝试获取媒体流
+    async function initializeCamera() {
+        try {
+            // 首先尝试只获取视频
+            const videoStream = await navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                    width: { ideal: 640 },
+                    height: { ideal: 480 },
+                    facingMode: 'user'
+                }, 
+                audio: false 
+            });
+            
+            userVideo.srcObject = videoStream;
+            loadingIndicator.remove();
+            console.log('✅ 摄像头初始化成功');
+            
+            // 尝试获取音频权限（但不立即使用）
+            await requestMicrophonePermission();
+            
+        } catch (err) {
+            console.error('❌ 摄像头初始化失败:', err);
+            loadingIndicator.innerHTML = `
+                <div class="text-center">
+                    <i class="ri-error-warning-line text-2xl mb-2 text-red-400"></i>
+                    <div class="mb-2">摄像头访问失败</div>
+                    <div class="text-sm text-gray-300 mb-3">${err.message}</div>
+                    <button onclick="location.reload()" class="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">
+                        重新加载
+                    </button>
+                </div>
+            `;
+        }
+    }
+    
+    // 请求麦克风权限
+    async function requestMicrophonePermission() {
+        try {
+            // 检查麦克风权限状态
+            const permission = await navigator.permissions.query({ name: 'microphone' });
+            
+            if (permission.state === 'granted') {
+                console.log('✅ 麦克风权限已授予');
+                microphonePermissionGranted = true;
+                return true;
+            } else if (permission.state === 'denied') {
+                console.warn('⚠️ 麦克风权限被拒绝');
+                showMicrophonePermissionDialog();
+                return false;
+            } else {
+                // 尝试获取麦克风权限
+                console.log('🔄 请求麦克风权限...');
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: false, 
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        sampleRate: 16000
+                    }
+                });
+                
+                // 立即停止流，只获取权限
+                stream.getTracks().forEach(track => track.stop());
+                
+                console.log('✅ 麦克风权限获取成功');
+                microphonePermissionGranted = true;
+                return true;
+            }
+        } catch (audioErr) {
+            console.warn('⚠️ 麦克风权限获取失败:', audioErr);
+            
+            if (audioErr.name === 'NotAllowedError') {
+                showMicrophonePermissionDialog();
+            } else if (audioErr.name === 'NotFoundError') {
+                showMicrophoneNotFoundDialog();
+            } else if (audioErr.name === 'NotReadableError') {
+                showMicrophoneInUseDialog();
+            } else {
+                showMicrophoneErrorDialog(audioErr.message);
+            }
+            
+            return false;
+        }
+    }
+    
+    // 显示麦克风权限对话框
+    function showMicrophonePermissionDialog() {
+        const dialog = document.createElement('div');
+        dialog.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        dialog.innerHTML = `
+            <div class="bg-white rounded-lg p-6 max-w-md mx-4">
+                <div class="text-center">
+                    <i class="ri-mic-off-line text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">麦克风权限被拒绝</h3>
+                    <p class="text-gray-600 mb-4">语音分析功能需要麦克风权限才能正常工作。</p>
+                    <div class="bg-gray-50 p-3 rounded text-sm text-gray-700 mb-4">
+                        <p><strong>解决方法：</strong></p>
+                        <ol class="list-decimal list-inside space-y-1 mt-2">
+                            <li>点击浏览器地址栏左侧的锁定图标</li>
+                            <li>将麦克风权限设置为"允许"</li>
+                            <li>刷新页面重新尝试</li>
+                        </ol>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button onclick="this.closest('.fixed').remove()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                            稍后处理
+                        </button>
+                        <button onclick="location.reload()" class="flex-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                            刷新页面
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(dialog);
+    }
+    
+    // 显示麦克风未找到对话框
+    function showMicrophoneNotFoundDialog() {
+        const dialog = document.createElement('div');
+        dialog.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        dialog.innerHTML = `
+            <div class="bg-white rounded-lg p-6 max-w-md mx-4">
+                <div class="text-center">
+                    <i class="ri-mic-off-line text-4xl text-red-500 mb-4"></i>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">未检测到麦克风</h3>
+                    <p class="text-gray-600 mb-4">系统未找到可用的麦克风设备。</p>
+                    <div class="bg-gray-50 p-3 rounded text-sm text-gray-700 mb-4">
+                        <p><strong>检查项目：</strong></p>
+                        <ul class="list-disc list-inside space-y-1 mt-2">
+                            <li>确认麦克风已正确连接</li>
+                            <li>检查系统音频设置</li>
+                            <li>尝试使用外接麦克风</li>
+                        </ul>
+                    </div>
+                    <button onclick="this.closest('.fixed').remove()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                        知道了
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(dialog);
+    }
+    
+    // 显示麦克风被占用对话框
+    function showMicrophoneInUseDialog() {
+        const dialog = document.createElement('div');
+        dialog.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        dialog.innerHTML = `
+            <div class="bg-white rounded-lg p-6 max-w-md mx-4">
+                <div class="text-center">
+                    <i class="ri-mic-off-line text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">麦克风被占用</h3>
+                    <p class="text-gray-600 mb-4">麦克风正在被其他应用程序使用。</p>
+                    <div class="bg-gray-50 p-3 rounded text-sm text-gray-700 mb-4">
+                        <p><strong>解决方法：</strong></p>
+                        <ul class="list-disc list-inside space-y-1 mt-2">
+                            <li>关闭其他使用麦克风的应用</li>
+                            <li>检查系统音频设置</li>
+                            <li>重启浏览器</li>
+                        </ul>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button onclick="this.closest('.fixed').remove()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                            稍后处理
+                        </button>
+                        <button onclick="location.reload()" class="flex-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                            重试
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(dialog);
+    }
+    
+    // 显示麦克风错误对话框
+    function showMicrophoneErrorDialog(errorMessage) {
+        const dialog = document.createElement('div');
+        dialog.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        dialog.innerHTML = `
+            <div class="bg-white rounded-lg p-6 max-w-md mx-4">
+                <div class="text-center">
+                    <i class="ri-error-warning-line text-4xl text-red-500 mb-4"></i>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">麦克风初始化失败</h3>
+                    <p class="text-gray-600 mb-4">${errorMessage}</p>
+                    <div class="bg-gray-50 p-3 rounded text-sm text-gray-700 mb-4">
+                        <p><strong>建议操作：</strong></p>
+                        <ul class="list-disc list-inside space-y-1 mt-2">
+                            <li>检查麦克风硬件连接</li>
+                            <li>更新音频驱动程序</li>
+                            <li>尝试使用不同的浏览器</li>
+                        </ul>
+                    </div>
+                    <button onclick="this.closest('.fixed').remove()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                        知道了
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(dialog);
+    }
+    
+    // 获取麦克风流（用于语音分析）
+    async function getMicrophoneStream() {
+        if (!microphonePermissionGranted) {
+            const granted = await requestMicrophonePermission();
+            if (!granted) {
+                return null;
+            }
+        }
+        
+        try {
+            audioStream = await navigator.mediaDevices.getUserMedia({ 
+                video: false, 
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    sampleRate: 16000
+                }
+            });
+            console.log('✅ 麦克风流获取成功');
+            return audioStream;
+        } catch (error) {
+            console.error('❌ 获取麦克风流失败:', error);
+            return null;
+        }
+    }
+    
+    // 检查浏览器支持
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        loadingIndicator.innerHTML = `
+            <div class="text-center">
+                <i class="ri-error-warning-line text-2xl mb-2 text-red-400"></i>
+                <div>浏览器不支持摄像头访问</div>
+                <div class="text-sm text-gray-300 mt-2">请使用Chrome、Firefox或Safari最新版本</div>
+            </div>
+        `;
+        return;
+    }
+    
+    // 初始化摄像头
+    initializeCamera();
+});
+</script>
+
+
+
+</script>
+
+
+<!-- Flask API 集成脚本 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+<script id="flask-api-integration">
+document.addEventListener('DOMContentLoaded', function() {
+    // API配置
+    const API_BASE_URL = 'http://localhost:5001';
+    const SOCKET_URL = 'http://localhost:5001';
+    
+    // 全局状态
+    let socket = null;
+    let isAnalysisRunning = false;
+    let isVoiceAnalysisRunning = false;
+    let sessionId = null;
+    let analysisStartTime = null;
+    
+    // 获取DOM元素 - 改进选择器
+    function getDOMElements() {
+        // 使用更精确的选择器
+        const rightPanel = document.getElementById('right-panel');
+        if (!rightPanel) {
+            console.error('❌ 右侧面板未找到');
+            return { expressionCard: null, motionCard: null, voiceCard: null };
+        }
+        
+        // 获取所有卡片
+        const cards = rightPanel.querySelectorAll('.bg-white.rounded-lg.shadow-sm.p-6');
+        console.log('🔍 找到卡片数量:', cards.length);
+        
+        let expressionCard = null;
+        let motionCard = null;
+        let voiceCard = null;
+        
+        cards.forEach((card, index) => {
+            const cardText = card.textContent || '';
+            console.log(`卡片 ${index + 1}:`, cardText.substring(0, 50));
+            
+            if (cardText.includes('表情检测') || cardText.includes('微表情')) {
+                expressionCard = card;
+                console.log('✅ 找到表情检测卡片');
+            } else if (cardText.includes('动作检测') || cardText.includes('肢体动作')) {
+                motionCard = card;
+                console.log('✅ 找到动作检测卡片');
+            } else if (cardText.includes('语音情感') || cardText.includes('语音分析')) {
+                voiceCard = card;
+                console.log('✅ 找到语音情感分析卡片');
+            }
+        });
+        
+        // 如果通过文本没找到，使用位置选择器
+        if (!expressionCard && cards.length >= 1) {
+            expressionCard = cards[0];
+            console.log('⚠️ 使用位置选择器找到表情卡片');
+        }
+        if (!motionCard && cards.length >= 2) {
+            motionCard = cards[1];
+            console.log('⚠️ 使用位置选择器找到动作卡片');
+        }
+        if (!voiceCard && cards.length >= 3) {
+            voiceCard = cards[2];
+            console.log('⚠️ 使用位置选择器找到语音卡片');
+        }
+        
+        console.log('🔍 DOM元素查找结果:');
+        console.log('  表情卡片:', expressionCard);
+        console.log('  动作卡片:', motionCard);
+        console.log('  语音卡片:', voiceCard);
+        
+        return { expressionCard, motionCard, voiceCard };
+    }
+    
+    // 全局变量，在初始化时设置
+    let expressionCard = null;
+    let motionCard = null;
+    let voiceCard = null;
+    
+
+    
+    // 初始化面板控制
+    function initPanelControl() {
+        const mainContent = document.getElementById('main-content');
+        const rightPanel = document.getElementById('right-panel');
+        const toggleButton = document.getElementById('toggle-panel');
+        const panelArrow = document.getElementById('panel-arrow');
+        
+        if (mainContent && rightPanel && toggleButton && panelArrow) {
+            let isPanelVisible = true;
+            
+            function togglePanel() {
+                isPanelVisible = !isPanelVisible;
+                if (isPanelVisible) {
+                    rightPanel.style.width = '30%';
+                    rightPanel.style.opacity = '1';
+                    mainContent.style.paddingRight = '24px';
+                    panelArrow.classList.remove('ri-arrow-left-s-line');
+                    panelArrow.classList.add('ri-arrow-right-s-line');
+                } else {
+                    rightPanel.style.width = '0';
+                    rightPanel.style.opacity = '0';
+                    mainContent.style.paddingRight = '48px';
+                    panelArrow.classList.remove('ri-arrow-right-s-line');
+                    panelArrow.classList.add('ri-arrow-left-s-line');
+                }
+            }
+            
+            toggleButton.addEventListener('click', togglePanel);
+            console.log('✅ 面板控制已初始化');
+    } else {
+            console.warn('⚠️ 面板控制元素未找到');
+        }
+    }
+    
+    // 初始化设置面板
+    function initSettingsPanel() {
+        // 设置面板功能已在统一设置面板中实现
+        console.log('✅ 设置面板已初始化（统一设置面板）');
+    }
+    
+    // 初始化音频可视化
+    function initAudioVisualization() {
+        const volumeIndicators = document.querySelectorAll('.volume-indicator');
+        if (volumeIndicators.length > 0) {
+            function animateVolumeIndicators() {
+                volumeIndicators.forEach(indicator => {
+                    const randomHeight = Math.floor(Math.random() * 15) + 3;
+                    indicator.style.height = `${randomHeight}px`;
+                });
+            }
+            setInterval(animateVolumeIndicators, 200);
+            console.log('✅ 音频可视化已初始化');
+} else {
+            console.warn('⚠️ 音频可视化元素未找到');
+        }
+    }
+    
+    // 初始化WebSocket连接
+    function initSocket() {
+        try {
+            socket = io(SOCKET_URL, {
+                transports: ['websocket', 'polling'],
+                timeout: 10000,
+                reconnection: true,
+                reconnectionAttempts: 10,
+                reconnectionDelay: 1000,
+                reconnectionDelayMax: 5000,
+                maxReconnectionAttempts: 10
+            });
+            
+            socket.on('connect', () => {
+                console.log('✅ WebSocket已连接');
+                updateConnectionStatus(true);
+                
+                // 连接成功后，确保分析正在运行
+                if (!isAnalysisRunning) {
+                    console.log('🔄 WebSocket连接成功，检查分析状态...');
+                    getAnalysisStatus().then(result => {
+                        if (result && !result.is_running) {
+                            startAnalysis();
+                            startVoiceAnalysis();
+                        }
+                    });
+                }
+            });
+            
+            socket.on('disconnect', (reason) => {
+                console.log('❌ WebSocket连接断开:', reason);
+                updateConnectionStatus(false);
+                
+                // 断开时使用HTTP轮询
+                if (reason === 'io server disconnect') {
+                    console.log('🔄 服务器主动断开，使用HTTP轮询...');
+                }
+            });
+            
+            socket.on('connect_error', (error) => {
+                console.error('WebSocket连接错误:', error);
+                updateConnectionStatus(false);
+            });
+            
+            socket.on('connect_timeout', () => {
+                console.error('WebSocket连接超时');
+                updateConnectionStatus(false);
+            });
+            
+            socket.on('reconnect', (attemptNumber) => {
+                console.log(`🔄 WebSocket重连成功 (第${attemptNumber}次)`);
+                updateConnectionStatus(true);
+            });
+            
+            socket.on('reconnect_attempt', (attemptNumber) => {
+                console.log(`🔄 WebSocket重连尝试 (第${attemptNumber}次)`);
+            });
+            
+            socket.on('reconnect_error', (error) => {
+                console.error('WebSocket重连失败:', error);
+            });
+            
+            socket.on('reconnect_failed', () => {
+                console.error('WebSocket重连失败，切换到HTTP轮询模式');
+                updateConnectionStatus(false);
+            });
+            
+            socket.on('detection_result', (data) => {
+                console.log('📡 收到检测结果:', data);
+                updateExpressionData(data);
+                updateMotionData(data);
+            });
+            
+            socket.on('voice_analysis_result', (data) => {
+                console.log('📡 收到语音分析结果:', data);
+                updateVoiceData(data);
+            });
+            
+            socket.on('status', (data) => {
+                console.log('服务器状态:', data.message);
+            });
+            
+        } catch (error) {
+            console.error('WebSocket连接失败:', error);
+            updateConnectionStatus(false);
+        }
+    }
+    
+    // 更新连接状态
+    function updateConnectionStatus(connected) {
+        const networkIndicator = document.querySelector('.network-indicator');
+        const networkStatus = document.getElementById('network-status');
+        
+        if (networkIndicator && networkStatus) {
+            if (connected) {
+                networkIndicator.style.backgroundColor = '#4CAF50';
+                networkStatus.textContent = '已连接';
+            } else {
+                networkIndicator.style.backgroundColor = '#f44336';
+                networkStatus.textContent = '未连接';
+            }
+        }
+    }
+    
+    // 更新分析状态
+    function updateAnalysisStatus(running) {
+        const statusDots = document.querySelectorAll('.w-2.h-2.bg-green-500');
+        const statusTexts = document.querySelectorAll('.text-sm.text-gray-500');
+        const analysisStatusDot = document.getElementById('analysis-status-dot');
+        const analysisStatusText = document.getElementById('analysis-status-text');
+        const startAnalysisBtn = document.getElementById('start-analysis-btn');
+        
+        // 更新所有状态指示器
+        statusDots.forEach(dot => {
+            dot.style.backgroundColor = running ? '#4CAF50' : '#9CA3AF';
+        });
+        
+        statusTexts.forEach(text => {
+            if (text.textContent.includes('检测中') || text.textContent.includes('分析中')) {
+                text.textContent = running ? '实时检测中' : '已停止';
+            }
+        });
+        
+        // 更新顶部分析状态
+        if (analysisStatusDot && analysisStatusText) {
+            if (running) {
+                analysisStatusDot.style.backgroundColor = '#4CAF50';
+                analysisStatusText.textContent = '运行中';
+            } else {
+                analysisStatusDot.style.backgroundColor = '#9CA3AF';
+                analysisStatusText.textContent = '已停止';
+            }
+        }
+        
+        // 更新启动按钮
+        if (startAnalysisBtn) {
+            if (running) {
+                startAnalysisBtn.className = 'bg-yellow-100 text-yellow-600 px-3 py-1.5 rounded-button flex items-center hover:bg-yellow-200 transition-colors whitespace-nowrap';
+                startAnalysisBtn.innerHTML = '<i class="ri-pause-line mr-1"></i><span>停止分析</span>';
+            } else {
+                startAnalysisBtn.className = 'bg-green-100 text-green-600 px-3 py-1.5 rounded-button flex items-center hover:bg-green-200 transition-colors whitespace-nowrap';
+                startAnalysisBtn.innerHTML = '<i class="ri-play-line mr-1"></i><span>启动分析</span>';
+            }
+        }
+    }
+    
+    // 启动分析
+    async function startAnalysis() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/v1/analysis/start`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                mode: 'cors',
+                body: JSON.stringify({
+                    camera_id: 0
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+                isAnalysisRunning = true;
+                sessionId = result.session_id;
+                analysisStartTime = Date.now();
+                console.log('✅ 分析已启动:', result.session_id);
+                
+                // 更新UI状态
+                updateAnalysisStatus(true);
+                
+                // 启动语音分析
+                startVoiceAnalysis();
+                
+                return true;
+            } else {
+                console.error('❌ 启动分析失败:', result.message);
+                return false;
+            }
+            
+        } catch (error) {
+            console.error('❌ 启动分析请求失败:', error);
+            return false;
+        }
+    }
+    
+    // 停止分析
+    async function stopAnalysis() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/v1/analysis/stop`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                mode: 'cors'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+                isAnalysisRunning = false;
+                sessionId = null;
+                analysisStartTime = null;
+                console.log('✅ 分析已停止');
+                
+                // 更新UI状态
+                updateAnalysisStatus(false);
+                
+                // 停止语音分析
+                stopVoiceAnalysis();
+                
+                return true;
+            } else {
+                console.error('❌ 停止分析失败:', result.message);
+                return false;
+            }
+            
+        } catch (error) {
+            console.error('❌ 停止分析请求失败:', error);
+            return false;
+        }
+    }
+    
+    // 启动语音分析
+    async function startVoiceAnalysis() {
+        try {
+            console.log('🔄 尝试启动语音分析...');
+            
+            const response = await fetch(`${API_BASE_URL}/api/v1/voice/start`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                mode: 'cors'
+            });
+            
+            const result = await response.json();
+            console.log('📡 语音分析启动响应:', result);
+            
+            if (response.ok && result.status === 'success') {
+                isVoiceAnalysisRunning = true;
+                console.log('✅ 语音分析已启动');
+                return true;
+            } else {
+                console.error('❌ 启动语音分析失败:', result.message);
+                // 如果是语音分析器未初始化，尝试初始化
+                if (result.message && result.message.includes('未初始化')) {
+                    console.log('🔄 语音分析器未初始化，尝试初始化...');
+                    await initializeVoiceAnalyzer();
+                    // 重试启动
+                    return await startVoiceAnalysis();
+                }
+                return false;
+            }
+            
+        } catch (error) {
+            console.error('❌ 启动语音分析请求失败:', error);
+            return false;
+        }
+    }
+    
+    // 初始化语音分析器
+    async function initializeVoiceAnalyzer() {
+        try {
+            console.log('🔄 初始化语音分析器...');
+            
+            // 检查语音分析器状态
+            const statusResponse = await fetch(`${API_BASE_URL}/api/v1/voice/status`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                mode: 'cors'
+            });
+            
+            const statusResult = await statusResponse.json();
+            console.log('📡 语音分析器状态:', statusResult);
+            
+            if (!statusResult.is_available) {
+                console.warn('⚠️ 语音分析器不可用，跳过语音分析功能');
+                return false;
+            }
+            
+            return true;
+            
+        } catch (error) {
+            console.error('❌ 初始化语音分析器失败:', error);
+            return false;
+        }
+    }
+    
+    // 停止语音分析
+    async function stopVoiceAnalysis() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/v1/voice/stop`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                mode: 'cors'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+                isVoiceAnalysisRunning = false;
+                console.log('✅ 语音分析已停止');
+                return true;
+            } else {
+                console.error('❌ 停止语音分析失败:', result.message);
+                return false;
+            }
+            
+        } catch (error) {
+            console.error('❌ 停止语音分析请求失败:', error);
+            return false;
+        }
+    }
+    
+    // 更新分析状态UI
+    function updateAnalysisStatus(running) {
+        const statusDots = document.querySelectorAll('.w-2.h-2.bg-green-500');
+        const statusTexts = document.querySelectorAll('.text-sm.text-gray-500');
+        
+        statusDots.forEach(dot => {
+            dot.style.backgroundColor = running ? '#4CAF50' : '#9CA3AF';
+        });
+        
+        statusTexts.forEach(text => {
+            if (text.textContent.includes('检测中') || text.textContent.includes('分析中')) {
+                text.textContent = running ? '实时检测中' : '已停止';
+            }
+        });
+    }
+    
+    // 更新表情检测数据
+    function updateExpressionData(data) {
+        console.log('🔍 开始更新表情数据:', data);
+        console.log('🔍 表情卡片元素:', expressionCard);
+        
+        if (!expressionCard) {
+            console.error('❌ 表情卡片元素未找到');
+            // 尝试重新获取DOM元素
+            const elements = getDOMElements();
+            expressionCard = elements.expressionCard;
+            if (!expressionCard) {
+                console.error('❌ 重新获取表情卡片失败');
+            return;
+            }
+        }
+        
+        // 处理空数据或无效数据
+        if (!data || !data.expression) {
+            console.warn('⚠️ 表情数据为空，显示默认值');
+            const expressionText = expressionCard.querySelector('.text-primary.font-medium');
+            const confidenceBar = expressionCard.querySelector('.h-2.bg-gray-100 .bg-primary');
+            const confidenceText = expressionCard.querySelector('.text-xs.text-gray-700');
+            
+            if (expressionText) {
+                expressionText.textContent = '自然';
+            }
+            if (confidenceBar) {
+                confidenceBar.style.width = '75%';
+            }
+            if (confidenceText) {
+                confidenceText.textContent = '75%';
+            }
+            return;
+        }
+        
+        console.log('📊 更新表情数据:', data.expression);
+        
+        const expressionText = expressionCard.querySelector('.text-primary.font-medium');
+        const confidenceBar = expressionCard.querySelector('.h-2.bg-gray-100 .bg-primary');
+        const confidenceText = expressionCard.querySelector('.text-xs.text-gray-700');
+        
+        if (expressionText) {
+            expressionText.textContent = data.expression.name || '自然';
+        }
+        
+        if (confidenceBar) {
+            const confidence = Math.min(Math.round(data.expression.confidence * 100), 100);
+            confidenceBar.style.width = `${confidence}%`;
+        }
+        
+        if (confidenceText) {
+            const confidence = Math.min(Math.round(data.expression.confidence * 100), 100);
+            confidenceText.textContent = `${confidence}%`;
+        }
+        
+        // 更新动作单元标签 - 显示所有动作单元，即使值为0
+        const tagsContainer = expressionCard.querySelector('.flex.flex-wrap.gap-2');
+        if (tagsContainer) {
+            // 获取所有可能的动作单元
+            const allActionUnits = [
+                'AU1', 'AU2', 'AU4', 'AU5', 'AU6', 'AU7', 'AU9', 'AU10', 'AU11', 'AU12', 
+                'AU13', 'AU14', 'AU15', 'AU16', 'AU17', 'AU18', 'AU20', 'AU22', 'AU23', 'AU24', 'AU25', 'AU26', 'AU27'
+            ];
+            
+            const actionUnitsMap = {};
+            if (data.action_units) {
+                data.action_units.forEach(au => {
+                    actionUnitsMap[au.code] = au.value;
+                });
+            }
+            
+            // 找到值最高的动作单元
+            let maxValue = 0;
+            let maxAU = null;
+            
+            allActionUnits.forEach(auCode => {
+                const value = actionUnitsMap[auCode] || 0;
+                if (value > maxValue) {
+                    maxValue = value;
+                    maxAU = auCode;
+                }
+            });
+            
+            tagsContainer.innerHTML = '';
+            
+            // 只显示值最高的动作单元
+            if (maxAU && maxValue > 0) {
+                const auNames = {
+                    'AU1': '内眉毛提升', 'AU2': '外眉毛提升', 'AU4': '眉毛皱起', 'AU5': '上眼睑提升',
+                    'AU6': '脸颊提升', 'AU7': '眼睑收紧', 'AU9': '鼻皱', 'AU10': '上唇提升',
+                    'AU11': '鼻唇沟加深', 'AU12': '嘴角提升', 'AU13': '脸颊膨胀', 'AU14': '酒窝',
+                    'AU15': '嘴角下拉', 'AU16': '下唇下拉', 'AU17': '下巴提升', 'AU18': '嘴唇撅起',
+                    'AU20': '嘴角拉伸', 'AU22': '嘴唇漏斗状', 'AU23': '嘴唇收紧', 'AU24': '嘴唇按压',
+                    'AU25': '嘴唇分离', 'AU26': '下颌下垂', 'AU27': '嘴部拉伸'
+                };
+                
+                const tag = document.createElement('span');
+                tag.className = 'px-2 py-1 bg-blue-100 rounded-full text-xs text-blue-700 font-medium';
+                tag.textContent = `${auNames[maxAU] || maxAU} ${Math.round(maxValue * 100)}%`;
+                tagsContainer.appendChild(tag);
+            } else {
+                // 如果没有检测到动作单元，显示默认信息
+                const tag = document.createElement('span');
+                tag.className = 'px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-500';
+                tag.textContent = '无显著动作单元';
+                tagsContainer.appendChild(tag);
+            }
+        }
+    }
+    
+    // 更新动作检测数据
+    function updateMotionData(data) {
+        console.log('🔍 开始更新动作数据:', data);
+        console.log('🔍 动作卡片元素:', motionCard);
+        
+        if (!motionCard) {
+            console.error('❌ 动作卡片元素未找到');
+            // 尝试重新获取DOM元素
+            const elements = getDOMElements();
+            motionCard = elements.motionCard;
+            if (!motionCard) {
+                console.error('❌ 重新获取动作卡片失败');
+            return;
+            }
+        }
+        
+        // 处理空数据或无效数据
+        if (!data || !data.body_action) {
+            console.warn('⚠️ 动作数据为空，显示默认值');
+            const postureText = motionCard.querySelector('.text-primary.font-medium');
+            const confidenceBar = motionCard.querySelector('.h-2.bg-gray-100 .bg-primary');
+            const confidenceText = motionCard.querySelector('.text-xs.text-gray-700');
+            
+            if (postureText) {
+                postureText.textContent = '正坐';
+            }
+            if (confidenceBar) {
+                confidenceBar.style.width = '85%';
+            }
+            if (confidenceText) {
+                confidenceText.textContent = '85%';
+            }
+            return;
+        }
+        
+        console.log('🤲 更新动作数据:', data.body_action);
+        
+        const postureText = motionCard.querySelector('.text-primary.font-medium');
+        const confidenceBar = motionCard.querySelector('.h-2.bg-gray-100 .bg-primary');
+        const confidenceText = motionCard.querySelector('.text-xs.text-gray-700');
+        
+        if (postureText) {
+            postureText.textContent = data.body_action.name || '正坐';
+        }
+        
+        if (confidenceBar) {
+            const confidence = Math.min(Math.round(data.body_action.confidence * 100), 100);
+            confidenceBar.style.width = `${confidence}%`;
+        }
+        
+        if (confidenceText) {
+            const confidence = Math.min(Math.round(data.body_action.confidence * 100), 100);
+            confidenceText.textContent = `${confidence}%`;
+        }
+    }
+    
+    // 更新语音分析数据
+    function updateVoiceData(data) {
+        console.log('🔍 开始更新语音数据:', data);
+        console.log('🔍 语音卡片元素:', voiceCard);
+        
+        if (!voiceCard) {
+            console.error('❌ 语音卡片元素未找到');
+            // 尝试重新获取DOM元素
+            const elements = getDOMElements();
+            voiceCard = elements.voiceCard;
+            if (!voiceCard) {
+                console.error('❌ 重新获取语音卡片失败');
+            return;
+            }
+        }
+        
+        // 处理空数据或无效数据
+        if (!data) {
+            console.warn('⚠️ 语音数据为空，显示默认值');
+            const emotionText = voiceCard.querySelector('.text-primary.font-medium');
+            const confidenceBar = voiceCard.querySelector('.h-2.bg-gray-100 .bg-primary');
+            const confidenceText = voiceCard.querySelector('.text-xs.text-gray-700');
+            const voiceText = voiceCard.querySelector('.bg-gray-50.p-3.rounded-lg.text-sm.text-gray-700');
+            
+            if (emotionText) {
+                emotionText.textContent = '自信';
+            }
+            if (confidenceBar) {
+                confidenceBar.style.width = '80%';
+            }
+            if (confidenceText) {
+                confidenceText.textContent = '80%';
+            }
+            if (voiceText) {
+                voiceText.textContent = '等待语音输入...';
+            }
+            return;
+        }
+        
+        console.log('🎤 更新语音数据:', data);
+        
+        const emotionText = voiceCard.querySelector('.text-primary.font-medium');
+        const confidenceBar = voiceCard.querySelector('.h-2.bg-gray-100 .bg-primary');
+        const confidenceText = voiceCard.querySelector('.text-xs.text-gray-700');
+        const voiceText = voiceCard.querySelector('.bg-gray-50.p-3.rounded-lg.text-sm.text-gray-700');
+        
+        if (emotionText) {
+            emotionText.textContent = data.emotion_cn || '自信';
+        }
+        
+        if (confidenceBar) {
+            const confidence = Math.min(Math.round(data.confidence * 100), 100);
+            confidenceBar.style.width = `${confidence}%`;
+        }
+        
+        if (confidenceText) {
+            const confidence = Math.min(Math.round(data.confidence * 100), 100);
+            confidenceText.textContent = `${confidence}%`;
+        }
+        
+        if (voiceText && data.accumulated_text) {
+            voiceText.textContent = data.accumulated_text;
+        }
+        
+        // 更新语音特征 - 使用更安全的选择器
+        try {
+            const progressBars = voiceCard.querySelectorAll('.h-1\\.5.bg-gray-100 .bg-primary');
+            if (progressBars.length >= 3 && data.tone_analysis) {
+                // 语速
+            const speed = data.tone_analysis.speed === 'fast' ? 90 : data.tone_analysis.speed === 'slow' ? 30 : 75;
+                progressBars[0].style.width = `${speed}%`;
+        
+                // 音调
+            const pitch = data.tone_analysis.pitch === 'high' ? 90 : data.tone_analysis.pitch === 'low' ? 30 : 82;
+                progressBars[1].style.width = `${pitch}%`;
+        
+                // 清晰度
+            const clarity = Math.round(data.tone_analysis.clarity * 100);
+                progressBars[2].style.width = `${clarity}%`;
+                
+                console.log('✅ 语音特征已更新:', { speed, pitch, clarity });
+            }
+        } catch (error) {
+            console.warn('⚠️ 更新语音特征时出错:', error);
+        }
+    }
+    
+    // 计算面试评分
+    async function calculateInterviewScore() {
+        try {
+            const duration = analysisStartTime ? (Date.now() - analysisStartTime) / 1000 : 0;
+            
+            const response = await fetch(`${API_BASE_URL}/api/v1/interview/score`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                mode: 'cors',
+                body: JSON.stringify({
+                    duration: duration
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+                return result;
+            } else {
+                console.error('❌ 计算评分失败:', result.message);
+                return null;
+            }
+            
+        } catch (error) {
+            console.error('❌ 计算评分请求失败:', error);
+            return null;
+        }
+    }
+    
+    // 获取分析状态
+    async function getAnalysisStatus() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/v1/analysis/status`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                mode: 'cors'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const result = await response.json();
+            
+            if (result.is_running !== isAnalysisRunning) {
+                isAnalysisRunning = result.is_running;
+                updateAnalysisStatus(result.is_running);
+            }
+            
+            return result;
+            
+        } catch (error) {
+            console.error('❌ 获取分析状态失败:', error);
+            // 更新连接状态
+            updateConnectionStatus(false);
+            return null;
+        }
+    }
+    
+    // 获取实时数据（主要机制）
+    async function getRealtimeData() {
+        try {
+            // 确保分析正在运行
+            if (!isAnalysisRunning) {
+                console.log('🔄 分析未运行，启动分析...');
+                const success = await startAnalysis();
+                if (!success) {
+                    console.error('❌ 无法启动分析');
+                    return;
+                }
+            }
+            
+            const response = await fetch(`${API_BASE_URL}/api/v1/data/realtime`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                mode: 'cors'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data) {
+                console.log('📡 获取实时数据:', data);
+                updateExpressionData(data);
+                updateMotionData(data);
+            } else {
+                console.warn('⚠️ 实时数据为空');
+            }
+            
+        } catch (error) {
+            console.error('❌ 获取实时数据失败:', error);
+        }
+    }
+    
+    // 获取语音实时数据（主要机制）
+    async function getVoiceRealtimeData() {
+        try {
+            // 确保语音分析正在运行
+            if (!isVoiceAnalysisRunning) {
+                console.log('🔄 语音分析未运行，启动语音分析...');
+                const success = await startVoiceAnalysis();
+                if (!success) {
+                    console.error('❌ 无法启动语音分析');
+                    return;
+                }
+            }
+            
+            const response = await fetch(`${API_BASE_URL}/api/v1/voice/realtime`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                mode: 'cors'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data) {
+                console.log('📡 获取语音数据:', data);
+                updateVoiceData(data);
+            } else {
+                console.warn('⚠️ 语音数据为空');
+            }
+            
+        } catch (error) {
+            console.error('❌ 获取语音实时数据失败:', error);
+        }
+    }
+    
+    // 确保分析已启动
+    async function ensureAnalysisRunning() {
+        if (!isAnalysisRunning) {
+            console.log('🔄 分析未运行，正在启动...');
+            const success = await startAnalysis();
+            if (!success) {
+                console.error('❌ 无法启动分析');
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    // 绑定按钮事件
+    function bindButtonEvents() {
+        // 顶部启动分析按钮
+        const startAnalysisBtn = document.getElementById('start-analysis-btn');
+        if (startAnalysisBtn) {
+            startAnalysisBtn.addEventListener('click', async function() {
+                if (!isAnalysisRunning) {
+                    // 启动分析
+                    console.log('🔄 手动启动分析...');
+                    const success = await startAnalysis();
+                    if (success) {
+                        console.log('✅ 分析启动成功');
+                        // 启动语音分析
+                        await startVoiceAnalysis();
+                        // 立即获取数据
+                        getRealtimeData();
+                        getVoiceRealtimeData();
+                    } else {
+                        console.error('❌ 分析启动失败');
+                    }
+                } else {
+                    // 停止分析
+                    console.log('🔄 手动停止分析...');
+                    const success = await stopAnalysis();
+                    if (success) {
+                        console.log('✅ 分析停止成功');
+                    } else {
+                        console.error('❌ 分析停止失败');
+                    }
+                }
+            });
+        }
+        
+        // 暂停/继续面试按钮
+        const pauseButton = document.querySelector('button:has(i.ri-pause-line)');
+        if (pauseButton) {
+            pauseButton.addEventListener('click', async function() {
+                if (!isAnalysisRunning) {
+                    // 启动分析
+                    const success = await startAnalysis();
+                    if (success) {
+                        const icon = this.querySelector('i');
+                        const text = this.querySelector('span');
+                        icon.classList.remove('ri-pause-line');
+                        icon.classList.add('ri-play-line');
+                        text.textContent = '继续面试';
+                    }
+                } else {
+                    // 暂停分析
+                    const success = await stopAnalysis();
+                    if (success) {
+                        const icon = this.querySelector('i');
+                        const text = this.querySelector('span');
+                        icon.classList.remove('ri-play-line');
+                        icon.classList.add('ri-pause-line');
+                        text.textContent = '暂停面试';
+                    }
+                }
+            });
+        }
+        
+        // 结束面试按钮
+        const endButton = document.querySelector('button:has(i.ri-close-line)');
+        if (endButton) {
+            endButton.addEventListener('click', async function() {
+                if (isAnalysisRunning) {
+                    await stopAnalysis();
+                }
+                
+                // 计算评分并显示报告
+                const scoreResult = await calculateInterviewScore();
+                if (scoreResult) {
+                    showInterviewReport(scoreResult);
+                }
+            });
+        }
+        
+        // 麦克风开关
+        const micToggle = document.querySelector('input[type="checkbox"]');
+        if (micToggle) {
+            micToggle.addEventListener('change', async function() {
+                if (this.checked) {
+                    // 检查麦克风权限
+                    if (!microphonePermissionGranted) {
+                        const granted = await requestMicrophonePermission();
+                        if (!granted) {
+                            this.checked = false; // 取消选中
+                            return;
+                        }
+                    }
+                    
+                    // 获取麦克风流
+                    const stream = await getMicrophoneStream();
+                    if (!stream) {
+                        this.checked = false; // 取消选中
+                        return;
+                    }
+                    
+                    // 启动语音分析
+                    if (!isVoiceAnalysisRunning) {
+                        const success = await startVoiceAnalysis();
+                        if (!success) {
+                            this.checked = false; // 取消选中
+                        }
+                    }
+                } else {
+                    // 停止语音分析
+                    if (isVoiceAnalysisRunning) {
+                        await stopVoiceAnalysis();
+                    }
+                    
+                    // 停止麦克风流
+                    if (audioStream) {
+                        audioStream.getTracks().forEach(track => track.stop());
+                        audioStream = null;
+                    }
+                }
+            });
+        }
+    }
+    
+    // 显示面试报告
+    function showInterviewReport(scoreResult) {
+        const reportDialog = document.createElement('div');
+        reportDialog.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        
+        const detailedScores = scoreResult.detailed_scores || {};
+        const analysisStats = scoreResult.analysis_stats || {};
+        
+        reportDialog.innerHTML = `
+            <div class="bg-white rounded-lg w-[800px] max-h-[80vh] overflow-y-auto p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-medium text-gray-900">面试评测报告</h2>
+                    <button class="text-gray-500 hover:text-gray-700" onclick="this.closest('.fixed').remove()">
+                        <i class="ri-close-line text-xl"></i>
+                    </button>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-medium text-gray-900 mb-2">整体表现评分</h3>
+                        <div class="flex items-center space-x-2">
+                            <div class="text-3xl font-medium text-primary">${scoreResult.overall_score}</div>
+                            <div class="text-gray-500">/ 100</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">详细评估</h3>
+                        <div class="space-y-4">
+                            ${Object.entries(detailedScores).map(([key, value]) => `
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">${key}</span>
+                                    <div class="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full bg-primary" style="width: ${value}%"></div>
+                                    </div>
+                                    <span class="text-gray-900">${value}%</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">分析统计</h3>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>面试时长: ${Math.round(analysisStats.duration || 0)}秒</div>
+                            <div>处理帧数: ${analysisStats.frame_count || 0}</div>
+                            <div>表情检测: ${analysisStats.expression_count || 0}次</div>
+                            <div>动作检测: ${analysisStats.body_count || 0}次</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-between">
+                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-button hover:bg-gray-300 transition-colors" onclick="this.closest('.fixed').remove()">
+                        关闭
+                    </button>
+                    <div class="flex space-x-3">
+                        <button class="bg-primary text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition-colors" id="viewReportBtn">
+                            查看详细报告
+                        </button>
+                        <button class="bg-green-500 text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition-colors" id="downloadReportBtn">
+                            下载报告
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(reportDialog);
+        
+        // 添加事件监听器
+        setTimeout(() => {
+            const viewReportBtn = document.getElementById('viewReportBtn');
+            const downloadReportBtn = document.getElementById('downloadReportBtn');
+            
+            if (viewReportBtn) {
+                viewReportBtn.addEventListener('click', viewInterviewReport);
+            }
+            if (downloadReportBtn) {
+                downloadReportBtn.addEventListener('click', downloadReport);
+            }
+        }, 100);
+    }
+    
+    // 查看面试报告（跳转到静态报告页面，从后端获取数据）
+    function viewInterviewReport() {
+        try {
+            // 获取面试参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const tech_field = urlParams.get('tech_field') || '人工智能';
+            const position = urlParams.get('position') || '技术岗';
+            const candidate_name = urlParams.get('candidate_name') || '张明远';
+            const duration_minutes = Math.round((Date.now() - interviewStartTime) / (1000 * 60)) || 45;
+            
+            // 构建报告页面URL，传递面试参数
+            const reportParams = new URLSearchParams({
+                tech_field: tech_field,
+                position: position,
+                candidate_name: candidate_name,
+                duration_minutes: duration_minutes.toString()
+            });
+            
+            const reportUrl = `/report?${reportParams.toString()}`;
+            
+            // 关闭当前对话框
+            const dialog = document.querySelector('.fixed.inset-0');
+            if (dialog) {
+                dialog.remove();
+            }
+            
+            // 跳转到报告页面
+            window.location.href = reportUrl;
+            
+        } catch (error) {
+            console.error('跳转报告页面失败:', error);
+            alert('跳转报告页面失败: ' + error.message);
+        }
+    }
+    
+    // 下载报告
+    async function downloadReport() {
+        try {
+            // 获取面试参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const tech_field = urlParams.get('tech_field') || '人工智能';
+            const position = urlParams.get('position') || '技术岗';
+            const candidate_name = urlParams.get('candidate_name') || '张明远';
+            
+            // 生成报告
+            const response = await fetch('/api/v1/reports/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    tech_field: tech_field,
+                    position: position,
+                    duration_minutes: Math.round((Date.now() - interviewStartTime) / (1000 * 60)) || 45,
+                    candidate_name: candidate_name
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+                const report = result.report;
+                
+                // 生成报告文本
+                const reportText = generateReportText(report);
+                
+                // 下载文件
+                const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `面试报告_${report.basic_info.report_id}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            console.error('下载报告失败:', error);
+            alert('下载报告失败: ' + error.message);
+        }
+    }
+    
+    // 生成报告文本
+    function generateReportText(report) {
+        return `面试评估报告
+        
+报告ID: ${report.basic_info.report_id}
+面试时间: ${report.basic_info.interview_time}
+岗位: ${report.basic_info.position}
+应聘者: ${report.basic_info.candidate_name}
+综合评分: ${report.core_competencies.overall_score}分
+等级: ${report.basic_info.overall_grade}
+
+详细评分:
+专业知识水平: ${report.core_competencies.detailed_scores.professional_knowledge.score}分 - ${report.core_competencies.detailed_scores.professional_knowledge.level}
+技能匹配度: ${report.core_competencies.detailed_scores.skill_matching.score}分 - ${report.core_competencies.detailed_scores.skill_matching.level}
+语言表达能力: ${report.core_competencies.detailed_scores.language_expression.score}分 - ${report.core_competencies.detailed_scores.language_expression.level}
+逻辑思维能力: ${report.core_competencies.detailed_scores.logical_thinking.score}分 - ${report.core_competencies.detailed_scores.logical_thinking.level}
+创新能力: ${report.core_competencies.detailed_scores.innovation_ability.score}分 - ${report.core_competencies.detailed_scores.innovation_ability.level}
+应变抗压能力: ${report.core_competencies.detailed_scores.stress_resistance.score}分 - ${report.core_competencies.detailed_scores.stress_resistance.level}
+
+优势能力:
+${report.strengths_weaknesses.strengths.map(item => `• ${item.title}: ${item.description}`).join('\n')}
+
+需提升能力:
+${report.strengths_weaknesses.weaknesses.map(item => `• ${item.title}: ${item.description}`).join('\n')}
+
+提升建议:
+学习资源:
+${report.improvement_suggestions.learning_resources.map(item => `• ${item.title}: ${item.description}`).join('\n')}
+
+提升方法:
+${report.improvement_suggestions.improvement_methods.map(item => `• ${item.title}: ${item.description}`).join('\n')}
+
+报告生成时间: ${report.metadata.generated_at}
+`;
+    }
+    
+    // 添加面试开始时间记录
+    let interviewStartTime = Date.now();
+    
+    // 初始化
+    function init() {
+        console.log('🚀 初始化Flask API集成...');
+        console.log('📡 API地址:', API_BASE_URL);
+        console.log('🔌 WebSocket地址:', SOCKET_URL);
+        
+        // 立即获取DOM元素
+            const elements = getDOMElements();
+            expressionCard = elements.expressionCard;
+            motionCard = elements.motionCard;
+            voiceCard = elements.voiceCard;
+        
+        console.log('🔍 DOM元素初始化结果:');
+        console.log('  表情卡片:', expressionCard);
+        console.log('  动作卡片:', motionCard);
+        console.log('  语音卡片:', voiceCard);
+        
+        // 如果DOM元素未找到，延迟重试
+        if (!expressionCard || !motionCard || !voiceCard) {
+            console.log('🔄 DOM元素未完全加载，延迟重试...');
+            setTimeout(() => {
+                const retryElements = getDOMElements();
+                expressionCard = retryElements.expressionCard;
+                motionCard = retryElements.motionCard;
+                voiceCard = retryElements.voiceCard;
+                console.log('🔄 重试后DOM元素:', { expressionCard, motionCard, voiceCard });
+            }, 2000);
+        }
+        
+        // 初始化WebSocket
+        initSocket();
+        
+        // 绑定按钮事件
+        bindButtonEvents();
+        
+        // 立即检查一次连接状态并启动分析
+        getAnalysisStatus().then(async result => {
+            if (result) {
+                console.log('✅ 后端连接正常');
+                updateConnectionStatus(true);
+                
+                // 如果分析没有运行，自动启动
+                if (!result.is_running) {
+                    console.log('🔄 分析未运行，自动启动分析...');
+                    const success = await startAnalysis();
+                    if (success) {
+                        console.log('✅ 分析启动成功');
+                        // 启动语音分析
+                        await startVoiceAnalysis();
+                    } else {
+                        console.error('❌ 分析启动失败');
+                    }
+                } else {
+                    console.log('🔄 检测到分析正在运行');
+                }
+                
+                // 立即获取一次实时数据
+                console.log('📡 获取实时数据...');
+                getRealtimeData();
+                getVoiceRealtimeData();
+            } else {
+                console.warn('⚠️ 后端连接失败，请检查服务器状态');
+                updateConnectionStatus(false);
+            }
+        });
+        
+        // 定期检查分析状态和获取实时数据 - 使用FPS设置控制
+        const settings = loadSettings();
+        // 使用1秒间隔，因为表情和动作检测都设置为1fps
+        const updateInterval = 1000;
+        
+        window.dataUpdateInterval = setInterval(async () => {
+            const result = await getAnalysisStatus();
+            if (result) {
+                updateConnectionStatus(true);
+                
+                // 确保分析正在运行
+                if (!result.is_running && !isAnalysisRunning) {
+                    console.log('🔄 检测到分析停止，重新启动...');
+                    await startAnalysis();
+                    await startVoiceAnalysis();
+                }
+                
+                // 根据FPS设置获取数据 - 表情和动作检测都是1fps
+                const now = Date.now();
+                if (!window.lastExpressionUpdate || now - window.lastExpressionUpdate >= 1000) {
+                    getRealtimeData();
+                    window.lastExpressionUpdate = now;
+                }
+                
+                if (!window.lastVoiceUpdate || now - window.lastVoiceUpdate >= 1000 / settings.voiceFps) {
+                    getVoiceRealtimeData();
+                    window.lastVoiceUpdate = now;
+                }
+                
+                // 如果WebSocket连接失败，记录日志
+                if (!socket || !socket.connected) {
+                    console.log('🔄 WebSocket未连接，使用HTTP轮询...');
+                }
+            }
+        }, updateInterval);
+        
+        console.log('✅ Flask API集成初始化完成');
+        console.log('📊 当前FPS设置:');
+        console.log('  表情检测: 1 FPS');
+        console.log('  动作检测: 1 FPS');
+        console.log('  语音分析: 5 FPS');
+        console.log('  更新间隔: 1000ms');
+    }
+    
+    // 显示设置对话框
+    function showSettingsDialog() {
+        console.log('正在打开设置面板...');
+        
+        // 检查是否已有设置面板，如果有则移除
+        const existingDialog = document.querySelector('.settings-dialog');
+        if (existingDialog) {
+            existingDialog.remove();
+        }
+        
+        const settingsDialog = document.createElement('div');
+        settingsDialog.className = 'settings-dialog fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center';
+        settingsDialog.style.zIndex = '9999';
+        
+        settingsDialog.innerHTML = `
+            <div class="bg-white rounded-lg w-[600px] max-h-[85vh] overflow-y-auto shadow-xl">
+                <div class="flex justify-between items-center mb-6 p-6 border-b border-gray-200">
+                    <h2 class="text-2xl font-medium text-gray-900">系统设置</h2>
+                    <button class="text-gray-500 hover:text-gray-700" onclick="this.closest('.fixed').remove()">
+                        <i class="ri-close-line text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="p-6 space-y-8">
+                    <!-- 检测频率设置 -->
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-4 flex items-center">
+                            <i class="ri-speed-line mr-2 text-primary"></i>
+                            检测频率设置
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    表情检测 FPS: <span id="expression-fps-value">1</span>
+                                </label>
+                                <input type="range" id="expression-fps-slider" min="1" max="30" value="1" 
+                                       class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>1 FPS</span>
+                                    <span>30 FPS</span>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    动作检测 FPS: <span id="motion-fps-value">1</span>
+                                </label>
+                                <input type="range" id="motion-fps-slider" min="1" max="20" value="1" 
+                                       class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>1 FPS</span>
+                                    <span>20 FPS</span>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    语音分析 FPS: <span id="voice-fps-value">5</span>
+                                </label>
+                                <input type="range" id="voice-fps-slider" min="1" max="10" value="5" 
+                                       class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>1 FPS</span>
+                                    <span>10 FPS</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 功能开关设置 -->
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-4 flex items-center">
+                            <i class="ri-toggle-line mr-2 text-primary"></i>
+                            功能开关设置
+                        </h3>
+                        <div class="space-y-4">
+                            <!-- 面试官问题显示配置 -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div>
+                                        <h4 class="font-medium text-gray-900">面试官问题显示</h4>
+                                        <p class="text-sm text-gray-600 mt-1">控制面试官问题文本的显示状态</p>
+                                    </div>
+                                    <label class="custom-switch">
+                                        <input type="checkbox" id="question-toggle" checked>
+                                        <span class="switch-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="bg-white p-3 rounded border">
+                                    <p class="text-sm text-gray-700">当前状态：<span id="question-status" class="font-medium text-green-600">已启用</span></p>
+                                    <p class="text-xs text-gray-500 mt-1">面试官的问题将实时显示在左侧面板中</p>
+                                </div>
+                            </div>
+                            
+                            <!-- 表情检测配置 - 默认启用 -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div>
+                                        <h4 class="font-medium text-gray-900">表情检测</h4>
+                                        <p class="text-sm text-gray-600 mt-1">实时分析面部表情变化</p>
+                                    </div>
+                                    <div class="text-green-600 text-sm font-medium">
+                                        <i class="ri-check-line mr-1"></i>默认启用
+                                    </div>
+                                </div>
+                                <div class="bg-white p-3 rounded border">
+                                    <p class="text-sm text-gray-700">当前状态：<span class="font-medium text-green-600">已启用</span></p>
+                                    <p class="text-xs text-gray-500 mt-1">实时检测用户的面部表情和情绪状态</p>
+                                </div>
+                            </div>
+                            
+                            <!-- 动作检测配置 - 默认启用 -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div>
+                                        <h4 class="font-medium text-gray-900">动作检测</h4>
+                                        <p class="text-sm text-gray-600 mt-1">监测肢体语言和姿态变化</p>
+                                    </div>
+                                    <div class="text-green-600 text-sm font-medium">
+                                        <i class="ri-check-line mr-1"></i>默认启用
+                                    </div>
+                                </div>
+                                <div class="bg-white p-3 rounded border">
+                                    <p class="text-sm text-gray-700">当前状态：<span class="font-medium text-green-600">已启用</span></p>
+                                    <p class="text-xs text-gray-500 mt-1">检测用户的身体动作、姿态和手势</p>
+                                </div>
+                            </div>
+                            
+                            <!-- 语音情感分析配置 - 默认启用 -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div>
+                                        <h4 class="font-medium text-gray-900">语音情感分析</h4>
+                                        <p class="text-sm text-gray-600 mt-1">分析语音情感和语言特征</p>
+                                    </div>
+                                    <div class="text-green-600 text-sm font-medium">
+                                        <i class="ri-check-line mr-1"></i>默认启用
+                                    </div>
+                                </div>
+                                <div class="bg-white p-3 rounded border">
+                                    <p class="text-sm text-gray-700">当前状态：<span class="font-medium text-green-600">已启用</span></p>
+                                    <p class="text-xs text-gray-500 mt-1">分析语音情感、语速、音调和清晰度</p>
+                                </div>
+                            </div>
+                            
+                            <!-- 实时提示配置 -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div>
+                                        <h4 class="font-medium text-gray-900">实时提示</h4>
+                                        <p class="text-sm text-gray-600 mt-1">显示回答建议和参考要点</p>
+                                    </div>
+                                    <label class="custom-switch">
+                                        <input type="checkbox" id="tips-toggle" checked>
+                                        <span class="switch-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="bg-white p-3 rounded border">
+                                    <p class="text-sm text-gray-700">当前状态：<span id="tips-status" class="font-medium text-green-600">已启用</span></p>
+                                    <p class="text-xs text-gray-500 mt-1">提供面试回答的建议和参考要点</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 显示设置 -->
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-4 flex items-center">
+                            <i class="ri-eye-line mr-2 text-primary"></i>
+                            显示设置
+                        </h3>
+                        <div class="space-y-3 bg-gray-50 p-4 rounded-lg">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="show-all-actions" checked class="rounded border-gray-300 text-primary focus:ring-primary">
+                                <span class="ml-2 text-sm text-gray-700">显示所有动作单元（即使值为0）</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="auto-start-analysis" checked class="rounded border-gray-300 text-primary focus:ring-primary">
+                                <span class="ml-2 text-sm text-gray-700">页面加载时自动启动分析</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="enable-websocket" checked class="rounded border-gray-300 text-primary focus:ring-primary">
+                                <span class="ml-2 text-sm text-gray-700">启用WebSocket实时通信</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-6 border-t border-gray-200 flex space-x-3 p-6">
+                    <button class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-button hover:bg-gray-200 transition-colors" id="reset-settings">
+                        恢复默认
+                    </button>
+                    <button class="flex-1 bg-primary text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition-colors" onclick="saveSettings()">
+                        保存设置
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // 点击背景关闭面板
+        settingsDialog.addEventListener('click', function(e) {
+            if (e.target === settingsDialog) {
+                settingsDialog.remove();
+            }
+        });
+        
+        document.body.appendChild(settingsDialog);
+        
+        // 绑定滑块事件
+        bindSettingsEvents();
+        
+        // 绑定开关事件
+        bindToggleEvents();
+        
+        console.log('✅ 统一设置面板已显示');
+    }
+    
+    // 绑定设置事件
+    function bindSettingsEvents() {
+        const expressionSlider = document.getElementById('expression-fps-slider');
+        const motionSlider = document.getElementById('motion-fps-slider');
+        const voiceSlider = document.getElementById('voice-fps-slider');
+        
+        if (expressionSlider) {
+            expressionSlider.addEventListener('input', function() {
+                document.getElementById('expression-fps-value').textContent = this.value;
+            });
+        }
+        
+        if (motionSlider) {
+            motionSlider.addEventListener('input', function() {
+                document.getElementById('motion-fps-value').textContent = this.value;
+            });
+        }
+        
+        if (voiceSlider) {
+            voiceSlider.addEventListener('input', function() {
+                document.getElementById('voice-fps-value').textContent = this.value;
+            });
+        }
+    }
+    
+    // 绑定开关事件
+    function bindToggleEvents() {
+        // 面试官问题显示开关
+        const questionToggle = document.getElementById('question-toggle');
+        if (questionToggle) {
+            questionToggle.addEventListener('change', function() {
+                const status = document.getElementById('question-status');
+                if (this.checked) {
+                    status.textContent = '已启用';
+                    status.className = 'font-medium text-green-600';
+                } else {
+                    status.textContent = '已禁用';
+                    status.className = 'font-medium text-red-600';
+                }
+            });
+        }
+        
+        // 表情检测、动作检测、语音情感分析 - 默认启用，无需开关
+        
+        // 实时提示开关
+        const tipsToggle = document.getElementById('tips-toggle');
+        if (tipsToggle) {
+            tipsToggle.addEventListener('change', function() {
+                const status = document.getElementById('tips-status');
+                if (this.checked) {
+                    status.textContent = '已启用';
+                    status.className = 'font-medium text-green-600';
+                } else {
+                    status.textContent = '已禁用';
+                    status.className = 'font-medium text-red-600';
+                }
+            });
+        }
+        
+        // 恢复默认按钮
+        const resetBtn = document.getElementById('reset-settings');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', function() {
+                resetToDefaults();
+            });
+        }
+    }
+    
+    // 恢复默认设置
+    function resetToDefaults() {
+        // 重置FPS滑块
+        const expressionSlider = document.getElementById('expression-fps-slider');
+        const motionSlider = document.getElementById('motion-fps-slider');
+        const voiceSlider = document.getElementById('voice-fps-slider');
+        
+        if (expressionSlider) {
+            expressionSlider.value = 1;
+            document.getElementById('expression-fps-value').textContent = '1';
+        }
+        
+        if (motionSlider) {
+            motionSlider.value = 1;
+            document.getElementById('motion-fps-value').textContent = '1';
+        }
+        
+        if (voiceSlider) {
+            voiceSlider.value = 5;
+            document.getElementById('voice-fps-value').textContent = '5';
+        }
+        
+        // 重置开关（仅保留问题显示和实时提示）
+        const toggles = ['question-toggle', 'tips-toggle'];
+        toggles.forEach(id => {
+            const toggle = document.getElementById(id);
+            if (toggle) {
+                toggle.checked = true;
+                const status = document.getElementById(id.replace('-toggle', '-status'));
+                if (status) {
+                    status.textContent = '已启用';
+                    status.className = 'font-medium text-green-600';
+                }
+            }
+        });
+        
+        // 重置复选框
+        const checkboxes = ['show-all-actions', 'auto-start-analysis', 'enable-websocket'];
+        checkboxes.forEach(id => {
+            const checkbox = document.getElementById(id);
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+        });
+        
+        console.log('✅ 设置已恢复默认值');
+    }
+    
+    // 保存设置
+    function saveSettings() {
+        try {
+            console.log('🔄 开始保存设置...');
+            
+            // 获取所有设置元素
+            const expressionFpsSlider = document.getElementById('expression-fps-slider');
+            const motionFpsSlider = document.getElementById('motion-fps-slider');
+            const voiceFpsSlider = document.getElementById('voice-fps-slider');
+            const questionToggle = document.getElementById('question-toggle');
+            const tipsToggle = document.getElementById('tips-toggle');
+            const showAllActions = document.getElementById('show-all-actions');
+            const autoStartAnalysis = document.getElementById('auto-start-analysis');
+            const enableWebSocket = document.getElementById('enable-websocket');
+            
+            // 检查元素是否存在
+            if (!expressionFpsSlider || !motionFpsSlider || !voiceFpsSlider) {
+                console.error('❌ FPS滑块元素未找到');
+                showNotification('设置保存失败：FPS滑块未找到', 'error');
+                return;
+            }
+            
+            if (!questionToggle || !tipsToggle) {
+                console.error('❌ 功能开关元素未找到');
+                showNotification('设置保存失败：功能开关未找到', 'error');
+                return;
+            }
+            
+        const settings = {
+                // FPS设置
+                expressionFps: parseInt(expressionFpsSlider.value) || 1,
+                motionFps: parseInt(motionFpsSlider.value) || 1,
+                voiceFps: parseInt(voiceFpsSlider.value) || 5,
+                
+                // 功能开关设置（表情/动作/语音检测默认启用）
+                questionDisplay: questionToggle.checked,
+                expressionDetection: true,  // 默认启用
+                motionDetection: true,      // 默认启用
+                voiceAnalysis: true,        // 默认启用
+                realtimeTips: tipsToggle.checked,
+                
+                // 显示设置
+                showAllActions: showAllActions ? showAllActions.checked : true,
+                autoStartAnalysis: autoStartAnalysis ? autoStartAnalysis.checked : true,
+                enableWebSocket: enableWebSocket ? enableWebSocket.checked : true
+            };
+            
+            console.log('📊 收集到的设置:', settings);
+        
+        // 保存到本地存储
+        localStorage.setItem('interviewSettings', JSON.stringify(settings));
+        
+        // 应用设置
+        applySettings(settings);
+        
+        // 关闭对话框
+            const dialog = document.querySelector('.settings-dialog');
+            if (dialog) {
+                dialog.remove();
+            } else {
+                // 备用关闭方法
+                const fixedElements = document.querySelectorAll('.fixed');
+                fixedElements.forEach(el => {
+                    if (el.classList.contains('settings-dialog') || el.querySelector('.settings-dialog')) {
+                        el.remove();
+                    }
+                });
+            }
+            
+            console.log('✅ 统一设置已保存:', settings);
+            
+            // 显示保存成功提示
+            showNotification('设置已保存', 'success');
+            
+        } catch (error) {
+            console.error('❌ 保存设置时出错:', error);
+            showNotification('设置保存失败：' + error.message, 'error');
+        }
+    }
+    
+    // 显示通知
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 px-4 py-2 rounded-lg text-white z-50 transition-all duration-300 ${
+            type === 'success' ? 'bg-green-500' : 
+            type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+        }`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        // 3秒后自动移除
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+    
+    // 应用设置
+    function applySettings(settings) {
+        // 更新FPS设置
+        window.expressionFps = settings.expressionFps;
+        window.motionFps = settings.motionFps;
+        window.voiceFps = settings.voiceFps;
+        
+        // 更新功能开关设置（表情/动作/语音检测默认启用）
+        window.questionDisplay = settings.questionDisplay;
+        window.expressionDetection = true;  // 默认启用
+        window.motionDetection = true;      // 默认启用
+        window.voiceAnalysis = true;        // 默认启用
+        window.realtimeTips = settings.realtimeTips;
+        
+        // 更新显示设置
+        window.showAllActions = settings.showAllActions;
+        window.autoStartAnalysis = settings.autoStartAnalysis;
+        window.enableWebSocket = settings.enableWebSocket;
+        
+        // 应用功能开关设置
+        applyFeatureToggles(settings);
+        
+        // 重新调整定时器
+        if (window.dataUpdateInterval) {
+            clearInterval(window.dataUpdateInterval);
+        }
+        
+        // 根据设置调整更新频率
+        const updateInterval = 1000;
+        window.dataUpdateInterval = setInterval(async () => {
+            const result = await getAnalysisStatus();
+            if (result) {
+                updateConnectionStatus(true);
+                
+                // 确保分析正在运行
+                if (!result.is_running && !isAnalysisRunning) {
+                    console.log('🔄 检测到分析停止，重新启动...');
+                    await startAnalysis();
+                    await startVoiceAnalysis();
+                }
+                
+                // 根据FPS设置获取数据
+                const now = Date.now();
+                if (!window.lastExpressionUpdate || now - window.lastExpressionUpdate >= 1000) {
+                    getRealtimeData();
+                    window.lastExpressionUpdate = now;
+                }
+                
+                if (!window.lastVoiceUpdate || now - window.lastVoiceUpdate >= 1000 / settings.voiceFps) {
+                    getVoiceRealtimeData();
+                    window.lastVoiceUpdate = now;
+                }
+                
+                // 如果WebSocket连接失败，记录日志
+                if (!socket || !socket.connected) {
+                    console.log('🔄 WebSocket未连接，使用HTTP轮询...');
+                }
+            }
+        }, updateInterval);
+        
+        console.log('✅ 统一设置已应用:', settings);
+    }
+    
+    // 应用功能开关设置（简化版 - 表情/动作/语音检测默认显示）
+    function applyFeatureToggles(settings) {
+        // 面试官问题显示 - 始终显示问题
+        const questionElement = document.getElementById('current-question');
+        if (questionElement) {
+            questionElement.style.display = 'block'; // 强制显示问题
+        }
+        
+        // 表情检测面板 - 默认显示
+        const expressionPanel = document.querySelector('.bg-white.rounded-lg.shadow-sm.p-6.mb-6');
+        if (expressionPanel && expressionPanel.textContent.includes('表情检测')) {
+            expressionPanel.style.display = 'block';
+        }
+        
+        // 动作检测面板 - 默认显示
+        const motionPanels = document.querySelectorAll('.bg-white.rounded-lg.shadow-sm.p-6.mb-6');
+        motionPanels.forEach(panel => {
+            if (panel.textContent.includes('动作检测')) {
+                panel.style.display = 'block';
+            }
+        });
+        
+        // 语音情感分析面板 - 默认显示
+        const voicePanels = document.querySelectorAll('.bg-white.rounded-lg.shadow-sm.p-6');
+        voicePanels.forEach(panel => {
+            if (panel.textContent.includes('语音情感分析')) {
+                panel.style.display = 'block';
+            }
+        });
+        
+        // 实时提示功能
+        if (!settings.realtimeTips) {
+            // 隐藏提示元素
+            const tipsElements = document.querySelectorAll('[data-tips]');
+            tipsElements.forEach(el => el.style.display = 'none');
+        }
+        
+        console.log('✅ 功能开关已应用（表情/动作/语音检测默认显示）');
+    }
+    
+    // 加载设置
+    function loadSettings() {
+        const savedSettings = localStorage.getItem('interviewSettings');
+        if (savedSettings) {
+            const settings = JSON.parse(savedSettings);
+            applySettings(settings);
+            return settings;
+        }
+        
+        // 默认设置
+        const defaultSettings = {
+            // FPS设置
+            expressionFps: 1,
+            motionFps: 1,
+            voiceFps: 5,
+            
+            // 功能开关设置 - 问题显示始终为true
+            questionDisplay: true, // 强制设置为true
+            expressionDetection: true,
+            motionDetection: true,
+            voiceAnalysis: true,
+            realtimeTips: true,
+            
+            // 显示设置
+            showAllActions: true,
+            autoStartAnalysis: true,
+            enableWebSocket: true
+        };
+        
+        applySettings(defaultSettings);
+        return defaultSettings;
+    }
+    
+    // 启动初始化
+    init();
+    
+    // 加载设置
+    loadSettings();
+    
+    // 强制显示问题元素（额外保障）
+    setTimeout(() => {
+        const questionElement = document.getElementById('current-question');
+        if (questionElement) {
+            questionElement.style.display = 'block';
+            console.log('✅ 强制显示问题元素');
+        }
+    }, 100);
+    
+    // 绑定设置按钮（顶部和底部）
+    try {
+        const topSettingsBtn = document.getElementById('settings-btn');
+        const bottomSettingsBtn = document.getElementById('settings-btn-footer');
+        
+        if (topSettingsBtn) {
+            topSettingsBtn.addEventListener('click', showSettingsDialog);
+            console.log('✅ 顶部设置按钮事件已绑定');
+        } else {
+            console.warn('⚠️ 未找到顶部设置按钮');
+        }
+        
+        if (bottomSettingsBtn) {
+            bottomSettingsBtn.addEventListener('click', showSettingsDialog);
+            console.log('✅ 底部设置按钮事件已绑定');
+        } else {
+            console.warn('⚠️ 未找到底部设置按钮');
+        }
+    } catch (error) {
+        console.error('❌ 绑定设置按钮事件时出错:', error);
+    }
+    
+    // 结束面试跳转
+    const endBtn = Array.from(document.querySelectorAll('button')).find(btn => btn.textContent && btn.textContent.includes('结束面试'));
+    if (endBtn) {
+        endBtn.addEventListener('click', function() {
+            window.location.href = './interview_report.html';
+        });
+    }
+});
+</script>
+
+<!-- 题目设置模态框 -->
+<div id="question-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-medium text-gray-900">选择面试题目</h3>
+            <button id="close-question-modal" class="text-gray-400 hover:text-gray-600">
+                <i class="ri-close-line ri-lg"></i>
+            </button>
+        </div>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">技术领域</label>
+                <select id="tech-field-select" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="">请选择技术领域</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">岗位类型</label>
+                <select id="position-select" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="">请选择岗位类型</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">题目序号</label>
+                <select id="question-id-select" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="">请选择题目</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="flex justify-end space-x-3 mt-6">
+            <button id="cancel-question-modal" class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                取消
+            </button>
+            <button id="apply-question-modal" class="px-4 py-2 text-white bg-primary rounded-lg hover:bg-opacity-90 transition-colors">
+                应用
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// 题目管理系统
+class QuestionManager {
+    constructor() {
+        console.log('🚀 初始化QuestionManager...');
+        
+        // 从URL参数获取初始值
+        const urlParams = this.getUrlParams();
+        console.log('URL参数:', urlParams);
+        
+        this.currentTechField = urlParams.techField || '人工智能';
+        this.currentPosition = urlParams.position || '技术岗';
+        this.currentQuestionId = urlParams.questionId || 1;
+        this.currentQuestions = [];
+        
+        console.log(`📋 初始设置: ${this.currentTechField} - ${this.currentPosition} - 题目${this.currentQuestionId}`);
+        
+        this.init();
+    }
+    
+    getUrlParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return {
+            techField: urlParams.get('tech_field'),
+            position: urlParams.get('position'),
+            questionId: parseInt(urlParams.get('question_id')) || 1
+        };
+    }
+    
+    updateUrl() {
+        const url = new URL(window.location);
+        url.searchParams.set('tech_field', this.currentTechField);
+        url.searchParams.set('position', this.currentPosition);
+        url.searchParams.set('question_id', this.currentQuestionId);
+        window.history.replaceState({}, '', url);
+    }
+    
+    async init() {
+        try {
+            // 获取问题分类
+            await this.loadCategories();
+            
+            // 初始化事件监听器
+            this.setupEventListeners();
+            
+            // 检查URL参数，如果有参数则直接加载对应问题
+            const urlParams = this.getUrlParams();
+            console.log('🔍 检查URL参数:', urlParams);
+            
+            if (urlParams.techField && urlParams.position) {
+                console.log(`📋 根据URL参数加载问题: ${urlParams.techField} - ${urlParams.position} - 题目${urlParams.questionId}`);
+                // 更新当前设置
+                this.currentTechField = urlParams.techField;
+                this.currentPosition = urlParams.position;
+                this.currentQuestionId = urlParams.questionId || 1;
+                
+                // 直接加载对应的问题
+                await this.loadQuestions(this.currentTechField, this.currentPosition);
+                
+                // 如果指定了特定问题ID，确保显示该问题
+                if (urlParams.questionId) {
+                    console.log(`🎯 显示指定问题ID: ${urlParams.questionId}`);
+                    this.currentQuestionId = urlParams.questionId;
+                    this.displayCurrentQuestion();
+                }
+            } else {
+                console.log('📋 没有URL参数，显示欢迎信息');
+                this.showWelcomeMessage();
+            }
+            
+        } catch (error) {
+            console.error('初始化题目管理器失败:', error);
+            // 如果初始化失败，显示fallback问题
+            this.showFallbackQuestion();
+        }
+    }
+    
+    showFallbackQuestion() {
+        console.log('📋 显示默认问题...');
+        
+        const questionElement = document.getElementById('current-question');
+        const metaElement = document.getElementById('question-meta');
+        
+        if (questionElement) {
+            // 强制显示问题元素
+            questionElement.style.display = 'block';
+            questionElement.innerHTML = 
+                `请详细介绍一下您的技术背景和项目经验。包括您最熟悉的技术栈、参与过的重要项目，以及在项目中遇到的技术挑战和解决方案。请重点说明您在团队中的角色和贡献。`;
+        }
+        
+        if (metaElement) {
+            metaElement.textContent = '技术背景与项目经验 | 默认问题';
+        }
+        
+        // 显示下一道题按钮
+        const nextBtn = document.getElementById('next-question-btn');
+        if (nextBtn) {
+            nextBtn.style.display = 'flex';
+        }
+        
+        console.log('✅ 默认问题显示完成');
+    }
+    
+    loadFallbackQuestions(techField, position) {
+        console.log(`📋 加载fallback问题: ${techField} - ${position}`);
+        
+        // 根据techField和position提供一些默认问题
+        const fallbackQuestions = {
+            '人工智能': {
+                '技术岗': [
+                    {
+                        id: 1,
+                        question: "请详细解释一下深度学习中的反向传播算法的原理，以及它在神经网络训练中的作用。",
+                        answer: "反向传播算法是深度学习中的核心算法，基于链式法则计算损失函数相对于网络参数的梯度..."
+                    },
+                    {
+                        id: 2,
+                        question: "什么是过拟合？如何检测和防止过拟合？请举例说明几种常用的正则化方法。",
+                        answer: "过拟合是指模型在训练集上表现很好，但在测试集上表现较差的现象..."
+                    },
+                    {
+                        id: 3,
+                        question: "解释卷积神经网络（CNN）的基本结构和工作原理，为什么CNN特别适合处理图像任务？",
+                        answer: "CNN包含卷积层、池化层和全连接层..."
+                    }
+                ],
+                '产品岗': [
+                    {
+                        id: 1,
+                        question: "你如何为一款AI产品定义核心价值和目标用户？请举例说明。",
+                        answer: "首先通过市场调研和用户研究，识别出用户的核心痛点..."
+                    }
+                ]
+            },
+            '默认': [
+                {
+                    id: 1,
+                    question: "请详细介绍一下您的技术背景和项目经验。包括您最熟悉的技术栈、参与过的重要项目，以及在项目中遇到的技术挑战和解决方案。",
+                    answer: "这是一个开放性问题，主要考察候选人的技术背景和项目经验。"
+                },
+                {
+                    id: 2,
+                    question: "描述一下您在团队协作中的角色和贡献，以及如何处理团队中的技术分歧和冲突。",
+                    answer: "这个问题考察候选人的团队协作能力和沟通技巧。"
+                }
+            ]
+        };
+        
+        // 尝试获取对应的问题，如果没有则使用默认问题
+        let questions = null;
+        if (fallbackQuestions[techField] && fallbackQuestions[techField][position]) {
+            questions = fallbackQuestions[techField][position];
+        } else {
+            questions = fallbackQuestions['默认'];
+        }
+        
+        this.currentQuestions = questions;
+        this.currentTechField = techField;
+        this.currentPosition = position;
+        
+        console.log(`✅ 加载fallback问题成功: ${this.currentQuestions.length} 个问题`);
+        
+        // 显示第一个问题
+        this.displayCurrentQuestion();
+    }
+    
+    showWelcomeMessage() {
+        console.log('🎉 显示欢迎信息...');
+        
+        const questionElement = document.getElementById('current-question');
+        const metaElement = document.getElementById('question-meta');
+        
+        if (questionElement) {
+            // 强制显示问题元素
+            questionElement.style.display = 'block';
+            questionElement.innerHTML = 
+                `您好！我是李教授，您的AI面试官。欢迎参加我们的智能面试系统！🎉<br><br>
+                
+                在开始正式面试之前，我想先了解一下您的基本情况。请您用30秒时间简单介绍一下自己，包括您的教育背景、技术栈以及您最感兴趣的技术领域。这样我就能为您准备更合适的面试题目。<br><br>
+                
+                请确保您的摄像头和麦克风已开启，我会实时分析您的表情、肢体语言和语音情感，为您提供全面的面试反馈。<br><br>
+                
+                准备好了吗？请开始您的自我介绍！`;
+        }
+        
+        if (metaElement) {
+            metaElement.textContent = '欢迎来到智能面试系统';
+        }
+        
+        // 隐藏下一道题按钮，显示开始面试按钮
+        const nextBtn = document.getElementById('next-question-btn');
+        if (nextBtn) {
+            nextBtn.style.display = 'none';
+            console.log('✅ 隐藏下一道题按钮');
+        }
+        
+        // 添加开始面试按钮
+        this.addStartInterviewButton();
+        
+        console.log('✅ 欢迎信息显示完成');
+    }
+    
+    addStartInterviewButton() {
+        // 检查是否已有开始面试按钮
+        let startBtn = document.getElementById('start-interview-btn');
+        if (!startBtn) {
+            startBtn = document.createElement('button');
+            startBtn.id = 'start-interview-btn';
+            startBtn.className = 'bg-green-500 text-white px-4 py-2 rounded-button flex items-center hover:bg-opacity-90 transition-colors whitespace-nowrap';
+            startBtn.innerHTML = '<i class="ri-play-line mr-1"></i><span>开始正式面试</span>';
+            
+            // 插入到下一道题按钮的位置
+            const nextBtn = document.getElementById('next-question-btn');
+            if (nextBtn && nextBtn.parentNode) {
+                nextBtn.parentNode.insertBefore(startBtn, nextBtn);
+            }
+            
+            // 绑定点击事件
+            startBtn.addEventListener('click', () => {
+                this.startFormalInterview();
+            });
+            
+            console.log('✅ 开始面试按钮已添加');
+        }
+    }
+    
+    async startFormalInterview() {
+        console.log('🎬 开始正式面试...');
+        
+        // 移除开始面试按钮
+        const startBtn = document.getElementById('start-interview-btn');
+        if (startBtn) {
+            startBtn.remove();
+        }
+        
+        // 显示下一道题按钮
+        const nextBtn = document.getElementById('next-question-btn');
+        if (nextBtn) {
+            nextBtn.style.display = 'flex';
+        }
+        
+        // 加载问题 - 优先使用API，失败则使用fallback
+        try {
+            await this.loadQuestions(this.currentTechField, this.currentPosition);
+        } catch (error) {
+            console.warn('⚠️ API加载失败，使用fallback问题');
+            this.loadFallbackQuestions(this.currentTechField, this.currentPosition);
+        }
+        
+        console.log('✅ 正式面试已开始');
+    }
+    
+    async loadCategories() {
+        try {
+            console.log('📋 从后端API加载问题分类...');
+            const response = await fetch('/api/v1/questions/categories');
+            const data = await response.json();
+            
+            console.log('📊 API响应数据:', data);
+            
+            if (data.status === 'success') {
+                this.populateSelects(data.categories);
+                console.log('✅ 问题分类加载成功');
+            } else {
+                console.error('❌ 加载问题分类失败:', data.message);
+                console.log('🔄 使用fallback分类数据');
+                this.loadFallbackCategories();
+            }
+        } catch (error) {
+            console.error('❌ 请求问题分类失败:', error);
+            console.log('🔄 使用fallback分类数据');
+            this.loadFallbackCategories();
+        }
+    }
+    
+    convertToCategories(questionsData) {
+        const categories = [];
+        
+        Object.keys(questionsData).forEach(techField => {
+            Object.keys(questionsData[techField]).forEach(position => {
+                const questions = questionsData[techField][position];
+                categories.push({
+                    tech_field: techField,
+                    position: position,
+                    question_count: questions.length
+                });
+            });
+        });
+        
+        console.log('📋 转换后的分类:', categories);
+        return categories;
+    }
+    
+    loadFallbackCategories() {
+        const fallbackCategories = [
+            { tech_field: '人工智能', position: '技术岗', question_count: 3 },
+            { tech_field: '人工智能', position: '产品岗', question_count: 3 },
+            { tech_field: '人工智能', position: '运营岗', question_count: 3 },
+            { tech_field: '大数据', position: '技术岗', question_count: 3 },
+            { tech_field: '物联网', position: '技术岗', question_count: 3 }
+        ];
+        
+        this.populateSelects(fallbackCategories);
+        console.log('✅ Fallback分类数据已加载');
+    }
+    
+    populateSelects(categories) {
+        const techFieldSelect = document.getElementById('tech-field-select');
+        const positionSelect = document.getElementById('position-select');
+        
+        // 清空现有选项
+        techFieldSelect.innerHTML = '<option value="">请选择技术领域</option>';
+        positionSelect.innerHTML = '<option value="">请选择岗位类型</option>';
+        
+        // 获取唯一的技术领域
+        const techFields = [...new Set(categories.map(cat => cat.tech_field))];
+        techFields.forEach(field => {
+            const option = document.createElement('option');
+            option.value = field;
+            option.textContent = field;
+            if (field === this.currentTechField) {
+                option.selected = true;
+            }
+            techFieldSelect.appendChild(option);
+        });
+        
+        // 根据当前技术领域填充岗位
+        this.updatePositionOptions(categories);
+    }
+    
+    updatePositionOptions(categories) {
+        const positionSelect = document.getElementById('position-select');
+        const currentFieldCategories = categories.filter(cat => cat.tech_field === this.currentTechField);
+        
+        positionSelect.innerHTML = '<option value="">请选择岗位类型</option>';
+        
+        currentFieldCategories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat.position;
+            option.textContent = `${cat.position} (${cat.question_count}题)`;
+            if (cat.position === this.currentPosition) {
+                option.selected = true;
+            }
+            positionSelect.appendChild(option);
+        });
+    }
+    
+    async loadQuestions(techField, position) {
+        try {
+            console.log(`🔄 从后端API加载问题: ${techField} - ${position}`);
+            
+            const response = await fetch(`/api/v1/questions/${encodeURIComponent(techField)}/${encodeURIComponent(position)}`);
+            const data = await response.json();
+            
+            console.log('API响应:', data);
+            
+            if (data.status === 'success') {
+                this.currentQuestions = data.questions;
+                this.currentTechField = techField;
+                this.currentPosition = position;
+                console.log(`✅ 从API加载到 ${this.currentQuestions.length} 个问题`);
+                
+                // 确保currentQuestionId有效
+                if (!this.currentQuestionId || !this.currentQuestions.find(q => q.id === this.currentQuestionId)) {
+                    this.currentQuestionId = this.currentQuestions.length > 0 ? this.currentQuestions[0].id : 1;
+                    console.log(`📋 设置当前问题ID为: ${this.currentQuestionId}`);
+                }
+                
+                this.updateQuestionOptions();
+                this.displayCurrentQuestion();
+            } else {
+                console.error('❌ 加载问题失败:', data.message);
+                // 使用fallback问题
+                this.loadFallbackQuestions(techField, position);
+            }
+        } catch (error) {
+            console.error('❌ 请求问题失败:', error);
+            // 使用fallback问题
+            this.loadFallbackQuestions(techField, position);
+        }
+    }
+    
+    showErrorMessage(message) {
+        const questionElement = document.getElementById('current-question');
+        const metaElement = document.getElementById('question-meta');
+        
+        if (questionElement) {
+            questionElement.innerHTML = `<span class="text-red-600">❌ 加载问题失败: ${message}</span>`;
+        }
+        
+        if (metaElement) {
+            metaElement.textContent = '加载失败';
+        }
+    }
+    
+    updateQuestionOptions() {
+        const questionSelect = document.getElementById('question-id-select');
+        questionSelect.innerHTML = '<option value="">请选择题目</option>';
+        
+        this.currentQuestions.forEach(question => {
+            const option = document.createElement('option');
+            option.value = question.id;
+            option.textContent = `第${question.id}题`;
+            if (question.id === this.currentQuestionId) {
+                option.selected = true;
+            }
+            questionSelect.appendChild(option);
+        });
+    }
+    
+    displayCurrentQuestion() {
+        console.log(`📋 显示问题 ID: ${this.currentQuestionId}`);
+        console.log(`📋 可用问题数量: ${this.currentQuestions ? this.currentQuestions.length : 0}`);
+        
+        // 检查是否有问题数据
+        if (!this.currentQuestions || this.currentQuestions.length === 0) {
+            console.warn('⚠️ 没有可用的问题，使用fallback问题');
+            this.loadFallbackQuestions(this.currentTechField || '人工智能', this.currentPosition || '技术岗');
+            return;
+        }
+        
+        const currentQuestion = this.currentQuestions.find(q => q.id === this.currentQuestionId);
+        if (currentQuestion) {
+            const questionElement = document.getElementById('current-question');
+            const metaElement = document.getElementById('question-meta');
+            
+            if (questionElement) {
+                // 强制显示问题元素
+                questionElement.style.display = 'block';
+                // 使用innerHTML以支持格式化文本
+                questionElement.innerHTML = currentQuestion.question;
+                console.log('✅ 问题内容已设置');
+            } else {
+                console.error('❌ 未找到问题显示元素 #current-question');
+            }
+            
+            if (metaElement) {
+                metaElement.textContent = 
+                    `${this.currentTechField} - ${this.currentPosition} | 题目 ${this.currentQuestionId}/${this.currentQuestions.length}`;
+                console.log('✅ 问题元数据已设置');
+            } else {
+                console.error('❌ 未找到问题元数据元素 #question-meta');
+            }
+            
+            // 显示下一道题按钮
+            const nextBtn = document.getElementById('next-question-btn');
+            if (nextBtn) {
+                nextBtn.style.display = 'flex';
+                console.log('✅ 下一题按钮已显示');
+            }
+            
+            // 更新URL参数
+            this.updateUrl();
+            
+            console.log('✅ 显示问题成功:', currentQuestion.question.substring(0, 50) + '...');
+        } else {
+            console.warn(`⚠️ 未找到问题 ID ${this.currentQuestionId}，尝试显示第一个问题`);
+            if (this.currentQuestions.length > 0) {
+                this.currentQuestionId = this.currentQuestions[0].id;
+                this.displayCurrentQuestion();
+            }
+        }
+    }
+    
+    async nextQuestion() {
+        const nextId = this.currentQuestionId + 1;
+        const maxId = Math.max(...this.currentQuestions.map(q => q.id));
+        
+        if (nextId <= maxId) {
+            this.currentQuestionId = nextId;
+            this.displayCurrentQuestion();
+        } else {
+            // 如果已是最后一题，可以选择循环到第一题或随机获取题目
+            const shouldGetRandom = confirm('已到最后一题，是否获取随机题目？');
+            if (shouldGetRandom) {
+                await this.getRandomQuestion();
+            } else {
+                this.currentQuestionId = 1;
+                this.displayCurrentQuestion();
+            }
+        }
+    }
+    
+    async getRandomQuestion() {
+        try {
+            console.log('🎲 从后端API获取随机问题...');
+            
+            const response = await fetch('/api/v1/questions/random');
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                this.currentTechField = data.tech_field;
+                this.currentPosition = data.position;
+                this.currentQuestionId = data.question.id;
+                
+                console.log(`🎲 随机选择: ${this.currentTechField} - ${this.currentPosition} - 题目${this.currentQuestionId}`);
+                
+                // 重新加载该分类的所有问题
+                await this.loadQuestions(this.currentTechField, this.currentPosition);
+            } else {
+                console.error('获取随机问题失败:', data.message);
+                this.getRandomFallbackQuestion();
+            }
+        } catch (error) {
+            console.error('❌ 请求随机问题失败:', error);
+            // 使用fallback随机问题
+            this.getRandomFallbackQuestion();
+        }
+    }
+    
+    getRandomFallbackQuestion() {
+        const fallbackOptions = [
+            { techField: '人工智能', position: '技术岗' },
+            { techField: '人工智能', position: '产品岗' },
+            { techField: '大数据', position: '技术岗' },
+            { techField: '物联网', position: '技术岗' }
+        ];
+        
+        const randomOption = fallbackOptions[Math.floor(Math.random() * fallbackOptions.length)];
+        console.log(`🎲 Fallback随机选择: ${randomOption.techField} - ${randomOption.position}`);
+        
+        this.currentTechField = randomOption.techField;
+        this.currentPosition = randomOption.position;
+        this.currentQuestionId = 1;
+        
+        this.loadFallbackQuestions(this.currentTechField, this.currentPosition);
+    }
+    
+    setupEventListeners() {
+        // 下一道题按钮
+        document.getElementById('next-question-btn').addEventListener('click', () => {
+            this.nextQuestion();
+        });
+        
+        // 题目设置按钮
+        document.getElementById('question-settings-btn').addEventListener('click', () => {
+            document.getElementById('question-modal').classList.remove('hidden');
+        });
+        
+        // 关闭模态框
+        document.getElementById('close-question-modal').addEventListener('click', () => {
+            document.getElementById('question-modal').classList.add('hidden');
+        });
+        
+        document.getElementById('cancel-question-modal').addEventListener('click', () => {
+            document.getElementById('question-modal').classList.add('hidden');
+        });
+        
+        // 技术领域变化
+        document.getElementById('tech-field-select').addEventListener('change', async (e) => {
+            this.currentTechField = e.target.value;
+            if (this.currentTechField) {
+                this.currentQuestionId = 1; // 重置为第一题
+                // 重新加载分类以更新岗位选项
+                await this.loadCategories();
+            }
+        });
+        
+        // 岗位变化
+        document.getElementById('position-select').addEventListener('change', async (e) => {
+            this.currentPosition = e.target.value;
+            if (this.currentTechField && this.currentPosition) {
+                this.currentQuestionId = 1; // 重置为第一题
+                await this.loadQuestions(this.currentTechField, this.currentPosition);
+            }
+        });
+        
+        // 应用题目设置
+        document.getElementById('apply-question-modal').addEventListener('click', () => {
+            const questionId = parseInt(document.getElementById('question-id-select').value);
+            if (questionId) {
+                this.currentQuestionId = questionId;
+                this.displayCurrentQuestion();
+                document.getElementById('question-modal').classList.add('hidden');
+            }
+        });
+        
+        // 点击模态框背景关闭
+        document.getElementById('question-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'question-modal') {
+                document.getElementById('question-modal').classList.add('hidden');
+            }
+        });
+    }
+}
+
+// 初始化题目管理器
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📄 DOM已加载完成，初始化QuestionManager...');
+    
+    // 初始化计时器
+    let seconds = 0;
+    let minutes = 0;
+    const timerElement = document.getElementById('timer');
+    
+    if (timerElement) {
+        function updateTimer() {
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+            }
+            const formattedMinutes = minutes.toString().padStart(2, '0');
+            const formattedSeconds = seconds.toString().padStart(2, '0');
+            timerElement.textContent = `${formattedMinutes}:${formattedSeconds}`;
+        }
+        setInterval(updateTimer, 1000);
+        console.log('✅ 计时器已初始化');
+    } else {
+        console.warn('⚠️ 未找到计时器元素 #timer');
+    }
+    
+    // 检查必要元素是否存在
+    const questionElement = document.getElementById('current-question');
+    const metaElement = document.getElementById('question-meta');
+    
+    if (questionElement) {
+        console.log('✅ 找到问题元素:', questionElement);
+    } else {
+        console.error('❌ 未找到问题元素 #current-question');
+    }
+    
+    if (metaElement) {
+        console.log('✅ 找到元数据元素:', metaElement);
+    } else {
+        console.error('❌ 未找到元数据元素 #question-meta');
+    }
+    
+    // 初始化QuestionManager
+    const questionManager = new QuestionManager();
+    
+    // 将questionManager暴露到全局作用域以便调试
+    window.questionManager = questionManager;
+    
+    // 初始化QuestionManager
+    questionManager.init();
+    
+    // 确保问题能够正确渲染 - 添加错误处理和重试机制
+    setTimeout(() => {
+        // 检查URL参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const techField = urlParams.get('tech_field') || '人工智能';
+        const position = urlParams.get('position') || '技术岗';
+        const questionId = parseInt(urlParams.get('question_id')) || 1;
+        
+        console.log('🔄 重试机制检查URL参数:', { techField, position, questionId });
+        
+        if (!questionManager.currentQuestions || questionManager.currentQuestions.length === 0) {
+            console.log('🔄 问题未加载，尝试重新加载...');
+            
+            // 如果有URL参数，使用URL参数的值
+            if (urlParams.get('tech_field') && urlParams.get('position')) {
+                questionManager.currentTechField = techField;
+                questionManager.currentPosition = position;
+                questionManager.currentQuestionId = questionId;
+                console.log(`🔄 使用URL参数重新加载: ${techField} - ${position} - 题目${questionId}`);
+            }
+            
+            questionManager.loadQuestions(questionManager.currentTechField, questionManager.currentPosition).then(() => {
+                if (questionManager.currentQuestions && questionManager.currentQuestions.length > 0) {
+                    console.log('✅ 问题重新加载成功，显示指定问题');
+                    questionManager.displayCurrentQuestion();
+                } else {
+                    console.warn('⚠️ 问题加载失败，显示默认问题');
+                    questionManager.showFallbackQuestion();
+                }
+            }).catch(error => {
+                console.error('❌ 问题加载失败:', error);
+                questionManager.showFallbackQuestion();
+            });
+        } else if (urlParams.get('tech_field') && urlParams.get('position')) {
+            // 如果问题已加载但URL参数不匹配，重新加载正确的问题
+            if (questionManager.currentTechField !== techField || 
+                questionManager.currentPosition !== position ||
+                questionManager.currentQuestionId !== questionId) {
+                console.log('🔄 URL参数不匹配，重新加载正确的问题');
+                questionManager.currentTechField = techField;
+                questionManager.currentPosition = position;
+                questionManager.currentQuestionId = questionId;
+                questionManager.loadQuestions(techField, position);
+            }
+        }
+    }, 1000);
+});
+
+// 添加临时测试功能
+window.testSettings = function() {
+    console.log('🧪 测试设置面板...');
+    showSettingsDialog();
+};
+
+window.testWelcome = function() {
+    console.log('🧪 测试欢迎信息...');
+    questionManager.showWelcomeMessage();
+};
+
+window.testLoadQuestions = function() {
+    console.log('🧪 测试加载问题...');
+    questionManager.loadQuestions('人工智能', '技术岗');
+};
+
+window.testDisplayQuestion = function() {
+    console.log('🧪 测试显示问题...');
+    questionManager.displayCurrentQuestion();
+};
+
+window.forceShowQuestion = function() {
+    console.log('🧪 强制显示测试问题...');
+    const questionElement = document.getElementById('current-question');
+    const metaElement = document.getElementById('question-meta');
+    
+    if (questionElement) {
+        questionElement.innerHTML = '这是一个测试问题，用于验证问题显示功能是否正常工作。如果您能看到这段文字，说明问题显示功能正常。';
+        questionElement.style.color = '#1f2937';
+        questionElement.style.fontSize = '16px';
+        questionElement.style.lineHeight = '1.6';
+    }
+    
+    if (metaElement) {
+        metaElement.textContent = '测试模式 - 问题显示验证';
+    }
+    
+    console.log('✅ 测试问题已显示');
+};
+
+window.loadSpecificQuestion = function(techField = '人工智能', position = '技术岗', questionId = 1) {
+    console.log(`🧪 加载指定问题: ${techField} - ${position} - 题目${questionId}`);
+    
+    if (window.questionManager) {
+        window.questionManager.currentTechField = techField;
+        window.questionManager.currentPosition = position;
+        window.questionManager.currentQuestionId = questionId;
+        
+        window.questionManager.loadQuestions(techField, position).then(() => {
+            console.log('✅ 指定问题加载完成');
+            window.questionManager.displayCurrentQuestion();
+        }).catch(error => {
+            console.warn('⚠️ API加载失败，使用fallback问题');
+            window.questionManager.loadFallbackQuestions(techField, position);
+        });
+    } else {
+        console.log('❌ questionManager未找到');
+    }
+};
+
+window.testApiLoading = function() {
+    console.log('🧪 测试后端API加载...');
+    
+    // 测试分类API
+    fetch('/api/v1/questions/categories')
+        .then(response => {
+            console.log('📡 分类API Response状态:', response.status, response.statusText);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('✅ 分类API加载成功');
+            console.log('📊 分类数据:', data);
+            
+            if (data.status === 'success' && data.categories) {
+                console.log(`📋 总分类数: ${data.categories.length}`);
+                data.categories.forEach(cat => {
+                    console.log(`- ${cat.tech_field} - ${cat.position}: ${cat.question_count}题`);
+                });
+            }
+            
+            // 测试特定问题API
+            return fetch('/api/v1/questions/人工智能/技术岗');
+        })
+        .then(response => {
+            console.log('📡 问题API Response状态:', response.status, response.statusText);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('✅ 问题API加载成功');
+            console.log('📊 问题数据:', data);
+            
+            if (data.status === 'success' && data.questions) {
+                console.log(`📋 问题数量: ${data.questions.length}`);
+                if (data.questions[0]) {
+                    console.log('📋 示例问题:', data.questions[0].question.substring(0, 50) + '...');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('❌ API加载失败:', error);
+            console.log('💡 请确保后端服务器正在运行');
+        });
+};
+
+window.testApiDataIntegrity = function() {
+    console.log('🧪 测试API数据完整性...');
+    
+    if (window.questionManager) {
+        // 测试是否能从API加载所有分类
+        window.questionManager.loadCategories().then(() => {
+            console.log('✅ API分类数据加载测试完成');
+            
+            // 测试加载不同的技术领域和岗位
+            const testCases = [
+                ['人工智能', '技术岗'],
+                ['人工智能', '产品岗'],
+                ['大数据', '技术岗'],
+                ['物联网', '技术岗'],
+                ['云计算', '技术岗'],
+                ['前端开发', '技术岗']
+            ];
+            
+            let successCount = 0;
+            testCases.forEach(([techField, position], index) => {
+                setTimeout(async () => {
+                    console.log(`🔄 测试API加载: ${techField} - ${position}`);
+                    
+                    try {
+                        const response = await fetch(`/api/v1/questions/${encodeURIComponent(techField)}/${encodeURIComponent(position)}`);
+                        const data = await response.json();
+                        
+                        if (data.status === 'success' && data.questions) {
+                            console.log(`✅ ${techField}-${position}: ${data.questions.length}个问题`);
+                            successCount++;
+                        } else {
+                            console.log(`❌ ${techField}-${position}: ${data.message || '加载失败'}`);
+                        }
+                    } catch (error) {
+                        console.log(`❌ ${techField}-${position}: 请求失败`);
+                    }
+                    
+                    // 最后一个测试完成后显示总结
+                    if (index === testCases.length - 1) {
+                        setTimeout(() => {
+                            console.log(`🎯 API数据完整性测试完成: ${successCount}/${testCases.length} 成功`);
+                        }, 100);
+                    }
+                }, index * 500); // 错开执行时间，避免API压力
+            });
+        });
+    } else {
+        console.log('❌ questionManager未找到');
+    }
+};
+
+window.testUnifiedSettings = function() {
+    console.log('🧪 测试统一设置面板...');
+    showSettingsDialog();
+};
+
+window.testVoiceAnalysis = function() {
+    console.log('🧪 测试语音分析...');
+    startVoiceAnalysis().then(success => {
+        if (success) {
+            console.log('✅ 语音分析启动成功');
+            // 等待2秒后获取语音数据
+            setTimeout(() => {
+                getVoiceRealtimeData();
+            }, 2000);
+        } else {
+            console.log('❌ 语音分析启动失败');
+        }
+    });
+};
+
+window.testDataUpdate = function() {
+    console.log('🧪 测试数据更新...');
+    
+    // 测试表情数据更新
+    const testExpressionData = {
+        expression: {
+            name: '开心',
+            confidence: 0.85
+        },
+        action_units: [
+            { code: 'AU12', value: 0.8 }
+        ]
+    };
+    updateExpressionData(testExpressionData);
+    
+    // 测试动作数据更新
+    const testMotionData = {
+        body_action: {
+            name: '正坐',
+            confidence: 0.92
+        }
+    };
+    updateMotionData(testMotionData);
+    
+    // 测试语音数据更新
+    const testVoiceData = {
+        emotion_cn: '自信',
+        confidence: 0.88,
+        text: '这是一个测试语音数据'
+    };
+    updateVoiceData(testVoiceData);
+    
+    console.log('✅ 测试数据更新完成');
+};
+
+window.testSettings = function() {
+    console.log('🧪 测试设置面板...');
+    showSettingsDialog();
+};
+
+window.testQuestionDisplay = function() {
+    console.log('🧪 测试问题显示...');
+    
+    const questionElement = document.getElementById('current-question');
+    const metaElement = document.getElementById('question-meta');
+    
+    if (questionElement && metaElement) {
+        // 显示测试问题
+        questionElement.innerHTML = '这是一个测试问题，用于验证问题显示功能是否正常工作。如果您能看到这段文字，说明问题显示功能正常。';
+        metaElement.textContent = '测试模式 - 问题显示验证';
+        
+        console.log('✅ 问题显示测试完成');
+    } else {
+        console.error('❌ 问题显示元素未找到');
+        console.log('questionElement:', questionElement);
+        console.log('metaElement:', metaElement);
+    }
+};
+
+window.testDefaultRendering = function() {
+    console.log('🧪 测试默认渲染状态...');
+    
+    // 检查表情检测卡片
+    const expressionCard = expressionCard || getDOMElements().expressionCard;
+    const motionCard = motionCard || getDOMElements().motionCard;
+    const voiceCard = voiceCard || getDOMElements().voiceCard;
+    
+    console.log('表情检测卡片显示状态:', expressionCard ? expressionCard.style.display || 'block' : '未找到');
+    console.log('动作检测卡片显示状态:', motionCard ? motionCard.style.display || 'block' : '未找到');
+    console.log('语音情感分析卡片显示状态:', voiceCard ? voiceCard.style.display || 'block' : '未找到');
+    
+    // 确保所有检测功能都默认显示
+    if (expressionCard) {
+        expressionCard.style.display = 'block';
+        console.log('✅ 表情检测卡片已确保显示');
+    }
+    
+    if (motionCard) {
+        motionCard.style.display = 'block';
+        console.log('✅ 动作检测卡片已确保显示');
+    }
+    
+    if (voiceCard) {
+        voiceCard.style.display = 'block';
+        console.log('✅ 语音情感分析卡片已确保显示');
+    }
+    
+    console.log('🎯 所有检测功能默认渲染状态检查完成');
+};
+
+window.testQuestionRendering = function() {
+    console.log('🧪 测试问题渲染...');
+    
+    if (window.questionManager) {
+        // 测试fallback问题
+        window.questionManager.loadFallbackQuestions('人工智能', '技术岗');
+        
+        setTimeout(() => {
+            const questionElement = document.getElementById('current-question');
+            const metaElement = document.getElementById('question-meta');
+            
+            console.log('问题元素内容:', questionElement ? questionElement.textContent : '未找到');
+            console.log('元数据元素内容:', metaElement ? metaElement.textContent : '未找到');
+            
+            if (questionElement && questionElement.textContent.trim()) {
+                console.log('✅ 问题渲染成功');
+            } else {
+                console.log('❌ 问题渲染失败');
+            }
+        }, 500);
+    } else {
+        console.log('❌ questionManager未找到');
+    }
+};
+
+window.testUrlParams = function() {
+    console.log('🧪 测试URL参数处理...');
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    console.log('当前URL参数:', {
+        tech_field: urlParams.get('tech_field'),
+        position: urlParams.get('position'),
+        question_id: urlParams.get('question_id')
+    });
+    
+    if (window.questionManager) {
+        console.log('QuestionManager当前状态:', {
+            techField: window.questionManager.currentTechField,
+            position: window.questionManager.currentPosition,
+            questionId: window.questionManager.currentQuestionId,
+            questionsLoaded: window.questionManager.currentQuestions ? window.questionManager.currentQuestions.length : 0
+        });
+        
+        // 测试使用特定参数
+        const testUrl = '?tech_field=人工智能&position=技术岗&question_id=2';
+        console.log('🔗 测试URL:', window.location.origin + window.location.pathname + testUrl);
+        console.log('💡 在浏览器地址栏中添加以上参数来测试URL参数功能');
+    } else {
+        console.log('❌ questionManager未找到');
+    }
+};
+
+// 在控制台输出调试信息
+console.log('🎯 调试信息：');
+console.log('- 如果设置按钮仍不工作，请在控制台运行: testSettings()');
+console.log('- 如果欢迎信息不显示，请在控制台运行: testWelcome()');
+console.log('- 如果问题不显示，请在控制台运行: testLoadQuestions()');
+console.log('- 测试显示问题: testDisplayQuestion()');
+console.log('- 强制显示测试问题: forceShowQuestion()');
+console.log('- 加载指定问题: loadSpecificQuestion("人工智能", "技术岗", 2)');
+console.log('- 测试API加载: testApiLoading()');
+console.log('- 测试API数据完整性: testApiDataIntegrity()');
+console.log('- 测试统一设置面板: testUnifiedSettings()');
+console.log('- 测试语音分析: testVoiceAnalysis()');
+console.log('- 测试数据更新: testDataUpdate()');
+console.log('- 测试设置面板: testSettings()');
+console.log('- 测试问题显示: testQuestionDisplay()');
+console.log('- 测试默认渲染: testDefaultRendering()');
+console.log('- 测试问题渲染: testQuestionRendering()');
+console.log('- 测试URL参数: testUrlParams()');
+console.log('- 检查是否有JavaScript错误');
+console.log('- 确认按钮元素存在');
+
+// 页面加载完成后的统一初始化已在上面的DOMContentLoaded中完成
+</script>
+
+</body>
+</html>

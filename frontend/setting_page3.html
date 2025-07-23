@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>职面星火 - 题目生成</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#3b82f6',
+secondary: '#6366f1'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+<style>
+:where([class^="ri-"])::before {
+content: "\f3c2";
+}
+.fade-in {
+animation: fadeIn 0.5s ease-in;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.skill-tag {
+transition: all 0.2s ease;
+cursor: pointer;
+}
+.skill-tag:hover {
+transform: translateY(-1px);
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.skill-tag.selected {
+background-color: #3b82f6;
+color: white;
+}
+.question-card {
+transition: all 0.3s ease;
+}
+.question-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.slider-track {
+background: linear-gradient(to right, #10b981 0%, #f59e0b 50%, #ef4444 100%);
+}
+.slider-thumb {
+transition: all 0.2s ease;
+}
+.slider-thumb:hover {
+transform: scale(1.1);
+}
+.loading-spinner {
+animation: spin 1s linear infinite;
+}
+@keyframes spin {
+from { transform: rotate(0deg); }
+to { transform: rotate(360deg); }
+}
+.checkbox-custom {
+appearance: none;
+width: 1.25rem;
+height: 1.25rem;
+border: 2px solid #d1d5db;
+border-radius: 4px;
+position: relative;
+cursor: pointer;
+transition: all 0.2s ease;
+}
+.checkbox-custom:checked {
+background-color: #3b82f6;
+border-color: #3b82f6;
+}
+.checkbox-custom:checked::after {
+content: '✓';
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+color: white;
+font-size: 0.75rem;
+font-weight: bold;
+}
+.switch-custom {
+width: 3rem;
+height: 1.5rem;
+background-color: #d1d5db;
+border-radius: 9999px;
+position: relative;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+.switch-custom.active {
+background-color: #3b82f6;
+}
+.switch-thumb {
+width: 1.25rem;
+height: 1.25rem;
+background-color: white;
+border-radius: 50%;
+position: absolute;
+top: 0.125rem;
+left: 0.125rem;
+transition: all 0.3s ease;
+box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.switch-custom.active .switch-thumb {
+transform: translateX(1.5rem);
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<div class="flex h-screen flex-col">
+<!-- 顶部导航栏 -->
+<!-- 顶部导航栏 -->
+<div class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="flex justify-between items-center h-16">
+  <a href="assessment-options.html" class="flex items-center">
+    <img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
+    <p class="text-sm text-gray-600 ml-2">职面星火</p>
+  </a>
+  <nav class="flex space-x-8">
+  <a href="../index.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-home-line"></i>
+  </div>
+  首页
+  </a>
+  <a href="./setting_page1.html" class="flex items-center px-3 py-2 text-sm font-medium text-primary">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-video-chat-line"></i>
+  </div>
+  面试模拟
+  </a>
+  <a href="./assessment-options.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-bar-chart-line"></i>
+  </div>
+  能力评估
+  </a>
+  <a href="./learning-resources.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-book-open-line"></i>
+  </div>
+  学习资源
+  </a>
+  <a href="./user-profile.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-user-settings-line"></i>
+  </div>
+  个人中心
+  </a>
+  </nav>
+  <div class="flex items-center">
+  <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+  <i class="ri-user-line text-white"></i>
+  </div>
+  <div class="ml-2">
+  <p class="text-sm font-medium text-gray-900">李明华</p>
+  <p class="text-xs text-gray-500">高级用户</p>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+
+<!-- 主要内容区 -->
+<div class="flex-1 flex overflow-hidden bg-gray-50">
+<!-- 左侧主要内容区 -->
+<div class="flex-1 flex flex-col overflow-hidden">
+<div class="bg-white border-b border-gray-200 px-8 py-6">
+<h1 class="text-2xl font-bold text-gray-900">题目生成</h1>
+<p class="text-gray-600 mt-1">基于简历解析结果，智能生成个性化面试题目</p>
+</div>
+
+<!-- 进度指示器 -->
+<div class="bg-white border-b border-gray-200 px-8 py-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+<i class="ri-check-line"></i>
+</div>
+<span class="ml-2 text-sm font-medium text-green-600">基础信息</span>
+</div>
+<div class="flex-1 mx-4 h-px bg-green-300"></div>
+<div class="flex items-center">
+<div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+<i class="ri-check-line"></i>
+</div>
+<span class="ml-2 text-sm font-medium text-green-600">简历解析</span>
+</div>
+<div class="flex-1 mx-4 h-px bg-primary"></div>
+<div class="flex items-center">
+<div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm font-medium">3</div>
+<span class="ml-2 text-sm font-medium text-primary">题目生成</span>
+</div>
+</div>
+</div>
+
+<div class="flex-1 flex overflow-hidden">
+<!-- 技能和项目展示区 -->
+<div class="flex-1 p-8 overflow-y-auto">
+<div class="space-y-8">
+<!-- 技能标签区域 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+<h3 class="text-lg font-semibold text-gray-900 mb-4">识别的技能点</h3>
+<div class="flex flex-wrap gap-2" id="skillsContainer">
+<!-- 技能标签将通过JavaScript动态生成 -->
+</div>
+<p class="text-sm text-gray-500 mt-3">点击技能标签可选择重点考察的技能</p>
+</div>
+
+<!-- 项目经验区域 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+<h3 class="text-lg font-semibold text-gray-900 mb-4">项目经验</h3>
+<div class="space-y-4" id="projectsContainer">
+<!-- 项目经验将通过JavaScript动态生成 -->
+</div>
+<p class="text-sm text-gray-500 mt-3">选择项目经验可生成相关的项目题目</p>
+</div>
+
+<!-- 生成的题目列表 -->
+<div id="questionsList" class="space-y-4">
+<!-- 题目将通过 JavaScript 动态生成 -->
+</div>
+</div>
+</div>
+
+<!-- 右侧题目生成控制面板 -->
+<div class="w-96 bg-white border-l border-gray-200 p-6 overflow-y-auto">
+<h3 class="text-lg font-semibold text-gray-900 mb-6">题目生成设置</h3>
+
+<!-- 题目类型选择 -->
+<div class="mb-8">
+<h4 class="text-sm font-medium text-gray-900 mb-4">题目类型</h4>
+<div class="space-y-3">
+<label class="flex items-center cursor-pointer">
+<input type="checkbox" class="checkbox-custom mr-3" id="techBasic" checked>
+<span class="text-sm text-gray-700">技术基础题</span>
+</label>
+<label class="flex items-center cursor-pointer">
+<input type="checkbox" class="checkbox-custom mr-3" id="projectExp" checked>
+<span class="text-sm text-gray-700">项目经验题</span>
+</label>
+<label class="flex items-center cursor-pointer">
+<input type="checkbox" class="checkbox-custom mr-3" id="algorithm">
+<span class="text-sm text-gray-700">算法设计题</span>
+</label>
+<label class="flex items-center cursor-pointer">
+<input type="checkbox" class="checkbox-custom mr-3" id="systemDesign">
+<span class="text-sm text-gray-700">系统设计题</span>
+</label>
+</div>
+</div>
+
+<!-- 难度调节 -->
+<div class="mb-8">
+<h4 class="text-sm font-medium text-gray-900 mb-4">题目难度</h4>
+<div class="space-y-4">
+<div class="relative">
+<input type="range" min="1" max="3" value="2" class="w-full h-2 slider-track rounded-full appearance-none cursor-pointer" id="difficultySlider">
+<div class="flex justify-between text-xs text-gray-500 mt-2">
+<span>初级</span>
+<span>中级</span>
+<span>高级</span>
+</div>
+</div>
+<div class="bg-gray-50 rounded-lg p-3">
+<div class="text-sm font-medium text-gray-900 mb-1" id="difficultyLabel">中级</div>
+<div class="text-xs text-gray-600" id="difficultyDesc">适合有 2-5 年工作经验的候选人</div>
+</div>
+</div>
+</div>
+
+<!-- 题目数量设置 -->
+<div class="mb-8">
+<h4 class="text-sm font-medium text-gray-900 mb-4">题目数量</h4>
+<div class="flex items-center space-x-4">
+<button class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200" id="decreaseCount">
+<i class="ri-subtract-line text-gray-600"></i>
+</button>
+<span class="text-lg font-medium text-gray-900 w-8 text-center" id="questionCount">8</span>
+<button class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200" id="increaseCount">
+<i class="ri-add-line text-gray-600"></i>
+</button>
+</div>
+<div class="text-xs text-gray-500 mt-2">建议生成 5-15 个题目</div>
+</div>
+
+<!-- 高级设置 -->
+<div class="mb-8">
+<h4 class="text-sm font-medium text-gray-900 mb-4">高级设置</h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-700">包含参考答案</span>
+<div class="switch-custom active" id="includeAnswer">
+<div class="switch-thumb"></div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-700">标注考察点</span>
+<div class="switch-custom active" id="includePoints">
+<div class="switch-thumb"></div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-700">智能推荐</span>
+<div class="switch-custom active" id="smartRecommend">
+<div class="switch-thumb"></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 生成按钮 -->
+<button class="w-full px-4 py-3 bg-primary text-white rounded-button hover:bg-primary/90 whitespace-nowrap !rounded-button mb-4" id="generateQuestions">
+<div class="w-4 h-4 flex items-center justify-center mr-2 inline-block">
+<i class="ri-magic-line"></i>
+</div>
+生成题目
+</button>
+
+<!-- 操作按钮 -->
+<div class="space-y-3">
+<button class="w-full px-4 py-2 text-primary border border-primary rounded-button hover:bg-primary/5 whitespace-nowrap !rounded-button" id="previewQuestions" disabled>
+<div class="w-4 h-4 flex items-center justify-center mr-2 inline-block">
+<i class="ri-eye-line"></i>
+</div>
+预览题目
+</button>
+<button class="w-full px-4 py-2 text-gray-600 border border-gray-300 rounded-button hover:bg-gray-50 whitespace-nowrap !rounded-button" id="exportQuestions" disabled>
+<div class="w-4 h-4 flex items-center justify-center mr-2 inline-block">
+<i class="ri-download-line"></i>
+</div>
+导出题目
+</button>
+<button class="w-full px-4 py-2 text-gray-600 border border-gray-300 rounded-button hover:bg-gray-50 whitespace-nowrap !rounded-button" id="startInterview" disabled>
+<div class="w-4 h-4 flex items-center justify-center mr-2 inline-block">
+<i class="ri-play-line"></i>
+</div>
+开始面试
+</button>
+</div>
+
+<!-- 生成统计 -->
+<div class="mt-8 bg-blue-50 rounded-lg p-4" id="generationStats" style="display: none;">
+<div class="flex items-center mb-3">
+<div class="w-5 h-5 flex items-center justify-center mr-2">
+<i class="ri-information-line text-blue-600"></i>
+</div>
+<h4 class="text-sm font-medium text-blue-900">生成统计</h4>
+</div>
+<div class="text-xs text-blue-700 space-y-1">
+<p>• 技术基础题：<span id="techCount">0</span> 个</p>
+<p>• 项目经验题：<span id="projectCount">0</span> 个</p>
+<p>• 算法设计题：<span id="algoCount">0</span> 个</p>
+<p>• 系统设计题：<span id="systemCount">0</span> 个</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script id="skill-selection">
+document.addEventListener('DOMContentLoaded', function() {
+const skillTags = document.querySelectorAll('.skill-tag');
+skillTags.forEach(tag => {
+tag.addEventListener('click', function() {
+this.classList.toggle('selected');
+if (this.classList.contains('selected')) {
+this.classList.remove('bg-blue-100', 'text-blue-800');
+this.classList.add('bg-primary', 'text-white');
+} else {
+this.classList.remove('bg-primary', 'text-white');
+this.classList.add('bg-blue-100', 'text-blue-800');
+}
+});
+});
+});
+</script>
+
+<script id="project-selection">
+document.addEventListener('DOMContentLoaded', function() {
+const projectCards = document.querySelectorAll('.project-card');
+projectCards.forEach(card => {
+const checkbox = card.querySelector('.checkbox-custom');
+card.addEventListener('click', function(e) {
+if (e.target.type !== 'checkbox') {
+checkbox.checked = !checkbox.checked;
+}
+if (checkbox.checked) {
+card.classList.add('border-primary', 'bg-blue-50');
+} else {
+card.classList.remove('border-primary', 'bg-blue-50');
+}
+});
+});
+});
+</script>
+
+<script id="difficulty-control">
+document.addEventListener('DOMContentLoaded', function() {
+const slider = document.getElementById('difficultySlider');
+const label = document.getElementById('difficultyLabel');
+const desc = document.getElementById('difficultyDesc');
+const difficultyData = {
+1: { label: '初级', desc: '适合应届毕业生或 0-2 年工作经验' },
+2: { label: '中级', desc: '适合有 2-5 年工作经验的候选人' },
+3: { label: '高级', desc: '适合有 5+ 年工作经验的资深候选人' }
+};
+slider.addEventListener('input', function() {
+const value = parseInt(this.value);
+const data = difficultyData[value];
+label.textContent = data.label;
+desc.textContent = data.desc;
+});
+});
+</script>
+
+<script id="question-count-control">
+document.addEventListener('DOMContentLoaded', function() {
+const countDisplay = document.getElementById('questionCount');
+const decreaseBtn = document.getElementById('decreaseCount');
+const increaseBtn = document.getElementById('increaseCount');
+let count = 8;
+decreaseBtn.addEventListener('click', function() {
+if (count > 5) {
+count--;
+countDisplay.textContent = count;
+}
+});
+increaseBtn.addEventListener('click', function() {
+if (count < 15) {
+count++;
+countDisplay.textContent = count;
+}
+});
+});
+</script>
+
+<script id="switch-controls">
+document.addEventListener('DOMContentLoaded', function() {
+const switches = document.querySelectorAll('.switch-custom');
+switches.forEach(switchEl => {
+switchEl.addEventListener('click', function() {
+this.classList.toggle('active');
+});
+});
+});
+</script>
+
+<script id="question-generation">
+// 全局变量存储简历解析结果
+let resumeData = null;
+let selectedSkills = [];
+let selectedProjects = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+// 从URL参数获取简历解析结果
+loadResumeData();
+renderResumeData();
+
+const generateBtn = document.getElementById('generateQuestions');
+const questionsList = document.getElementById('questionsList');
+const generationStats = document.getElementById('generationStats');
+const previewBtn = document.getElementById('previewQuestions');
+const exportBtn = document.getElementById('exportQuestions');
+const startBtn = document.getElementById('startInterview');
+generateBtn.addEventListener('click', function() {
+const button = this;
+const originalText = button.innerHTML;
+button.innerHTML = '<div class="w-4 h-4 loading-spinner border-2 border-white border-t-transparent rounded-full mr-2 inline-block"></div>生成中...';
+button.disabled = true;
+
+// 调用后端API生成题目
+generateQuestionsWithAI().then(() => {
+button.innerHTML = originalText;
+button.disabled = false;
+previewBtn.disabled = false;
+exportBtn.disabled = false;
+startBtn.disabled = false;
+generationStats.style.display = 'block';
+}).catch(error => {
+console.error('生成题目失败:', error);
+button.innerHTML = originalText;
+button.disabled = false;
+alert('生成题目失败，请重试');
+});
+});
+});
+
+// 加载简历解析结果
+function loadResumeData() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const taskId = urlParams.get('taskId');
+  if (taskId) {
+    loadResumeDataFromBackend(taskId);
+  } else {
+    alert('未获取到简历分析任务ID，请从首页重新上传简历！');
+    window.location.href = './setting_page1.html';
+  }
+}
+
+// 从后端加载简历数据
+async function loadResumeDataFromBackend(taskId) {
+try {
+console.log('🔄 正在从后端加载简历数据...');
+const response = await fetch(`/api/v1/resume/json/${taskId}`);
+const result = await response.json();
+if (result.success && result.data) {
+resumeData = result.data;
+console.log('✅ 从后端加载简历数据成功:', resumeData);
+} else {
+console.error('❌ 从后端加载数据失败:', result.message);
+resumeData = getDefaultResumeData();
+}
+} catch (error) {
+console.error('❌ 加载简历数据异常:', error);
+resumeData = getDefaultResumeData();
+}
+}
+
+// 获取默认简历数据
+function getDefaultResumeData() {
+return {
+basic_info: {
+name: '莫栩',
+phone: '13480805647',
+email: '2022302181277@whu.edu.cn',
+city: '武汉市',
+current_position: '算法工程师',
+experience_years: '2'
+},
+skills: ['Python', 'PyTorch', 'Springboot', 'React', 'Docker', 'FastAPI', 'Redis', 'MongoDB'],
+skills_categories: {
+programming_languages: ['Python', 'JavaScript', 'Java'],
+frameworks: ['PyTorch', 'Springboot', 'React', 'FastAPI'],
+databases: ['Redis', 'MongoDB', 'MySQL'],
+tools: ['Docker', 'Git', 'Linux']
+},
+projects: [
+{
+name: '大模型微调的安全对齐研究',
+description: '成功复现ICLR的关键结论，采用GPT-4o对目标大语言模型输出进行精细化安全性量化评估',
+tech_stack: 'Python, PyTorch, GPT-4o, 安全评估',
+period: '2025.03 - 至今'
+},
+{
+name: '舆情分析系统',
+description: '前后端分离架构，支持实时情感分析和热点事件检测',
+tech_stack: 'React, FastAPI, Redis, MongoDB, Docker',
+period: '2024.11 - 至今'
+},
+{
+name: '电商电群运营',
+description: '从零开始孵化并运营七个店铺，形成店群效应，C端营收突破百万',
+tech_stack: '团队管理, 自动化系统, 数据分析',
+period: '2023.06 - 至今'
+}
+],
+experience: [
+{
+company: '武汉大学',
+position: '学生',
+period: '2022.09 - 2026.06',
+responsibilities: [
+'大模型微调的安全对齐研究',
+'舆情分析系统开发',
+'创新发明与知识产权协会副会长'
+]
+},
+{
+company: '电商电群',
+position: '创业者',
+period: '2023.06 - 至今',
+responsibilities: [
+'团队管理：组建9人跨职能团队',
+'效率优化：引入智能发货机器人',
+'规模拓展：运营七个店铺，服务超二十万用户'
+]
+}
+],
+analysis: {
+overall_match: 86
+}
+};
+}
+
+// 渲染简历数据到界面
+function renderResumeData() {
+if (!resumeData) return;
+
+// 渲染技能点
+renderSkills();
+// 渲染项目经验
+renderProjects();
+}
+
+// 渲染技能点
+function renderSkills() {
+const skillsContainer = document.getElementById('skillsContainer');
+if (!skillsContainer || !resumeData.skills) return;
+
+skillsContainer.innerHTML = '';
+resumeData.skills.forEach(skill => {
+const skillTag = document.createElement('span');
+skillTag.className = 'skill-tag px-3 py-2 bg-blue-100 text-blue-800 text-sm rounded-lg';
+skillTag.textContent = skill;
+skillTag.addEventListener('click', function() {
+this.classList.toggle('selected');
+if (this.classList.contains('selected')) {
+this.classList.remove('bg-blue-100', 'text-blue-800');
+this.classList.add('bg-primary', 'text-white');
+selectedSkills.push(skill);
+} else {
+this.classList.remove('bg-primary', 'text-white');
+this.classList.add('bg-blue-100', 'text-blue-800');
+selectedSkills = selectedSkills.filter(s => s !== skill);
+}
+});
+skillsContainer.appendChild(skillTag);
+});
+}
+
+// 渲染项目经验
+function renderProjects() {
+const projectsContainer = document.getElementById('projectsContainer');
+if (!projectsContainer || !resumeData.projects) return;
+
+// 清空现有项目卡片
+projectsContainer.innerHTML = '';
+
+// 添加真实项目数据
+resumeData.projects.forEach(project => {
+const projectDiv = document.createElement('div');
+projectDiv.className = 'border border-gray-200 rounded-lg p-4 hover:border-primary transition-colors cursor-pointer project-card';
+projectDiv.innerHTML = `
+<div class="flex items-start justify-between mb-2">
+<h4 class="text-base font-medium text-gray-900">${project.name}</h4>
+<input type="checkbox" class="checkbox-custom">
+</div>
+<p class="text-gray-600 text-sm mb-3">${project.description}</p>
+<div class="flex flex-wrap gap-2 mb-3">
+${project.tech_stack.split(', ').map(tech => 
+`<span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">${tech}</span>`
+).join('')}
+</div>
+<div class="flex items-center text-xs text-gray-500">
+<i class="ri-time-line mr-1"></i>
+${project.period}
+</div>
+`;
+
+// 添加项目选择事件
+const checkbox = projectDiv.querySelector('.checkbox-custom');
+projectDiv.addEventListener('click', function(e) {
+if (e.target.type !== 'checkbox') {
+checkbox.checked = !checkbox.checked;
+}
+if (checkbox.checked) {
+projectDiv.classList.add('border-primary', 'bg-blue-50');
+selectedProjects.push(project);
+} else {
+projectDiv.classList.remove('border-primary', 'bg-blue-50');
+selectedProjects = selectedProjects.filter(p => p.name !== project.name);
+}
+});
+
+projectsContainer.appendChild(projectDiv);
+});
+}
+
+// AI生成题目函数
+async function generateQuestionsWithAI() {
+const techBasic = document.getElementById('techBasic').checked;
+const projectExp = document.getElementById('projectExp').checked;
+const algorithm = document.getElementById('algorithm').checked;
+const systemDesign = document.getElementById('systemDesign').checked;
+const count = parseInt(document.getElementById('questionCount').textContent);
+const difficulty = parseInt(document.getElementById('difficultySlider').value);
+const includeAnswer = document.getElementById('includeAnswer').classList.contains('active');
+const includePoints = document.getElementById('includePoints').classList.contains('active');
+
+// 构建请求参数
+const requestData = {
+resume_data: resumeData,
+selected_skills: selectedSkills,
+selected_projects: selectedProjects,
+question_types: {
+tech_basic: techBasic,
+project_experience: projectExp,
+algorithm_design: algorithm,
+system_design: systemDesign
+},
+question_count: count,
+difficulty_level: difficulty,
+include_answer: includeAnswer,
+include_points: includePoints
+};
+
+try {
+console.log('🚀 开始AI生成题目...');
+console.log('📋 请求参数:', requestData);
+
+const response = await fetch('http://localhost:8000/api/v1/questions/generate', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify(requestData)
+});
+
+const result = await response.json();
+
+if (result.success) {
+console.log('✅ AI生成题目成功:', result.questions);
+renderQuestions(result.questions, includeAnswer, includePoints);
+updateGenerationStats(result.questions);
+} else {
+console.error('❌ AI生成题目失败:', result.message);
+throw new Error(result.message);
+}
+} catch (error) {
+console.error('❌ AI生成题目异常:', error);
+throw error;
+}
+}
+
+// 更新生成统计
+function updateGenerationStats(questions) {
+let techCount = 0, projectCount = 0, algoCount = 0, systemCount = 0;
+questions.forEach(q => {
+if (q.type === 'tech_basic') techCount++;
+else if (q.type === 'project_experience') projectCount++;
+else if (q.type === 'algorithm_design') algoCount++;
+else if (q.type === 'system_design') systemCount++;
+});
+
+document.getElementById('techCount').textContent = techCount;
+document.getElementById('projectCount').textContent = projectCount;
+document.getElementById('algoCount').textContent = algoCount;
+document.getElementById('systemCount').textContent = systemCount;
+}
+
+// 保留原有的generateQuestions函数作为备用
+function generateQuestions() {
+const techBasic = document.getElementById('techBasic').checked;
+const projectExp = document.getElementById('projectExp').checked;
+const algorithm = document.getElementById('algorithm').checked;
+const systemDesign = document.getElementById('systemDesign').checked;
+const count = parseInt(document.getElementById('questionCount').textContent);
+const includeAnswer = document.getElementById('includeAnswer').classList.contains('active');
+const includePoints = document.getElementById('includePoints').classList.contains('active');
+let questions = [];
+let techCount = 0, projectCount = 0, algoCount = 0, systemCount = 0;
+const types = [];
+if (techBasic) types.push('techBasic');
+if (projectExp) types.push('projectExp');
+if (algorithm) types.push('algorithm');
+if (systemDesign) types.push('systemDesign');
+for (let i = 0; i < count; i++) {
+const type = types[i % types.length];
+const templates = questionTemplates[type];
+const template = templates[Math.floor(Math.random() * templates.length)];
+questions.push({
+type: type,
+...template
+});
+if (type === 'techBasic') techCount++;
+else if (type === 'projectExp') projectCount++;
+else if (type === 'algorithm') algoCount++;
+else if (type === 'systemDesign') systemCount++;
+}
+document.getElementById('techCount').textContent = techCount;
+document.getElementById('projectCount').textContent = projectCount;
+document.getElementById('algoCount').textContent = algoCount;
+document.getElementById('systemCount').textContent = systemCount;
+renderQuestions(questions, includeAnswer, includePoints);
+}
+function renderQuestions(questions, includeAnswer, includePoints) {
+const typeLabels = {
+tech_basic: '技术基础',
+project_experience: '项目经验',
+algorithm_design: '算法设计',
+system_design: '系统设计',
+techBasic: '技术基础',
+projectExp: '项目经验',
+algorithm: '算法设计',
+systemDesign: '系统设计'
+};
+const typeColors = {
+tech_basic: 'bg-blue-100 text-blue-800',
+project_experience: 'bg-green-100 text-green-800',
+algorithm_design: 'bg-purple-100 text-purple-800',
+system_design: 'bg-orange-100 text-orange-800',
+techBasic: 'bg-blue-100 text-blue-800',
+projectExp: 'bg-green-100 text-green-800',
+algorithm: 'bg-purple-100 text-purple-800',
+systemDesign: 'bg-orange-100 text-orange-800'
+};
+questionsList.innerHTML = questions.map((q, index) => `
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 question-card fade-in">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center space-x-3">
+<span class="text-lg font-medium text-gray-900">题目 ${index + 1}</span>
+<span class="px-2 py-1 ${typeColors[q.type]} text-xs rounded-full">${typeLabels[q.type]}</span>
+</div>
+<div class="flex items-center space-x-2">
+<button class="p-2 text-gray-400 hover:text-gray-600" onclick="toggleFavorite(this)">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-heart-line"></i>
+</div>
+</button>
+<button class="p-2 text-gray-400 hover:text-gray-600">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-more-line"></i>
+</div>
+</button>
+</div>
+</div>
+<div class="mb-4">
+<h4 class="text-base font-medium text-gray-900 mb-2">题目内容</h4>
+<p class="text-gray-700 leading-relaxed">${q.title}</p>
+</div>
+${includePoints ? `
+<div class="mb-4">
+<h4 class="text-sm font-medium text-gray-900 mb-2">考察点</h4>
+<div class="flex flex-wrap gap-2">
+${q.points.map(point => `<span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">${point}</span>`).join('')}
+</div>
+</div>
+` : ''}
+${includeAnswer ? `
+<div class="border-t border-gray-200 pt-4">
+<button class="flex items-center text-sm font-medium text-primary hover:text-primary/80 mb-3" onclick="toggleAnswer(this)">
+<div class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-eye-line"></i>
+</div>
+查看参考答案
+<div class="w-4 h-4 flex items-center justify-center ml-1">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</button>
+<div class="answer-content hidden bg-gray-50 rounded-lg p-4">
+<p class="text-gray-700 text-sm leading-relaxed">${q.answer}</p>
+</div>
+</div>
+` : ''}
+</div>
+`).join('');
+}
+window.toggleAnswer = function(button) {
+const content = button.nextElementSibling;
+const icon = button.querySelector('i:last-child');
+if (content.classList.contains('hidden')) {
+content.classList.remove('hidden');
+icon.className = 'ri-arrow-up-s-line';
+button.innerHTML = button.innerHTML.replace('查看参考答案', '隐藏参考答案');
+} else {
+content.classList.add('hidden');
+icon.className = 'ri-arrow-down-s-line';
+button.innerHTML = button.innerHTML.replace('隐藏参考答案', '查看参考答案');
+}
+};
+window.toggleFavorite = function(button) {
+const icon = button.querySelector('i');
+if (icon.classList.contains('ri-heart-line')) {
+icon.className = 'ri-heart-fill';
+button.classList.add('text-red-500');
+} else {
+icon.className = 'ri-heart-line';
+button.classList.remove('text-red-500');
+}
+};
+</script>
+
+<script id="export-and-preview">
+document.addEventListener('DOMContentLoaded', function() {
+const previewBtn = document.getElementById('previewQuestions');
+const exportBtn = document.getElementById('exportQuestions');
+const startBtn = document.getElementById('startInterview');
+previewBtn.addEventListener('click', function() {
+const dialog = document.createElement('div');
+dialog.className = 'fixed inset-0 flex items-center justify-center z-50';
+dialog.innerHTML = `
+<div class="fixed inset-0 bg-black/50" onclick="this.parentElement.remove()"></div>
+<div class="relative bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-medium text-gray-900">题目预览</h3>
+<button class="p-2 text-gray-400 hover:text-gray-600" onclick="this.closest('.fixed').remove()">
+<i class="ri-close-line"></i>
+</button>
+</div>
+<div class="space-y-4">
+<div class="text-sm text-gray-600">共生成 ${document.getElementById('questionCount').textContent} 道题目</div>
+<div class="bg-blue-50 rounded-lg p-4">
+<p class="text-sm text-blue-700">预览模式下仅显示题目概览，完整内容请在主界面查看。</p>
+</div>
+</div>
+</div>
+`;
+document.body.appendChild(dialog);
+});
+exportBtn.addEventListener('click', function() {
+const dialog = document.createElement('div');
+dialog.className = 'fixed inset-0 flex items-center justify-center z-50';
+dialog.innerHTML = `
+<div class="fixed inset-0 bg-black/50"></div>
+<div class="relative bg-white rounded-lg p-6 max-w-sm w-full mx-4">
+<h3 class="text-lg font-medium text-gray-900 mb-2">导出成功</h3>
+<p class="text-gray-600 mb-4">题目已导出为 PDF 文件到下载文件夹</p>
+<button class="w-full px-4 py-2 bg-primary text-white rounded-button" onclick="this.closest('.fixed').remove()">确定</button>
+</div>
+`;
+document.body.appendChild(dialog);
+});
+startBtn.addEventListener('click', function() {
+const dialog = document.createElement('div');
+dialog.className = 'fixed inset-0 flex items-center justify-center z-50';
+dialog.innerHTML = `
+<div class="fixed inset-0 bg-black/50"></div>
+<div class="relative bg-white rounded-lg p-6 max-w-sm w-full mx-4">
+<h3 class="text-lg font-medium text-gray-900 mb-2">开始面试</h3>
+<p class="text-gray-600 mb-4">即将进入面试模拟环节，请确保设备正常工作</p>
+<div class="flex space-x-3">
+<button class="flex-1 px-4 py-2 text-gray-600 border border-gray-300 rounded-button hover:bg-gray-50" onclick="this.closest('.fixed').remove()">取消</button>
+<button class="flex-1 px-4 py-2 bg-primary text-white rounded-button hover:bg-primary/90" onclick="this.closest('.fixed').remove()">开始</button>
+</div>
+</div>
+`;
+document.body.appendChild(dialog);
+});
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const startBtn = document.getElementById('startInterview');
+  if (startBtn) {
+    startBtn.addEventListener('click', function() {
+      if (!startBtn.disabled) {
+        window.location.href = './interview-simulation.html';
+      }
+    });
+  }
+});
+</script>
+</body>
+</html>

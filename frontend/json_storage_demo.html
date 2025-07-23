@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON存储功能演示</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-4xl mx-auto p-8">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-6">JSON存储功能演示</h1>
+            
+            <div class="space-y-8">
+                <!-- 功能说明 -->
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <h2 class="text-xl font-semibold text-blue-900 mb-4">功能说明</h2>
+                    <div class="space-y-3 text-blue-800">
+                        <p>✅ <strong>JSON文件保存</strong>：简历分析结果自动保存为本地JSON文件</p>
+                        <p>✅ <strong>URL参数传递</strong>：页面间通过taskId传递，避免URL过长</p>
+                        <p>✅ <strong>数据持久化</strong>：分析结果持久化存储，支持多次访问</p>
+                        <p>✅ <strong>性能优化</strong>：减少网络传输，提高页面加载速度</p>
+                    </div>
+                </div>
+
+                <!-- 测试区域 -->
+                <div class="bg-green-50 rounded-lg p-6">
+                    <h2 class="text-xl font-semibold text-green-900 mb-4">功能测试</h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">测试TaskId</label>
+                            <input type="text" id="testTaskId" placeholder="输入taskId进行测试" 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                        </div>
+                        
+                        <div class="flex space-x-4">
+                            <button onclick="testJsonLoad()" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                                <i class="ri-download-line mr-2"></i>测试JSON加载
+                            </button>
+                            <button onclick="testPageNavigation()" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                <i class="ri-arrow-right-line mr-2"></i>测试页面跳转
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 结果显示 -->
+                <div id="resultArea" class="hidden">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">测试结果</h2>
+                    <div id="resultContent" class="bg-gray-50 rounded-lg p-4">
+                        <!-- 结果将在这里显示 -->
+                    </div>
+                </div>
+
+                <!-- 页面跳转测试 -->
+                <div class="bg-purple-50 rounded-lg p-6">
+                    <h2 class="text-xl font-semibold text-purple-900 mb-4">页面跳转测试</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white rounded-lg p-4 border border-purple-200">
+                            <h3 class="font-medium text-purple-900 mb-2">setting_page1.html</h3>
+                            <p class="text-sm text-purple-700 mb-3">简历上传和分析页面</p>
+                            <a href="./setting_page1.html" class="inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm">
+                                访问页面
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-purple-200">
+                            <h3 class="font-medium text-purple-900 mb-2">setting_page2.html</h3>
+                            <p class="text-sm text-purple-700 mb-3">简历解析结果展示页面</p>
+                            <a href="./setting_page2.html" class="inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm">
+                                访问页面
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-purple-200">
+                            <h3 class="font-medium text-purple-900 mb-2">setting_page3.html</h3>
+                            <p class="text-sm text-purple-700 mb-3">题目生成页面</p>
+                            <a href="./setting_page3.html" class="inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm">
+                                访问页面
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API端点说明 -->
+                <div class="bg-yellow-50 rounded-lg p-6">
+                    <h2 class="text-xl font-semibold text-yellow-900 mb-4">API端点说明</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-white rounded-lg p-4 border border-yellow-200">
+                            <h3 class="font-medium text-yellow-900 mb-2">POST /api/v1/resume/upload</h3>
+                            <p class="text-sm text-yellow-700 mb-2">上传简历文件，返回taskId</p>
+                            <code class="text-xs bg-gray-100 px-2 py-1 rounded">返回: {"success": true, "task_id": "xxx"}</code>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-yellow-200">
+                            <h3 class="font-medium text-yellow-900 mb-2">GET /api/v1/resume/status/{taskId}</h3>
+                            <p class="text-sm text-yellow-700 mb-2">获取分析状态和进度</p>
+                            <code class="text-xs bg-gray-100 px-2 py-1 rounded">返回: {"status": "completed", "progress": 100}</code>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-yellow-200">
+                            <h3 class="font-medium text-yellow-900 mb-2">GET /api/v1/resume/json/{taskId}</h3>
+                            <p class="text-sm text-yellow-700 mb-2">获取分析结果的JSON数据</p>
+                            <code class="text-xs bg-gray-100 px-2 py-1 rounded">返回: {"success": true, "data": {...}}</code>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-yellow-200">
+                            <h3 class="font-medium text-yellow-900 mb-2">DELETE /api/v1/resume/cleanup/{taskId}</h3>
+                            <p class="text-sm text-yellow-700 mb-2">清理分析任务和文件</p>
+                            <code class="text-xs bg-gray-100 px-2 py-1 rounded">返回: {"success": true, "message": "清理成功"}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function testJsonLoad() {
+            const taskId = document.getElementById('testTaskId').value.trim();
+            if (!taskId) {
+                alert('请输入taskId');
+                return;
+            }
+
+            const resultArea = document.getElementById('resultArea');
+            const resultContent = document.getElementById('resultContent');
+            
+            resultContent.innerHTML = '<div class="flex items-center"><i class="ri-loader-4-line animate-spin mr-2"></i>正在加载...</div>';
+            resultArea.classList.remove('hidden');
+
+            try {
+                const response = await fetch(`/api/v1/resume/json/${taskId}`);
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    const data = result.data;
+                    resultContent.innerHTML = `
+                        <div class="space-y-3">
+                            <div class="flex items-center text-green-600">
+                                <i class="ri-check-line mr-2"></i>
+                                <span class="font-medium">JSON加载成功</span>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                <div>
+                                    <span class="font-medium">基本信息:</span>
+                                    <p>姓名: ${data.basic_info?.name || 'N/A'}</p>
+                                    <p>邮箱: ${data.basic_info?.email || 'N/A'}</p>
+                                </div>
+                                <div>
+                                    <span class="font-medium">技能点:</span>
+                                    <p>数量: ${data.skills?.length || 0}</p>
+                                    <p>示例: ${data.skills?.slice(0, 3).join(', ') || 'N/A'}</p>
+                                </div>
+                                <div>
+                                    <span class="font-medium">项目经验:</span>
+                                    <p>数量: ${data.projects?.length || 0}</p>
+                                    <p>示例: ${data.projects?.[0]?.name || 'N/A'}</p>
+                                </div>
+                            </div>
+                            <details class="mt-4">
+                                <summary class="cursor-pointer font-medium text-gray-700">查看完整JSON数据</summary>
+                                <pre class="mt-2 text-xs bg-gray-100 p-3 rounded overflow-auto max-h-60">${JSON.stringify(data, null, 2)}</pre>
+                            </details>
+                        </div>
+                    `;
+                } else {
+                    resultContent.innerHTML = `
+                        <div class="flex items-center text-red-600">
+                            <i class="ri-error-warning-line mr-2"></i>
+                            <span>加载失败: ${result.detail || result.message || '未知错误'}</span>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultContent.innerHTML = `
+                    <div class="flex items-center text-red-600">
+                        <i class="ri-error-warning-line mr-2"></i>
+                        <span>请求失败: ${error.message}</span>
+                    </div>
+                `;
+            }
+        }
+
+        function testPageNavigation() {
+            const taskId = document.getElementById('testTaskId').value.trim();
+            if (!taskId) {
+                alert('请输入taskId');
+                return;
+            }
+
+            const resultArea = document.getElementById('resultArea');
+            const resultContent = document.getElementById('resultContent');
+            
+            resultContent.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center text-blue-600">
+                        <i class="ri-information-line mr-2"></i>
+                        <span class="font-medium">页面跳转测试</span>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-sm">使用以下链接测试页面跳转:</p>
+                        <div class="space-y-2">
+                            <a href="./setting_page2.html?taskId=${taskId}" class="block text-blue-600 hover:text-blue-800 text-sm">
+                                📄 setting_page2.html?taskId=${taskId}
+                            </a>
+                            <a href="./setting_page3.html?taskId=${taskId}" class="block text-blue-600 hover:text-blue-800 text-sm">
+                                📄 setting_page3.html?taskId=${taskId}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            resultArea.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html> 

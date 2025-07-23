@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数据结构与算法精讲 - 课程详情</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#2196F3',secondary:'#FF5722'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: "Noto Sans SC", "Roboto", sans-serif;
+}
+.sticky-nav {
+position: sticky;
+top: 72px;
+z-index: 40;
+background: white;
+border-bottom: 1px solid #e5e7eb;
+}
+.nav-item {
+transition: all 0.2s;
+}
+.nav-item.active {
+color: #2196F3;
+border-bottom: 2px solid #2196F3;
+}
+.chapter-item {
+transition: all 0.2s;
+}
+.chapter-item:hover {
+background-color: #f9fafb;
+}
+.progress-bar {
+height: 6px;
+background-color: #E5E7EB;
+border-radius: 3px;
+overflow: hidden;
+}
+.progress-fill {
+height: 100%;
+border-radius: 3px;
+transition: width 0.3s ease;
+}
+.rating-stars {
+display: inline-flex;
+align-items: center;
+}
+.rating-stars i {
+color: #FFB400;
+margin-right: 1px;
+}
+.rating-stars i.empty {
+color: #E5E7EB;
+}
+.difficulty-stars {
+display: inline-flex;
+align-items: center;
+}
+.difficulty-stars i {
+color: #FFB400;
+margin-right: 2px;
+}
+.difficulty-stars i.empty {
+color: #E5E7EB;
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- 顶部导航栏 -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+<div class="container mx-auto px-4 py-3 flex justify-between items-center">
+<div class="flex items-center">
+<a href="https://readdy.ai/home/95b52a2e-78c3-4162-b2e2-e2497cd401ae/955e1b2d-0963-4c97-bc72-dca034feca35" data-readdy="true" class="flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors mr-6">
+<div class="w-8 h-8 flex items-center justify-center">
+<i class="ri-arrow-left-line"></i>
+</div>
+<span>返回</span>
+</a>
+<img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
+<span class="ml-2 text-lg font-medium">职面星火</span>
+</div>
+<div class="flex items-center space-x-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
+<i class="ri-share-line"></i>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
+<i class="ri-heart-line"></i>
+</button>
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+<i class="ri-user-line text-gray-500"></i>
+</div>
+<span class="text-gray-700 hidden md:inline">张明远</span>
+</div>
+</div>
+</div>
+</header>
+
+<!-- 课程概览区域 -->
+<section class="bg-white border-b">
+<div class="container mx-auto px-4 py-8">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2">
+<div class="flex items-start space-x-2 mb-4">
+<span class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">技术能力</span>
+<div class="difficulty-stars">
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-line empty"></i>
+</div>
+</div>
+<h1 class="text-3xl font-bold text-gray-900 mb-4">数据结构与算法精讲</h1>
+<p class="text-lg text-gray-600 mb-6">深入理解数据结构与算法的核心概念，掌握常用数据结构的实现原理和算法设计思想，提升编程能力和问题解决能力。</p>
+<div class="flex items-center space-x-6 text-sm text-gray-600 mb-6">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-gray-500 mr-2">
+<i class="ri-user-line"></i>
+</div>
+<span>3,247 人学习</span>
+</div>
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-yellow-500 mr-1">
+<i class="ri-star-fill"></i>
+</div>
+<span>4.9 (892 评价)</span>
+</div>
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-gray-500 mr-2">
+<i class="ri-time-line"></i>
+</div>
+<span>总时长 8 小时 30 分钟</span>
+</div>
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-gray-500 mr-2">
+<i class="ri-calendar-line"></i>
+</div>
+<span>最近更新：2025-07-15</span>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="px-8 py-3 bg-primary text-white rounded-button font-medium hover:bg-blue-600 transition-colors whitespace-nowrap !rounded-button">开始学习</button>
+<button class="px-6 py-3 border border-gray-300 text-gray-700 rounded-button hover:border-gray-400 transition-colors whitespace-nowrap !rounded-button">加入收藏</button>
+</div>
+</div>
+<div class="lg:col-span-1">
+<div class="relative h-64 rounded-lg overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Data%20structure%20and%20algorithms%20comprehensive%20course%20cover%2C%20modern%20computer%20science%20education%20with%20code%20visualization%20and%20algorithm%20diagrams%2C%20professional%20educational%20design%20with%20clean%20background&width=400&height=300&seq=1&orientation=landscape" alt="数据结构与算法精讲" class="w-full h-full object-cover object-top">
+<div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+<button class="w-16 h-16 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-primary hover:bg-opacity-100 transition-all">
+<div class="w-8 h-8 flex items-center justify-center">
+<i class="ri-play-fill ri-2x"></i>
+</div>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 内容导航栏 -->
+<nav class="sticky-nav">
+<div class="container mx-auto px-4">
+<div class="flex space-x-8 overflow-x-auto">
+<button class="nav-item active py-4 px-2 text-sm font-medium whitespace-nowrap border-b-2 border-transparent" data-tab="details">课程详情</button>
+<button class="nav-item py-4 px-2 text-sm font-medium whitespace-nowrap border-b-2 border-transparent text-gray-600 hover:text-gray-900" data-tab="chapters">章节目录</button>
+<button class="nav-item py-4 px-2 text-sm font-medium whitespace-nowrap border-b-2 border-transparent text-gray-600 hover:text-gray-900" data-tab="progress">学习进度</button>
+<button class="nav-item py-4 px-2 text-sm font-medium whitespace-nowrap border-b-2 border-transparent text-gray-600 hover:text-gray-900" data-tab="instructor">讲师信息</button>
+<button class="nav-item py-4 px-2 text-sm font-medium whitespace-nowrap border-b-2 border-transparent text-gray-600 hover:text-gray-900" data-tab="reviews">学员评价</button>
+<button class="nav-item py-4 px-2 text-sm font-medium whitespace-nowrap border-b-2 border-transparent text-gray-600 hover:text-gray-900" data-tab="recommendations">相关推荐</button>
+</div>
+</div>
+</nav>
+
+<!-- 主要内容区域 -->
+<main class="container mx-auto px-4 py-8">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2">
+<!-- 课程详情 -->
+<div id="details-content" class="tab-content">
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+<h2 class="text-xl font-semibold text-gray-900 mb-4">课程目标</h2>
+<ul class="space-y-3">
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-3">
+<i class="ri-checkbox-circle-line"></i>
+</div>
+<span class="text-gray-700">掌握常用数据结构的原理和实现，包括数组、链表、栈、队列、树、图等</span>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-3">
+<i class="ri-checkbox-circle-line"></i>
+</div>
+<span class="text-gray-700">理解经典算法的设计思想，包括排序、搜索、动态规划、贪心算法等</span>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-3">
+<i class="ri-checkbox-circle-line"></i>
+</div>
+<span class="text-gray-700">能够分析算法的时间复杂度和空间复杂度，优化算法性能</span>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-3">
+<i class="ri-checkbox-circle-line"></i>
+</div>
+<span class="text-gray-700">具备解决实际编程问题的能力，提升编程思维和代码质量</span>
+</li>
+</ul>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+<h2 class="text-xl font-semibold text-gray-900 mb-4">适合人群</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-green-500 mt-0.5 mr-3">
+<i class="ri-user-line"></i>
+</div>
+<div>
+<h3 class="font-medium text-gray-900">计算机专业学生</h3>
+<p class="text-sm text-gray-600">希望系统学习数据结构与算法的在校学生</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-blue-500 mt-0.5 mr-3">
+<i class="ri-code-line"></i>
+</div>
+<div>
+<h3 class="font-medium text-gray-900">初级程序员</h3>
+<p class="text-sm text-gray-600">想要提升编程能力和算法思维的开发者</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-purple-500 mt-0.5 mr-3">
+<i class="ri-briefcase-line"></i>
+</div>
+<div>
+<h3 class="font-medium text-gray-900">求职准备者</h3>
+<p class="text-sm text-gray-600">准备技术面试，需要巩固算法基础的求职者</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-orange-500 mt-0.5 mr-3">
+<i class="ri-graduation-cap-line"></i>
+</div>
+<div>
+<h3 class="font-medium text-gray-900">自学爱好者</h3>
+<p class="text-sm text-gray-600">对算法和数据结构感兴趣的编程爱好者</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+<h2 class="text-xl font-semibold text-gray-900 mb-4">课程特色</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="text-center">
+<div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+<div class="w-8 h-8 flex items-center justify-center text-blue-600">
+<i class="ri-lightbulb-line ri-2x"></i>
+</div>
+</div>
+<h3 class="font-medium text-gray-900 mb-2">理论与实践结合</h3>
+<p class="text-sm text-gray-600">每个概念都配有代码实现和实际应用案例</p>
+</div>
+<div class="text-center">
+<div class="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+<div class="w-8 h-8 flex items-center justify-center text-green-600">
+<i class="ri-bar-chart-line ri-2x"></i>
+</div>
+</div>
+<h3 class="font-medium text-gray-900 mb-2">渐进式学习</h3>
+<p class="text-sm text-gray-600">从基础到高级，循序渐进的学习路径</p>
+</div>
+<div class="text-center">
+<div class="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
+<div class="w-8 h-8 flex items-center justify-center text-purple-600">
+<i class="ri-question-answer-line ri-2x"></i>
+</div>
+</div>
+<h3 class="font-medium text-gray-900 mb-2">互动练习</h3>
+<p class="text-sm text-gray-600">丰富的练习题和编程挑战</p>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm p-6">
+<h2 class="text-xl font-semibold text-gray-900 mb-4">学习路径</h2>
+<div class="relative">
+<div class="absolute left-4 top-8 bottom-0 w-0.5 bg-gray-200"></div>
+<div class="space-y-6">
+<div class="flex items-start">
+<div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-medium relative z-10">1</div>
+<div class="ml-4">
+<h3 class="font-medium text-gray-900">基础数据结构</h3>
+<p class="text-sm text-gray-600 mt-1">学习数组、链表、栈、队列等基础数据结构</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-medium relative z-10">2</div>
+<div class="ml-4">
+<h3 class="font-medium text-gray-900">树形结构</h3>
+<p class="text-sm text-gray-600 mt-1">掌握二叉树、平衡树、堆等树形数据结构</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-medium relative z-10">3</div>
+<div class="ml-4">
+<h3 class="font-medium text-gray-900">图论算法</h3>
+<p class="text-sm text-gray-600 mt-1">学习图的表示方法和常用图算法</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-medium relative z-10">4</div>
+<div class="ml-4">
+<h3 class="font-medium text-gray-900">高级算法</h3>
+<p class="text-sm text-gray-600 mt-1">掌握动态规划、贪心算法等高级算法设计技巧</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 章节目录 -->
+<div id="chapters-content" class="tab-content hidden">
+<div class="bg-white rounded-lg shadow-sm p-6">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-semibold text-gray-900">课程章节</h2>
+<div class="text-sm text-gray-600">共 8 章 32 节 · 8 小时 30 分钟</div>
+</div>
+<div class="space-y-4">
+<div class="border border-gray-200 rounded-lg">
+<div class="chapter-item p-4 cursor-pointer" data-chapter="1">
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-medium mr-4">1</div>
+<div>
+<h3 class="font-medium text-gray-900">算法基础与复杂度分析</h3>
+<p class="text-sm text-gray-600 mt-1">4 节 · 65 分钟</p>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">已完成</span>
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</div>
+</div>
+<div class="chapter-content mt-4 pl-12 space-y-2 hidden">
+<div class="flex items-center justify-between py-2 px-3 rounded hover:bg-gray-50">
+<div class="flex items-center">
+<div class="w-6 h-6 flex items-center justify-center text-green-500 mr-3">
+<i class="ri-play-circle-fill"></i>
+</div>
+<span class="text-sm text-gray-700">1.1 算法的定义与特征</span>
+</div>
+<div class="flex items-center space-x-2 text-xs text-gray-500">
+<span>15:30</span>
+<div class="w-4 h-4 flex items-center justify-center text-green-500">
+<i class="ri-check-line"></i>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between py-2 px-3 rounded hover:bg-gray-50">
+<div class="flex items-center">
+<div class="w-6 h-6 flex items-center justify-center text-green-500 mr-3">
+<i class="ri-play-circle-fill"></i>
+</div>
+<span class="text-sm text-gray-700">1.2 时间复杂度分析</span>
+</div>
+<div class="flex items-center space-x-2 text-xs text-gray-500">
+<span>18:45</span>
+<div class="w-4 h-4 flex items-center justify-center text-green-500">
+<i class="ri-check-line"></i>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between py-2 px-3 rounded hover:bg-gray-50">
+<div class="flex items-center">
+<div class="w-6 h-6 flex items-center justify-center text-green-500 mr-3">
+<i class="ri-play-circle-fill"></i>
+</div>
+<span class="text-sm text-gray-700">1.3 空间复杂度分析</span>
+</div>
+<div class="flex items-center space-x-2 text-xs text-gray-500">
+<span>16:20</span>
+<div class="w-4 h-4 flex items-center justify-center text-green-500">
+<i class="ri-check-line"></i>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between py-2 px-3 rounded hover:bg-gray-50">
+<div class="flex items-center">
+<div class="w-6 h-6 flex items-center justify-center text-green-500 mr-3">
+<i class="ri-play-circle-fill"></i>
+</div>
+<span class="text-sm text-gray-700">1.4 算法性能比较</span>
+</div>
+<div class="flex items-center space-x-2 text-xs text-gray-500">
+<span>14:25</span>
+<div class="w-4 h-4 flex items-center justify-center text-green-500">
+<i class="ri-check-line"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="border border-gray-200 rounded-lg">
+<div class="chapter-item p-4 cursor-pointer" data-chapter="2">
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-medium mr-4">2</div>
+<div>
+<h3 class="font-medium text-gray-900">线性数据结构</h3>
+<p class="text-sm text-gray-600 mt-1">5 节 · 78 分钟</p>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">进行中</span>
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</div>
+</div>
+</div>
+
+<div class="border border-gray-200 rounded-lg">
+<div class="chapter-item p-4 cursor-pointer" data-chapter="3">
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-8 h-8 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium mr-4">3</div>
+<div>
+<h3 class="font-medium text-gray-900">栈与队列</h3>
+<p class="text-sm text-gray-600 mt-1">4 节 · 62 分钟</p>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">未开始</span>
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</div>
+</div>
+</div>
+
+<div class="border border-gray-200 rounded-lg">
+<div class="chapter-item p-4 cursor-pointer" data-chapter="4">
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-8 h-8 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium mr-4">4</div>
+<div>
+<h3 class="font-medium text-gray-900">树与二叉树</h3>
+<p class="text-sm text-gray-600 mt-1">6 节 · 95 分钟</p>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">未开始</span>
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</div>
+</div>
+</div>
+
+<div class="border border-gray-200 rounded-lg">
+<div class="chapter-item p-4 cursor-pointer" data-chapter="5">
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-8 h-8 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium mr-4">5</div>
+<div>
+<h3 class="font-medium text-gray-900">图论基础</h3>
+<p class="text-sm text-gray-600 mt-1">5 节 · 88 分钟</p>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">未开始</span>
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</div>
+</div>
+</div>
+
+<div class="border border-gray-200 rounded-lg">
+<div class="chapter-item p-4 cursor-pointer" data-chapter="6">
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-8 h-8 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium mr-4">6</div>
+<div>
+<h3 class="font-medium text-gray-900">排序算法</h3>
+<p class="text-sm text-gray-600 mt-1">4 节 · 72 分钟</p>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">未开始</span>
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</div>
+</div>
+</div>
+
+<div class="border border-gray-200 rounded-lg">
+<div class="chapter-item p-4 cursor-pointer" data-chapter="7">
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-8 h-8 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium mr-4">7</div>
+<div>
+<h3 class="font-medium text-gray-900">搜索算法</h3>
+<p class="text-sm text-gray-600 mt-1">3 节 · 58 分钟</p>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">未开始</span>
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</div>
+</div>
+</div>
+
+<div class="border border-gray-200 rounded-lg">
+<div class="chapter-item p-4 cursor-pointer" data-chapter="8">
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-8 h-8 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium mr-4">8</div>
+<div>
+<h3 class="font-medium text-gray-900">动态规划与贪心算法</h3>
+<p class="text-sm text-gray-600 mt-1">5 节 · 92 分钟</p>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">未开始</span>
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="mt-6 p-4 bg-blue-50 rounded-lg">
+<div class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-blue-500 mt-0.5 mr-3">
+<i class="ri-information-line"></i>
+</div>
+<div>
+<h3 class="font-medium text-blue-900 mb-1">继续上次学习</h3>
+<p class="text-sm text-blue-700">您上次学习到第 2 章第 3 节：数组的动态扩容</p>
+<button class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-button text-sm hover:bg-blue-700 transition-colors whitespace-nowrap !rounded-button">继续学习</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 学习进度 -->
+<div id="progress-content" class="tab-content hidden">
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+<h2 class="text-xl font-semibold text-gray-900 mb-4">总体进度</h2>
+<div class="mb-4">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-medium text-gray-700">课程完成度</span>
+<span class="text-sm text-gray-600">40%</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill bg-primary" style="width: 40%"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+<div>
+<div class="text-2xl font-bold text-primary">13</div>
+<div class="text-sm text-gray-600">已完成节数</div>
+</div>
+<div>
+<div class="text-2xl font-bold text-gray-900">32</div>
+<div class="text-sm text-gray-600">总节数</div>
+</div>
+<div>
+<div class="text-2xl font-bold text-green-600">3.5</div>
+<div class="text-sm text-gray-600">学习时长(小时)</div>
+</div>
+<div>
+<div class="text-2xl font-bold text-orange-600">8.5</div>
+<div class="text-sm text-gray-600">总时长(小时)</div>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+<h2 class="text-xl font-semibold text-gray-900 mb-4">最近学习</h2>
+<div class="space-y-4">
+<div class="flex items-center p-3 border border-gray-200 rounded-lg">
+<div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+<div class="w-6 h-6 flex items-center justify-center text-blue-600">
+<i class="ri-play-circle-line"></i>
+</div>
+</div>
+<div class="flex-1">
+<h3 class="font-medium text-gray-900">2.3 数组的动态扩容</h3>
+<p class="text-sm text-gray-600">第 2 章 线性数据结构</p>
+</div>
+<div class="text-right">
+<div class="text-sm text-gray-600">2025-07-22</div>
+<div class="text-xs text-gray-500">学习了 15 分钟</div>
+</div>
+</div>
+<div class="flex items-center p-3 border border-gray-200 rounded-lg">
+<div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+<div class="w-6 h-6 flex items-center justify-center text-green-600">
+<i class="ri-check-line"></i>
+</div>
+</div>
+<div class="flex-1">
+<h3 class="font-medium text-gray-900">2.2 链表的基本操作</h3>
+<p class="text-sm text-gray-600">第 2 章 线性数据结构</p>
+</div>
+<div class="text-right">
+<div class="text-sm text-gray-600">2025-07-21</div>
+<div class="text-xs text-green-600">已完成</div>
+</div>
+</div>
+<div class="flex items-center p-3 border border-gray-200 rounded-lg">
+<div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+<div class="w-6 h-6 flex items-center justify-center text-green-600">
+<i class="ri-check-line"></i>
+</div>
+</div>
+<div class="flex-1">
+<h3 class="font-medium text-gray-900">2.1 数组与链表对比</h3>
+<p class="text-sm text-gray-600">第 2 章 线性数据结构</p>
+</div>
+<div class="text-right">
+<div class="text-sm text-gray-600">2025-07-20</div>
+<div class="text-xs text-green-600">已完成</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm p-6">
+<h2 class="text-xl font-semibold text-gray-900 mb-4">学习统计</h2>
+<div id="progress-chart" class="w-full h-64"></div>
+</div>
+</div>
+
+<!-- 讲师信息 -->
+<div id="instructor-content" class="tab-content hidden">
+<div class="bg-white rounded-lg shadow-sm p-6">
+<div class="flex items-start space-x-6 mb-6">
+<div class="w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=Professional%20computer%20science%20instructor%20portrait%2C%20experienced%20algorithm%20teacher%20with%20friendly%20smile%2C%20clean%20background%20professional%20headshot&width=150&height=150&seq=2&orientation=squarish" alt="李教授" class="w-full h-full object-cover object-top">
+</div>
+<div class="flex-1">
+<h2 class="text-2xl font-semibold text-gray-900 mb-2">李志强教授</h2>
+<p class="text-gray-600 mb-3">计算机科学博士 · 算法专家 · 10 年教学经验</p>
+<div class="flex items-center space-x-6 text-sm text-gray-600 mb-4">
+<div class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center text-gray-500 mr-1">
+<i class="ri-user-line"></i>
+</div>
+<span>15,247 学员</span>
+</div>
+<div class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center text-yellow-500 mr-1">
+<i class="ri-star-fill"></i>
+</div>
+<span>4.9 评分</span>
+</div>
+<div class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center text-gray-500 mr-1">
+<i class="ri-book-line"></i>
+</div>
+<span>23 门课程</span>
+</div>
+</div>
+<button class="px-6 py-2 border border-primary text-primary rounded-button hover:bg-primary hover:text-white transition-colors whitespace-nowrap !rounded-button">咨询讲师</button>
+</div>
+</div>
+
+<div class="mb-6">
+<h3 class="text-lg font-semibold text-gray-900 mb-3">讲师简介</h3>
+<p class="text-gray-700 leading-relaxed mb-4">
+李志强教授拥有清华大学计算机科学博士学位，专注于算法设计与分析领域研究超过 15 年。曾在国际顶级会议发表论文 30 余篇，主持多项国家自然科学基金项目。
+</p>
+<p class="text-gray-700 leading-relaxed mb-4">
+在教学方面，李教授有着丰富的经验，善于将复杂的算法概念用简单易懂的方式讲解，深受学生喜爱。他的课程注重理论与实践相结合，帮助学生真正掌握算法思维。
+</p>
+<p class="text-gray-700 leading-relaxed">
+李教授还是多家知名互联网公司的技术顾问，对行业前沿技术有着深刻的理解，能够为学生提供最实用的学习指导。
+</p>
+</div>
+
+<div class="mb-6">
+<h3 class="text-lg font-semibold text-gray-900 mb-3">教学成就</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-blue-500 mt-0.5 mr-3">
+<i class="ri-award-line"></i>
+</div>
+<div>
+<h4 class="font-medium text-gray-900">优秀教师奖</h4>
+<p class="text-sm text-gray-600">连续 5 年获得学院优秀教师称号</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-green-500 mt-0.5 mr-3">
+<i class="ri-trophy-line"></i>
+</div>
+<div>
+<h4 class="font-medium text-gray-900">教学创新奖</h4>
+<p class="text-sm text-gray-600">创新教学方法获得国家级教学成果奖</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-purple-500 mt-0.5 mr-3">
+<i class="ri-book-2-line"></i>
+</div>
+<div>
+<h4 class="font-medium text-gray-900">学术专著</h4>
+<p class="text-sm text-gray-600">出版《算法设计与分析》等专业教材 3 部</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-orange-500 mt-0.5 mr-3">
+<i class="ri-global-line"></i>
+</div>
+<div>
+<h4 class="font-medium text-gray-900">国际影响</h4>
+<p class="text-sm text-gray-600">多次受邀在国际学术会议做主题报告</p>
+</div>
+</div>
+</div>
+</div>
+
+<div>
+<h3 class="text-lg font-semibold text-gray-900 mb-3">其他热门课程</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="border border-gray-200 rounded-lg p-4 hover:border-primary transition-colors cursor-pointer">
+<div class="flex items-start">
+<div class="w-16 h-16 rounded overflow-hidden flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=Advanced%20algorithms%20course%20cover%2C%20complex%20algorithm%20visualization%20with%20mathematical%20formulas%2C%20professional%20educational%20design&width=100&height=100&seq=3&orientation=squarish" alt="高级算法设计" class="w-full h-full object-cover object-top">
+</div>
+<div class="ml-3">
+<h4 class="font-medium text-gray-900 mb-1">高级算法设计与分析</h4>
+<p class="text-xs text-gray-600 mb-2">深入学习高级算法设计技巧</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center text-yellow-500">
+<i class="ri-star-fill"></i>
+</div>
+<span class="ml-1 text-xs text-gray-700">4.8</span>
+</div>
+<span class="text-xs text-primary">查看详情</span>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 hover:border-primary transition-colors cursor-pointer">
+<div class="flex items-start">
+<div class="w-16 h-16 rounded overflow-hidden flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=System%20design%20course%20cover%2C%20distributed%20system%20architecture%20diagram%2C%20professional%20educational%20design&width=100&height=100&seq=4&orientation=squarish" alt="系统设计实战" class="w-full h-full object-cover object-top">
+</div>
+<div class="ml-3">
+<h4 class="font-medium text-gray-900 mb-1">系统设计实战课程</h4>
+<p class="text-xs text-gray-600 mb-2">大型系统架构设计与实现</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center text-yellow-500">
+<i class="ri-star-fill"></i>
+</div>
+<span class="ml-1 text-xs text-gray-700">4.9</span>
+</div>
+<span class="text-xs text-primary">查看详情</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 学员评价 -->
+<div id="reviews-content" class="tab-content hidden">
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+<h2 class="text-xl font-semibold text-gray-900 mb-4">学员评价</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="text-center">
+<div class="text-4xl font-bold text-primary mb-2">4.9</div>
+<div class="rating-stars justify-center mb-2">
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+</div>
+<div class="text-sm text-gray-600">基于 892 条评价</div>
+</div>
+<div class="space-y-2">
+<div class="flex items-center">
+<span class="text-sm text-gray-600 w-12">5星</span>
+<div class="flex-1 mx-3 progress-bar">
+<div class="progress-fill bg-yellow-400" style="width: 78%"></div>
+</div>
+<span class="text-sm text-gray-600 w-12">78%</span>
+</div>
+<div class="flex items-center">
+<span class="text-sm text-gray-600 w-12">4星</span>
+<div class="flex-1 mx-3 progress-bar">
+<div class="progress-fill bg-yellow-400" style="width: 16%"></div>
+</div>
+<span class="text-sm text-gray-600 w-12">16%</span>
+</div>
+<div class="flex items-center">
+<span class="text-sm text-gray-600 w-12">3星</span>
+<div class="flex-1 mx-3 progress-bar">
+<div class="progress-fill bg-yellow-400" style="width: 4%"></div>
+</div>
+<span class="text-sm text-gray-600 w-12">4%</span>
+</div>
+<div class="flex items-center">
+<span class="text-sm text-gray-600 w-12">2星</span>
+<div class="flex-1 mx-3 progress-bar">
+<div class="progress-fill bg-yellow-400" style="width: 1%"></div>
+</div>
+<span class="text-sm text-gray-600 w-12">1%</span>
+</div>
+<div class="flex items-center">
+<span class="text-sm text-gray-600 w-12">1星</span>
+<div class="flex-1 mx-3 progress-bar">
+<div class="progress-fill bg-yellow-400" style="width: 1%"></div>
+</div>
+<span class="text-sm text-gray-600 w-12">1%</span>
+</div>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+<div class="text-center p-4 bg-gray-50 rounded-lg">
+<div class="text-2xl font-bold text-gray-900 mb-1">4.9</div>
+<div class="text-sm text-gray-600">课程内容</div>
+</div>
+<div class="text-center p-4 bg-gray-50 rounded-lg">
+<div class="text-2xl font-bold text-gray-900 mb-1">4.8</div>
+<div class="text-sm text-gray-600">讲师表现</div>
+</div>
+<div class="text-center p-4 bg-gray-50 rounded-lg">
+<div class="text-2xl font-bold text-gray-900 mb-1">4.9</div>
+<div class="text-sm text-gray-600">学习收获</div>
+</div>
+</div>
+
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-semibold text-gray-900">最新评价</h3>
+<div class="flex space-x-2">
+<button class="px-3 py-1 text-sm border border-gray-200 rounded-button text-gray-700 bg-white hover:border-primary hover:text-primary whitespace-nowrap !rounded-button">全部</button>
+<button class="px-3 py-1 text-sm border border-gray-200 rounded-button text-gray-700 bg-white hover:border-primary hover:text-primary whitespace-nowrap !rounded-button">5星</button>
+<button class="px-3 py-1 text-sm border border-gray-200 rounded-button text-gray-700 bg-white hover:border-primary hover:text-primary whitespace-nowrap !rounded-button">4星</button>
+<button class="px-3 py-1 text-sm border border-gray-200 rounded-button text-gray-700 bg-white hover:border-primary hover:text-primary whitespace-nowrap !rounded-button">有图</button>
+</div>
+</div>
+
+<div class="space-y-6">
+<div class="border-b border-gray-200 pb-6">
+<div class="flex items-start space-x-4">
+<div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=Professional%20student%20avatar%2C%20young%20programmer%20headshot%2C%20clean%20background&width=80&height=80&seq=5&orientation=squarish" alt="王晓明" class="w-full h-full object-cover object-top">
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-2">
+<div>
+<h4 class="font-medium text-gray-900">王晓明</h4>
+<div class="flex items-center mt-1">
+<div class="rating-stars">
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+</div>
+<span class="ml-2 text-sm text-gray-600">2025-07-20</span>
+</div>
+</div>
+<button class="text-gray-400 hover:text-gray-600">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-thumb-up-line"></i>
+</div>
+</button>
+</div>
+<p class="text-gray-700 leading-relaxed">
+这门课程真的太棒了！李教授讲解得非常清晰，每个算法都有详细的图解和代码实现。特别是动态规划那部分，之前一直搞不懂，现在终于理解了。强烈推荐给所有想要提升算法能力的同学！
+</p>
+<div class="flex items-center justify-between mt-3 text-sm text-gray-500">
+<span>来自：Python 编程基础课程</span>
+<div class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-thumb-up-line"></i>
+</div>
+<span>24</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="border-b border-gray-200 pb-6">
+<div class="flex items-start space-x-4">
+<div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=Female%20student%20avatar%2C%20computer%20science%20student%20headshot%2C%20clean%20background&width=80&height=80&seq=6&orientation=squarish" alt="李小雨" class="w-full h-full object-cover object-top">
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-2">
+<div>
+<h4 class="font-medium text-gray-900">李小雨</h4>
+<div class="flex items-center mt-1">
+<div class="rating-stars">
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+</div>
+<span class="ml-2 text-sm text-gray-600">2025-07-18</span>
+</div>
+</div>
+<button class="text-gray-400 hover:text-gray-600">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-thumb-up-line"></i>
+</div>
+</button>
+</div>
+<p class="text-gray-700 leading-relaxed">
+作为一个算法小白，这门课程对我来说非常友好。从最基础的概念开始讲起，循序渐进，每个知识点都有充足的练习。现在我已经能够独立解决一些中等难度的算法题了，感谢李教授！
+</p>
+<div class="flex items-center justify-between mt-3 text-sm text-gray-500">
+<span>来自：数据结构基础课程</span>
+<div class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-thumb-up-line"></i>
+</div>
+<span>18</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="border-b border-gray-200 pb-6">
+<div class="flex items-start space-x-4">
+<div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=Male%20professional%20avatar%2C%20software%20engineer%20headshot%2C%20clean%20background&width=80&height=80&seq=7&orientation=squarish" alt="张建华" class="w-full h-full object-cover object-top">
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-2">
+<div>
+<h4 class="font-medium text-gray-900">张建华</h4>
+<div class="flex items-center mt-1">
+<div class="rating-stars">
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-line empty"></i>
+</div>
+<span class="ml-2 text-sm text-gray-600">2025-07-15</span>
+</div>
+</div>
+<button class="text-gray-400 hover:text-gray-600">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-thumb-up-line"></i>
+</div>
+</button>
+</div>
+<p class="text-gray-700 leading-relaxed">
+课程内容很扎实，涵盖了算法和数据结构的各个方面。李教授的讲解很有条理，代码示例也很实用。唯一的小建议是希望能增加一些更多的实战项目，让理论与实践结合得更紧密。
+</p>
+<div class="flex items-center justify-between mt-3 text-sm text-gray-500">
+<span>来自：高级算法设计课程</span>
+<div class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-thumb-up-line"></i>
+</div>
+<span>12</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="pb-6">
+<div class="flex items-start space-x-4">
+<div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=Young%20female%20developer%20avatar%2C%20tech%20student%20headshot%2C%20clean%20background&width=80&height=80&seq=8&orientation=squarish" alt="陈美玲" class="w-full h-full object-cover object-top">
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-2">
+<div>
+<h4 class="font-medium text-gray-900">陈美玲</h4>
+<div class="flex items-center mt-1">
+<div class="rating-stars">
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+</div>
+<span class="ml-2 text-sm text-gray-600">2025-07-12</span>
+</div>
+</div>
+<button class="text-gray-400 hover:text-gray-600">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-thumb-up-line"></i>
+</div>
+</button>
+</div>
+<p class="text-gray-700 leading-relaxed">
+正在准备秋招，这门课程对我帮助很大。李教授不仅讲解了算法原理，还分享了很多面试技巧和常见问题的解题思路。现在刷题效率提高了很多，面试也更有信心了！
+</p>
+<div class="flex items-center justify-between mt-3 text-sm text-gray-500">
+<span>来自：面试算法专题课程</span>
+<div class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-thumb-up-line"></i>
+</div>
+<span>31</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="text-center">
+<button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-button hover:border-gray-400 transition-colors whitespace-nowrap !rounded-button">查看更多评价</button>
+</div>
+</div>
+</div>
+
+<!-- 相关推荐 -->
+<div id="recommendations-content" class="tab-content hidden">
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+<h2 class="text-xl font-semibold text-gray-900 mb-4">相关课程推荐</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="border border-gray-200 rounded-lg overflow-hidden hover:border-primary transition-colors cursor-pointer">
+<div class="relative h-40 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Advanced%20data%20structures%20course%20cover%2C%20complex%20tree%20and%20graph%20structures%20visualization%2C%20professional%20educational%20design&width=400&height=200&seq=9&orientation=landscape" alt="高级数据结构" class="w-full h-full object-cover object-top">
+<div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+<div class="w-7 h-7 flex items-center justify-center">
+<i class="ri-book-open-line text-primary"></i>
+</div>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">技术能力</span>
+<div class="difficulty-stars">
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+</div>
+</div>
+<h3 class="font-medium text-gray-900 mb-1">高级数据结构与算法</h3>
+<p class="text-sm text-gray-600 mb-3">深入学习红黑树、B树、跳表等高级数据结构</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+<i class="ri-star-fill"></i>
+</div>
+<span class="ml-1 text-sm text-gray-700">4.8</span>
+</div>
+<span class="text-sm text-gray-500">时长: 6 小时</span>
+</div>
+</div>
+</div>
+
+<div class="border border-gray-200 rounded-lg overflow-hidden hover:border-primary transition-colors cursor-pointer">
+<div class="relative h-40 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Algorithm%20interview%20preparation%20course%2C%20coding%20interview%20practice%20with%20whiteboard%2C%20professional%20educational%20design&width=400&height=200&seq=10&orientation=landscape" alt="算法面试" class="w-full h-full object-cover object-top">
+<div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+<div class="w-7 h-7 flex items-center justify-center">
+<i class="ri-video-line text-primary"></i>
+</div>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">面试准备</span>
+<div class="difficulty-stars">
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-line empty"></i>
+</div>
+</div>
+<h3 class="font-medium text-gray-900 mb-1">算法面试突击训练</h3>
+<p class="text-sm text-gray-600 mb-3">针对大厂面试的算法题型和解题技巧</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+<i class="ri-star-fill"></i>
+</div>
+<span class="ml-1 text-sm text-gray-700">4.9</span>
+</div>
+<span class="text-sm text-gray-500">时长: 4 小时</span>
+</div>
+</div>
+</div>
+
+<div class="border border-gray-200 rounded-lg overflow-hidden hover:border-primary transition-colors cursor-pointer">
+<div class="relative h-40 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Competitive%20programming%20course%2C%20coding%20contest%20preparation%20with%20algorithms%2C%20professional%20educational%20design&width=400&height=200&seq=11&orientation=landscape" alt="竞赛编程" class="w-full h-full object-cover object-top">
+<div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+<div class="w-7 h-7 flex items-center justify-center">
+<i class="ri-trophy-line text-primary"></i>
+</div>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">竞赛训练</span>
+<div class="difficulty-stars">
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+</div>
+</div>
+<h3 class="font-medium text-gray-900 mb-1">算法竞赛进阶课程</h3>
+<p class="text-sm text-gray-600 mb-3">ACM/ICPC 竞赛算法与编程技巧训练</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+<i class="ri-star-fill"></i>
+</div>
+<span class="ml-1 text-sm text-gray-700">4.7</span>
+</div>
+<span class="text-sm text-gray-500">时长: 10 小时</span>
+</div>
+</div>
+</div>
+
+<div class="border border-gray-200 rounded-lg overflow-hidden hover:border-primary transition-colors cursor-pointer">
+<div class="relative h-40 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Machine%20learning%20algorithms%20course%2C%20AI%20and%20ML%20algorithm%20implementation%2C%20professional%20educational%20design&width=400&height=200&seq=12&orientation=landscape" alt="机器学习算法" class="w-full h-full object-cover object-top">
+<div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+<div class="w-7 h-7 flex items-center justify-center">
+<i class="ri-brain-line text-primary"></i>
+</div>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">机器学习</span>
+<div class="difficulty-stars">
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-line empty"></i>
+</div>
+</div>
+<h3 class="font-medium text-gray-900 mb-1">机器学习算法实战</h3>
+<p class="text-sm text-gray-600 mb-3">从算法角度理解机器学习的核心原理</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+<i class="ri-star-fill"></i>
+</div>
+<span class="ml-1 text-sm text-gray-700">4.8</span>
+</div>
+<span class="text-sm text-gray-500">时长: 8 小时</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm p-6">
+<h2 class="text-xl font-semibold text-gray-900 mb-4">学习路径推荐</h2>
+<div class="space-y-4">
+<div class="border border-gray-200 rounded-lg p-4">
+<div class="flex items-start">
+<div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+<div class="w-6 h-6 flex items-center justify-center text-blue-600">
+<i class="ri-route-line"></i>
+</div>
+</div>
+<div class="flex-1">
+<h3 class="font-medium text-gray-900 mb-2">算法工程师成长路径</h3>
+<p class="text-sm text-gray-600 mb-3">从基础算法到高级优化，系统性培养算法工程师技能</p>
+<div class="flex items-center space-x-4 text-xs text-gray-500">
+<span>6 门课程</span>
+<span>·</span>
+<span>预计 3 个月完成</span>
+<span>·</span>
+<span>适合有编程基础的学员</span>
+</div>
+</div>
+<button class="px-4 py-2 text-primary border border-primary rounded-button hover:bg-primary hover:text-white transition-colors text-sm whitespace-nowrap !rounded-button">查看详情</button>
+</div>
+</div>
+
+<div class="border border-gray-200 rounded-lg p-4">
+<div class="flex items-start">
+<div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+<div class="w-6 h-6 flex items-center justify-center text-green-600">
+<i class="ri-graduation-cap-line"></i>
+</div>
+</div>
+<div class="flex-1">
+<h3 class="font-medium text-gray-900 mb-2">计算机科学基础强化</h3>
+<p class="text-sm text-gray-600 mb-3">涵盖数据结构、算法、操作系统、网络等核心课程</p>
+<div class="flex items-center space-x-4 text-xs text-gray-500">
+<span>12 门课程</span>
+<span>·</span>
+<span>预计 6 个月完成</span>
+<span>·</span>
+<span>适合转行或基础薄弱的学员</span>
+</div>
+</div>
+<button class="px-4 py-2 text-primary border border-primary rounded-button hover:bg-primary hover:text-white transition-colors text-sm whitespace-nowrap !rounded-button">查看详情</button>
+</div>
+</div>
+
+<div class="border border-gray-200 rounded-lg p-4">
+<div class="flex items-start">
+<div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+<div class="w-6 h-6 flex items-center justify-center text-purple-600">
+<i class="ri-briefcase-line"></i>
+</div>
+</div>
+<div class="flex-1">
+<h3 class="font-medium text-gray-900 mb-2">大厂面试冲刺训练</h3>
+<p class="text-sm text-gray-600 mb-3">针对 BAT、字节跳动等大厂的面试准备课程</p>
+<div class="flex items-center space-x-4 text-xs text-gray-500">
+<span>8 门课程</span>
+<span>·</span>
+<span>预计 2 个月完成</span>
+<span>·</span>
+<span>适合求职准备的学员</span>
+</div>
+</div>
+<button class="px-4 py-2 text-primary border border-primary rounded-button hover:bg-primary hover:text-white transition-colors text-sm whitespace-nowrap !rounded-button">查看详情</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 右侧边栏 -->
+<div class="lg:col-span-1 space-y-6">
+<!-- 学习进度卡片 -->
+<div class="bg-white rounded-lg shadow-sm p-6">
+<h3 class="font-semibold text-gray-900 mb-4">我的学习进度</h3>
+<div class="text-center mb-4">
+<div class="text-3xl font-bold text-primary mb-2">40%</div>
+<div class="progress-bar mb-2">
+<div class="progress-fill bg-primary" style="width: 40%"></div>
+</div>
+<div class="text-sm text-gray-600">已完成 13/32 节</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between text-sm">
+<span class="text-gray-600">学习时长</span>
+<span class="text-gray-900">3.5 小时</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="text-gray-600">剩余时长</span>
+<span class="text-gray-900">5 小时</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="text-gray-600">预计完成</span>
+<span class="text-gray-900">8 天后</span>
+</div>
+</div>
+<button class="w-full mt-4 px-4 py-2 bg-primary text-white rounded-button hover:bg-blue-600 transition-colors whitespace-nowrap !rounded-button">继续学习</button>
+</div>
+
+<!-- 学习笔记 -->
+<div class="bg-white rounded-lg shadow-sm p-6">
+<h3 class="font-semibold text-gray-900 mb-4">我的笔记</h3>
+<div class="space-y-3">
+<div class="p-3 bg-gray-50 rounded-lg">
+<div class="text-sm font-medium text-gray-900 mb-1">时间复杂度分析要点</div>
+<div class="text-xs text-gray-600 mb-2">第 1 章 · 2025-07-20</div>
+<div class="text-sm text-gray-700">大O表示法的三个关键点：忽略常数项、忽略低阶项、忽略系数</div>
+</div>
+<div class="p-3 bg-gray-50 rounded-lg">
+<div class="text-sm font-medium text-gray-900 mb-1">链表操作技巧</div>
+<div class="text-xs text-gray-600 mb-2">第 2 章 · 2025-07-21</div>
+<div class="text-sm text-gray-700">使用虚拟头节点可以简化链表操作的边界条件处理</div>
+</div>
+</div>
+<button class="w-full mt-4 px-4 py-2 border border-gray-300 text-gray-700 rounded-button hover:border-gray-400 transition-colors whitespace-nowrap !rounded-button">查看全部笔记</button>
+</div>
+
+<!-- 学习提醒 -->
+<div class="bg-white rounded-lg shadow-sm p-6">
+<h3 class="font-semibold text-gray-900 mb-4">学习提醒</h3>
+<div class="space-y-3">
+<div class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-blue-500 mt-0.5 mr-3">
+<i class="ri-calendar-line"></i>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">今日学习计划</div>
+<div class="text-xs text-gray-600">完成第 2 章剩余内容</div>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-green-500 mt-0.5 mr-3">
+<i class="ri-trophy-line"></i>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">学习成就</div>
+<div class="text-xs text-gray-600">连续学习 7 天</div>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center text-orange-500 mt-0.5 mr-3">
+<i class="ri-alarm-line"></i>
+</div>
+<div>
+<div class="text-sm font-medium text-gray-900">复习提醒</div>
+<div class="text-xs text-gray-600">第 1 章内容需要复习</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 讨论区 -->
+<div class="bg-white rounded-lg shadow-sm p-6">
+<h3 class="font-semibold text-gray-900 mb-4">课程讨论</h3>
+<div class="space-y-4">
+<div class="border-b border-gray-100 pb-3">
+<div class="flex items-start space-x-3">
+<div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=Student%20discussion%20avatar%2C%20young%20learner%20headshot%2C%20clean%20background&width=50&height=50&seq=13&orientation=squarish" alt="讨论用户" class="w-full h-full object-cover object-top">
+</div>
+<div class="flex-1">
+<div class="text-sm font-medium text-gray-900">刘志远</div>
+<div class="text-xs text-gray-600 mb-1">2 小时前</div>
+<div class="text-sm text-gray-700">请问动态规划的状态转移方程应该怎么理解？</div>
+<div class="flex items-center mt-2 text-xs text-gray-500">
+<span>3 回复</span>
+<span class="mx-2">·</span>
+<span>5 点赞</span>
+</div>
+</div>
+</div>
+</div>
+<div class="border-b border-gray-100 pb-3">
+<div class="flex items-start space-x-3">
+<div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=Female%20student%20discussion%20avatar%2C%20programming%20learner%20headshot%2C%20clean%20background&width=50&height=50&seq=14&orientation=squarish" alt="讨论用户" class="w-full h-full object-cover object-top">
+</div>
+<div class="flex-1">
+<div class="text-sm font-medium text-gray-900">王小芳</div>
+<div class="text-xs text-gray-600 mb-1">5 小时前</div>
+<div class="text-sm text-gray-700">分享一个二叉树遍历的记忆技巧</div>
+<div class="flex items-center mt-2 text-xs text-gray-500">
+<span>8 回复</span>
+<span class="mx-2">·</span>
+<span>12 点赞</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 px-4 py-2 border border-gray-300 text-gray-700 rounded-button hover:border-gray-400 transition-colors whitespace-nowrap !rounded-button">参与讨论</button>
+</div>
+</div>
+</div>
+</main>
+
+<script id="tab-navigation-script">
+document.addEventListener('DOMContentLoaded', function() {
+const navItems = document.querySelectorAll('.nav-item');
+const tabContents = document.querySelectorAll('.tab-content');
+
+navItems.forEach(item => {
+item.addEventListener('click', function() {
+const targetTab = this.getAttribute('data-tab');
+
+navItems.forEach(nav => {
+nav.classList.remove('active');
+nav.classList.add('text-gray-600', 'hover:text-gray-900');
+nav.classList.remove('text-primary', 'border-primary');
+});
+
+this.classList.add('active');
+this.classList.remove('text-gray-600', 'hover:text-gray-900');
+this.classList.add('text-primary');
+
+tabContents.forEach(content => {
+content.classList.add('hidden');
+});
+
+const targetContent = document.getElementById(targetTab + '-content');
+if (targetContent) {
+targetContent.classList.remove('hidden');
+}
+});
+});
+});
+</script>
+
+<script id="chapter-toggle-script">
+document.addEventListener('DOMContentLoaded', function() {
+const chapterItems = document.querySelectorAll('.chapter-item');
+
+chapterItems.forEach(item => {
+item.addEventListener('click', function() {
+const content = this.nextElementSibling;
+const arrow = this.querySelector('.ri-arrow-down-s-line');
+
+if (content && content.classList.contains('chapter-content')) {
+content.classList.toggle('hidden');
+if (arrow) {
+arrow.classList.toggle('ri-arrow-down-s-line');
+arrow.classList.toggle('ri-arrow-up-s-line');
+}
+}
+});
+});
+});
+</script>
+
+<script id="progress-chart-script">
+document.addEventListener('DOMContentLoaded', function() {
+const progressChart = echarts.init(document.getElementById('progress-chart'));
+const progressOption = {
+animation: false,
+tooltip: {
+backgroundColor: 'rgba(255, 255, 255, 0.9)',
+borderColor: '#e0e1e4',
+textStyle: {
+color: '#1f2937'
+}
+},
+grid: {
+left: 0,
+right: 0,
+top: 20,
+bottom: 0,
+containLabel: true
+},
+xAxis: {
+type: 'category',
+data: ['7/16', '7/17', '7/18', '7/19', '7/20', '7/21', '7/22'],
+axisLine: {
+lineStyle: {
+color: 'rgba(224, 225, 228, 0.5)'
+}
+},
+axisTick: {
+show: false
+},
+axisLabel: {
+color: '#1f2937',
+fontSize: 12
+}
+},
+yAxis: {
+type: 'value',
+name: '学习时长(分钟)',
+nameTextStyle: {
+color: '#1f2937',
+fontSize: 12
+},
+axisLine: {
+show: false
+},
+axisTick: {
+show: false
+},
+axisLabel: {
+color: '#1f2937',
+fontSize: 12
+},
+splitLine: {
+lineStyle: {
+color: 'rgba(224, 225, 228, 0.5)'
+}
+}
+},
+series: [{
+data: [45, 60, 30, 75, 90, 45, 60],
+type: 'line',
+smooth: true,
+symbol: 'none',
+lineStyle: {
+width: 3,
+color: 'rgba(87, 181, 231, 1)'
+},
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+{
+offset: 0,
+color: 'rgba(87, 181, 231, 0.3)'
+},
+{
+offset: 1,
+color: 'rgba(87, 181, 231, 0.1)'
+}
+])
+}
+}]
+};
+progressChart.setOption(progressOption);
+
+window.addEventListener('resize', function() {
+progressChart.resize();
+});
+});
+</script>
+
+</body>
+</html>

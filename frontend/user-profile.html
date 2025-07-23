@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人中心 - 智能面试评分系统</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#2196F3',secondary:'#FF5722'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+  font-family: "Noto Sans SC", "Roboto", sans-serif;
+}
+.custom-progress {
+  height: 6px;
+  background-color: #E5E7EB;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.custom-progress-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+.resource-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.resource-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.tab-button {
+  transition: all 0.2s;
+}
+.tab-button.active {
+  background-color: #2196F3;
+  color: white;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.custom-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+.custom-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+.switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+input:checked + .switch-slider {
+  background-color: #2196F3;
+}
+input:checked + .switch-slider:before {
+  transform: translateX(20px);
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- 顶部导航栏 -->
+<div class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="flex justify-between items-center h-16">
+  <a href="assessment-options.html" class="flex items-center">
+    <img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
+    <p class="text-sm text-gray-600 ml-2">职面星火</p>
+  </a>
+  <nav class="flex space-x-8">
+  <a href="../index.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-home-line"></i>
+  </div>
+  首页
+  </a>
+  <a href="./setting_page1.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-video-chat-line"></i>
+  </div>
+  面试模拟
+  </a>
+  <a href="./assessment-options.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-bar-chart-line"></i>
+  </div>
+  能力评估
+  </a>
+  <a href="./learning-resources.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-book-open-line"></i>
+  </div>
+  学习资源
+  </a>
+  <a href="./user-profile.html" class="flex items-center px-3 py-2 text-sm font-medium text-primary">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-user-settings-line"></i>
+  </div>
+  个人中心
+  </a>
+  </nav>
+  <div class="flex items-center">
+  <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+  <i class="ri-user-line text-white"></i>
+  </div>
+  <div class="ml-2">
+  <p class="text-sm font-medium text-gray-900">李明华</p>
+  <p class="text-xs text-gray-500">高级用户</p>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+
+<!-- 主要内容区域 -->
+<main class="container mx-auto px-4 py-8">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">个人中心</h1>
+    <div class="flex items-center space-x-2">
+      <a href="./learning-resources.html" class="flex items-center text-gray-600 hover:text-primary transition-colors">
+        <div class="w-5 h-5 flex items-center justify-center mr-1">
+          <i class="ri-arrow-left-line"></i>
+        </div>
+        <span>返回学习资源</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 主要内容网格布局 -->
+  <div class="grid grid-cols-1 lg:grid-cols-10 gap-8">
+    <!-- 左侧个人信息区 -->
+    <div class="lg:col-span-7 space-y-6">
+      <!-- 个人基本信息卡片 -->
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div class="relative">
+            <div class="w-24 h-24 rounded-full bg-primary bg-opacity-10 flex items-center justify-center overflow-hidden">
+              <img src="https://readdy.ai/api/search-image?query=Professional%20portrait%20of%20a%20young%20Asian%20man%20with%20short%20black%20hair%20and%20glasses%2C%20wearing%20a%20business%20casual%20outfit%2C%20looking%20confident%20and%20approachable%2C%20clean%20studio%20background&width=200&height=200&seq=101&orientation=squarish" alt="用户头像" class="w-full h-full object-cover">
+            </div>
+            <div class="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full shadow-sm flex items-center justify-center cursor-pointer">
+              <div class="w-5 h-5 flex items-center justify-center text-primary">
+                <i class="ri-camera-line"></i>
+              </div>
+            </div>
+          </div>
+          <div class="flex-1">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h2 class="text-xl font-bold text-gray-900">张明远</h2>
+                <p class="text-gray-500 mt-1">前端开发工程师 · 3 年工作经验</p>
+              </div>
+              <button class="px-4 py-2 bg-primary text-white rounded-button text-sm whitespace-nowrap flex items-center">
+                <div class="w-4 h-4 flex items-center justify-center mr-1">
+                  <i class="ri-edit-line"></i>
+                </div>
+                <span>编辑资料</span>
+              </button>
+            </div>
+            <div class="mt-4 text-gray-700">
+              <p>热爱前端技术，擅长 Vue、React 框架，对用户体验和交互设计有浓厚兴趣。目前正在学习数据可视化和 WebGL 相关技术，希望在面试中展现自己的技术实力和学习能力。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 学习进度统计卡片 -->
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">学习统计</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-blue-50 rounded-lg p-4 text-center">
+            <div class="w-10 h-10 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-2">
+              <div class="w-6 h-6 flex items-center justify-center text-primary">
+                <i class="ri-time-line"></i>
+              </div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900">42.5</h3>
+            <p class="text-sm text-gray-600">总学习时长(小时)</p>
+          </div>
+          <div class="bg-green-50 rounded-lg p-4 text-center">
+            <div class="w-10 h-10 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-2">
+              <div class="w-6 h-6 flex items-center justify-center text-green-600">
+                <i class="ri-book-open-line"></i>
+              </div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900">16</h3>
+            <p class="text-sm text-gray-600">已完成课程</p>
+          </div>
+          <div class="bg-purple-50 rounded-lg p-4 text-center">
+            <div class="w-10 h-10 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-2">
+              <div class="w-6 h-6 flex items-center justify-center text-purple-600">
+                <i class="ri-medal-line"></i>
+              </div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900">5</h3>
+            <p class="text-sm text-gray-600">获得证书</p>
+          </div>
+          <div class="bg-orange-50 rounded-lg p-4 text-center">
+            <div class="w-10 h-10 mx-auto bg-orange-100 rounded-full flex items-center justify-center mb-2">
+              <div class="w-6 h-6 flex items-center justify-center text-orange-600">
+                <i class="ri-calendar-check-line"></i>
+              </div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900">28</h3>
+            <p class="text-sm text-gray-600">连续学习天数</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 我的学习资源 -->
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-xl font-semibold text-gray-900">我的学习资源</h2>
+          <div class="flex space-x-2">
+            <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white">
+              <i class="ri-layout-grid-line"></i>
+            </button>
+            <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-700 bg-white">
+              <i class="ri-list-check-2"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 分类标签 -->
+        <div class="flex flex-wrap gap-2 mb-6">
+          <button class="tab-button active px-4 py-2 rounded-full text-sm whitespace-nowrap">全部</button>
+          <button class="tab-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">已收藏</button>
+          <button class="tab-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">进行中</button>
+          <button class="tab-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">已完成</button>
+        </div>
+
+        <!-- 资源列表 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 资源卡片1 -->
+          <div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
+            <div class="relative h-40 overflow-hidden">
+              <img src="https://readdy.ai/api/search-image?query=Python%20programming%20tutorial%2C%20code%20on%20screen%20with%20modern%20IDE%20interface%2C%20professional%20software%20development%20educational%20content%20with%20clean%20background&width=400&height=200&seq=12&orientation=landscape" alt="Python编程实战" class="w-full h-full object-cover object-top">
+              <div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+                <div class="w-7 h-7 flex items-center justify-center">
+                  <i class="ri-video-line text-primary"></i>
+                </div>
+              </div>
+            </div>
+            <div class="p-4">
+              <div class="flex justify-between items-start mb-2">
+                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">技术能力</span>
+                <div class="flex items-center">
+                  <div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+                    <i class="ri-star-fill"></i>
+                  </div>
+                  <span class="ml-1 text-xs text-gray-700">4.8</span>
+                </div>
+              </div>
+              <h3 class="font-medium text-gray-900 mb-1">Python 编程实战教程</h3>
+              <p class="text-sm text-gray-500 mb-3">从基础到高级的 Python 编程技能培训课程</p>
+              <div class="flex items-center justify-between text-sm mb-2">
+                <span class="text-gray-500">学习进度</span>
+                <span class="text-gray-700">65%</span>
+              </div>
+              <div class="custom-progress mb-3">
+                <div class="custom-progress-bar bg-primary" style="width: 65%"></div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-500">最近学习: 昨天</span>
+                <button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">继续学习</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 资源卡片2 -->
+          <div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
+            <div class="relative h-40 overflow-hidden">
+              <img src="https://readdy.ai/api/search-image?query=Professional%20video%20tutorial%20on%20effective%20communication%20skills%2C%20business%20presentation%20with%20clear%20visual%20aids%2C%20high%20quality%20educational%20content%20with%20clean%20background&width=400&height=200&seq=13&orientation=landscape" alt="沟通技巧视频教程" class="w-full h-full object-cover object-top">
+              <div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+                <div class="w-7 h-7 flex items-center justify-center">
+                  <i class="ri-video-line text-primary"></i>
+                </div>
+              </div>
+            </div>
+            <div class="p-4">
+              <div class="flex justify-between items-start mb-2">
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">沟通表达</span>
+                <div class="flex items-center">
+                  <div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+                    <i class="ri-star-fill"></i>
+                  </div>
+                  <span class="ml-1 text-xs text-gray-700">4.6</span>
+                </div>
+              </div>
+              <h3 class="font-medium text-gray-900 mb-1">高效沟通技巧视频教程</h3>
+              <p class="text-sm text-gray-500 mb-3">学习如何在面试和工作中进行清晰有效的沟通</p>
+              <div class="flex items-center justify-between text-sm mb-2">
+                <span class="text-gray-500">学习进度</span>
+                <span class="text-gray-700">15%</span>
+              </div>
+              <div class="custom-progress mb-3">
+                <div class="custom-progress-bar bg-primary" style="width: 15%"></div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-500">最近学习: 3 天前</span>
+                <button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">继续学习</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 资源卡片3 -->
+          <div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
+            <div class="relative h-40 overflow-hidden">
+              <img src="https://readdy.ai/api/search-image?query=Data%20structure%20and%20algorithms%20visualization%2C%20computer%20science%20education%20with%20diagrams%20and%20code%20examples%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=14&orientation=landscape" alt="数据结构与算法" class="w-full h-full object-cover object-top">
+              <div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+                <div class="w-7 h-7 flex items-center justify-center">
+                  <i class="ri-book-open-line text-primary"></i>
+                </div>
+              </div>
+            </div>
+            <div class="p-4">
+              <div class="flex justify-between items-start mb-2">
+                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">技术能力</span>
+                <div class="flex items-center">
+                  <div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+                    <i class="ri-star-fill"></i>
+                  </div>
+                  <span class="ml-1 text-xs text-gray-700">4.9</span>
+                </div>
+              </div>
+              <h3 class="font-medium text-gray-900 mb-1">数据结构与算法精讲</h3>
+              <p class="text-sm text-gray-500 mb-3">深入理解数据结构与算法的核心概念</p>
+              <div class="flex items-center justify-between text-sm mb-2">
+                <span class="text-gray-500">学习进度</span>
+                <span class="text-gray-700">40%</span>
+              </div>
+              <div class="custom-progress mb-3">
+                <div class="custom-progress-bar bg-primary" style="width: 40%"></div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-500">最近学习: 昨天</span>
+                <button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">继续学习</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 资源卡片4 -->
+          <div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
+            <div class="relative h-40 overflow-hidden">
+              <img src="https://readdy.ai/api/search-image?query=Team%20collaboration%20workshop%2C%20diverse%20group%20of%20professionals%20working%20together%20on%20a%20project%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=15&orientation=landscape" alt="团队协作技巧" class="w-full h-full object-cover object-top">
+              <div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+                <div class="w-7 h-7 flex items-center justify-center">
+                  <i class="ri-presentation-line text-primary"></i>
+                </div>
+              </div>
+            </div>
+            <div class="p-4">
+              <div class="flex justify-between items-start mb-2">
+                <span class="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full">团队协作</span>
+                <div class="flex items-center">
+                  <div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+                    <i class="ri-star-fill"></i>
+                  </div>
+                  <span class="ml-1 text-xs text-gray-700">4.7</span>
+                </div>
+              </div>
+              <h3 class="font-medium text-gray-900 mb-1">团队协作与冲突处理</h3>
+              <p class="text-sm text-gray-500 mb-3">提升团队协作能力，有效处理团队冲突</p>
+              <div class="flex items-center justify-between text-sm mb-2">
+                <span class="text-gray-500">学习进度</span>
+                <span class="text-gray-700">90%</span>
+              </div>
+              <div class="custom-progress mb-3">
+                <div class="custom-progress-bar bg-green-500" style="width: 90%"></div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-500">最近学习: 今天</span>
+                <button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">继续学习</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 分页 -->
+        <div class="flex items-center justify-between mt-8">
+          <div class="text-sm text-gray-500">显示 1-4 条，共 12 条</div>
+          <div class="flex space-x-1">
+            <button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 bg-white">
+              <i class="ri-arrow-left-s-line"></i>
+            </button>
+            <button class="w-8 h-8 flex items-center justify-center rounded-full border border-primary text-white bg-primary">1</button>
+            <button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-700 bg-white hover:border-primary hover:text-primary">2</button>
+            <button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-700 bg-white hover:border-primary hover:text-primary">3</button>
+            <button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-700 bg-white">
+              <i class="ri-arrow-right-s-line"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧数据统计区 -->
+    <div class="lg:col-span-3 space-y-6">
+      <!-- 能力评估结果卡片 -->
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold text-gray-900">能力评估结果</h2>
+          <a href="#" data-readdy="true" class="text-primary text-sm hover:underline">查看详情</a>
+        </div>
+        <div id="ability-radar-chart" class="w-full h-60"></div>
+        <div class="mt-4 p-4 bg-primary bg-opacity-5 rounded-lg">
+          <h3 class="font-medium text-gray-900 mb-2">能力评估分析</h3>
+          <p class="text-sm text-gray-700 mb-3">您的技术能力和逻辑思维表现优秀，建议重点提升以下能力：</p>
+          <ul class="space-y-2">
+            <li class="flex items-start">
+              <div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+                <i class="ri-checkbox-circle-line"></i>
+              </div>
+              <span class="text-sm text-gray-700">创新思维能力（60分）：尝试参与更多创新项目</span>
+            </li>
+            <li class="flex items-start">
+              <div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+                <i class="ri-checkbox-circle-line"></i>
+              </div>
+              <span class="text-sm text-gray-700">沟通表达能力（65分）：建议多参与演讲和讨论</span>
+            </li>
+          </ul>
+          <button class="mt-4 w-full px-4 py-2 bg-primary text-white rounded-button text-sm whitespace-nowrap">查看完整评估报告</button>
+        </div>
+      </div>
+
+      <!-- 学习计划卡片 -->
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold text-gray-900">学习计划</h2>
+          <button class="text-primary text-sm hover:underline">编辑计划</button>
+        </div>
+        <div class="mb-4">
+          <h3 class="font-medium text-gray-900 mb-2">本周学习目标</h3>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm text-gray-700">学习时长</span>
+            <span class="text-sm font-medium text-gray-900">8.5/10 小时</span>
+          </div>
+          <div class="custom-progress mb-4">
+            <div class="custom-progress-bar bg-primary" style="width: 85%"></div>
+          </div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm text-gray-700">完成课程数</span>
+            <span class="text-sm font-medium text-gray-900">2/3 门</span>
+          </div>
+          <div class="custom-progress mb-2">
+            <div class="custom-progress-bar bg-primary" style="width: 67%"></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-medium text-gray-900 mb-2">待完成任务</h3>
+          <ul class="space-y-3">
+            <li class="flex items-center">
+              <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2">
+                <i class="ri-checkbox-blank-circle-line"></i>
+              </div>
+              <span class="text-sm text-gray-700 flex-1">完成《数据结构与算法》第 5 章</span>
+              <span class="text-xs text-gray-500">今天</span>
+            </li>
+            <li class="flex items-center">
+              <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2">
+                <i class="ri-checkbox-blank-circle-line"></i>
+              </div>
+              <span class="text-sm text-gray-700 flex-1">参加沟通技巧在线研讨会</span>
+              <span class="text-xs text-gray-500">明天</span>
+            </li>
+            <li class="flex items-center">
+              <div class="w-5 h-5 flex items-center justify-center text-primary mr-2">
+                <i class="ri-checkbox-circle-fill"></i>
+              </div>
+              <span class="text-sm text-gray-700 flex-1 line-through">完成 Python 实战项目</span>
+              <span class="text-xs text-gray-500">已完成</span>
+            </li>
+          </ul>
+        </div>
+        <div class="mt-4 pt-4 border-t border-gray-100">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium text-gray-700">学习提醒</span>
+            <label class="custom-switch">
+              <input type="checkbox" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">每天 20:00 提醒您按计划学习</p>
+        </div>
+      </div>
+
+      <!-- 学习数据统计 -->
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">学习数据统计</h2>
+        <div id="weekly-study-chart" class="w-full h-60 mb-6"></div>
+        <div id="knowledge-pie-chart" class="w-full h-60"></div>
+      </div>
+
+      <!-- 最近学习记录 -->
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">最近学习记录</h2>
+        <div class="space-y-4">
+          <div class="flex items-start">
+            <div class="w-10 h-10 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center">
+              <div class="w-5 h-5 flex items-center justify-center text-primary">
+                <i class="ri-video-line"></i>
+              </div>
+            </div>
+            <div class="ml-3 flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-medium text-gray-900 text-sm">Python 编程实战教程</h3>
+                <span class="text-xs text-gray-500">今天 14:30</span>
+              </div>
+              <p class="text-xs text-gray-500 mt-1">学习了第 8 章：高级数据处理技巧</p>
+              <div class="flex items-center mt-1">
+                <div class="w-4 h-4 flex items-center justify-center text-primary">
+                  <i class="ri-time-line"></i>
+                </div>
+                <span class="ml-1 text-xs text-gray-700">学习时长：45 分钟</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div class="w-10 h-10 rounded-full bg-green-100 flex-shrink-0 flex items-center justify-center">
+              <div class="w-5 h-5 flex items-center justify-center text-green-600">
+                <i class="ri-book-open-line"></i>
+              </div>
+            </div>
+            <div class="ml-3 flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-medium text-gray-900 text-sm">数据结构与算法精讲</h3>
+                <span class="text-xs text-gray-500">昨天 19:15</span>
+              </div>
+              <p class="text-xs text-gray-500 mt-1">学习了第 4 章：树结构与算法</p>
+              <div class="flex items-center mt-1">
+                <div class="w-4 h-4 flex items-center justify-center text-primary">
+                  <i class="ri-time-line"></i>
+                </div>
+                <span class="ml-1 text-xs text-gray-700">学习时长：60 分钟</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div class="w-10 h-10 rounded-full bg-indigo-100 flex-shrink-0 flex items-center justify-center">
+              <div class="w-5 h-5 flex items-center justify-center text-indigo-600">
+                <i class="ri-presentation-line"></i>
+              </div>
+            </div>
+            <div class="ml-3 flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-medium text-gray-900 text-sm">团队协作与冲突处理</h3>
+                <span class="text-xs text-gray-500">2025-07-01</span>
+              </div>
+              <p class="text-xs text-gray-500 mt-1">学习了第 6 章：有效沟通与反馈</p>
+              <div class="flex items-center mt-1">
+                <div class="w-4 h-4 flex items-center justify-center text-primary">
+                  <i class="ri-time-line"></i>
+                </div>
+                <span class="ml-1 text-xs text-gray-700">学习时长：30 分钟</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <button class="text-primary hover:text-primary-dark text-sm font-medium">查看全部记录</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script id="chart-script">
+document.addEventListener('DOMContentLoaded', function() {
+  // 能力评估雷达图
+  const abilityRadarChart = echarts.init(document.getElementById('ability-radar-chart'));
+  const abilityRadarOption = {
+    animation: false,
+    radar: {
+      indicator: [
+        { name: '技术能力', max: 100 },
+        { name: '沟通表达', max: 100 },
+        { name: '逻辑思维', max: 100 },
+        { name: '学习能力', max: 100 },
+        { name: '团队协作', max: 100 },
+        { name: '创新思维', max: 100 }
+      ],
+      radius: '65%',
+      splitNumber: 4,
+      axisName: {
+        color: '#1f2937',
+        fontSize: 12
+      },
+      splitLine: {
+        lineStyle: {
+          color: 'rgba(224, 225, 228, 0.5)'
+        }
+      },
+      splitArea: {
+        show: true,
+        areaStyle: {
+          color: ['rgba(255, 255, 255, 0.9)', 'rgba(245, 246, 248, 0.6)']
+        }
+      },
+      axisLine: {
+        lineStyle: {
+          color: 'rgba(224, 225, 228, 0.5)'
+        }
+      }
+    },
+    tooltip: {
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      borderColor: '#e0e1e4',
+      textStyle: {
+        color: '#1f2937'
+      }
+    },
+    series: [{
+      name: '能力评估',
+      type: 'radar',
+      data: [
+        {
+          value: [85, 65, 92, 78, 80, 60],
+          name: '个人能力',
+          symbol: 'none',
+          lineStyle: {
+            width: 2,
+            color: 'rgba(87, 181, 231, 1)'
+          },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: 'rgba(87, 181, 231, 0.3)'
+              },
+              {
+                offset: 1,
+                color: 'rgba(87, 181, 231, 0.1)'
+              }
+            ])
+          }
+        }
+      ]
+    }]
+  };
+  abilityRadarChart.setOption(abilityRadarOption);
+
+  // 每周学习时长趋势图
+  const weeklyStudyChart = echarts.init(document.getElementById('weekly-study-chart'));
+  const weeklyStudyOption = {
+    animation: false,
+    title: {
+      text: '每周学习时长趋势',
+      left: 'center',
+      textStyle: {
+        fontSize: 14,
+        fontWeight: 'normal',
+        color: '#1f2937'
+      }
+    },
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      borderColor: '#e0e1e4',
+      textStyle: {
+        color: '#1f2937'
+      }
+    },
+    xAxis: {
+      type: 'category',
+      data: ['6.26', '6.27', '6.28', '6.29', '6.30', '7.01', '7.02'],
+      axisLine: {
+        lineStyle: {
+          color: '#e0e1e4'
+        }
+      },
+      axisLabel: {
+        color: '#1f2937'
+      }
+    },
+    yAxis: {
+      type: 'value',
+      name: '小时',
+      nameTextStyle: {
+        color: '#1f2937'
+      },
+      axisLine: {
+        show: false
+      },
+      axisTick: {
+        show: false
+      },
+      splitLine: {
+        lineStyle: {
+          color: 'rgba(224, 225, 228, 0.5)'
+        }
+      },
+      axisLabel: {
+        color: '#1f2937'
+      }
+    },
+    series: [
+      {
+        data: [1.5, 2.2, 1.8, 2.5, 3.0, 2.8, 1.5],
+        type: 'line',
+        smooth: true,
+        symbol: 'circle',
+        symbolSize: 6,
+        itemStyle: {
+          color: 'rgba(87, 181, 231, 1)'
+        },
+        lineStyle: {
+          width: 3,
+          color: 'rgba(87, 181, 231, 1)'
+        },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: 'rgba(87, 181, 231, 0.3)'
+            },
+            {
+              offset: 1,
+              color: 'rgba(87, 181, 231, 0.1)'
+            }
+          ])
+        }
+      }
+    ],
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      top: '15%',
+      containLabel: true
+    }
+  };
+  weeklyStudyChart.setOption(weeklyStudyOption);
+
+  // 知识点掌握程度分布
+  const knowledgePieChart = echarts.init(document.getElementById('knowledge-pie-chart'));
+  const knowledgePieOption = {
+    animation: false,
+    title: {
+      text: '知识点掌握程度分布',
+      left: 'center',
+      textStyle: {
+        fontSize: 14,
+        fontWeight: 'normal',
+        color: '#1f2937'
+      }
+    },
+    tooltip: {
+      trigger: 'item',
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      borderColor: '#e0e1e4',
+      textStyle: {
+        color: '#1f2937'
+      }
+    },
+    legend: {
+      bottom: '0%',
+      left: 'center',
+      itemWidth: 10,
+      itemHeight: 10,
+      textStyle: {
+        color: '#1f2937'
+      }
+    },
+    series: [
+      {
+        name: '掌握程度',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 8,
+          borderColor: '#fff',
+          borderWidth: 2
+        },
+        label: {
+          show: false
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 12,
+            fontWeight: 'bold'
+          }
+        },
+        labelLine: {
+          show: false
+        },
+        data: [
+          { value: 45, name: '熟练掌握', itemStyle: { color: 'rgba(87, 181, 231, 1)' } },
+          { value: 30, name: '基本掌握', itemStyle: { color: 'rgba(141, 211, 199, 1)' } },
+          { value: 15, name: '需要巩固', itemStyle: { color: 'rgba(251, 191, 114, 1)' } },
+          { value: 10, name: '尚未掌握', itemStyle: { color: 'rgba(252, 141, 98, 1)' } }
+        ]
+      }
+    ]
+  };
+  knowledgePieChart.setOption(knowledgePieOption);
+
+  // 窗口大小变化时重新调整图表大小
+  window.addEventListener('resize', function() {
+    abilityRadarChart.resize();
+    weeklyStudyChart.resize();
+    knowledgePieChart.resize();
+  });
+});
+</script>
+
+<script id="tab-button-script">
+document.addEventListener('DOMContentLoaded', function() {
+  // 分类标签切换
+  const tabButtons = document.querySelectorAll('.tab-button');
+  tabButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // 移除所有按钮的激活状态
+      tabButtons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.classList.add('bg-gray-100');
+        btn.classList.add('text-gray-700');
+      });
+      // 添加当前按钮的激活状态
+      this.classList.add('active');
+      this.classList.remove('bg-gray-100');
+      this.classList.remove('text-gray-700');
+    });
+  });
+});
+</script>
+
+<script id="task-checkbox-script">
+document.addEventListener('DOMContentLoaded', function() {
+  // 任务复选框交互
+  const taskCheckboxes = document.querySelectorAll('.ri-checkbox-blank-circle-line, .ri-checkbox-circle-fill');
+  taskCheckboxes.forEach(checkbox => {
+    checkbox.parentElement.addEventListener('click', function() {
+      const taskItem = this.parentElement;
+      const taskText = taskItem.querySelector('span:nth-child(2)');
+      const taskStatus = taskItem.querySelector('span:nth-child(3)');
+      const icon = this.querySelector('i');
+      
+      if (icon.classList.contains('ri-checkbox-blank-circle-line')) {
+        icon.classList.remove('ri-checkbox-blank-circle-line');
+        icon.classList.add('ri-checkbox-circle-fill');
+        this.classList.remove('text-gray-400');
+        this.classList.add('text-primary');
+        taskText.classList.add('line-through');
+        taskStatus.textContent = '已完成';
+      } else {
+        icon.classList.remove('ri-checkbox-circle-fill');
+        icon.classList.add('ri-checkbox-blank-circle-line');
+        this.classList.remove('text-primary');
+        this.classList.add('text-gray-400');
+        taskText.classList.remove('line-through');
+        taskStatus.textContent = taskItem.querySelector('span:nth-child(3)').getAttribute('data-original-date') || '今天';
+      }
+    });
+  });
+});
+</script>
+
+<script id="resource-card-script">
+document.addEventListener('DOMContentLoaded', function() {
+  // 资源卡片交互
+  const resourceCards = document.querySelectorAll('.resource-card');
+  resourceCards.forEach(card => {
+    card.addEventListener('click', function(e) {
+      // 如果点击的是按钮，则不触发卡片的点击事件
+      if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+        return;
+      }
+      // 这里可以添加点击卡片后的跳转逻辑
+      const button = this.querySelector('button');
+      if (button) {
+        button.click();
+      }
+    });
+  });
+});
+</script>
+
+<!-- 通用导航脚本 -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 导航链接点击事件处理
+    const navLinks = document.querySelectorAll('nav a, a[href*="/"]');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href && (href.includes('.html') || href.startsWith('/'))) {
+          console.log('导航到:', href);
+        }
+      });
+    });
+    
+    // 移动端菜单切换
+    const mobileMenuBtn = document.querySelector('.md\\:hidden');
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', function() {
+        console.log('切换移动端菜单');
+      });
+    }
+  });
+</script>
+</body>
+</html>

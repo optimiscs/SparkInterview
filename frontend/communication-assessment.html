@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沟通能力测试 - 智能面试评分系统</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#2196F3',secondary:'#FF5722'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+  font-family: "Noto Sans SC", "Roboto", sans-serif;
+}
+.timer-container {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+.timer-circle {
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+.timer-circle circle {
+  transition: stroke-dashoffset 1s linear;
+}
+.progress-bar {
+  height: 8px;
+  border-radius: 4px;
+  background-color: #E5E7EB;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+.option-card {
+  transition: all 0.2s ease;
+}
+.option-card:hover {
+  border-color: #2196F3;
+}
+.option-card.selected {
+  border-color: #2196F3;
+  background-color: rgba(33, 150, 243, 0.05);
+}
+.option-card.selected .check-icon {
+  display: flex;
+}
+.option-card .check-icon {
+  display: none;
+}
+.custom-textarea {
+  resize: none;
+  min-height: 120px;
+  transition: border-color 0.2s ease;
+}
+.custom-textarea:focus {
+  outline: none;
+  border-color: #2196F3;
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+.nav-button {
+  transition: all 0.2s ease;
+}
+.nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- 顶部导航栏 -->
+<div class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="flex justify-between items-center h-16">
+  <a href="assessment-options.html" class="flex items-center">
+    <img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
+    <p class="text-sm text-gray-600 ml-2">职面星火</p>
+  </a>
+  <nav class="flex space-x-8">
+  <a href="../index.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-home-line"></i>
+  </div>
+  首页
+  </a>
+  <a href="./setting_page1.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-video-chat-line"></i>
+  </div>
+  面试模拟
+  </a>
+  <a href="./assessment-options.html" class="flex items-center px-3 py-2 text-sm font-medium text-primary">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-bar-chart-line"></i>
+  </div>
+  能力评估
+  </a>
+  <a href="./learning-resources.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-book-open-line"></i>
+  </div>
+  学习资源
+  </a>
+  <a href="./user-profile.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+  <div class="w-5 h-5 flex items-center justify-center mr-2">
+  <i class="ri-user-settings-line"></i>
+  </div>
+  个人中心
+  </a>
+  </nav>
+  <div class="flex items-center">
+  <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+  <i class="ri-user-line text-white"></i>
+  </div>
+  <div class="ml-2">
+  <p class="text-sm font-medium text-gray-900">李明华</p>
+  <p class="text-xs text-gray-500">高级用户</p>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+
+<!-- 主要内容区域 -->
+<main class="container mx-auto px-4 py-6">
+  <!-- 进度条 -->
+  <div class="mb-6">
+    <div class="flex justify-between items-center mb-2">
+      <div class="flex items-center">
+        <span class="text-sm font-medium text-gray-700">测试进度</span>
+        <span class="ml-2 text-sm text-gray-500">1/5</span>
+      </div>
+      <div class="flex items-center">
+        <div class="w-5 h-5 flex items-center justify-center text-primary mr-1">
+          <i class="ri-time-line"></i>
+        </div>
+        <span class="text-sm font-medium" id="timer-text">29:45</span>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill bg-primary" style="width: 20%"></div>
+    </div>
+  </div>
+
+  <!-- 测试说明区域 -->
+  <div id="test-intro" class="bg-white rounded-lg shadow-sm p-6 mb-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">沟通能力测试说明</h2>
+    <div class="space-y-4 mb-6">
+      <div class="p-4 bg-primary bg-opacity-5 rounded-lg border border-primary border-opacity-20">
+        <h3 class="font-medium text-gray-900 mb-2">测试目的</h3>
+        <p class="text-gray-700">本测试旨在评估您的沟通表达能力、倾听理解能力、情境应对能力和非语言沟通技巧，帮助您了解自己在职场沟通中的优势和不足。</p>
+      </div>
+      
+      <div>
+        <h3 class="font-medium text-gray-900 mb-2">测试内容</h3>
+        <ul class="space-y-2 text-gray-700">
+          <li class="flex items-start">
+            <div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+              <i class="ri-checkbox-circle-line"></i>
+            </div>
+            <span>情景对话：模拟职场中的沟通场景，选择最合适的回应</span>
+          </li>
+          <li class="flex items-start">
+            <div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+              <i class="ri-checkbox-circle-line"></i>
+            </div>
+            <span>表达练习：针对特定主题进行书面表达</span>
+          </li>
+          <li class="flex items-start">
+            <div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+              <i class="ri-checkbox-circle-line"></i>
+            </div>
+            <span>沟通风格：评估您的沟通偏好和风格</span>
+          </li>
+          <li class="flex items-start">
+            <div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+              <i class="ri-checkbox-circle-line"></i>
+            </div>
+            <span>问题解决：分析沟通障碍并提出解决方案</span>
+          </li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="font-medium text-gray-900 mb-2">测试规则</h3>
+        <ul class="space-y-2 text-gray-700">
+          <li class="flex items-start">
+            <div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+              <i class="ri-time-line"></i>
+            </div>
+            <span>测试时间：30 分钟，超时将自动提交</span>
+          </li>
+          <li class="flex items-start">
+            <div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+              <i class="ri-file-list-3-line"></i>
+            </div>
+            <span>题目数量：共 5 道题，包含不同类型的沟通能力测试</span>
+          </li>
+          <li class="flex items-start">
+            <div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+              <i class="ri-arrow-left-right-line"></i>
+            </div>
+            <span>可以在题目间自由切换，系统会自动保存已完成的答案</span>
+          </li>
+          <li class="flex items-start">
+            <div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+              <i class="ri-medal-line"></i>
+            </div>
+            <span>评分标准：根据回答的准确性、完整性、逻辑性和表达流畅度进行综合评分</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <button id="start-test-btn" class="px-6 py-3 bg-primary text-white rounded-button text-base font-medium whitespace-nowrap hover:bg-primary/90 transition-colors">开始测试</button>
+    </div>
+  </div>
+
+  <!-- 测试内容区域 - 默认隐藏 -->
+  <div id="test-content" class="hidden">
+    <!-- 题目1：情景对话 -->
+    <div id="question-1" class="bg-white rounded-lg shadow-sm p-6 mb-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">情景对话</h2>
+      <div class="mb-6">
+        <div class="p-4 bg-gray-50 rounded-lg mb-4">
+          <p class="text-gray-700 mb-3"><span class="font-medium">情景：</span>您是一名项目经理，团队成员小王最近工作表现不佳，多次延误任务截止日期。您需要与小王进行一次沟通，既要指出问题，又要保持良好的工作关系。</p>
+          <p class="text-gray-700"><span class="font-medium">要求：</span>请选择您认为最合适的沟通方式。</p>
+        </div>
+        
+        <div class="space-y-3">
+          <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+            <div class="flex justify-between">
+              <div>
+                <div class="font-medium text-gray-900 mb-2">选项 A</div>
+                <p class="text-gray-700">"小王，你最近的工作表现让我很失望。如果再这样下去，我不得不考虑调整你在团队中的角色。希望你能认真对待这个警告。"</p>
+              </div>
+              <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                <i class="ri-check-line"></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+            <div class="flex justify-between">
+              <div>
+                <div class="font-medium text-gray-900 mb-2">选项 B</div>
+                <p class="text-gray-700">"小王，我注意到你最近几次任务都没能按时完成。这种情况对团队的整体进度有影响。你遇到了什么困难吗？我们可以一起讨论如何解决。"</p>
+              </div>
+              <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                <i class="ri-check-line"></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+            <div class="flex justify-between">
+              <div>
+                <div class="font-medium text-gray-900 mb-2">选项 C</div>
+                <p class="text-gray-700">"小王，团队其他成员都能按时完成任务，只有你总是拖后腿。你是不是不够重视这份工作？我希望你能向其他人学习。"</p>
+              </div>
+              <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                <i class="ri-check-line"></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+            <div class="flex justify-between">
+              <div>
+                <div class="font-medium text-gray-900 mb-2">选项 D</div>
+                <p class="text-gray-700">"小王，我想和你谈谈最近的工作情况。我们都希望项目能顺利进行，但你的任务延误影响了整体进度。我相信你有能力做得更好，有什么我能帮助你的吗？"</p>
+              </div>
+              <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                <i class="ri-check-line"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 题目2：表达练习 -->
+    <div id="question-2" class="bg-white rounded-lg shadow-sm p-6 mb-6 hidden">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">表达练习</h2>
+      <div class="mb-6">
+        <div class="p-4 bg-gray-50 rounded-lg mb-4">
+          <p class="text-gray-700 mb-3"><span class="font-medium">主题：</span>如何有效地向非技术人员解释复杂的技术概念</p>
+          <p class="text-gray-700"><span class="font-medium">要求：</span>请撰写一段文字（200-300字），描述您会采用哪些方法和技巧来确保沟通的有效性和清晰度。</p>
+        </div>
+        
+        <div>
+          <textarea class="custom-textarea w-full p-4 border border-gray-200 rounded-lg text-gray-700" placeholder="请在此输入您的回答..."></textarea>
+          <div class="flex justify-between mt-2 text-sm text-gray-500">
+            <span>提示：可以从比喻、示例、视觉辅助等角度思考</span>
+            <span id="word-count">0/300</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 题目3：沟通风格 -->
+    <div id="question-3" class="bg-white rounded-lg shadow-sm p-6 mb-6 hidden">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">沟通风格评估</h2>
+      <div class="mb-6">
+        <div class="p-4 bg-gray-50 rounded-lg mb-4">
+          <p class="text-gray-700"><span class="font-medium">说明：</span>以下描述了不同的沟通情境，请根据您的实际情况选择最符合您行为习惯的选项。</p>
+        </div>
+        
+        <div class="space-y-6">
+          <div>
+            <p class="font-medium text-gray-900 mb-3">1. 在团队讨论中，您通常会：</p>
+            <div class="space-y-2">
+              <div class="flex items-center">
+                <div class="w-5 h-5 mr-3 relative flex items-center justify-center">
+                  <input type="radio" id="q3-1-a" name="q3-1" class="absolute opacity-0 w-0 h-0">
+                  <div class="w-5 h-5 border border-gray-300 rounded-full"></div>
+                  <div class="absolute w-3 h-3 bg-primary rounded-full opacity-0 transition-opacity"></div>
+                </div>
+                <label for="q3-1-a" class="text-gray-700 cursor-pointer">主动发言，表达自己的观点和想法</label>
+              </div>
+              <div class="flex items-center">
+                <div class="w-5 h-5 mr-3 relative flex items-center justify-center">
+                  <input type="radio" id="q3-1-b" name="q3-1" class="absolute opacity-0 w-0 h-0">
+                  <div class="w-5 h-5 border border-gray-300 rounded-full"></div>
+                  <div class="absolute w-3 h-3 bg-primary rounded-full opacity-0 transition-opacity"></div>
+                </div>
+                <label for="q3-1-b" class="text-gray-700 cursor-pointer">先倾听他人意见，然后再提出自己的看法</label>
+              </div>
+              <div class="flex items-center">
+                <div class="w-5 h-5 mr-3 relative flex items-center justify-center">
+                  <input type="radio" id="q3-1-c" name="q3-1" class="absolute opacity-0 w-0 h-0">
+                  <div class="w-5 h-5 border border-gray-300 rounded-full"></div>
+                  <div class="absolute w-3 h-3 bg-primary rounded-full opacity-0 transition-opacity"></div>
+                </div>
+                <label for="q3-1-c" class="text-gray-700 cursor-pointer">主要倾听，只在必要时发表意见</label>
+              </div>
+              <div class="flex items-center">
+                <div class="w-5 h-5 mr-3 relative flex items-center justify-center">
+                  <input type="radio" id="q3-1-d" name="q3-1" class="absolute opacity-0 w-0 h-0">
+                  <div class="w-5 h-5 border border-gray-300 rounded-full"></div>
+                  <div class="absolute w-3 h-3 bg-primary rounded-full opacity-0 transition-opacity"></div>
+                </div>
+                <label for="q3-1-d" class="text-gray-700 cursor-pointer">尽量避免发言，更愿意私下与个别人交流</label>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <p class="font-medium text-gray-900 mb-3">2. 当您需要传达不好的消息时，您倾向于：</p>
+            <div class="space-y-2">
+              <div class="flex items-center">
+                <div class="w-5 h-5 mr-3 relative flex items-center justify-center">
+                  <input type="radio" id="q3-2-a" name="q3-2" class="absolute opacity-0 w-0 h-0">
+                  <div class="w-5 h-5 border border-gray-300 rounded-full"></div>
+                  <div class="absolute w-3 h-3 bg-primary rounded-full opacity-0 transition-opacity"></div>
+                </div>
+                <label for="q3-2-a" class="text-gray-700 cursor-pointer">直接坦率地说出来，不拖延</label>
+              </div>
+              <div class="flex items-center">
+                <div class="w-5 h-5 mr-3 relative flex items-center justify-center">
+                  <input type="radio" id="q3-2-b" name="q3-2" class="absolute opacity-0 w-0 h-0">
+                  <div class="w-5 h-5 border border-gray-300 rounded-full"></div>
+                  <div class="absolute w-3 h-3 bg-primary rounded-full opacity-0 transition-opacity"></div>
+                </div>
+                <label for="q3-2-b" class="text-gray-700 cursor-pointer">先铺垫一些积极的信息，然后再说不好的消息</label>
+              </div>
+              <div class="flex items-center">
+                <div class="w-5 h-5 mr-3 relative flex items-center justify-center">
+                  <input type="radio" id="q3-2-c" name="q3-2" class="absolute opacity-0 w-0 h-0">
+                  <div class="w-5 h-5 border border-gray-300 rounded-full"></div>
+                  <div class="absolute w-3 h-3 bg-primary rounded-full opacity-0 transition-opacity"></div>
+                </div>
+                <label for="q3-2-c" class="text-gray-700 cursor-pointer">尽量委婉地表达，减轻负面影响</label>
+              </div>
+              <div class="flex items-center">
+                <div class="w-5 h-5 mr-3 relative flex items-center justify-center">
+                  <input type="radio" id="q3-2-d" name="q3-2" class="absolute opacity-0 w-0 h-0">
+                  <div class="w-5 h-5 border border-gray-300 rounded-full"></div>
+                  <div class="absolute w-3 h-3 bg-primary rounded-full opacity-0 transition-opacity"></div>
+                </div>
+                <label for="q3-2-d" class="text-gray-700 cursor-pointer">尽可能通过书面形式传达，避免面对面的尴尬</label>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <p class="font-medium text-gray-900 mb-3">3. 在处理冲突时，您通常会：</p>
+            <div class="space-y-2">
+              <div class="flex items-center">
+                <div class="w-5 h-5 mr-3 relative flex items-center justify-center">
+                  <input type="radio" id="q3-3-a" name="q3-3" class="absolute opacity-0 w-0 h-0">
+                  <div class="w-5 h-5 border border-gray-300 rounded-full"></div>
+                  <div class="absolute w-3 h-3 bg-primary rounded-full opacity-0 transition-opacity"></div>
+                </div>
+                <label for="q3-3-a" class="text-gray-700 cursor-pointer">直面冲突，积极寻求解决方案</label>
+              </div>
+              <div class="flex items-center">
+                <div class="w-5 h-5 mr-3 relative flex items-center justify-center">
+                  <input type="radio" id="q3-3-b" name="q3-3" class="absolute opacity-0 w-0 h-0">
+                  <div class="w-5 h-5 border border-gray-300 rounded-full"></div>
+                  <div class="absolute w-3 h-3 bg-primary rounded-full opacity-0 transition-opacity"></div>
+                </div>
+                <label for="q3-3-b" class="text-gray-700 cursor-pointer">寻求妥协，尽量让各方都满意</label>
+              </div>
+              <div class="flex items-center">
+                <div class="w-5 h-5 mr-3 relative flex items-center justify-center">
+                  <input type="radio" id="q3-3-c" name="q3-3" class="absolute opacity-0 w-0 h-0">
+                  <div class="w-5 h-5 border border-gray-300 rounded-full"></div>
+                  <div class="absolute w-3 h-3 bg-primary rounded-full opacity-0 transition-opacity"></div>
+                </div>
+                <label for="q3-3-c" class="text-gray-700 cursor-pointer">尽量避免冲突，保持和谐关系</label>
+              </div>
+              <div class="flex items-center">
+                <div class="w-5 h-5 mr-3 relative flex items-center justify-center">
+                  <input type="radio" id="q3-3-d" name="q3-3" class="absolute opacity-0 w-0 h-0">
+                  <div class="w-5 h-5 border border-gray-300 rounded-full"></div>
+                  <div class="absolute w-3 h-3 bg-primary rounded-full opacity-0 transition-opacity"></div>
+                </div>
+                <label for="q3-3-d" class="text-gray-700 cursor-pointer">请第三方介入调解，避免直接对抗</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 题目4：问题解决 -->
+    <div id="question-4" class="bg-white rounded-lg shadow-sm p-6 mb-6 hidden">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">沟通问题解决</h2>
+      <div class="mb-6">
+        <div class="p-4 bg-gray-50 rounded-lg mb-4">
+          <p class="text-gray-700 mb-3"><span class="font-medium">场景：</span>您所在的团队由来自不同部门的成员组成，负责一个重要项目。然而，团队成员之间存在明显的沟通障碍：技术团队使用专业术语，市场团队关注用户体验，财务团队关注成本控制。这导致会议效率低下，各方经常产生误解。</p>
+          <p class="text-gray-700"><span class="font-medium">要求：</span>请分析造成沟通障碍的原因，并提出具体的解决方案。</p>
+        </div>
+        
+        <div>
+          <textarea class="custom-textarea w-full p-4 border border-gray-200 rounded-lg text-gray-700" placeholder="请在此输入您的回答..."></textarea>
+          <div class="flex justify-between mt-2 text-sm text-gray-500">
+            <span>提示：可以从团队结构、沟通方式、信息传递等方面思考</span>
+            <span id="word-count-2">0/500</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 题目5：非语言沟通 -->
+    <div id="question-5" class="bg-white rounded-lg shadow-sm p-6 mb-6 hidden">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">非语言沟通技巧</h2>
+      <div class="mb-6">
+        <div class="p-4 bg-gray-50 rounded-lg mb-4">
+          <p class="text-gray-700"><span class="font-medium">说明：</span>非语言沟通（如肢体语言、面部表情、眼神接触等）在职场中扮演着重要角色。请根据以下情境，选择最恰当的非语言沟通方式。</p>
+        </div>
+        
+        <div class="space-y-6">
+          <div>
+            <p class="font-medium text-gray-900 mb-3">1. 在与重要客户进行初次会面时，以下哪种非语言行为最为恰当？</p>
+            <div class="space-y-3">
+              <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+                <div class="flex justify-between">
+                  <div>
+                    <p class="text-gray-700">保持放松的坐姿，双臂交叉在胸前，表现自信</p>
+                  </div>
+                  <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                    <i class="ri-check-line"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+                <div class="flex justify-between">
+                  <div>
+                    <p class="text-gray-700">微笑、适度眼神接触、身体略微前倾表示专注</p>
+                  </div>
+                  <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                    <i class="ri-check-line"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+                <div class="flex justify-between">
+                  <div>
+                    <p class="text-gray-700">保持严肃表情，展示专业性和认真态度</p>
+                  </div>
+                  <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                    <i class="ri-check-line"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+                <div class="flex justify-between">
+                  <div>
+                    <p class="text-gray-700">频繁点头，表示对客户的认同和尊重</p>
+                  </div>
+                  <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                    <i class="ri-check-line"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <p class="font-medium text-gray-900 mb-3">2. 当团队成员在会议中提出您不同意的观点时，以下哪种非语言反应最为适当？</p>
+            <div class="space-y-3">
+              <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+                <div class="flex justify-between">
+                  <div>
+                    <p class="text-gray-700">皱眉并摇头，明确表示不认同</p>
+                  </div>
+                  <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                    <i class="ri-check-line"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+                <div class="flex justify-between">
+                  <div>
+                    <p class="text-gray-700">保持中立的表情，专注倾听，适当点头表示理解</p>
+                  </div>
+                  <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                    <i class="ri-check-line"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+                <div class="flex justify-between">
+                  <div>
+                    <p class="text-gray-700">避免眼神接触，低头看笔记或手机</p>
+                  </div>
+                  <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                    <i class="ri-check-line"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+                <div class="flex justify-between">
+                  <div>
+                    <p class="text-gray-700">轻声叹气，表情略显不耐烦</p>
+                  </div>
+                  <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                    <i class="ri-check-line"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <p class="font-medium text-gray-900 mb-3">3. 在进行重要演讲时，以下哪种非语言行为最有助于增强说服力？</p>
+            <div class="space-y-3">
+              <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+                <div class="flex justify-between">
+                  <div>
+                    <p class="text-gray-700">站在讲台后方，手扶讲台，保持稳定姿势</p>
+                  </div>
+                  <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                    <i class="ri-check-line"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+                <div class="flex justify-between">
+                  <div>
+                    <p class="text-gray-700">适度走动，使用有力的手势，与观众保持眼神接触</p>
+                  </div>
+                  <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                    <i class="ri-check-line"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+                <div class="flex justify-between">
+                  <div>
+                    <p class="text-gray-700">保持快速的语速和高昂的声调，展示热情</p>
+                  </div>
+                  <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                    <i class="ri-check-line"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="option-card p-4 border border-gray-200 rounded-lg cursor-pointer">
+                <div class="flex justify-between">
+                  <div>
+                    <p class="text-gray-700">主要关注幻灯片内容，减少分散观众注意力的动作</p>
+                  </div>
+                  <div class="check-icon w-6 h-6 flex items-center justify-center bg-primary rounded-full text-white">
+                    <i class="ri-check-line"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 导航按钮 -->
+    <div class="flex justify-between">
+      <button id="prev-btn" class="nav-button px-4 py-2 border border-gray-300 rounded-button text-gray-700 bg-white hover:bg-gray-50 disabled:bg-gray-100 whitespace-nowrap">
+        <div class="flex items-center">
+          <div class="w-5 h-5 flex items-center justify-center mr-1">
+            <i class="ri-arrow-left-line"></i>
+          </div>
+          <span>上一题</span>
+        </div>
+      </button>
+      
+      <div class="flex space-x-2">
+        <button class="question-dot w-3 h-3 rounded-full bg-primary" data-question="1"></button>
+        <button class="question-dot w-3 h-3 rounded-full bg-gray-300" data-question="2"></button>
+        <button class="question-dot w-3 h-3 rounded-full bg-gray-300" data-question="3"></button>
+        <button class="question-dot w-3 h-3 rounded-full bg-gray-300" data-question="4"></button>
+        <button class="question-dot w-3 h-3 rounded-full bg-gray-300" data-question="5"></button>
+      </div>
+      
+      <button id="next-btn" class="nav-button px-4 py-2 bg-primary text-white rounded-button hover:bg-primary/90 whitespace-nowrap">
+        <div class="flex items-center">
+          <span>下一题</span>
+          <div class="w-5 h-5 flex items-center justify-center ml-1">
+            <i class="ri-arrow-right-line"></i>
+          </div>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- 提交测试按钮 - 默认隐藏 -->
+  <div id="submit-container" class="hidden mt-6 text-center">
+    <button id="submit-test-btn" class="px-6 py-3 bg-primary text-white rounded-button text-base font-medium whitespace-nowrap hover:bg-primary/90 transition-colors">提交测试</button>
+    <p class="mt-2 text-sm text-gray-500">提交后将无法修改答案</p>
+  </div>
+</main>
+
+<script id="timer-script">
+document.addEventListener('DOMContentLoaded', function() {
+  let totalSeconds = 30 * 60; // 30分钟
+  const timerText = document.getElementById('timer-text');
+  let timerInterval;
+  
+  function updateTimer() {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    timerText.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    
+    if (totalSeconds <= 0) {
+      clearInterval(timerInterval);
+      // 时间到，自动提交测试
+      alert('测试时间已结束，系统将自动提交您的答案。');
+      // 这里可以添加提交测试的逻辑
+    }
+    
+    totalSeconds--;
+  }
+  
+  // 开始测试按钮点击事件
+  const startTestBtn = document.getElementById('start-test-btn');
+  startTestBtn.addEventListener('click', function() {
+    document.getElementById('test-intro').classList.add('hidden');
+    document.getElementById('test-content').classList.remove('hidden');
+    
+    // 启动计时器
+    timerInterval = setInterval(updateTimer, 1000);
+  });
+});
+</script>
+
+<script id="navigation-script">
+document.addEventListener('DOMContentLoaded', function() {
+  let currentQuestion = 1;
+  const totalQuestions = 5;
+  
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const submitContainer = document.getElementById('submit-container');
+  const questionDots = document.querySelectorAll('.question-dot');
+  
+  // 初始状态
+  updateNavButtons();
+  
+  // 上一题按钮点击事件
+  prevBtn.addEventListener('click', function() {
+    if (currentQuestion > 1) {
+      hideCurrentQuestion();
+      currentQuestion--;
+      showCurrentQuestion();
+      updateNavButtons();
+    }
+  });
+  
+  // 下一题按钮点击事件
+  nextBtn.addEventListener('click', function() {
+    if (currentQuestion < totalQuestions) {
+      hideCurrentQuestion();
+      currentQuestion++;
+      showCurrentQuestion();
+      updateNavButtons();
+    }
+  });
+  
+  // 点击导航点切换题目
+  questionDots.forEach(dot => {
+    dot.addEventListener('click', function() {
+      const questionNum = parseInt(this.getAttribute('data-question'));
+      if (questionNum !== currentQuestion) {
+        hideCurrentQuestion();
+        currentQuestion = questionNum;
+        showCurrentQuestion();
+        updateNavButtons();
+      }
+    });
+  });
+  
+  // 更新导航按钮状态
+  function updateNavButtons() {
+    // 更新上一题按钮状态
+    prevBtn.disabled = currentQuestion === 1;
+    
+    // 更新下一题按钮文本
+    if (currentQuestion === totalQuestions) {
+      nextBtn.classList.add('hidden');
+      submitContainer.classList.remove('hidden');
+    } else {
+      nextBtn.classList.remove('hidden');
+      submitContainer.classList.add('hidden');
+    }
+    
+    // 更新导航点状态
+    questionDots.forEach(dot => {
+      const dotQuestion = parseInt(dot.getAttribute('data-question'));
+      if (dotQuestion === currentQuestion) {
+        dot.classList.remove('bg-gray-300');
+        dot.classList.add('bg-primary');
+      } else {
+        dot.classList.remove('bg-primary');
+        dot.classList.add('bg-gray-300');
+      }
+    });
+  }
+  
+  // 隐藏当前题目
+  function hideCurrentQuestion() {
+    document.getElementById(`question-${currentQuestion}`).classList.add('hidden');
+  }
+  
+  // 显示当前题目
+  function showCurrentQuestion() {
+    document.getElementById(`question-${currentQuestion}`).classList.remove('hidden');
+  }
+  
+  // 提交测试按钮点击事件
+  const submitTestBtn = document.getElementById('submit-test-btn');
+  submitTestBtn.addEventListener('click', function() {
+    if (confirm('确定要提交测试吗？提交后将无法修改答案。')) {
+      // 这里可以添加提交测试的逻辑
+      alert('测试已提交，系统将为您生成评估报告。');
+      // 可以跳转到结果页面
+      window.location.href = 'https://readdy.ai/home/95b52a2e-78c3-4162-b2e2-e2497cd401ae/460a9823-4efb-4a90-8f29-bb08fa145440';
+    }
+  });
+});
+</script>
+
+<script id="interaction-script">
+document.addEventListener('DOMContentLoaded', function() {
+  // 选项卡片选择
+  const optionCards = document.querySelectorAll('.option-card');
+  optionCards.forEach(card => {
+    card.addEventListener('click', function() {
+      // 获取当前卡片所在的问题组
+      const questionGroup = this.closest('.space-y-3');
+      
+      // 移除同组中其他卡片的选中状态
+      questionGroup.querySelectorAll('.option-card').forEach(c => {
+        c.classList.remove('selected');
+      });
+      
+      // 添加当前卡片的选中状态
+      this.classList.add('selected');
+    });
+  });
+  
+  // 单选按钮交互
+  const radioInputs = document.querySelectorAll('input[type="radio"]');
+  radioInputs.forEach(radio => {
+    radio.addEventListener('change', function() {
+      // 获取同名单选按钮组
+      const name = this.getAttribute('name');
+      const group = document.querySelectorAll(`input[name="${name}"]`);
+      
+      // 更新所有单选按钮的样式
+      group.forEach(input => {
+        const indicator = input.nextElementSibling.nextElementSibling;
+        if (input.checked) {
+          indicator.classList.add('opacity-100');
+        } else {
+          indicator.classList.remove('opacity-100');
+        }
+      });
+    });
+  });
+  
+  // 文本框字数统计
+  const textareas = document.querySelectorAll('.custom-textarea');
+  textareas.forEach((textarea, index) => {
+    const counterId = index === 0 ? 'word-count' : 'word-count-2';
+    const counter = document.getElementById(counterId);
+    const maxLength = index === 0 ? 300 : 500;
+    
+    textarea.addEventListener('input', function() {
+      const length = this.value.length;
+      counter.textContent = `${length}/${maxLength}`;
+      
+      if (length > maxLength) {
+        counter.classList.add('text-red-500');
+      } else {
+        counter.classList.remove('text-red-500');
+      }
+    });
+  });
+});
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 导航链接点击事件处理
+    const navLinks = document.querySelectorAll('nav a, a[href*="/"]');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href && (href.includes('.html') || href.startsWith('/'))) {
+          console.log('导航到:', href);
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
