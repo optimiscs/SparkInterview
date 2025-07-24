@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模拟面试 - 智能面试评分系统</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#2196F3',secondary:'#FF5722'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: "Noto Sans SC", "Roboto", sans-serif;
+}
+.code-editor {
+font-family: "Consolas", "Monaco", "Courier New", monospace;
+}
+.code-editor:focus {
+outline: none;
+}
+.volume-indicator {
+width: 3px;
+height: 15px;
+background-color: #2196F3;
+margin: 0 1px;
+border-radius: 1px;
+transition: height 0.1s ease;
+}
+.avatar-pulse {
+animation: pulse 2s infinite;
+}
+@keyframes pulse {
+0% {
+box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.4);
+}
+70% {
+box-shadow: 0 0 0 10px rgba(33, 150, 243, 0);
+}
+100% {
+box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+}
+}
+.network-indicator {
+display: inline-block;
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background-color: #4CAF50;
+}
+.custom-switch {
+position: relative;
+display: inline-block;
+width: 44px;
+height: 24px;
+}
+.custom-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.switch-slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #e5e7eb;
+transition: .4s;
+border-radius: 24px;
+}
+.switch-slider:before {
+position: absolute;
+content: "";
+height: 18px;
+width: 18px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+}
+input:checked + .switch-slider {
+background-color: #2196F3;
+}
+input:checked + .switch-slider:before {
+transform: translateX(20px);
+}
+.progress-bar {
+height: 4px;
+background-color: #e5e7eb;
+border-radius: 2px;
+overflow: hidden;
+}
+.progress-value {
+height: 100%;
+background-color: #2196F3;
+border-radius: 2px;
+transition: width 0.3s ease;
+}
+.settings-tab.active {
+color: #2196F3;
+border-color: #2196F3;
+}
+.transition-all {
+transition: all 0.3s ease;
+}
+.detection-card-disabled {
+opacity: 0.5;
+transform: scale(0.98);
+pointer-events: none;
+}
+.detection-card-disabled .bg-green-500 {
+background-color: #9ca3af !important;
+}
+.detection-card-disabled .bg-primary {
+width: 0% !important;
+}
+.question-area-disabled {
+opacity: 0.5;
+transform: scale(0.98);
+filter: grayscale(0.5);
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+<!-- 顶部导航栏 -->
+<header class="bg-white shadow-sm z-50 py-3 px-4">
+<div class="container mx-auto flex justify-between items-center">
+<div class="flex items-center">
+<a href="https://readdy.ai/home/95b52a2e-78c3-4162-b2e2-e2497cd401ae/9d12dac0-e378-427b-bddd-5b98bbd9222d" data-readdy="true" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 cursor-pointer">
+<i class="ri-arrow-left-line text-gray-700"></i>
+</a>
+<div class="ml-4 flex items-center">
+<span class="text-gray-700 font-medium">面试进度：</span>
+<span class="ml-2 text-primary font-medium">3/10</span>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="px-3 py-1.5 !rounded-button bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center cursor-pointer whitespace-nowrap" id="toggle-tips">
+<i class="ri-lightbulb-line mr-1"></i>
+<span>回答提示</span>
+</button>
+<button class="px-3 py-1.5 !rounded-button bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center cursor-pointer whitespace-nowrap" id="toggle-reference">
+<i class="ri-book-2-line mr-1"></i>
+<span>参考资料</span>
+</button>
+<button class="px-3 py-1.5 !rounded-button bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center cursor-pointer whitespace-nowrap" id="toggle-skills">
+<i class="ri-star-line mr-1"></i>
+<span>面试技巧</span>
+</button>
+<button class="px-3 py-1.5 !rounded-button bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center cursor-pointer whitespace-nowrap" id="toggle-coding">
+<i class="ri-code-line mr-1"></i>
+<span>编程答题</span>
+</button>
+</div>
+<div class="flex items-center space-x-6">
+<div class="flex items-center">
+<span class="text-gray-700 mr-2">网络状态：</span>
+<span class="network-indicator"></span>
+<span class="ml-1 text-sm text-gray-700">良好</span>
+</div>
+<div class="flex items-center">
+<i class="ri-time-line text-gray-700 mr-2"></i>
+<span class="text-gray-900 font-medium" id="timer">12:45</span>
+</div>
+<button class="bg-red-100 text-red-600 px-3 py-1.5 !rounded-button flex items-center hover:bg-red-200 transition-colors whitespace-nowrap cursor-pointer">
+<i class="ri-error-warning-line mr-1"></i>
+<span>紧急求助</span>
+</button>
+</div>
+</div>
+</header>
+<!-- 主要内容区域 -->
+<main class="flex-1 flex overflow-hidden relative" style="height: calc(100vh - 8.5rem)">
+<!-- 左侧内容区域 -->
+<div class="flex-1 flex flex-col p-6 transition-all duration-300 overflow-y-auto" id="main-content">
+<button id="toggle-panel" class="absolute right-0 top-1/2 -translate-y-1/2 w-6 h-24 bg-white border border-gray-200 rounded-l-lg shadow-sm flex items-center justify-center hover:bg-gray-50 z-10 cursor-pointer">
+<i class="ri-arrow-right-s-line text-gray-500" id="panel-arrow"></i>
+</button>
+<!-- 面试官区域 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6 transition-all duration-300" id="interviewer-area">
+<div class="flex items-start">
+<div class="w-16 h-16 rounded-full bg-primary bg-opacity-10 flex items-center justify-center avatar-pulse mr-4">
+<i class="ri-user-line ri-xl text-primary"></i>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-2">
+<h3 class="text-lg font-medium text-gray-900">李教授 (AI面试官)</h3>
+<div class="flex items-center">
+<div class="flex space-x-0.5 mr-2">
+<div class="volume-indicator" style="height: 5px;"></div>
+<div class="volume-indicator" style="height: 10px;"></div>
+<div class="volume-indicator" style="height: 15px;"></div>
+<div class="volume-indicator" style="height: 8px;"></div>
+<div class="volume-indicator" style="height: 4px;"></div>
+</div>
+<span class="text-xs text-gray-500">正在说话</span>
+</div>
+</div>
+<div class="bg-gray-50 p-4 rounded-lg transition-all duration-300" id="question-display">
+<p class="text-gray-800">请详细解释一下深度学习中的反向传播算法的原理，以及它在神经网络训练中的作用。同时，能否谈谈它的计算复杂度和可能存在的问题？</p>
+</div>
+</div>
+</div>
+</div>
+<!-- 用户摄像头区域 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6 transition-all duration-300" id="camera-area" style="height: 400px;">
+<div class="relative w-full h-full">
+<div class="absolute inset-0 bg-gray-900 rounded-lg overflow-hidden">
+<video id="user-video" class="w-full h-full object-cover" autoplay muted></video>
+</div>
+<div class="absolute bottom-4 right-4 flex space-x-2">
+<button class="w-10 h-10 bg-black bg-opacity-50 hover:bg-opacity-70 rounded-full flex items-center justify-center text-white transition-colors cursor-pointer">
+<i class="ri-fullscreen-line"></i>
+</button>
+<button class="w-10 h-10 bg-black bg-opacity-50 hover:bg-opacity-70 rounded-full flex items-center justify-center text-white transition-colors cursor-pointer">
+<i class="ri-camera-line"></i>
+</button>
+<button class="w-10 h-10 bg-black bg-opacity-50 hover:bg-opacity-70 rounded-full flex items-center justify-center text-white transition-colors cursor-pointer">
+<i class="ri-mic-line"></i>
+</button>
+</div>
+</div>
+</div>
+<!-- 编程题答题区域 -->
+<div class="bg-white rounded-lg shadow-sm p-6 hidden transition-all duration-300" id="coding-area">
+<h3 class="text-lg font-medium text-gray-900 mb-3">编程题解答</h3>
+<div class="mb-3 flex space-x-2">
+<button class="px-3 py-1 bg-primary text-white !rounded-button whitespace-nowrap cursor-pointer">Python</button>
+<button class="px-3 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 !rounded-button whitespace-nowrap cursor-pointer">JavaScript</button>
+<button class="px-3 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 !rounded-button whitespace-nowrap cursor-pointer">Java</button>
+<button class="px-3 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 !rounded-button whitespace-nowrap cursor-pointer">C++</button>
+</div>
+<div class="bg-gray-900 rounded-lg p-4 text-white">
+<pre class="code-editor" contenteditable="true" spellcheck="false">def backpropagation(network, X, y, learning_rate):
+# 前向传播
+output = forward_propagation(network, X)
+# 计算输出层的误差
+output_error = y - output
+output_delta = output_error * sigmoid_derivative(output)
+# 反向传播误差
+for layer in reversed(range(len(network) - 1)):
+# 计算当前层的误差
+current_layer = network[layer]
+next_layer = network[layer + 1]
+# 计算当前层的delta
+current_delta = np.dot(next_layer['weights'].T, next_layer['delta']) * sigmoid_derivative(current_layer['output'])
+# 更新权重和偏置
+current_layer['weights'] += learning_rate * np.outer(current_delta, current_layer['input'])
+current_layer['bias'] += learning_rate * current_delta
+return network</pre>
+</div>
+<div class="mt-3 flex justify-end">
+<button class="bg-primary text-white px-4 py-2 !rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap cursor-pointer">
+运行代码
+</button>
+</div>
+</div>
+</div>
+<!-- 右侧实时指标区域 -->
+<div class="bg-gray-50 p-6 border-l border-gray-200 overflow-y-auto transition-all duration-300" id="right-panel" style="width: 30%;">
+<!-- 表情检测 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6 transition-all duration-300" id="expression-card">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-medium text-gray-900">表情检测</h3>
+<div class="flex items-center">
+<div class="w-2 h-2 bg-green-500 rounded-full mr-2 transition-colors duration-300"></div>
+<span class="text-sm text-gray-500 transition-colors duration-300">实时检测中</span>
+</div>
+</div>
+<div class="space-y-3">
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-gray-700">当前表情</span>
+<span class="text-primary font-medium" data-metric="expression">自然</span>
+</div>
+<div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-300" data-metric="expression-confidence" style="width: 85%"></div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="text-xs text-gray-500">置信度</span>
+<span class="text-xs text-gray-700">85%</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-700">微笑 12%</span>
+<span class="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-700">专注 8%</span>
+<span class="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-700">思考 5%</span>
+</div>
+</div>
+</div>
+<!-- 动作检测 -->
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6 transition-all duration-300" id="motion-card">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-medium text-gray-900">动作检测</h3>
+<div class="flex items-center">
+<div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+<span class="text-sm text-gray-500">实时检测中</span>
+</div>
+</div>
+<div class="space-y-3">
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-gray-700">当前姿态</span>
+<span class="text-primary font-medium" data-metric="posture">正坐</span>
+</div>
+<div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-300" data-metric="posture-confidence" style="width: 92%"></div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="text-xs text-gray-500">置信度</span>
+<span class="text-xs text-gray-700">92%</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-700">手势活跃度 中等</span>
+<span class="px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-700">视线交互 良好</span>
+</div>
+</div>
+</div>
+<!-- 语音情感分析 -->
+<div class="bg-white rounded-lg shadow-sm p-6 transition-all duration-300" id="voice-card">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-medium text-gray-900">语音情感分析</h3>
+<div class="flex items-center">
+<div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+<span class="text-sm text-gray-500">实时分析中</span>
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-gray-700">当前情感</span>
+<span class="text-primary font-medium" data-metric="voice-emotion">自信</span>
+</div>
+<div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-300" data-metric="voice-confidence" style="width: 88%"></div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="text-xs text-gray-500">置信度</span>
+<span class="text-xs text-gray-700">88%</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm text-gray-700">语速</span>
+<span class="text-sm text-primary">适中</span>
+</div>
+<div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-300" data-metric="voice-speed" style="width: 75%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm text-gray-700">音调</span>
+<span class="text-sm text-primary">自然</span>
+</div>
+<div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-300" data-metric="voice-pitch" style="width: 82%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm text-gray-700">清晰度</span>
+<span class="text-sm text-primary">优秀</span>
+</div>
+<div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-300" data-metric="voice-clarity" style="width: 90%"></div>
+</div>
+</div>
+</div>
+<div class="mt-4">
+<h4 class="text-sm font-medium text-gray-900 mb-2">实时语音识别</h4>
+<div class="bg-gray-50 p-3 rounded-lg text-sm text-gray-700 h-20 overflow-y-auto">
+反向传播算法是深度学习中的一个核心算法，它通过计算损失函数对各层参数的梯度来更新网络权重...
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- 底部控制栏 -->
+<footer class="bg-white border-t border-gray-200 py-4 px-6">
+<div class="container mx-auto flex justify-between items-center">
+<div class="flex items-center space-x-4">
+<button class="bg-primary text-white px-4 py-2 !rounded-button flex items-center hover:bg-opacity-90 transition-colors whitespace-nowrap cursor-pointer">
+<i class="ri-pause-line mr-1"></i>
+<span>暂停面试</span>
+</button>
+<button class="bg-red-500 text-white px-4 py-2 !rounded-button flex items-center hover:bg-opacity-90 transition-colors whitespace-nowrap cursor-pointer">
+<i class="ri-close-line mr-1"></i>
+<span>结束面试</span>
+</button>
+</div>
+<div class="flex items-center space-x-6">
+<div class="flex items-center">
+<span class="text-gray-700 mr-2">麦克风</span>
+<label class="custom-switch cursor-pointer">
+<input type="checkbox" checked>
+<span class="switch-slider"></span>
+</label>
+</div>
+<div class="flex items-center">
+<span class="text-gray-700 mr-2">摄像头</span>
+<label class="custom-switch cursor-pointer">
+<input type="checkbox" checked>
+<span class="switch-slider"></span>
+</label>
+</div>
+<div class="flex items-center">
+<span class="text-gray-700 mr-2">全屏</span>
+<label class="custom-switch cursor-pointer">
+<input type="checkbox">
+<span class="switch-slider"></span>
+</label>
+</div>
+<button id="settings-btn" class="bg-gray-100 text-gray-700 px-4 py-2 !rounded-button flex items-center hover:bg-gray-200 transition-colors whitespace-nowrap cursor-pointer">
+<i class="ri-settings-line mr-1"></i>
+<span>设置</span>
+</button>
+</div>
+</div>
+</footer>
+<!-- 配置面板 -->
+<div id="settings-panel" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+<div class="bg-white rounded-lg w-[480px] p-6 transition-all duration-300">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-medium text-gray-900">面试设置</h2>
+<button class="text-gray-500 hover:text-gray-700 cursor-pointer" id="close-settings">
+<i class="ri-close-line text-xl"></i>
+</button>
+</div>
+<div class="border-b border-gray-200 mb-6">
+<div class="flex space-x-6">
+<button class="settings-tab active pb-3 px-2 text-primary border-b-2 border-primary cursor-pointer">检测配置</button>
+<button class="settings-tab pb-3 px-2 text-gray-500 border-b-2 border-transparent cursor-pointer">界面设置</button>
+<button class="settings-tab pb-3 px-2 text-gray-500 border-b-2 border-transparent cursor-pointer">其他设置</button>
+</div>
+</div>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-medium text-gray-900">面试官问题显示</h3>
+<p class="text-sm text-gray-500 mt-1">显示面试官提问的文本内容</p>
+</div>
+<label class="custom-switch cursor-pointer">
+<input type="checkbox" id="question-toggle" checked>
+<span class="switch-slider"></span>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-medium text-gray-900">表情检测</h3>
+<p class="text-sm text-gray-500 mt-1">实时分析面部表情变化</p>
+</div>
+<label class="custom-switch cursor-pointer">
+<input type="checkbox" id="expression-toggle" checked>
+<span class="switch-slider"></span>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-medium text-gray-900">动作检测</h3>
+<p class="text-sm text-gray-500 mt-1">监测肢体语言和姿态变化</p>
+</div>
+<label class="custom-switch cursor-pointer">
+<input type="checkbox" id="motion-toggle" checked>
+<span class="switch-slider"></span>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-medium text-gray-900">语音情感分析</h3>
+<p class="text-sm text-gray-500 mt-1">分析语音情感和语言特征</p>
+</div>
+<label class="custom-switch cursor-pointer">
+<input type="checkbox" id="voice-toggle" checked>
+<span class="switch-slider"></span>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-medium text-gray-900">实时提示</h3>
+<p class="text-sm text-gray-500 mt-1">显示回答建议和参考要点</p>
+</div>
+<label class="custom-switch cursor-pointer">
+<input type="checkbox" id="tips-toggle" checked>
+<span class="switch-slider"></span>
+</label>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-gray-200 flex space-x-3">
+<button class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 !rounded-button hover:bg-gray-200 transition-colors cursor-pointer whitespace-nowrap" id="reset-settings">
+恢复默认
+</button>
+<button class="flex-1 bg-primary text-white px-4 py-2 !rounded-button hover:bg-opacity-90 transition-colors cursor-pointer whitespace-nowrap" id="save-settings">
+保存设置
+</button>
+</div>
+</div>
+</div>
+<script id="timer-script">
+document.addEventListener('DOMContentLoaded', function() {
+let seconds = 0;
+let minutes = 0;
+function updateTimer() {
+seconds++;
+if (seconds >= 60) {
+seconds = 0;
+minutes++;
+}
+const formattedMinutes = minutes.toString().padStart(2, '0');
+const formattedSeconds = seconds.toString().padStart(2, '0');
+document.getElementById('timer').textContent = `${formattedMinutes}:${formattedSeconds}`;
+}
+setInterval(updateTimer, 1000);
+});
+</script>
+<script id="camera-script">
+document.addEventListener('DOMContentLoaded', function() {
+const userVideo = document.getElementById('user-video');
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+.then(function(stream) {
+userVideo.srcObject = stream;
+})
+.catch(function(err) {
+console.error('无法访问摄像头或麦克风:', err);
+});
+});
+</script>
+<script id="panel-control-script">
+document.addEventListener('DOMContentLoaded', function() {
+const mainContent = document.getElementById('main-content');
+const rightPanel = document.getElementById('right-panel');
+const toggleButton = document.getElementById('toggle-panel');
+const panelArrow = document.getElementById('panel-arrow');
+let isPanelVisible = true;
+function togglePanel() {
+isPanelVisible = !isPanelVisible;
+if (isPanelVisible) {
+rightPanel.style.width = '30%';
+rightPanel.style.opacity = '1';
+mainContent.style.paddingRight = '24px';
+panelArrow.classList.remove('ri-arrow-left-s-line');
+panelArrow.classList.add('ri-arrow-right-s-line');
+} else {
+rightPanel.style.width = '0';
+rightPanel.style.opacity = '0';
+mainContent.style.paddingRight = '48px';
+panelArrow.classList.remove('ri-arrow-right-s-line');
+panelArrow.classList.add('ri-arrow-left-s-line');
+}
+}
+toggleButton.addEventListener('click', togglePanel);
+function updateMetrics() {
+const metrics = {
+expression: {
+current: ['自然', '微笑', '专注', '思考'],
+confidence: [85, 12, 8, 5]
+},
+posture: {
+current: '正坐',
+confidence: 92,
+details: ['手势活跃度 中等', '视线交互 良好']
+},
+voice: {
+emotion: '自信',
+confidence: 88,
+speed: 75,
+pitch: 82,
+clarity: 90
+}
+};
+const randomIndex = Math.floor(Math.random() * metrics.expression.current.length);
+const currentExpression = metrics.expression.current[randomIndex];
+const currentConfidence = metrics.expression.confidence[randomIndex];
+const expressionElement = document.querySelector('[data-metric="expression"]');
+const expressionConfidenceElement = document.querySelector('[data-metric="expression-confidence"]');
+const postureElement = document.querySelector('[data-metric="posture"]');
+const postureConfidenceElement = document.querySelector('[data-metric="posture-confidence"]');
+const voiceEmotionElement = document.querySelector('[data-metric="voice-emotion"]');
+const voiceConfidenceElement = document.querySelector('[data-metric="voice-confidence"]');
+const voiceSpeedElement = document.querySelector('[data-metric="voice-speed"]');
+const voicePitchElement = document.querySelector('[data-metric="voice-pitch"]');
+const voiceClarityElement = document.querySelector('[data-metric="voice-clarity"]');
+if (expressionElement) expressionElement.textContent = currentExpression;
+if (expressionConfidenceElement) expressionConfidenceElement.style.width = `${currentConfidence}%`;
+if (postureElement) postureElement.textContent = metrics.posture.current;
+if (postureConfidenceElement) postureConfidenceElement.style.width = `${metrics.posture.confidence}%`;
+if (voiceEmotionElement) voiceEmotionElement.textContent = metrics.voice.emotion;
+if (voiceConfidenceElement) voiceConfidenceElement.style.width = `${metrics.voice.confidence}%`;
+if (voiceSpeedElement) voiceSpeedElement.style.width = `${metrics.voice.speed}%`;
+if (voicePitchElement) voicePitchElement.style.width = `${metrics.voice.pitch}%`;
+if (voiceClarityElement) voiceClarityElement.style.width = `${metrics.voice.clarity}%`;
+}
+setInterval(updateMetrics, 2000);
+});
+</script>
+<script id="audio-visualization-script">
+document.addEventListener('DOMContentLoaded', function() {
+const volumeIndicators = document.querySelectorAll('.volume-indicator');
+function animateVolumeIndicators() {
+volumeIndicators.forEach(indicator => {
+const randomHeight = Math.floor(Math.random() * 15) + 3;
+indicator.style.height = `${randomHeight}px`;
+});
+}
+setInterval(animateVolumeIndicators, 200);
+});
+</script>
+<script id="settings-script">
+document.addEventListener('DOMContentLoaded', function() {
+const settingsBtn = document.getElementById('settings-btn');
+const settingsPanel = document.getElementById('settings-panel');
+const closeSettings = document.getElementById('close-settings');
+const saveSettings = document.getElementById('save-settings');
+const resetSettings = document.getElementById('reset-settings');
+const questionToggle = document.getElementById('question-toggle');
+const expressionToggle = document.getElementById('expression-toggle');
+const motionToggle = document.getElementById('motion-toggle');
+const voiceToggle = document.getElementById('voice-toggle');
+const tipsToggle = document.getElementById('tips-toggle');
+const settingsTabs = document.querySelectorAll('.settings-tab');
+const questionDisplay = document.getElementById('question-display');
+const interviewerArea = document.getElementById('interviewer-area');
+const cameraArea = document.getElementById('camera-area');
+const expressionCard = document.getElementById('expression-card');
+const motionCard = document.getElementById('motion-card');
+const voiceCard = document.getElementById('voice-card');
+const rightPanel = document.getElementById('right-panel');
+const defaultSettings = {
+question: true,
+expression: true,
+motion: true,
+voice: true,
+tips: true
+};
+function adjustLayout() {
+const questionEnabled = questionToggle.checked;
+const expressionEnabled = expressionToggle.checked;
+const motionEnabled = motionToggle.checked;
+const voiceEnabled = voiceToggle.checked;
+let enabledCount = 0;
+if (expressionEnabled) enabledCount++;
+if (motionEnabled) enabledCount++;
+if (voiceEnabled) enabledCount++;
+if (questionEnabled) {
+cameraArea.style.height = '400px';
+} else {
+cameraArea.style.height = '500px';
+}
+const rightPanelHeight = window.innerHeight - 136;
+const cardHeight = enabledCount > 0 ? Math.floor((rightPanelHeight - (enabledCount * 24)) / enabledCount) : 0;
+if (expressionCard && expressionEnabled) {
+expressionCard.style.height = `${cardHeight}px`;
+expressionCard.style.overflow = 'hidden';
+}
+if (motionCard && motionEnabled) {
+motionCard.style.height = `${cardHeight}px`;
+motionCard.style.overflow = 'hidden';
+}
+if (voiceCard && voiceEnabled) {
+voiceCard.style.height = `${cardHeight}px`;
+voiceCard.style.overflow = 'hidden';
+}
+}
+function updateCard(card, isEnabled) {
+if (!card) return;
+if (isEnabled) {
+card.classList.remove('detection-card-disabled');
+card.style.display = 'block';
+const statusDot = card.querySelector('.w-2.h-2');
+const statusText = card.querySelector('.text-sm.text-gray-500');
+if (statusDot && statusText) {
+statusDot.classList.remove('bg-gray-400');
+statusDot.classList.add('bg-green-500');
+statusText.textContent = card === voiceCard ? '实时分析中' : '实时检测中';
+}
+const progressBars = card.querySelectorAll('.bg-primary');
+progressBars.forEach(bar => {
+const originalWidth = bar.getAttribute('data-width') || bar.style.width || '85%';
+bar.setAttribute('data-width', originalWidth);
+bar.style.width = originalWidth;
+});
+} else {
+card.classList.add('detection-card-disabled');
+card.style.display = 'none';
+const statusDot = card.querySelector('.w-2.h-2');
+const statusText = card.querySelector('.text-sm.text-gray-500');
+if (statusDot && statusText) {
+statusDot.classList.remove('bg-green-500');
+statusDot.classList.add('bg-gray-400');
+statusText.textContent = '已关闭';
+}
+const progressBars = card.querySelectorAll('.bg-primary');
+progressBars.forEach(bar => {
+bar.style.width = '0%';
+});
+}
+}
+function applySettings() {
+if (questionDisplay) {
+if (questionToggle.checked) {
+questionDisplay.classList.remove('question-area-disabled');
+questionDisplay.style.display = 'block';
+} else {
+questionDisplay.classList.add('question-area-disabled');
+questionDisplay.style.display = 'none';
+}
+}
+updateCard(expressionCard, expressionToggle.checked);
+updateCard(motionCard, motionToggle.checked);
+updateCard(voiceCard, voiceToggle.checked);
+adjustLayout();
+}
+function resetToDefault() {
+questionToggle.checked = defaultSettings.question;
+expressionToggle.checked = defaultSettings.expression;
+motionToggle.checked = defaultSettings.motion;
+voiceToggle.checked = defaultSettings.voice;
+tipsToggle.checked = defaultSettings.tips;
+applySettings();
+}
+settingsTabs.forEach(tab => {
+tab.addEventListener('click', () => {
+settingsTabs.forEach(t => {
+t.classList.remove('active', 'text-primary', 'border-primary');
+t.classList.add('text-gray-500', 'border-transparent');
+});
+tab.classList.add('active', 'text-primary', 'border-primary');
+tab.classList.remove('text-gray-500', 'border-transparent');
+});
+});
+settingsBtn.addEventListener('click', () => {
+settingsPanel.classList.remove('hidden');
+});
+closeSettings.addEventListener('click', () => {
+settingsPanel.classList.add('hidden');
+});
+settingsPanel.addEventListener('click', (e) => {
+if (e.target === settingsPanel) {
+settingsPanel.classList.add('hidden');
+}
+});
+saveSettings.addEventListener('click', () => {
+applySettings();
+settingsPanel.classList.add('hidden');
+});
+resetSettings.addEventListener('click', resetToDefault);
+questionToggle.addEventListener('change', applySettings);
+expressionToggle.addEventListener('change', applySettings);
+motionToggle.addEventListener('change', applySettings);
+voiceToggle.addEventListener('change', applySettings);
+applySettings();
+window.addEventListener('resize', adjustLayout);
+});
+</script>
+<script id="feature-toggle-script">
+document.addEventListener('DOMContentLoaded', function() {
+const features = {
+'toggle-tips': document.querySelector('.bg-white.rounded-lg.shadow-sm.p-6.mb-6:has(h3:contains("回答要点提示"))'),
+'toggle-reference': document.querySelector('.bg-white.rounded-lg.shadow-sm.overflow-hidden.mb-6'),
+'toggle-skills': document.querySelector('.bg-white.rounded-lg.shadow-sm.p-6:has(h3:contains("面试技巧"))'),
+'toggle-coding': document.getElementById('coding-area')
+};
+const buttons = {
+'toggle-tips': document.getElementById('toggle-tips'),
+'toggle-reference': document.getElementById('toggle-reference'),
+'toggle-skills': document.getElementById('toggle-skills'),
+'toggle-coding': document.getElementById('toggle-coding')
+};
+Object.keys(features).forEach(id => {
+if (buttons[id] && features[id]) {
+features[id].classList.add('hidden');
+buttons[id].addEventListener('click', function() {
+features[id].classList.toggle('hidden');
+this.classList.toggle('bg-primary');
+this.classList.toggle('text-white');
+this.classList.toggle('bg-gray-100');
+this.classList.toggle('text-gray-700');
+});
+}
+});
+let isRecording = false;
+const endButton = document.querySelector('button:has(i.ri-close-line)');
+endButton.addEventListener('click', function() {
+if (!isRecording) return;
+isRecording = false;
+const reportDialog = document.createElement('div');
+reportDialog.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+reportDialog.innerHTML = `
+<div class="bg-white rounded-lg w-[800px] max-h-[80vh] overflow-y-auto p-6">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-2xl font-medium text-gray-900">面试评测报告</h2>
+<button class="text-gray-500 hover:text-gray-700 cursor-pointer" onclick="this.closest('.fixed').remove()">
+<i class="ri-close-line text-xl"></i>
+</button>
+</div>
+<div class="space-y-6">
+<div class="bg-gray-50 p-4 rounded-lg">
+<h3 class="font-medium text-gray-900 mb-2">整体表现评分</h3>
+<div class="flex items-center space-x-2">
+<div class="text-3xl font-medium text-primary">92</div>
+<div class="text-gray-500">/ 100</div>
+</div>
+</div>
+<div>
+<h3 class="font-medium text-gray-900 mb-3">详细评估</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-gray-700">专业知识掌握</span>
+<div class="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 95%"></div>
+</div>
+<span class="text-gray-900">95%</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-gray-700">表达能力</span>
+<div class="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 88%"></div>
+</div>
+<span class="text-gray-900">88%</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-gray-700">逻辑思维</span>
+<div class="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 92%"></div>
+</div>
+<span class="text-gray-900">92%</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-medium text-gray-900 mb-3">问题回答分析</h3>
+<div class="space-y-4">
+<div class="bg-gray-50 p-4 rounded-lg">
+<div class="flex justify-between mb-2">
+<span class="font-medium text-gray-900">问题 1：深度学习中的反向传播算法</span>
+<span class="text-primary">得分：95</span>
+</div>
+<p class="text-gray-700 text-sm">回答全面准确，很好地解释了算法原理和应用场景。建议可以补充更多实际案例。</p>
+</div>
+<div class="bg-gray-50 p-4 rounded-lg">
+<div class="flex justify-between mb-2">
+<span class="font-medium text-gray-900">问题 2：神经网络优化方法</span>
+<span class="text-primary">得分：90</span>
+</div>
+<p class="text-gray-700 text-sm">对各种优化算法的比较分析到位，可以进一步深入讨论超参数选择。</p>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-medium text-gray-900 mb-3">改进建议</h3>
+<ul class="list-disc list-inside space-y-2 text-gray-700">
+<li>在回答技术问题时可以多举一些实际应用的例子</li>
+<li>对于复杂概念的解释可以适当使用类比来增加理解度</li>
+<li>回答问题时的语速可以稍微放慢一些</li>
+</ul>
+</div>
+</div>
+<div class="mt-6 flex justify-end">
+<button class="bg-primary text-white px-4 py-2 !rounded-button hover:bg-opacity-90 transition-colors cursor-pointer whitespace-nowrap">
+下载完整报告
+</button>
+</div>
+</div>
+`;
+document.body.appendChild(reportDialog);
+});
+const startButton = document.querySelector('button:has(i.ri-pause-line)');
+startButton.addEventListener('click', function() {
+isRecording = !isRecording;
+const icon = this.querySelector('i');
+const text = this.querySelector('span');
+if (isRecording) {
+icon.classList.remove('ri-pause-line');
+icon.classList.add('ri-play-line');
+text.textContent = '继续面试';
+} else {
+icon.classList.remove('ri-play-line');
+icon.classList.add('ri-pause-line');
+text.textContent = '暂停面试';
+}
+});
+});
+</script>
+</body>
+</html>

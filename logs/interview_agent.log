@@ -435,3 +435,939 @@ To install, run: pip install email-validator
 2025-07-23 17:30:40,189 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_172940_1488180341051347627
 2025-07-23 17:30:40,681 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_172940_1488180341051347627
 2025-07-23 17:30:40,685 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_172940_1488180341051347627
+2025-07-23 17:32:28,498 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_173228_5004459689705944568
+2025-07-23 17:32:28,502 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_173228_5004459689705944568
+2025-07-23 17:34:06,200 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 17:34:06,205 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_173228_5004459689705944568
+2025-07-23 17:34:06,206 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_173228_5004459689705944568.json
+2025-07-23 17:34:06,211 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_173228_5004459689705944568
+2025-07-23 17:34:06,213 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_173228_5004459689705944568
+2025-07-23 17:34:06,217 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_173228_5004459689705944568
+2025-07-23 17:34:07,773 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_173228_5004459689705944568
+2025-07-23 17:38:04,575 - src.persistence.optimal_manager - WARNING - ⚠️ 未找到分析结果: test_task_id
+2025-07-23 17:38:04,590 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: test_task_id
+2025-07-23 17:38:04,594 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_173228_5004459689705944568
+2025-07-23 17:38:04,597 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_173228_5004459689705944568
+2025-07-23 17:39:32,328 - watchfiles.main - INFO - 2 changes detected
+2025-07-23 17:40:16,009 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_173228_5004459689705944568
+2025-07-23 17:41:23,653 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 17:41:23,653 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-23 17:41:32,140 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 17:41:38,192 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 17:41:38,194 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-23 17:41:38,198 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-23 17:41:38,198 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 17:41:38,198 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 17:41:38,199 - main - INFO - ✅ 系统启动完成
+2025-07-23 17:42:30,908 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:42:32,974 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:42:39,793 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:42:46,019 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 17:42:59,983 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:43:35,273 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:49:33,764 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:49:40,637 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:50:32,499 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:51:34,766 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:51:39,554 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:52:09,246 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 17:52:09,246 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-23 17:52:17,571 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 17:52:22,223 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 17:52:22,223 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-23 17:52:22,226 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-23 17:52:22,226 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 17:52:22,226 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 17:52:22,226 - main - INFO - ✅ 系统启动完成
+2025-07-23 17:53:35,441 - watchfiles.main - INFO - 11 changes detected
+2025-07-23 17:54:05,425 - watchfiles.main - INFO - 1 change detected
+2025-07-23 17:54:15,432 - watchfiles.main - INFO - 1 change detected
+2025-07-23 18:04:23,071 - watchfiles.main - INFO - 1 change detected
+2025-07-23 18:07:36,636 - watchfiles.main - INFO - 1 change detected
+2025-07-23 18:11:05,135 - watchfiles.main - INFO - 1 change detected
+2025-07-23 18:24:40,343 - watchfiles.main - INFO - 1 change detected
+2025-07-23 18:26:14,897 - watchfiles.main - INFO - 1 change detected
+2025-07-23 18:29:36,453 - watchfiles.main - INFO - 1 change detected
+2025-07-23 18:31:11,862 - watchfiles.main - INFO - 1 change detected
+2025-07-23 18:31:59,071 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 18:33:11,207 - watchfiles.main - INFO - 1 change detected
+2025-07-23 18:34:39,320 - watchfiles.main - INFO - 1 change detected
+2025-07-23 20:51:48,565 - watchfiles.main - INFO - 1 change detected
+2025-07-23 20:51:50,661 - watchfiles.main - INFO - 1 change detected
+2025-07-23 20:52:37,416 - watchfiles.main - INFO - 1 change detected
+2025-07-23 20:52:46,087 - watchfiles.main - INFO - 1 change detected
+2025-07-23 20:52:56,376 - watchfiles.main - INFO - 1 change detected
+2025-07-23 20:53:04,651 - watchfiles.main - INFO - 1 change detected
+2025-07-23 20:55:54,712 - watchfiles.main - INFO - 12 changes detected
+2025-07-23 20:57:13,024 - watchfiles.main - INFO - 1 change detected
+2025-07-23 20:57:23,945 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:06:34,706 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:06:41,597 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:06:52,089 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:06:59,476 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:07:15,718 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:07:22,483 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:07:29,608 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:07:36,566 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:07:44,438 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:07:51,008 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:07:57,854 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:08:06,175 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:09:43,235 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 21:09:43,237 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-23 21:09:53,860 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-23 21:09:59,555 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 21:09:59,559 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-23 21:09:59,563 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-23 21:09:59,564 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 21:09:59,564 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 21:09:59,564 - main - INFO - ✅ 系统启动完成
+2025-07-23 21:17:42,762 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_211742_4688038332610999942
+2025-07-23 21:17:42,776 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_211742_4688038332610999942
+2025-07-23 21:18:43,207 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 21:18:43,220 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_211742_4688038332610999942
+2025-07-23 21:18:43,222 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_211742_4688038332610999942.json
+2025-07-23 21:18:43,225 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_211742_4688038332610999942
+2025-07-23 21:18:43,229 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_211742_4688038332610999942
+2025-07-23 21:18:43,231 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_211742_4688038332610999942
+2025-07-23 21:18:45,917 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_211742_4688038332610999942
+2025-07-23 21:40:12,169 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:40:31,204 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:40:44,140 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:43:30,373 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 21:44:16,653 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:44:29,313 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:44:50,012 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:45:10,255 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:45:22,619 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:50:39,674 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:50:47,339 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:50:52,406 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:51:06,708 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:51:11,855 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:51:17,517 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:51:30,255 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:59:03,175 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:59:10,142 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:59:39,934 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:59:43,928 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:59:48,345 - watchfiles.main - INFO - 1 change detected
+2025-07-23 21:59:59,257 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:00:04,917 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:00:10,276 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:00:20,438 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:00:24,357 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:00:29,684 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:00:36,100 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:03:24,036 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:03:38,783 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:03:46,950 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:04:10,942 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:04:23,167 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:08:08,844 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:08:40,929 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:09:51,654 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:10:43,022 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:10:52,045 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:11:34,833 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:11:53,079 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:12:10,503 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:13:01,969 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_221301_4688038332610999942
+2025-07-23 22:13:01,972 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_221301_4688038332610999942
+2025-07-23 22:14:00,130 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 22:14:00,137 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_221301_4688038332610999942
+2025-07-23 22:14:00,138 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_221301_4688038332610999942.json
+2025-07-23 22:14:00,141 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_221301_4688038332610999942
+2025-07-23 22:14:00,143 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_221301_4688038332610999942
+2025-07-23 22:14:00,150 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_221301_4688038332610999942
+2025-07-23 22:14:03,027 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_221301_4688038332610999942
+2025-07-23 22:14:56,480 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:15:08,247 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:22:59,677 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:23:41,153 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:24:05,855 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:24:22,092 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:24:22,219 - main - INFO - 🛑 系统正在关闭...
+2025-07-23 22:24:22,219 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-23 22:24:30,190 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 22:24:30,262 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-23 22:24:30,262 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-23 22:24:30,264 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-23 22:24:30,264 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 22:24:30,264 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-23 22:24:30,264 - main - INFO - ✅ 系统启动完成
+2025-07-23 22:24:41,657 - watchfiles.main - INFO - 3 changes detected
+2025-07-23 22:25:48,598 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:27:31,297 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_222731_-6787099846374091554
+2025-07-23 22:27:31,300 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_222731_-6787099846374091554
+2025-07-23 22:28:43,172 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 22:28:43,182 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_222731_-6787099846374091554
+2025-07-23 22:28:43,184 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_222731_-6787099846374091554.json
+2025-07-23 22:28:43,189 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_222731_-6787099846374091554
+2025-07-23 22:28:43,190 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_222731_-6787099846374091554
+2025-07-23 22:28:43,192 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_222731_-6787099846374091554
+2025-07-23 22:28:47,055 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_222731_-6787099846374091554
+2025-07-23 22:32:50,626 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:33:10,539 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:33:21,464 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:33:41,711 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:34:49,263 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_223449_-6787099846374091554
+2025-07-23 22:34:49,275 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_223449_-6787099846374091554
+2025-07-23 22:35:52,402 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 22:35:52,407 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_223449_-6787099846374091554
+2025-07-23 22:35:52,409 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_223449_-6787099846374091554.json
+2025-07-23 22:35:52,413 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_223449_-6787099846374091554
+2025-07-23 22:35:52,416 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_223449_-6787099846374091554
+2025-07-23 22:35:52,420 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_223449_-6787099846374091554
+2025-07-23 22:35:52,506 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_223449_-6787099846374091554
+2025-07-23 22:38:36,754 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:38:52,408 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:39:04,193 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:39:15,572 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:39:36,028 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:40:00,526 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:40:12,341 - watchfiles.main - INFO - 1 change detected
+2025-07-23 22:44:48,380 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_224448_-6787099846374091554
+2025-07-23 22:44:48,385 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_224448_-6787099846374091554
+2025-07-23 22:45:43,979 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-23 22:45:43,983 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250723_224448_-6787099846374091554
+2025-07-23 22:45:43,984 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250723_224448_-6787099846374091554.json
+2025-07-23 22:45:43,988 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250723_224448_-6787099846374091554
+2025-07-23 22:45:43,991 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_224448_-6787099846374091554
+2025-07-23 22:45:43,993 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250723_224448_-6787099846374091554
+2025-07-23 22:45:45,049 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_224448_-6787099846374091554
+2025-07-24 12:56:47,545 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-24 12:56:53,145 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 12:56:53,150 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 12:56:53,156 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 12:56:53,157 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 12:56:53,157 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 12:56:53,157 - main - INFO - ✅ 系统启动完成
+2025-07-24 14:19:12,296 - watchfiles.main - INFO - 1 change detected
+2025-07-24 14:19:20,836 - watchfiles.main - INFO - 1 change detected
+2025-07-24 14:19:32,018 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_224448_-6787099846374091554
+2025-07-24 14:20:03,574 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250723_224448_-6787099846374091554
+2025-07-24 14:29:54,723 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_142954_8441260036325872167
+2025-07-24 14:29:54,745 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_142954_8441260036325872167
+2025-07-24 14:31:34,692 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 14:31:34,702 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250724_142954_8441260036325872167
+2025-07-24 14:31:34,704 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250724_142954_8441260036325872167.json
+2025-07-24 14:31:34,709 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_142954_8441260036325872167
+2025-07-24 14:31:34,711 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250724_142954_8441260036325872167
+2025-07-24 14:31:34,714 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_142954_8441260036325872167
+2025-07-24 14:31:36,969 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_142954_8441260036325872167
+2025-07-24 14:42:05,057 - watchfiles.main - INFO - 1 change detected
+2025-07-24 14:42:40,533 - watchfiles.main - INFO - 1 change detected
+2025-07-24 14:42:49,784 - watchfiles.main - INFO - 1 change detected
+2025-07-24 14:43:06,250 - watchfiles.main - INFO - 1 change detected
+2025-07-24 15:55:56,750 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_142954_8441260036325872167
+2025-07-24 15:56:12,247 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_155612_593727026618101000
+2025-07-24 15:56:12,255 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_155612_593727026618101000
+2025-07-24 15:58:19,027 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 15:58:19,034 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250724_155612_593727026618101000
+2025-07-24 15:58:19,035 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250724_155612_593727026618101000.json
+2025-07-24 15:58:19,038 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250724_155612_593727026618101000
+2025-07-24 15:58:19,041 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_155612_593727026618101000
+2025-07-24 15:58:19,044 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_155612_593727026618101000
+2025-07-24 15:58:21,482 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_155612_593727026618101000
+2025-07-24 16:00:20,457 - watchfiles.main - INFO - 1 change detected
+2025-07-24 16:00:20,608 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 16:00:20,609 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 16:00:28,591 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 16:00:28,645 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 16:00:28,647 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 16:00:28,650 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 16:00:28,650 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 16:00:28,650 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 16:00:28,650 - main - INFO - ✅ 系统启动完成
+2025-07-24 16:00:48,416 - watchfiles.main - INFO - 1 change detected
+2025-07-24 16:00:58,698 - watchfiles.main - INFO - 1 change detected
+2025-07-24 16:08:58,696 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_155612_593727026618101000
+2025-07-24 16:09:08,174 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:08,177 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:08,680 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:08,885 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:09,091 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:09,296 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:09,501 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:09,709 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:09,916 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:10,121 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:10,327 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:10,534 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:10,690 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:10,845 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:11,001 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:11,158 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:11,313 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:11,468 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:11,623 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:11,777 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:11,933 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:12,165 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:12,268 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:12,374 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:12,478 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:12,582 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:12,688 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:12,792 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:12,898 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:13,004 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:13,111 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:13,217 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:13,302 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:13,386 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:13,471 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:13,557 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:13,644 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:13,735 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:13,821 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:13,905 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:13,991 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:14,078 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:14,142 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:14,205 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:14,270 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:14,334 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:14,397 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:14,461 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:14,525 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:14,589 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:14,655 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:14,721 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:14,826 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:14,930 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:15,037 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:15,142 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:15,245 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:15,350 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:15,457 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:15,563 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:15,669 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:15,775 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:15,878 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:15,985 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:16,091 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:16,195 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:16,301 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:16,407 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:16,511 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:16,615 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:16,720 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:16,878 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:17,035 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:17,193 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:17,347 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:17,503 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:17,658 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:17,814 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:17,970 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:18,126 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:18,282 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:18,437 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:18,594 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:18,751 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:18,906 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:19,062 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:19,265 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:19,467 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:19,672 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:19,876 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:20,079 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:20,285 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:20,591 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:20,896 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:21,203 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:21,508 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:21,813 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:22,118 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:22,422 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:09:22,729 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:11:04,961 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 16:11:04,979 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:11:04,982 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250724_160908_5335203081484248006.json
+2025-07-24 16:11:04,986 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:11:04,990 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:11:04,993 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:11:05,456 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:37:31,890 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:38:23,855 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_160908_5335203081484248006
+2025-07-24 16:38:42,058 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:42,063 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:42,569 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:42,777 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:42,983 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:43,187 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:43,393 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:43,599 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:43,803 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:44,010 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:44,215 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:44,421 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:44,576 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:44,732 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:44,888 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:45,044 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:45,200 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:45,355 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:45,511 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:45,667 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:45,824 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:46,091 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:46,193 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:46,296 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:46,403 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:46,509 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:46,615 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:46,720 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:46,826 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:46,932 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:47,037 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:47,142 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:47,228 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:47,313 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:47,400 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:47,484 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:47,569 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:47,655 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:47,742 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:47,828 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:47,913 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,000 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,067 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,131 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,194 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,257 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,322 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,390 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,456 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,520 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,585 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,651 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,757 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,860 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:48,964 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:49,070 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:49,175 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:49,280 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:49,385 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:49,492 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:49,599 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:49,703 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:49,807 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:49,911 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:50,015 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:50,120 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:50,226 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:50,332 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:50,438 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:50,543 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:50,647 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:50,803 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:50,957 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:51,111 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:51,267 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:51,422 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:51,579 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:51,734 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:51,891 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:52,046 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:52,202 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:52,357 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:52,512 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:52,666 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:52,821 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:52,976 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:53,180 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:53,385 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:53,591 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:53,798 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:54,004 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:54,210 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:54,515 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:54,821 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:55,127 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:55,433 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:55,739 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:56,045 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:56,351 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:38:56,657 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:40:34,055 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 16:40:34,072 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:40:34,075 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250724_163842_-7761170248912117914.json
+2025-07-24 16:40:34,078 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:40:34,082 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:40:34,084 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:40:36,352 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:42:04,113 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:43:36,090 - watchfiles.main - INFO - 1 change detected
+2025-07-24 16:44:05,484 - watchfiles.main - INFO - 1 change detected
+2025-07-24 16:46:44,350 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 16:46:51,020 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 17:04:45,954 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:04:48,103 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 17:06:11,491 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:09:30,432 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 17:09:31,591 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 17:09:42,144 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 17:09:43,723 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 17:09:47,112 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 17:20:56,043 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:21:07,002 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:21:21,639 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:25:26,740 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 17:28:53,148 - watchfiles.main - INFO - 2 changes detected
+2025-07-24 17:28:53,347 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 17:28:53,349 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 17:28:55,552 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:29:02,857 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 17:29:02,861 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 17:29:02,864 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 17:29:02,864 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:29:02,864 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:29:02,864 - main - INFO - ✅ 系统启动完成
+2025-07-24 17:29:06,945 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:29:07,112 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 17:29:07,112 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 17:29:12,463 - watchfiles.main - INFO - 7 changes detected
+2025-07-24 17:29:12,904 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 17:29:12,905 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 17:29:12,906 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 17:29:12,906 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:29:12,906 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:29:12,906 - main - INFO - ✅ 系统启动完成
+2025-07-24 17:29:15,341 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:29:15,531 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 17:29:15,531 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 17:29:20,516 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 17:29:20,562 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 17:29:20,563 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 17:29:20,565 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 17:29:20,565 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:29:20,565 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:29:20,565 - main - INFO - ✅ 系统启动完成
+2025-07-24 17:29:45,380 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:29:45,613 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 17:29:45,614 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 17:29:51,898 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 17:29:51,969 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 17:29:51,971 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 17:29:51,973 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 17:29:51,973 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:29:51,973 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:29:51,973 - main - INFO - ✅ 系统启动完成
+2025-07-24 17:29:56,374 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:29:56,522 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 17:29:56,522 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 17:30:43,934 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:30:49,422 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 17:30:49,424 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 17:30:49,426 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 17:30:49,426 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:30:49,426 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:30:49,426 - main - INFO - ✅ 系统启动完成
+2025-07-24 17:30:49,564 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 17:31:01,022 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:31:01,146 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 17:31:01,146 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 17:31:07,429 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 17:31:07,451 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 17:31:07,453 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 17:31:07,454 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 17:31:07,454 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:31:07,454 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:31:07,454 - main - INFO - ✅ 系统启动完成
+2025-07-24 17:33:26,776 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 17:33:27,452 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 17:44:20,341 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 17:47:29,271 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:47:29,402 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 17:47:29,403 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 17:47:31,856 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:47:37,586 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 17:47:37,588 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 17:47:37,590 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 17:47:37,590 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:47:37,590 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:47:37,590 - main - INFO - ✅ 系统启动完成
+2025-07-24 17:48:27,500 - watchfiles.main - INFO - 1 change detected
+2025-07-24 17:48:27,644 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 17:48:27,644 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 17:48:28,036 - watchfiles.main - INFO - 6 changes detected
+2025-07-24 17:48:34,226 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 17:48:34,227 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 17:48:34,228 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 17:48:34,228 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:48:34,228 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:48:34,228 - main - INFO - ✅ 系统启动完成
+2025-07-24 17:50:34,669 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 17:53:47,783 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 17:54:02,553 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 17:54:03,585 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 17:54:13,659 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 17:54:13,660 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 17:54:22,757 - __main__ - INFO - 🔥 启动开发服务器...
+2025-07-24 17:54:28,482 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 17:54:28,482 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 17:54:28,486 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 17:54:28,486 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:54:28,486 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 17:54:28,486 - main - INFO - ✅ 系统启动完成
+2025-07-24 17:55:02,184 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:02,194 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:02,701 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:02,908 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:03,113 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:03,319 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:03,524 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:03,729 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:03,934 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:04,138 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:04,344 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:04,549 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:04,707 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:04,863 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:05,030 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:05,187 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:05,342 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:05,496 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:05,653 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:05,809 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:05,965 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:06,237 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:06,339 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:06,442 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:06,547 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:06,654 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:06,759 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:06,865 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:06,969 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:07,076 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:07,180 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:07,283 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:07,366 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:07,455 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:07,540 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:07,626 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:07,711 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:07,796 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:07,882 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:07,968 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,055 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,139 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,203 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,266 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,329 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,393 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,457 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,524 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,589 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,655 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,720 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,786 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,892 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:08,998 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:09,105 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:09,211 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:09,316 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:09,423 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:09,528 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:09,634 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:09,740 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:09,843 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:09,949 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:10,055 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:10,160 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:10,265 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:10,369 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:10,474 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:10,579 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:10,683 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:10,788 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:10,945 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:11,103 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:11,259 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:11,414 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:11,571 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:11,726 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:11,882 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:12,039 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:12,193 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:12,349 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:12,506 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:12,662 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:12,817 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:12,973 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:13,127 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:13,331 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:13,536 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:13,742 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:13,947 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:14,153 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:14,358 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:14,666 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:14,973 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:15,280 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:15,585 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:15,892 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:16,197 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:16,502 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:55:16,808 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:56:31,910 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 17:56:31,924 - src.persistence.optimal_manager - INFO - ✅ Redis缓存保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:56:31,926 - src.persistence.optimal_manager - INFO - ✅ 文件备份成功: data/analysis_results/resume_analysis_20250724_175502_-4256331747599923135.json
+2025-07-24 17:56:31,928 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:56:31,929 - src.persistence.optimal_manager - INFO - ✅ 数据库保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:56:31,931 - src.persistence.optimal_manager - INFO - ✅ 任务信息保存成功: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 17:56:32,462 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 18:08:12,805 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 18:08:14,929 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 18:08:24,430 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 18:09:51,171 - watchfiles.main - INFO - 1 change detected
+2025-07-24 18:09:51,362 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 18:09:51,363 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 18:09:58,384 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 18:09:58,422 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 18:09:58,423 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 18:09:58,426 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 18:09:58,426 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 18:09:58,426 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 18:09:58,426 - main - INFO - ✅ 系统启动完成
+2025-07-24 18:10:35,617 - src.database.chroma_manager - ERROR - 搜索题目失败: Expected where to have exactly one operator, got {'difficulty': {'$eq': 2}, 'type': {'$eq': 'tech_basic'}, 'has_answer': {'$eq': 'yes'}} in query.
+2025-07-24 18:11:14,143 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 18:12:04,054 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 18:12:09,679 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 18:28:28,792 - src.database.chroma_manager - ERROR - 搜索题目失败: Expected where to have exactly one operator, got {'difficulty': {'$eq': 2}, 'type': {'$in': ['tech_basic', 'project_experience']}, 'has_answer': {'$eq': 'yes'}} in query.
+2025-07-24 18:29:18,044 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 18:37:25,157 - watchfiles.main - INFO - 1 change detected
+2025-07-24 18:37:42,190 - watchfiles.main - INFO - 1 change detected
+2025-07-24 18:38:42,906 - watchfiles.main - INFO - 1 change detected
+2025-07-24 18:45:57,185 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 18:45:58,649 - src.database.chroma_manager - ERROR - 搜索题目失败: Expected where to have exactly one operator, got {'difficulty': {'$eq': 2}, 'type': {'$in': ['tech_basic', 'project_experience']}, 'has_answer': {'$eq': 'yes'}} in query.
+2025-07-24 18:46:55,189 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 19:00:33,332 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:00:33,491 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 19:00:33,491 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 19:00:41,332 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 19:00:41,414 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 19:00:41,416 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 19:00:41,421 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 19:00:41,421 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:00:41,421 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:00:41,421 - main - INFO - ✅ 系统启动完成
+2025-07-24 19:01:12,858 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 19:04:43,232 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 19:05:19,857 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 19:05:53,090 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:08:06,346 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:08:06,550 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 19:08:06,550 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 19:08:14,701 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 19:08:14,780 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 19:08:14,781 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 19:08:14,784 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 19:08:14,785 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:08:14,785 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:08:14,785 - main - INFO - ✅ 系统启动完成
+2025-07-24 19:08:48,373 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:08:48,524 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 19:08:48,524 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 19:08:54,584 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 19:08:54,598 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 19:08:54,599 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 19:08:54,600 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 19:08:54,601 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:08:54,601 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:08:54,601 - main - INFO - ✅ 系统启动完成
+2025-07-24 19:09:17,347 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:09:44,103 - watchfiles.main - INFO - 4 changes detected
+2025-07-24 19:09:44,225 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 19:09:44,225 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 19:09:50,559 - watchfiles.main - INFO - 6 changes detected
+2025-07-24 19:09:50,605 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 19:09:50,607 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 19:09:50,608 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 19:09:50,608 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:09:50,608 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:09:50,608 - main - INFO - ✅ 系统启动完成
+2025-07-24 19:11:34,610 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:11:34,713 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 19:11:34,713 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 19:11:41,087 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 19:11:41,138 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 19:11:41,139 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 19:11:41,140 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 19:11:41,140 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:11:41,140 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:11:41,140 - main - INFO - ✅ 系统启动完成
+2025-07-24 19:11:46,737 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:11:46,906 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 19:11:46,907 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 19:11:52,922 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 19:11:52,962 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 19:11:52,962 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 19:11:52,964 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 19:11:52,964 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:11:52,964 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:11:52,964 - main - INFO - ✅ 系统启动完成
+2025-07-24 19:12:00,358 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:12:00,545 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 19:12:00,546 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 19:12:06,180 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 19:12:06,181 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 19:12:06,182 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 19:12:06,182 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:12:06,182 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:12:06,182 - main - INFO - ✅ 系统启动完成
+2025-07-24 19:12:06,224 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 19:12:08,585 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:12:08,705 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 19:12:08,705 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 19:12:13,917 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 19:12:13,951 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 19:12:13,951 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 19:12:13,953 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 19:12:13,953 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:12:13,953 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:12:13,953 - main - INFO - ✅ 系统启动完成
+2025-07-24 19:12:29,223 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:12:29,417 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 19:12:29,417 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 19:12:35,792 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 19:12:35,824 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 19:12:35,825 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 19:12:35,827 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 19:12:35,827 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:12:35,827 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:12:35,827 - main - INFO - ✅ 系统启动完成
+2025-07-24 19:12:47,465 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:12:56,936 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:12:57,048 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 19:12:57,048 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 19:13:03,331 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 19:13:03,339 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 19:13:03,340 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 19:13:03,341 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 19:13:03,341 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:13:03,341 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:13:03,341 - main - INFO - ✅ 系统启动完成
+2025-07-24 19:13:06,325 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:13:06,475 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 19:13:06,475 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 19:13:11,837 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 19:13:11,906 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 19:13:11,906 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 19:13:11,908 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 19:13:11,908 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:13:11,908 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 19:13:11,908 - main - INFO - ✅ 系统启动完成
+2025-07-24 19:13:14,341 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:13:58,727 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 19:27:25,465 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 19:27:58,676 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 19:29:50,315 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:30:04,968 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:30:19,799 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:30:28,564 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:30:39,810 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:30:47,477 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:30:58,442 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:31:14,627 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:31:25,554 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:31:37,790 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:31:53,031 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:35:33,857 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 19:46:30,433 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:46:39,621 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:46:51,398 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:47:15,954 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:47:24,926 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:47:34,456 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:48:03,088 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:57:53,070 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:58:19,907 - watchfiles.main - INFO - 1 change detected
+2025-07-24 19:58:39,510 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:00:13,438 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:00:25,846 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:00:38,684 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:00:47,271 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:06:17,986 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:08:38,541 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:09:26,942 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:09:48,633 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:11:15,750 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:11:31,954 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:13:43,350 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:13:43,526 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 20:13:43,527 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 20:13:51,559 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 20:13:51,661 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 20:13:51,663 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 20:13:51,665 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 20:13:51,665 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 20:13:51,665 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 20:13:51,665 - main - INFO - ✅ 系统启动完成
+2025-07-24 20:13:54,626 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:13:54,798 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 20:13:54,798 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 20:13:59,686 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 20:13:59,687 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 20:13:59,688 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 20:13:59,689 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 20:13:59,689 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 20:13:59,689 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 20:13:59,689 - main - INFO - ✅ 系统启动完成
+2025-07-24 20:14:13,647 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:14:13,835 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 20:14:13,835 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 20:14:18,597 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 20:14:18,629 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 20:14:18,630 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 20:14:18,631 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 20:14:18,631 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 20:14:18,631 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 20:14:18,631 - main - INFO - ✅ 系统启动完成
+2025-07-24 20:14:30,107 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:14:30,250 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 20:14:30,251 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 20:14:35,058 - watchfiles.main - INFO - 3 changes detected
+2025-07-24 20:14:35,087 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 20:14:35,088 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 20:14:35,090 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 20:14:35,090 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 20:14:35,090 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 20:14:35,090 - main - INFO - ✅ 系统启动完成
+2025-07-24 20:14:48,598 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:15:07,558 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:15:54,354 - watchfiles.main - INFO - 1 change detected
+2025-07-24 20:22:32,439 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_175502_-4256331747599923135
+2025-07-24 20:22:51,875 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 20:22:53,891 - src.persistence.optimal_manager - INFO - ✅ 从Redis缓存获取: resume_analysis_20250724_163842_-7761170248912117914
+2025-07-24 20:23:49,498 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 20:24:49,022 - httpx - INFO - HTTP Request: POST https://spark-api-open.xf-yun.com/v2/chat/completions "HTTP/1.1 200 OK"
+2025-07-24 20:59:53,875 - watchfiles.main - INFO - 1 change detected
+2025-07-24 21:06:08,203 - watchfiles.main - INFO - 1 change detected
+2025-07-24 21:06:08,395 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 21:06:08,395 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 21:06:11,030 - watchfiles.main - INFO - 1 change detected
+2025-07-24 21:06:16,965 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 21:06:16,967 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 21:06:16,968 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 21:06:16,968 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 21:06:16,968 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 21:06:16,968 - main - INFO - ✅ 系统启动完成
+2025-07-24 21:07:23,610 - watchfiles.main - INFO - 1 change detected
+2025-07-24 21:07:23,749 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 21:07:23,749 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 21:07:26,530 - watchfiles.main - INFO - 1 change detected
+2025-07-24 21:07:32,098 - main - INFO - 🚀 职面星火系统正在启动...
+2025-07-24 21:07:32,099 - src.persistence.optimal_manager - INFO - ✅ 数据库表结构初始化完成
+2025-07-24 21:07:32,100 - src.persistence.optimal_manager - INFO - ✅ Redis连接成功
+2025-07-24 21:07:32,100 - src.persistence.optimal_manager - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 21:07:32,100 - main - INFO - ✅ 持久化管理器初始化完成
+2025-07-24 21:07:32,100 - main - INFO - ✅ 系统启动完成
+2025-07-24 21:09:09,303 - watchfiles.main - INFO - 1 change detected
+2025-07-24 21:09:09,481 - main - INFO - 🛑 系统正在关闭...
+2025-07-24 21:09:09,482 - main - INFO - ✅ 持久化管理器已关闭
+2025-07-24 21:09:12,212 - watchfiles.main - INFO - 1 change detected
+2025-07-24 21:09:17,866 - watchfiles.main - INFO - 6 changes detected

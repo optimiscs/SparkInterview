@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用户注册 - 职面星火</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#2196F3',secondary:'#FF5722'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: "Noto Sans SC", "Roboto", sans-serif;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+.register-bg {
+background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+}
+.password-toggle {
+cursor: pointer;
+transition: color 0.3s;
+}
+.password-toggle:hover {
+color: #2196F3;
+}
+.strength-bar {
+height: 4px;
+border-radius: 2px;
+transition: all 0.3s;
+}
+.strength-weak { background-color: #ef4444; width: 33%; }
+.strength-medium { background-color: #f59e0b; width: 66%; }
+.strength-strong { background-color: #10b981; width: 100%; }
+
+/* 弹窗动画 */
+.modal-enter {
+animation: modalEnter 0.3s ease-out;
+}
+.modal-exit {
+animation: modalExit 0.3s ease-in;
+}
+@keyframes modalEnter {
+from {
+opacity: 0;
+transform: translateY(-20px) scale(0.9);
+}
+to {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+}
+@keyframes modalExit {
+from {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+to {
+opacity: 0;
+transform: translateY(-20px) scale(0.9);
+}
+}
+</style>
+</head>
+<body class="register-bg min-h-screen">
+
+<!-- 成功/失败弹窗 -->
+<div id="result-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+<div id="modal-content" class="bg-white rounded-lg p-8 relative max-w-sm w-full mx-4">
+<div class="text-center">
+<!-- 成功状态 -->
+<div id="success-content" class="hidden">
+<div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-green-100 rounded-full">
+<i class="ri-check-line text-green-500 text-3xl"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">注册成功！</h3>
+<p class="text-gray-600 mb-6">您的账户已创建成功，即将跳转到登录页面</p>
+<div class="flex justify-center">
+<div class="flex items-center text-primary">
+<i class="ri-loader-4-line animate-spin mr-2"></i>
+<span class="text-sm">正在跳转...</span>
+</div>
+</div>
+</div>
+
+<!-- 失败状态 -->
+<div id="error-content" class="hidden">
+<div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-red-100 rounded-full">
+<i class="ri-close-line text-red-500 text-3xl"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">注册失败</h3>
+<p id="error-message-text" class="text-gray-600 mb-6">注册过程中出现错误，请稍后重试</p>
+<button id="close-error-modal" class="w-full bg-primary text-white py-3 px-4 rounded-button hover:bg-opacity-90 transition-colors font-medium">
+确定
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="min-h-screen flex flex-col">
+<header class="bg-white shadow-sm">
+<div class="container mx-auto px-4 py-3 flex justify-between items-center">
+<div class="flex items-center">
+    <img src="../static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
+<span class="ml-2 text-lg font-medium">职面星火</span>
+</div>
+<div class="flex items-center">
+<a href="/frontend/login.html" data-readdy="true" class="text-gray-700 hover:text-primary transition-colors px-4 py-2 rounded-button whitespace-nowrap">
+<div class="w-5 h-5 flex items-center justify-center mr-2 inline-block">
+<i class="ri-arrow-left-line"></i>
+</div>
+返回登录
+</a>
+</div>
+</div>
+</header>
+<div class="flex-1 flex items-center justify-center px-4 py-12">
+<div class="w-full max-w-md">
+<div class="bg-white rounded-lg shadow-lg p-8">
+<div class="text-center mb-8">
+<h1 class="text-2xl font-bold text-gray-900 mb-2">用户注册</h1>
+<p class="text-gray-600">创建新账户开始使用</p>
+</div>
+<form class="space-y-6">
+<div id="error-message" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-button text-sm">
+</div>
+<div>
+<label for="email" class="block text-sm font-medium text-gray-700 mb-2">邮箱地址</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-mail-line text-gray-400"></i>
+</div>
+</div>
+<input type="email" id="email" name="email" required
+class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+placeholder="请输入您的邮箱地址">
+</div>
+<div id="email-error" class="hidden text-red-600 text-xs mt-1"></div>
+</div>
+<div>
+<label for="username" class="block text-sm font-medium text-gray-700 mb-2">用户名</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-user-line text-gray-400"></i>
+</div>
+</div>
+<input type="text" id="username" name="username" required
+class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+placeholder="请输入用户名（3-20个字符）">
+</div>
+<div id="username-error" class="hidden text-red-600 text-xs mt-1"></div>
+</div>
+<div>
+<label for="password" class="block text-sm font-medium text-gray-700 mb-2">密码</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-lock-line text-gray-400"></i>
+</div>
+</div>
+<input type="password" id="password" name="password" required
+class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+placeholder="请输入密码（至少6位，包含字母和数字）">
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+<div class="w-5 h-5 flex items-center justify-center password-toggle" onclick="togglePassword('password')">
+<i class="ri-eye-off-line text-gray-400" id="password-toggle-icon"></i>
+</div>
+</div>
+</div>
+<div class="mt-2">
+<div class="flex justify-between items-center mb-1">
+<span class="text-xs text-gray-500">密码强度</span>
+<span id="strength-text" class="text-xs text-gray-500">弱</span>
+</div>
+<div class="w-full bg-gray-200 rounded-full h-1">
+<div id="strength-bar" class="strength-bar bg-gray-300"></div>
+</div>
+</div>
+<div id="password-error" class="hidden text-red-600 text-xs mt-1"></div>
+</div>
+<div>
+<label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-2">确认密码</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-lock-line text-gray-400"></i>
+</div>
+</div>
+<input type="password" id="confirm-password" name="confirm-password" required
+class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+placeholder="请再次输入密码">
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+<div class="w-5 h-5 flex items-center justify-center password-toggle" onclick="togglePassword('confirm-password')">
+<i class="ri-eye-off-line text-gray-400" id="confirm-password-toggle-icon"></i>
+</div>
+</div>
+</div>
+<div id="confirm-password-error" class="hidden text-red-600 text-xs mt-1"></div>
+</div>
+<button type="submit" id="register-btn"
+class="w-full bg-primary text-white py-3 px-4 rounded-button hover:bg-opacity-90 transition-colors font-medium !rounded-button whitespace-nowrap">
+<span id="register-text">注册</span>
+<span id="register-loading" class="hidden">
+<div class="w-5 h-5 flex items-center justify-center mr-2 inline-block">
+<i class="ri-loader-4-line animate-spin"></i>
+</div>
+注册中...
+</span>
+</button>
+<div class="text-center">
+<span class="text-gray-600 text-sm">已有账户？</span>
+<a href="/frontend/login.html" data-readdy="true" class="text-primary hover:text-opacity-80 transition-colors text-sm font-medium ml-1">返回登录</a>
+</div>
+</form>
+</div>
+</div>
+</div>
+<footer class="bg-white border-t border-gray-200 py-6">
+<div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+<p>© 2025 职面星火 版权所有 | 京ICP备12345678号</p>
+</div>
+</footer>
+</div>
+
+<script id="modal-functions">
+function showSuccessModal() {
+const modal = document.getElementById('result-modal');
+const modalContent = document.getElementById('modal-content');
+const successContent = document.getElementById('success-content');
+const errorContent = document.getElementById('error-content');
+
+// 显示成功内容，隐藏错误内容
+successContent.classList.remove('hidden');
+errorContent.classList.add('hidden');
+
+// 显示弹窗
+modal.classList.remove('hidden');
+modalContent.classList.add('modal-enter');
+document.body.style.overflow = 'hidden';
+
+// 3秒后自动跳转
+setTimeout(() => {
+window.location.href = '/frontend/login.html';
+}, 3000);
+}
+
+function showErrorModal(message) {
+const modal = document.getElementById('result-modal');
+const modalContent = document.getElementById('modal-content');
+const successContent = document.getElementById('success-content');
+const errorContent = document.getElementById('error-content');
+const errorMessageText = document.getElementById('error-message-text');
+
+// 设置错误消息
+errorMessageText.textContent = message;
+
+// 显示错误内容，隐藏成功内容
+errorContent.classList.remove('hidden');
+successContent.classList.add('hidden');
+
+// 显示弹窗
+modal.classList.remove('hidden');
+modalContent.classList.add('modal-enter');
+document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+const modal = document.getElementById('result-modal');
+const modalContent = document.getElementById('modal-content');
+
+modalContent.classList.remove('modal-enter');
+modalContent.classList.add('modal-exit');
+
+setTimeout(() => {
+modal.classList.add('hidden');
+modalContent.classList.remove('modal-exit');
+document.body.style.overflow = '';
+}, 300);
+}
+
+// 绑定关闭按钮事件
+document.getElementById('close-error-modal').addEventListener('click', closeModal);
+
+// 点击背景关闭弹窗
+document.getElementById('result-modal').addEventListener('click', function(e) {
+if (e.target === this) {
+closeModal();
+}
+});
+</script>
+
+<script id="password-toggle-script">
+function togglePassword(inputId) {
+const passwordInput = document.getElementById(inputId);
+const toggleIcon = document.getElementById(inputId + '-toggle-icon');
+if (passwordInput.type === 'password') {
+passwordInput.type = 'text';
+toggleIcon.className = 'ri-eye-line text-gray-400';
+} else {
+passwordInput.type = 'password';
+toggleIcon.className = 'ri-eye-off-line text-gray-400';
+}
+}
+</script>
+
+<script id="password-strength-script">
+document.addEventListener('DOMContentLoaded', function() {
+const passwordInput = document.getElementById('password');
+const strengthBar = document.getElementById('strength-bar');
+const strengthText = document.getElementById('strength-text');
+
+function checkPasswordStrength(password) {
+let strength = 0;
+if (password.length >= 6) strength++;
+if (/[a-z]/.test(password)) strength++;
+if (/[A-Z]/.test(password)) strength++;
+if (/[0-9]/.test(password)) strength++;
+if (/[^A-Za-z0-9]/.test(password)) strength++;
+return strength;
+}
+
+passwordInput.addEventListener('input', function() {
+const password = this.value;
+const strength = checkPasswordStrength(password);
+
+strengthBar.className = 'strength-bar';
+
+if (password.length === 0) {
+strengthBar.classList.add('bg-gray-300');
+strengthText.textContent = '弱';
+} else if (strength <= 2) {
+strengthBar.classList.add('strength-weak');
+strengthText.textContent = '弱';
+} else if (strength <= 3) {
+strengthBar.classList.add('strength-medium');
+strengthText.textContent = '中';
+} else {
+strengthBar.classList.add('strength-strong');
+strengthText.textContent = '强';
+}
+});
+});
+</script>
+
+<script id="form-validation-script">
+document.addEventListener('DOMContentLoaded', function() {
+const form = document.querySelector('form');
+const emailInput = document.getElementById('email');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const confirmPasswordInput = document.getElementById('confirm-password');
+const emailError = document.getElementById('email-error');
+const usernameError = document.getElementById('username-error');
+const passwordError = document.getElementById('password-error');
+const confirmPasswordError = document.getElementById('confirm-password-error');
+const errorMessage = document.getElementById('error-message');
+const registerBtn = document.getElementById('register-btn');
+const registerText = document.getElementById('register-text');
+const registerLoading = document.getElementById('register-loading');
+
+function validateEmail(email) {
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+return emailRegex.test(email);
+}
+
+function validateUsername(username) {
+return username.length >= 3 && username.length <= 20;
+}
+
+function validatePassword(password) {
+const hasLetter = /[a-zA-Z]/.test(password);
+const hasNumber = /[0-9]/.test(password);
+return password.length >= 6 && hasLetter && hasNumber;
+}
+
+function showError(element, message) {
+element.textContent = message;
+element.classList.remove('hidden');
+}
+
+function hideError(element) {
+element.classList.add('hidden');
+}
+
+function showFormError(message) {
+errorMessage.textContent = message;
+errorMessage.classList.remove('hidden');
+}
+
+function hideFormError() {
+errorMessage.classList.add('hidden');
+}
+
+emailInput.addEventListener('blur', function() {
+const email = this.value.trim();
+if (!email) {
+showError(emailError, '请输入邮箱地址');
+} else if (!validateEmail(email)) {
+showError(emailError, '请输入有效的邮箱地址');
+} else {
+hideError(emailError);
+}
+});
+
+usernameInput.addEventListener('blur', function() {
+const username = this.value.trim();
+if (!username) {
+showError(usernameError, '请输入用户名');
+} else if (!validateUsername(username)) {
+showError(usernameError, '用户名长度需要在3-20个字符之间');
+} else {
+hideError(usernameError);
+}
+});
+
+passwordInput.addEventListener('blur', function() {
+const password = this.value;
+if (!password) {
+showError(passwordError, '请输入密码');
+} else if (!validatePassword(password)) {
+showError(passwordError, '密码至少6位，需包含字母和数字');
+} else {
+hideError(passwordError);
+}
+});
+
+confirmPasswordInput.addEventListener('blur', function() {
+const password = passwordInput.value;
+const confirmPassword = this.value;
+if (!confirmPassword) {
+showError(confirmPasswordError, '请确认密码');
+} else if (password !== confirmPassword) {
+showError(confirmPasswordError, '两次输入的密码不一致');
+} else {
+hideError(confirmPasswordError);
+}
+});
+
+form.addEventListener('submit', async function(e) {
+e.preventDefault();
+hideFormError();
+
+const email = emailInput.value.trim();
+const username = usernameInput.value.trim();
+const password = passwordInput.value;
+const confirmPassword = confirmPasswordInput.value;
+
+let hasError = false;
+
+if (!email) {
+showError(emailError, '请输入邮箱地址');
+hasError = true;
+} else if (!validateEmail(email)) {
+showError(emailError, '请输入有效的邮箱地址');
+hasError = true;
+} else {
+hideError(emailError);
+}
+
+if (!username) {
+showError(usernameError, '请输入用户名');
+hasError = true;
+} else if (!validateUsername(username)) {
+showError(usernameError, '用户名长度需要在3-20个字符之间');
+hasError = true;
+} else {
+hideError(usernameError);
+}
+
+if (!password) {
+showError(passwordError, '请输入密码');
+hasError = true;
+} else if (!validatePassword(password)) {
+showError(passwordError, '密码至少6位，需包含字母和数字');
+hasError = true;
+} else {
+hideError(passwordError);
+}
+
+if (!confirmPassword) {
+showError(confirmPasswordError, '请确认密码');
+hasError = true;
+} else if (password !== confirmPassword) {
+showError(confirmPasswordError, '两次输入的密码不一致');
+hasError = true;
+} else {
+hideError(confirmPasswordError);
+}
+
+if (!hasError) {
+registerText.classList.add('hidden');
+registerLoading.classList.remove('hidden');
+registerBtn.disabled = true;
+
+try {
+const resp = await fetch('/api/v1/register', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ name: username, email, password })
+});
+
+if (resp.ok) {
+const result = await resp.json();
+showSuccessModal();
+} else {
+const err = await resp.json();
+showErrorModal(err.detail || err.message || '注册失败');
+}
+} catch (err) {
+showErrorModal('网络错误，请稍后重试');
+} finally {
+registerText.classList.remove('hidden');
+registerLoading.classList.add('hidden');
+registerBtn.disabled = false;
+}
+}
+});
+});
+</script>
+
+<script id="input-focus-effects">
+document.addEventListener('DOMContentLoaded', function() {
+const inputs = document.querySelectorAll('input[type="email"], input[type="text"], input[type="password"]');
+inputs.forEach(input => {
+input.addEventListener('focus', function() {
+this.parentElement.classList.add('ring-2', 'ring-primary');
+});
+input.addEventListener('blur', function() {
+this.parentElement.classList.remove('ring-2', 'ring-primary');
+});
+});
+});
+</script>
+</body>
+</html>

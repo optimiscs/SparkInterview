@@ -308,14 +308,26 @@ def analyze_resume_comprehensive(text: str, domain: str, position: str, experien
         return {}
 
 async def process_resume_analysis_persist(file_path: str, task_id: str, domain: str, position: str, experience: str):
-    """异步处理简历分析 - 优化版本，一次模型调用完成所有分析"""
+    """异步处理简历分析 - 带模拟进度更新，1%-99%为模拟进度，100%为真实结果"""
     try:
-        await persistence_manager.save_task(task_id, status='processing', progress=10)
+        # 初始化任务
+        await persistence_manager.save_task(task_id, status='processing', progress=1)
         print(f"🚀 开始处理简历分析任务: {task_id}")
         print(f"📋 目标岗位: {domain} - {position} - {experience}")
+        await asyncio.sleep(0.5)  # 模拟初始化时间
         
-        # PDF加载
+        # 模拟进度更新：任务初始化阶段 (1-10%)
+        for progress in range(2, 11):
+            await persistence_manager.save_task(task_id, status='processing', progress=progress)
+            await asyncio.sleep(0.2)
+        print(f"📊 任务初始化完成: 10%")
+        
+        # PDF加载阶段 (10-30%)
         print(f"📄 正在加载PDF文件: {file_path}")
+        for progress in range(11, 21):
+            await persistence_manager.save_task(task_id, status='processing', progress=progress)
+            await asyncio.sleep(0.15)
+        
         try:
             loader = UnstructuredPDFLoader(file_path)
             docs = loader.load()
@@ -325,10 +337,26 @@ async def process_resume_analysis_persist(file_path: str, task_id: str, domain: 
             docs = loader.load()
             print(f"✅ 使用PyPDFLoader加载完成，共 {len(docs)} 页")
         
-        # 合并所有页面的文本
+        # 继续PDF加载进度 (20-30%)
+        for progress in range(21, 31):
+            await persistence_manager.save_task(task_id, status='processing', progress=progress)
+            await asyncio.sleep(0.1)
+        print(f"📊 PDF加载完成: 30%")
+        
+        # 文本合并阶段 (30-50%)
         print(f"📝 正在合并文本内容...")
+        for progress in range(31, 41):
+            await persistence_manager.save_task(task_id, status='processing', progress=progress)
+            await asyncio.sleep(0.08)
+        
         full_text = "\n".join([doc.page_content for doc in docs])
         print(f"✅ 文本合并完成，总长度: {len(full_text)} 字符")
+        
+        # 继续文本处理进度 (40-50%)
+        for progress in range(41, 51):
+            await persistence_manager.save_task(task_id, status='processing', progress=progress)
+            await asyncio.sleep(0.06)
+        print(f"📊 文本处理完成: 50%")
         
         # 打印PDF解析结果（大模型的输入）
         print(f"📄 PDF解析结果（大模型输入）:")
@@ -336,8 +364,28 @@ async def process_resume_analysis_persist(file_path: str, task_id: str, domain: 
         print(full_text)
         print(f"{'='*50}")
         
-        # 调用大模型
+        # 大模型分析准备阶段 (50-90%)
         print(f"🤖 开始调用Spark Pro模型进行综合分析...")
+        for progress in range(51, 91):
+            await persistence_manager.save_task(task_id, status='processing', progress=progress)
+            if progress < 70:
+                await asyncio.sleep(0.1)  # 前期较快
+            elif progress < 85:
+                await asyncio.sleep(0.15)  # 中期适中
+            else:
+                await asyncio.sleep(0.2)   # 后期较慢，模拟复杂分析
+        print(f"📊 大模型分析准备完成: 90%")
+        
+        # 最终分析阶段 (90-99%)
+        for progress in range(91, 99):
+            await persistence_manager.save_task(task_id, status='processing', progress=progress)
+            await asyncio.sleep(0.3)  # 模拟最终分析时间
+        
+        await persistence_manager.save_task(task_id, status='processing', progress=99)
+        print(f"📊 即将完成分析: 99%")
+        
+        # 🚀 真正调用大模型获取结果
+        print(f"🎯 开始真实的大模型分析调用...")
         analysis_result = await asyncio.to_thread(
             analyze_resume_comprehensive, 
             full_text, 
@@ -346,7 +394,7 @@ async def process_resume_analysis_persist(file_path: str, task_id: str, domain: 
             experience
         )
         
-        # 保存分析结果到持久化
+        # 保存分析结果到持久化，设置为100%完成
         await persistence_manager.save_analysis_result(task_id, analysis_result)
         await persistence_manager.save_task(task_id, status='completed', progress=100)
         
@@ -417,6 +465,8 @@ async def upload_resume(
 @router.get("/status/{task_id}")
 async def get_analysis_status(task_id: str):
     """获取分析状态"""
+    # 注意：这里暂时不做用户权限检查，因为taskId本身就是唯一且难以猜测的
+    # 在实际生产环境中，应该添加用户权限验证
     status = await persistence_manager.get_task_status(task_id)
     if not status:
         raise HTTPException(status_code=404, detail="任务不存在")

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>技术能力测试 - 智能面试评分系统</title>
+<title>技术能力测试 - 职面星火</title>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
 <script>tailwind.config={theme:{extend:{colors:{primary:'#2196F3',secondary:'#FF5722'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,6 +46,54 @@ border-radius: 3px;
 background: #a1a1a1;
 }
 </style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const token = localStorage.getItem('access_token');
+  if (!token) {
+    window.location.href = '/frontend/login.html';
+    return;
+  }
+  
+  // 获取用户信息
+  fetchAndShowUserInfo();
+});
+
+async function fetchAndShowUserInfo() {
+  const token = localStorage.getItem('access_token');
+  if (!token) return;
+  
+  try {
+    const resp = await fetch('/api/v1/profile', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    
+    if (!resp.ok) {
+      throw new Error('获取用户信息失败');
+    }
+    
+    const user = await resp.json();
+    const userInfoDiv = document.getElementById('user-info');
+    
+    if (userInfoDiv) {
+      userInfoDiv.innerHTML = `
+        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center overflow-hidden">
+          ${user.avatar_url ? 
+            `<img src="${user.avatar_url}" class="w-full h-full object-cover" alt="头像">` : 
+            `<i class="ri-user-line text-white"></i>`}
+        </div>
+        <div class="ml-2">
+          <p class="text-sm font-medium text-gray-900">${user.name || '未知用户'}</p>
+          <p class="text-xs text-gray-500">${user.role === 'admin' ? '管理员' : user.role === 'teacher' ? '教师' : '学生'}</p>
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error('获取用户信息失败:', error);
+    localStorage.removeItem('access_token');
+    window.location.href = '/frontend/login.html';
+  }
+}
+</script>
 </head>
 <body class="min-h-screen">
 <!-- 顶部导航栏 -->
@@ -54,7 +102,7 @@ background: #a1a1a1;
   <div class="flex justify-between items-center h-16">
   <a href="assessment-options.html" class="flex items-center">
     <img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
-    <p class="text-sm text-gray-600 ml-2">职面星火</p>
+    <p class="ml-2 text-lg font-medium">职面星火</p>
   </a>
   <nav class="flex space-x-8">
   <a href="../index.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
@@ -88,13 +136,13 @@ background: #a1a1a1;
   个人中心
   </a>
   </nav>
-  <div class="flex items-center">
+  <div id="user-info" class="flex items-center">
   <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
   <i class="ri-user-line text-white"></i>
   </div>
   <div class="ml-2">
-  <p class="text-sm font-medium text-gray-900">李明华</p>
-  <p class="text-xs text-gray-500">高级用户</p>
+  <p class="text-sm font-medium text-gray-900">加载中...</p>
+  <p class="text-xs text-gray-500">请稍候</p>
   </div>
   </div>
   </div>

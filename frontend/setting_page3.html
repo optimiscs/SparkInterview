@@ -130,6 +130,54 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 transform: translateX(1.5rem);
 }
 </style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const token = localStorage.getItem('access_token');
+  if (!token) {
+    window.location.href = '/frontend/login.html';
+    return;
+  }
+  
+  // 获取用户信息
+  fetchAndShowUserInfo();
+});
+
+async function fetchAndShowUserInfo() {
+  const token = localStorage.getItem('access_token');
+  if (!token) return;
+  
+  try {
+    const resp = await fetch('/api/v1/profile', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    
+    if (!resp.ok) {
+      throw new Error('获取用户信息失败');
+    }
+    
+    const user = await resp.json();
+    const userInfoDiv = document.getElementById('user-info');
+    
+    if (userInfoDiv) {
+      userInfoDiv.innerHTML = `
+        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center overflow-hidden">
+          ${user.avatar_url ? 
+            `<img src="${user.avatar_url}" class="w-full h-full object-cover" alt="头像">` : 
+            `<i class="ri-user-line text-white"></i>`}
+        </div>
+        <div class="ml-2">
+          <p class="text-sm font-medium text-gray-900">${user.name || '未知用户'}</p>
+          <p class="text-xs text-gray-500">${user.role === 'admin' ? '管理员' : user.role === 'teacher' ? '教师' : '学生'}</p>
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error('获取用户信息失败:', error);
+    localStorage.removeItem('access_token');
+    window.location.href = '/frontend/login.html';
+  }
+}
+</script>
 </head>
 <body class="bg-gray-50 min-h-screen">
 <div class="flex h-screen flex-col">
@@ -140,7 +188,7 @@ transform: translateX(1.5rem);
   <div class="flex justify-between items-center h-16">
   <a href="assessment-options.html" class="flex items-center">
     <img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
-    <p class="text-sm text-gray-600 ml-2">职面星火</p>
+    <p class="ml-2 text-lg font-medium">职面星火</p>
   </a>
   <nav class="flex space-x-8">
   <a href="../index.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
@@ -174,13 +222,13 @@ transform: translateX(1.5rem);
   个人中心
   </a>
   </nav>
-  <div class="flex items-center">
+  <div id="user-info" class="flex items-center">
   <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
   <i class="ri-user-line text-white"></i>
   </div>
   <div class="ml-2">
-  <p class="text-sm font-medium text-gray-900">李明华</p>
-  <p class="text-xs text-gray-500">高级用户</p>
+  <p class="text-sm font-medium text-gray-900">加载中...</p>
+  <p class="text-xs text-gray-500">请稍候</p>
   </div>
   </div>
   </div>
@@ -482,7 +530,7 @@ let selectedProjects = [];
 document.addEventListener('DOMContentLoaded', function() {
 // 从URL参数获取简历解析结果
 loadResumeData();
-renderResumeData();
+// 注意：renderResumeData() 现在在数据加载完成后调用
 
 const generateBtn = document.getElementById('generateQuestions');
 const questionsList = document.getElementById('questionsList');
@@ -534,13 +582,19 @@ const result = await response.json();
 if (result.success && result.data) {
 resumeData = result.data;
 console.log('✅ 从后端加载简历数据成功:', resumeData);
+// 🆕 数据加载成功后立即渲染
+renderResumeData();
 } else {
 console.error('❌ 从后端加载数据失败:', result.message);
 resumeData = getDefaultResumeData();
+// 🆕 使用默认数据后也需要渲染
+renderResumeData();
 }
 } catch (error) {
 console.error('❌ 加载简历数据异常:', error);
 resumeData = getDefaultResumeData();
+// 🆕 异常情况下也需要渲染默认数据
+renderResumeData();
 }
 }
 
@@ -726,7 +780,7 @@ try {
 console.log('🚀 开始AI生成题目...');
 console.log('📋 请求参数:', requestData);
 
-const response = await fetch('http://localhost:8000/api/v1/questions/generate', {
+const response = await fetch('/api/v1/questions/generate', {
 method: 'POST',
 headers: {
 'Content-Type': 'application/json'
@@ -960,9 +1014,66 @@ document.body.appendChild(dialog);
 document.addEventListener('DOMContentLoaded', function() {
   const startBtn = document.getElementById('startInterview');
   if (startBtn) {
-    startBtn.addEventListener('click', function() {
+    startBtn.addEventListener('click', async function() {
       if (!startBtn.disabled) {
-        window.location.href = './interview-simulation.html';
+        try {
+          // 禁用按钮，显示加载状态
+          startBtn.disabled = true;
+          startBtn.innerHTML = '<i class="ri-loader-4-line animate-spin mr-2"></i>正在准备面试...';
+          
+          // 获取当前页面的taskId
+          const urlParams = new URLSearchParams(window.location.search);
+          const taskId = urlParams.get('taskId');
+          
+          // 收集题目生成参数
+          const generateData = {
+            task_id: taskId || '',
+            resume_data: resumeData || getDefaultResumeData(),
+            selected_skills: selectedSkills,
+            selected_projects: selectedProjects,
+            question_types: {
+              tech_basic: document.getElementById('techBasic').checked,
+              project_experience: document.getElementById('projectExp').checked,
+              algorithm_design: document.getElementById('algorithm').checked,
+              system_design: document.getElementById('systemDesign').checked
+            },
+            question_count: parseInt(document.getElementById('questionCount').textContent),
+            difficulty_level: parseInt(document.getElementById('difficultySlider').value),
+            include_answer: document.getElementById('includeAnswer').classList.contains('active'),
+            include_points: document.getElementById('includePoints').classList.contains('active')
+          };
+          
+          console.log('🚀 开始生成面试题目...', generateData);
+          
+          // 调用后端API生成题目并存储到Redis
+          const response = await fetch('/api/v1/questions/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(generateData)
+          });
+          
+          const result = await response.json();
+          
+          if (result.success && result.stats && result.stats.session_id) {
+            console.log('✅ 题目生成成功，session_id:', result.stats.session_id);
+            
+            // 将session_id保存到localStorage
+            localStorage.setItem('interview_session_id', result.stats.session_id);
+            
+            // 跳转到面试页面
+            window.location.href = `./interview-simulation.html?session_id=${result.stats.session_id}`;
+          } else {
+            throw new Error(result.message || '题目生成失败');
+          }
+          
+        } catch (error) {
+          console.error('❌ 准备面试失败:', error);
+          alert('准备面试失败，请重试：' + error.message);
+          
+          // 恢复按钮状态
+          startBtn.disabled = false;
+          startBtn.innerHTML = '<div class="w-4 h-4 flex items-center justify-center mr-2 inline-block"><i class="ri-play-line"></i></div>开始面试';
+        }
       }
     });
   }

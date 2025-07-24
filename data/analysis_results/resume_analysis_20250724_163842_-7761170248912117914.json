@@ -1,0 +1,96 @@
+{
+  "basic_info": {
+    "name": "周永乐",
+    "phone": "19044731514",
+    "email": "",
+    "experience_years": "应届生",
+    "current_position": "学生",
+    "city": "未明确"
+  },
+  "skills": [
+    "Python",
+    "C/SQL",
+    "Vue.js",
+    "SpringBoot",
+    "Transformer",
+    "GRU/CNN",
+    "Hadoop/Spark",
+    "MySQL",
+    "计算机网络原理",
+    "数据可视化"
+  ],
+  "experience": [
+    {
+      "company": "东西湖区教育局",
+      "position": "教育保障中心助理",
+      "period": "2024-07至2024-08",
+      "responsibilities": [
+        "机构运营数据统计与汇报",
+        "数据收集、PPT制作及会议纪要",
+        "审计数据智能分析模型应用"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "DDoSeek微调DeepSeek驱动的SDN管控与DDoS主动防御系统",
+      "description": "基于深度学习的SDN安全防御系统开发",
+      "tech_stack": "Python/Django/Transformer/GRU/CNN",
+      "period": "2025-01至2025-07"
+    },
+    {
+      "name": "以太哨兵-区块链安全一体化平台",
+      "description": "图模型驱动的区块链安全检测系统",
+      "tech_stack": "Vue.js/SpringBoot/数据可视化",
+      "period": "2024-12至2025-07"
+    }
+  ],
+  "education": {
+    "school": "武汉大学",
+    "major": "网络空间安全",
+    "degree": "本科",
+    "graduation_year": "2026-06",
+    "gpa": "3.61(20/50)"
+  },
+  "skills_categories": {
+    "programming_languages": [
+      "Python",
+      "C",
+      "SQL"
+    ],
+    "frameworks": [
+      "Vue.js",
+      "SpringBoot"
+    ],
+    "databases": [
+      "MySQL"
+    ],
+    "tools": [
+      "Hadoop",
+      "Spark",
+      "数据可视化工具"
+    ]
+  },
+  "analysis": {
+    "skill_match": 88,
+    "experience_match": 70,
+    "project_relevance": 92,
+    "overall_match": 83,
+    "strengths": [
+      "深度学习模型微调经验(Transformer/GRU/CNN)",
+      "全栈开发能力(Vue.js+SpringBoot)",
+      "网络安全与AI结合项目经验"
+    ],
+    "weaknesses": [
+      "无工业界算法工程经验",
+      "缺乏分布式系统实战经验",
+      "英语能力未明确(仅CET-)"
+    ],
+    "suggestions": [
+      "补充分布式计算框架(如PyTorch/TensorFlow)实战经验",
+      "参与Kaggle竞赛积累算法工程能力",
+      "强化英语技术文档读写能力"
+    ]
+  },
+  "resume_content": "国家络安全学院 络空间安全 本科 3.614.0 ( 成绩排名2050 ) 相关课程: 数据 络安全实践 计算机络 操作系统 计算机组成原理 1. CET- 2. 熟练掌握 PythonCSQL 3. 熟悉 Vue.js 前端框架及 SpringBoot 后端技术架构具备完整平台搭建能 4. 了解图神经络 Transformer 等深度学习模型具备模型微调和开发经验 1. 参与后端开发使 Python Django 处理志与规则件实现 CSV 到 JSON 的数据转化与传递 2. 协助实现前端规则编辑功能通过 AJAX POST 请求将操作同步后端进处理 3. 深理解项整体技术包括 SDN 防墙CNNGRU 检测器及微调模型的协同作机制 1. 负责项前端整体架构采 Vue.js 独完成可视化平台的搭建 2. 开发恶意交易检测地址险评估合约函数恢复等核功能 3. 实现复杂交易图谱的动态渲染缩放节点交互等数据可视化功能 4. 设计并实现安全态势感知屏融合多源数据进全景式监控与展 社会实践 1. 负责机构运营情况的数据统计整理与汇报作 2. 独完成数据收集信息统计PPT 制作会议纪要及实地访记录等任务 3. 尝试应模型对审计数据进智能分析提升报告整合效率 具备定的数据分析能熟练掌握pythoncmysql语对操作系统的有定的底层理解对Hadoopspark的使 有定掌握熟练掌握计算机络原理掌握vuespringboot技术架构具备充分的团队协作能以及沟通能能够清晰 实现技术需求 周永乐 机19044731514邮箱whu.edu.cn 性别 年龄20岁 教育背景 武汉学 2022-06 2026-06 专业技能 项经历 DDoSeek微调DeepSeek驱动的SDN管控与DDoS的主动防御系统 团队成员 2025-01 2025-07 以太哨兵基于图模型的区块链安全体化平台 团队成员 2024-12 2025-07 在校经历 东西湖区教育局--教育保障中助理 2024-07 2024-08 我评价 获奖情况 2025络技术挑战赛华中赛区等奖 2025-07..."
+}

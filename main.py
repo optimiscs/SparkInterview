@@ -5,13 +5,14 @@ FastAPI 后端服务主入口
 import os
 import logging
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 
 from api.routers import users, interviews, assessments, resources, resume_parser
 from api.routers import questions
+from api.websocket_server import websocket_endpoint
 from src.config.settings import system_config
 
 
@@ -49,6 +50,14 @@ async def lifespan(app: FastAPI):
         logger.info("✅ 持久化管理器初始化完成")
     except Exception as e:
         logger.warning(f"⚠️ 持久化管理器初始化失败，使用传统方式: {e}")
+    
+    # 初始化实时多模态分析器
+    try:
+        from src.tools.realtime_analyzer import create_realtime_processor
+        realtime_processor = create_realtime_processor()
+        logger.info("✅ 实时多模态分析器初始化完成")
+    except Exception as e:
+        logger.warning(f"⚠️ 实时多模态分析器初始化失败: {e}")
     
     logger.info("✅ 系统启动完成")
     
@@ -118,6 +127,12 @@ app.include_router(assessments.router, prefix="/api/v1", tags=["能力评估"])
 app.include_router(resources.router, prefix="/api/v1", tags=["学习资源"])
 app.include_router(resume_parser.router, prefix="/api/v1/resume", tags=["简历解析"])
 app.include_router(questions.router, prefix="/api/v1", tags=["题目生成"])
+
+# 注册WebSocket路由
+@app.websocket("/ws/multimodal-analysis")
+async def websocket_multimodal_analysis(websocket: WebSocket):
+    """实时多模态分析WebSocket端点"""
+    await websocket_endpoint(websocket)
 
 # 根路径重定向到首页
 @app.get("/", include_in_schema=False)

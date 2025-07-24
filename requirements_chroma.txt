@@ -1,0 +1,19 @@
+# ChromaDB题目匹配和生成系统依赖
+chromadb>=0.4.0
+pydantic>=2.0.0
+fastapi>=0.100.0
+uvicorn>=0.20.0
+
+# 现有依赖（如果还没安装）
+langchain>=0.0.300
+langchain-community>=0.0.20
+pypdf>=3.0.0
+unstructured>=0.10.0
+
+# 可选的向量化依赖（提升性能）
+sentence-transformers>=2.2.0
+torch>=2.0.0
+
+# 数据处理
+numpy>=1.24.0
+pandas>=2.0.0 

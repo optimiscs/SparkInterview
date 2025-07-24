@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>职面星火</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#2196F3',secondary:'#FF5722'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: "Noto Sans SC", "Roboto", sans-serif;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+.hero-section {
+background-image: linear-gradient(to right, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.1)), url('https://readdy.ai/api/search-image?query=A%20modern%20office%20interview%20setting%20with%20a%20student%20and%20interviewer%2C%20high-tech%20environment%20with%20soft%20blue%20lighting%2C%20professional%20atmosphere%2C%20clean%20minimal%20design%2C%20showing%20digital%20screens%20with%20interview%20analytics%20in%20the%20background%2C%20photorealistic%20style&width=1280&height=600&seq=1&orientation=landscape');
+background-size: cover;
+background-position: center;
+}
+.custom-switch {
+position: relative;
+display: inline-block;
+width: 48px;
+height: 24px;
+}
+.custom-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #ccc;
+transition: .4s;
+border-radius: 24px;
+}
+.slider:before {
+position: absolute;
+content: "";
+height: 18px;
+width: 18px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+}
+input:checked + .slider {
+background-color: #2196F3;
+}
+input:checked + .slider:before {
+transform: translateX(24px);
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- 顶部导航栏 -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+<div class="container mx-auto px-4 py-3 flex justify-between items-center">
+<div class="flex items-center">
+<span class="text-primary text-2xl font-['Pacifico']">logo</span>
+<span class="ml-2 text-lg font-medium">职面星火</span>
+</div>
+<nav class="hidden md:flex items-center space-x-8">
+<a href="#" class="text-primary font-medium">首页</a>
+<a href="#" class="text-gray-700 hover:text-primary transition-colors">面试模拟</a>
+<a href="#" class="text-gray-700 hover:text-primary transition-colors">能力评估</a>
+<a href="#" class="text-gray-700 hover:text-primary transition-colors">学习资源</a>
+<a href="#" class="text-gray-700 hover:text-primary transition-colors">个人中心</a>
+</nav>
+<div class="flex items-center space-x-4">
+<a href="https://readdy.ai/home/95b52a2e-78c3-4162-b2e2-e2497cd401ae/d1dc60f0-f831-4248-94a6-efaa54c7f75a" data-readdy="true">
+<button class="text-gray-700 hover:text-primary px-4 py-2 rounded-button whitespace-nowrap">登录</button>
+</a>
+<a href="https://readdy.ai/home/95b52a2e-78c3-4162-b2e2-e2497cd401ae/577bb061-0426-4ab2-b2ae-7c7ba48f3735" data-readdy="true">
+<button class="bg-primary text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap">注册</button>
+</a>
+<div class="md:hidden w-10 h-10 flex items-center justify-center">
+<i class="ri-menu-line ri-lg"></i>
+</div>
+</div>
+</div>
+</header>
+<!-- Hero 区域 -->
+<section class="hero-section w-full">
+<div class="container mx-auto px-4 py-20">
+<div class="max-w-2xl">
+<h1 class="text-4xl font-bold text-gray-900 mb-6">职面星火</h1>
+<p class="text-lg text-gray-700 mb-8">通过多模态数据分析，为高校学生提供专业的面试评估和个性化反馈，助力职业发展和能力提升。</p>
+<div class="flex flex-wrap gap-4">
+<a href="Mock-Interview-Coordinator">
+<button class="bg-primary text-white px-6 py-3 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap">开始模拟面试</button>
+</a>
+<button class="bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">了解更多</button>
+</div>
+</div>
+</div>
+</section>
+<!-- 赛题简介 -->
+<section class="py-16 bg-white">
+<div class="container mx-auto px-4">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-bold text-gray-900 mb-4">赛题简介</h2>
+<p class="text-gray-600 max-w-3xl mx-auto">介绍整个赛题的实现目标、实用价值、涉及技术和整体要求</p>
+</div>
+<div class="bg-gray-50 rounded-lg p-6 shadow-sm mb-10">
+<p class="text-gray-700 leading-relaxed mb-4">随着高校毕业生逐年递增，面试作为求职的核心环节，成为学生能力的关键展示场景。大多数学生因缺乏实战面试经验、难以精准把握企业需求、对岗位需求认知不足、临场能力欠缺等问题错失就业机会。</p>
+<p class="text-gray-700 leading-relaxed">如何利用人工智能、多模态数据分析等技术，构建聚焦、沉浸式面试模拟智能体，精准诊断学生面试短板并提供个性化提升方案，成为亟待攻关的关键方向。</p>
+</div>
+<div class="grid md:grid-cols-2 gap-8">
+<div class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+<div class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-4">
+<i class="ri-building-line ri-lg text-primary"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-3">业务场景</h3>
+<p class="text-gray-700 leading-relaxed">本赛题旨在开发一个高校学生多模态模拟面试评价智能体，通过模拟真实面试场景，提供全面的面试反馈，帮助高校毕业生更好地准备实际面试。智能体能够面向不同专业和岗位的学生，提供虚拟面试环境，进行模拟面试练习，弥合课堂教学与职业实践之间的鸿沟。</p>
+</div>
+<div class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+<div class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-4">
+<i class="ri-target-line ri-lg text-primary"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-3">实用价值</h3>
+<p class="text-gray-700 leading-relaxed">通过多维度状态分析（语音、表情、内容等）提供实时分析和反馈，帮助学生提高自己的面试表现，增强实际面试能力，缓解"求职焦虑"，了解岗位技能和行业需求，增强学生自我信心与职业规划意识，增加就业机会。通过技术赋能，让每一次模拟面试成为学生走向职场的"垫脚石"，简化从校园到职场的角色转换。</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 核心功能 -->
+<section class="py-16 bg-gray-50">
+<div class="container mx-auto px-4">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-bold text-gray-900 mb-4">核心功能</h2>
+<p class="text-gray-600 max-w-3xl mx-auto">我们提供全面的面试模拟与评估体系，助力学生提升面试能力</p>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-14 h-14 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-4">
+<i class="ri-user-voice-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">场景覆盖</h3>
+<p class="text-gray-600">支持人工智能、大数据、物联网、智能系统等至少 3 个技术领域的典型岗位面试场景（如技术岗、运维测试岗、产品岗等）</p>
+</div>
+<div class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-14 h-14 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-4">
+<i class="ri-pie-chart-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">多模态数据分析</h3>
+<p class="text-gray-600">整合语音（语言逻辑、情感语调）、视频（微表情、肢体语言）、文本（应答内容、问卷）等多维度数据，构建动态评分体系</p>
+</div>
+<div class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-14 h-14 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-4">
+<i class="ri-feedback-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">智能反馈</h3>
+<p class="text-gray-600">支持可视化反馈报告，包含能力雷达图、关键问题定位及改进建议（如"回答缺乏 STAR 结构"、"眼神交流不足"）</p>
+</div>
+<div class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-14 h-14 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-4">
+<i class="ri-road-map-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">个性化学习路径</h3>
+<p class="text-gray-600">提供模拟面试后的个性化学习资源/路径推荐（如行业面试题库、表达训练视频、岗位技能课程等），帮助学生有针对性地提升面试能力</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 技术领域覆盖 -->
+<section class="py-16 bg-white">
+<div class="container mx-auto px-4">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-bold text-gray-900 mb-4">技术领域覆盖</h2>
+<p class="text-gray-600 max-w-3xl mx-auto">我们的系统支持多个技术领域的面试模拟，满足不同专业学生的需求</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+<div class="bg-gray-50 rounded-lg p-6 text-center hover:shadow-md transition-shadow">
+<div class="w-16 h-16 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mx-auto mb-4">
+<i class="ri-ai-generate ri-2x text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900">人工智能</h3>
+</div>
+<div class="bg-gray-50 rounded-lg p-6 text-center hover:shadow-md transition-shadow">
+<div class="w-16 h-16 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mx-auto mb-4">
+<i class="ri-database-2-line ri-2x text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900">大数据</h3>
+</div>
+<div class="bg-gray-50 rounded-lg p-6 text-center hover:shadow-md transition-shadow">
+<div class="w-16 h-16 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mx-auto mb-4">
+<i class="ri-device-line ri-2x text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900">物联网</h3>
+</div>
+<div class="bg-gray-50 rounded-lg p-6 text-center hover:shadow-md transition-shadow">
+<div class="w-16 h-16 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mx-auto mb-4">
+<i class="ri-cloud-line ri-2x text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900">云计算</h3>
+</div>
+<div class="bg-gray-50 rounded-lg p-6 text-center hover:shadow-md transition-shadow">
+<div class="w-16 h-16 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mx-auto mb-4">
+<i class="ri-shield-keyhole-line ri-2x text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900">网络安全</h3>
+</div>
+</div>
+<div class="mt-12 text-center">
+<button class="bg-white border border-primary text-primary px-6 py-3 rounded-button hover:bg-primary hover:text-white transition-colors whitespace-nowrap">查看全部领域</button>
+</div>
+</div>
+</section>
+<!-- 评分维度 -->
+<section class="py-16 bg-gray-50">
+<div class="container mx-auto px-4">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-bold text-gray-900 mb-4">评分维度</h2>
+<p class="text-gray-600 max-w-3xl mx-auto">我们从多个维度全面评估面试表现，提供精准分析</p>
+</div>
+<div class="grid md:grid-cols-2 gap-8 items-center">
+<div>
+<div id="radar-chart" class="w-full h-80"></div>
+</div>
+<div class="space-y-6">
+<div class="bg-white rounded-lg p-5 shadow-sm">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-book-open-line ri-lg text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900">专业知识水平</h3>
+</div>
+<p class="text-gray-600">评估应聘者对所申请岗位相关专业知识的掌握程度和深度</p>
+</div>
+<div class="bg-white rounded-lg p-5 shadow-sm">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-chat-1-line ri-lg text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900">语言表达能力</h3>
+</div>
+<p class="text-gray-600">评估表达清晰度、逻辑性、流畅度以及语言组织能力</p>
+</div>
+<div class="bg-white rounded-lg p-5 shadow-sm">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-brain-line ri-lg text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900">逻辑思维能力</h3>
+</div>
+<p class="text-gray-600">评估问题分析、解决方案构建和思维条理性</p>
+</div>
+<div class="bg-white rounded-lg p-5 shadow-sm">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-lightbulb-line ri-lg text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900">创新能力</h3>
+</div>
+<p class="text-gray-600">评估创新思维、解决问题的独特视角和方法</p>
+</div>
+<div class="bg-white rounded-lg p-5 shadow-sm">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mr-3">
+<i class="ri-emotion-line ri-lg text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900">抗压能力</h3>
+</div>
+<p class="text-gray-600">评估在压力情境下的情绪控制、应对能力和稳定性</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 模拟面试流程 -->
+<section class="py-16 bg-white">
+<div class="container mx-auto px-4">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-bold text-gray-900 mb-4">模拟面试流程</h2>
+<p class="text-gray-600 max-w-3xl mx-auto">简单四步，开启你的面试能力提升之旅</p>
+</div>
+<div class="flex flex-col md:flex-row">
+<div class="flex-1 relative pb-12 md:pb-0">
+<div class="text-center md:text-left md:pr-8">
+<div class="w-16 h-16 flex items-center justify-center bg-primary text-white rounded-full mx-auto md:mx-0 mb-4">
+<span class="text-2xl font-bold">1</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">选择面试场景</h3>
+<p class="text-gray-600">根据你的专业和目标岗位，选择合适的面试场景</p>
+</div>
+<div class="hidden md:block absolute top-0 right-0 h-full w-px bg-gray-200"></div>
+</div>
+<div class="flex-1 relative pb-12 md:pb-0">
+<div class="text-center md:text-left md:px-8">
+<div class="w-16 h-16 flex items-center justify-center bg-primary text-white rounded-full mx-auto md:mx-0 mb-4">
+<span class="text-2xl font-bold">2</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">进行模拟面试</h3>
+<p class="text-gray-600">在虚拟环境中与 AI 面试官进行真实对话</p>
+</div>
+<div class="hidden md:block absolute top-0 right-0 h-full w-px bg-gray-200"></div>
+</div>
+<div class="flex-1 relative pb-12 md:pb-0">
+<div class="text-center md:text-left md:px-8">
+<div class="w-16 h-16 flex items-center justify-center bg-primary text-white rounded-full mx-auto md:mx-0 mb-4">
+<span class="text-2xl font-bold">3</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">获取评估报告</h3>
+<p class="text-gray-600">系统分析你的表现并生成详细的评估报告</p>
+</div>
+<div class="hidden md:block absolute top-0 right-0 h-full w-px bg-gray-200"></div>
+</div>
+<div class="flex-1">
+<div class="text-center md:text-left md:pl-8">
+<div class="w-16 h-16 flex items-center justify-center bg-primary text-white rounded-full mx-auto md:mx-0 mb-4">
+<span class="text-2xl font-bold">4</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">个性化提升</h3>
+<p class="text-gray-600">根据反馈获取个性化学习资源，针对性提升能力</p>
+</div>
+</div>
+</div>
+<div class="mt-12 text-center">
+<a href="Mock-Interview-Coordinator">
+<button class="bg-primary text-white px-6 py-3 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap">立即开始</button>
+</a>
+</div>
+</div>
+</section>
+<!-- 用户反馈 -->
+<section class="py-16 bg-gray-50">
+<div class="container mx-auto px-4">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-bold text-gray-900 mb-4">用户反馈</h2>
+<p class="text-gray-600 max-w-3xl mx-auto">来自真实用户的使用体验分享</p>
+</div>
+<div class="grid md:grid-cols-3 gap-6">
+<div class="bg-white rounded-lg p-6 shadow-sm">
+<div class="flex items-center mb-4">
+<div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+<i class="ri-user-line ri-lg text-gray-500"></i>
+</div>
+<div class="ml-4">
+<h4 class="text-lg font-semibold text-gray-900">陈佳怡</h4>
+<p class="text-gray-500 text-sm">计算机科学专业 / 应届毕业生</p>
+</div>
+</div>
+<div class="flex text-secondary mb-3">
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+</div>
+<p class="text-gray-700">"这个系统帮我发现了面试中的很多盲点，尤其是我之前没注意到的非语言表达问题。经过几次练习，我在实际面试中的表现明显提升，最终成功拿到了心仪公司的 offer。"</p>
+</div>
+<div class="bg-white rounded-lg p-6 shadow-sm">
+<div class="flex items-center mb-4">
+<div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+<i class="ri-user-line ri-lg text-gray-500"></i>
+</div>
+<div class="ml-4">
+<h4 class="text-lg font-semibold text-gray-900">王浩然</h4>
+<p class="text-gray-500 text-sm">人工智能专业 / 研究生</p>
+</div>
+</div>
+<div class="flex text-secondary mb-3">
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-half-fill"></i>
+</div>
+<p class="text-gray-700">"系统的专业知识评估非常准确，帮我找出了知识盲区。个性化学习资源推荐也很有针对性，让我能够高效地弥补不足。感谢这个平台让我在面试中更加自信！"</p>
+</div>
+<div class="bg-white rounded-lg p-6 shadow-sm">
+<div class="flex items-center mb-4">
+<div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+<i class="ri-user-line ri-lg text-gray-500"></i>
+</div>
+<div class="ml-4">
+<h4 class="text-lg font-semibold text-gray-900">林思琪</h4>
+<p class="text-gray-500 text-sm">数据科学专业 / 大四学生</p>
+</div>
+</div>
+<div class="flex text-secondary mb-3">
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-fill"></i>
+<i class="ri-star-line"></i>
+</div>
+<p class="text-gray-700">"作为缺乏面试经验的学生，这个系统给了我很大帮助。特别是情绪和压力管理方面的反馈，让我学会了如何在紧张的面试环境中保持冷静和清晰的思路。"</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 订阅区域 -->
+<section class="py-16 bg-primary bg-opacity-5">
+<div class="container mx-auto px-4">
+<div class="max-w-3xl mx-auto text-center">
+<h2 class="text-3xl font-bold text-gray-900 mb-4">获取最新资讯</h2>
+<p class="text-gray-600 mb-8">订阅我们的通讯，获取最新的面试技巧、行业动态和系统更新</p>
+<div class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+<input type="email" placeholder="输入您的邮箱地址" class="flex-1 px-4 py-3 rounded-button border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+<button class="bg-primary text-white px-6 py-3 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap">订阅</button>
+</div>
+<div class="mt-4 flex items-center justify-center">
+<label class="custom-switch mr-2">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+<span class="text-sm text-gray-600">我同意接收相关资讯和更新</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 底部区域 -->
+<footer class="bg-gray-900 text-white py-12">
+<div class="container mx-auto px-4">
+<div class="grid md:grid-cols-4 gap-8">
+<div>
+<div class="text-2xl font-['Pacifico'] mb-4">logo</div>
+<p class="text-gray-400 mb-4">职面星火 - 助力高校学生提升面试能力，开启职业成功之路</p>
+<div class="flex space-x-4">
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full hover:bg-primary transition-colors">
+<i class="ri-wechat-fill ri-lg"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full hover:bg-primary transition-colors">
+<i class="ri-weibo-fill ri-lg"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full hover:bg-primary transition-colors">
+<i class="ri-github-fill ri-lg"></i>
+</a>
+</div>
+</div>
+<div>
+<h3 class="text-lg font-semibold mb-4">功能导航</h3>
+<ul class="space-y-2">
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">面试模拟</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">能力评估</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">学习资源</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">个人中心</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-lg font-semibold mb-4">支持与帮助</h3>
+<ul class="space-y-2">
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">使用指南</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">联系我们</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">隐私政策</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">用户协议</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-lg font-semibold mb-4">联系我们</h3>
+<ul class="space-y-2">
+<li class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center mr-2">
+<i class="ri-mail-line text-gray-400"></i>
+</div>
+<span class="text-gray-400">contact@interview-ai.com</span>
+</li>
+<li class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center mr-2">
+<i class="ri-phone-line text-gray-400"></i>
+</div>
+<span class="text-gray-400">400-123-4567</span>
+</li>
+<li class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center mr-2">
+<i class="ri-map-pin-line text-gray-400"></i>
+</div>
+<span class="text-gray-400">北京市海淀区中关村南大街5号</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
+<p>© 2025 职面星火 版权所有 | 京ICP备12345678号</p>
+</div>
+</div>
+</footer>
+<script id="radar-chart-script">
+document.addEventListener('DOMContentLoaded', function() {
+const radarChart = echarts.init(document.getElementById('radar-chart'));
+const option = {
+animation: false,
+radar: {
+indicator: [
+{ name: '专业知识', max: 100 },
+{ name: '语言表达', max: 100 },
+{ name: '逻辑思维', max: 100 },
+{ name: '创新能力', max: 100 },
+{ name: '抗压能力', max: 100 }
+],
+radius: '65%',
+splitNumber: 4,
+axisName: {
+color: '#333',
+fontSize: 12
+},
+splitArea: {
+areaStyle: {
+color: ['#f5f5f5', '#fff']
+}
+}
+},
+tooltip: {
+trigger: 'item',
+backgroundColor: 'rgba(255, 255, 255, 0.8)',
+borderColor: '#ccc',
+borderWidth: 1,
+textStyle: {
+color: '#333'
+}
+},
+series: [{
+name: '能力评估',
+type: 'radar',
+data: [
+{
+value: [85, 70, 90, 65, 75],
+name: '当前水平',
+symbol: 'none',
+lineStyle: {
+color: 'rgba(87, 181, 231, 1)'
+},
+areaStyle: {
+color: 'rgba(87, 181, 231, 0.1)'
+}
+},
+{
+value: [95, 85, 95, 80, 90],
+name: '目标水平',
+symbol: 'none',
+lineStyle: {
+color: 'rgba(141, 211, 199, 1)',
+type: 'dashed'
+},
+areaStyle: {
+color: 'rgba(141, 211, 199, 0.1)'
+}
+}
+]
+}]
+};
+radarChart.setOption(option);
+window.addEventListener('resize', function() {
+radarChart.resize();
+});
+});
+</script>
+</body>
+</html>
