@@ -441,6 +441,10 @@ class RealtimeMultimodalProcessor:
         """分析视频帧"""
         start_time = time.time()
         
+        # 记录分析开始
+        frame_info = f"帧大小: {frame.shape}" if frame is not None else "空帧"
+        logger.debug(f"🎥 [分析器] 开始视频帧分析 ({frame_info})")
+        
         result = self.video_analyzer.analyze_frame(frame)
         
         # 更新性能统计
@@ -451,11 +455,25 @@ class RealtimeMultimodalProcessor:
             (self.performance_stats['avg_video_time'] * (count - 1) + processing_time) / count
         )
         
+        # 记录分析完成和详细信息
+        if result:
+            logger.debug(f"✅ [分析器] 视频帧分析完成:")
+            logger.debug(f"   - 处理时间: {processing_time*1000:.1f}ms")
+            logger.debug(f"   - 累计分析: {count} 帧")
+            logger.debug(f"   - 平均耗时: {self.performance_stats['avg_video_time']*1000:.1f}ms")
+            logger.debug(f"   - 实时FPS: {1/processing_time:.1f}")
+        else:
+            logger.warning(f"⚠️ [分析器] 视频帧分析返回空结果")
+        
         return result
     
     def analyze_audio_chunk(self, audio_bytes: bytes) -> Dict[str, Any]:
         """分析音频片段"""
         start_time = time.time()
+        
+        # 记录分析开始
+        audio_info = f"音频大小: {len(audio_bytes)} bytes" if audio_bytes else "空音频"
+        logger.debug(f"🎵 [分析器] 开始音频片段分析 ({audio_info})")
         
         result = self.audio_analyzer.analyze_chunk(audio_bytes)
         
@@ -466,6 +484,18 @@ class RealtimeMultimodalProcessor:
         self.performance_stats['avg_audio_time'] = (
             (self.performance_stats['avg_audio_time'] * (count - 1) + processing_time) / count
         )
+        
+        # 记录分析完成和详细信息
+        if result:
+            logger.debug(f"✅ [分析器] 音频片段分析完成:")
+            logger.debug(f"   - 处理时间: {processing_time*1000:.1f}ms")
+            logger.debug(f"   - 累计分析: {count} 个片段")
+            logger.debug(f"   - 平均耗时: {self.performance_stats['avg_audio_time']*1000:.1f}ms")
+            # 假设音频片段通常为3秒，计算实时比例
+            real_time_ratio = 3000 / (processing_time * 1000) if processing_time > 0 else 0
+            logger.debug(f"   - 实时比例: {real_time_ratio:.1f}x")
+        else:
+            logger.warning(f"⚠️ [分析器] 音频片段分析返回空结果")
         
         return result
     
@@ -482,6 +512,33 @@ class RealtimeMultimodalProcessor:
             'video_fps': round(self.performance_stats['video_analysis_count'] / runtime, 2) if runtime > 0 else 0,
             'audio_chunks_per_second': round(self.performance_stats['audio_analysis_count'] / runtime, 2) if runtime > 0 else 0
         }
+    
+    def print_performance_summary(self):
+        """打印性能摘要"""
+        stats = self.get_performance_stats()
+        
+        logger.info("📊 === 实时多模态分析性能摘要 ===")
+        logger.info(f"   🕐 运行时间: {stats['runtime_seconds']} 秒")
+        logger.info(f"   🎥 视频分析: {stats['video_analyses']} 帧 | 平均: {stats['avg_video_processing_ms']}ms | FPS: {stats['video_fps']}")
+        logger.info(f"   🎵 音频分析: {stats['audio_analyses']} 片段 | 平均: {stats['avg_audio_processing_ms']}ms | 片段/秒: {stats['audio_chunks_per_second']}")
+        
+        # 性能评估
+        if stats['avg_video_processing_ms'] < 100:
+            video_perf = "优秀"
+        elif stats['avg_video_processing_ms'] < 200:
+            video_perf = "良好"  
+        else:
+            video_perf = "需要优化"
+            
+        if stats['avg_audio_processing_ms'] < 500:
+            audio_perf = "优秀"
+        elif stats['avg_audio_processing_ms'] < 1000:
+            audio_perf = "良好"
+        else:
+            audio_perf = "需要优化"
+        
+        logger.info(f"   💯 性能评估: 视频-{video_perf} | 音频-{audio_perf}")
+        logger.info("="*50)
     
     def reset_stats(self):
         """重置性能统计"""

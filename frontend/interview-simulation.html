@@ -137,8 +137,8 @@ filter: grayscale(0.5);
 <div class="ml-4 flex items-center">
 <span class="text-gray-700 font-medium">面试进度：</span>
 <span class="ml-2 text-primary font-medium">3/10</span>
-</div>
-</div>
+    </div>
+    </div>
 <div class="flex items-center space-x-4">
 <button class="px-3 py-1.5 !rounded-button bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center cursor-pointer whitespace-nowrap" id="toggle-tips">
 <i class="ri-lightbulb-line mr-1"></i>
@@ -156,23 +156,23 @@ filter: grayscale(0.5);
 <i class="ri-code-line mr-1"></i>
 <span>编程答题</span>
 </button>
-</div>
+    </div>
 <div class="flex items-center space-x-6">
 <div class="flex items-center">
 <span class="text-gray-700 mr-2">网络状态：</span>
 <span class="network-indicator"></span>
 <span class="ml-1 text-sm text-gray-700">良好</span>
-</div>
+    </div>
 <div class="flex items-center">
 <i class="ri-time-line text-gray-700 mr-2"></i>
 <span class="text-gray-900 font-medium" id="timer">12:45</span>
-</div>
+    </div>
 <button class="bg-red-100 text-red-600 px-3 py-1.5 !rounded-button flex items-center hover:bg-red-200 transition-colors whitespace-nowrap cursor-pointer">
 <i class="ri-error-warning-line mr-1"></i>
 <span>紧急求助</span>
 </button>
-</div>
-</div>
+    </div>
+    </div>
 </header>
 <!-- 主要内容区域 -->
 <main class="flex-1 flex overflow-hidden relative" style="height: calc(100vh - 8.5rem)">
@@ -211,8 +211,8 @@ filter: grayscale(0.5);
       <div class="text-center">
         <button id="start-interview-btn" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium">
           <i class="ri-play-line mr-2"></i>开始正式面试
-        </button>
-      </div>
+</button>
+</div>
     </div>
 
     <!-- 面试题目区域 -->
@@ -232,7 +232,7 @@ filter: grayscale(0.5);
         </div>
       </div>
     </div>
-  </div>
+</div>
 </div>
 </div>
 </div>
@@ -241,7 +241,7 @@ filter: grayscale(0.5);
 <div class="relative w-full h-full">
 <div class="absolute inset-0 bg-gray-900 rounded-lg overflow-hidden">
 <video id="user-video" class="w-full h-full object-cover" autoplay muted></video>
-</div>
+  </div>
 <div class="absolute bottom-4 right-4 flex space-x-2">
 <button class="w-10 h-10 bg-black bg-opacity-50 hover:bg-opacity-70 rounded-full flex items-center justify-center text-white transition-colors cursor-pointer">
 <i class="ri-fullscreen-line"></i>
@@ -462,66 +462,66 @@ return network</pre>
 <h2 class="text-xl font-medium text-gray-900">面试设置</h2>
 <button class="text-gray-500 hover:text-gray-700 cursor-pointer" id="close-settings">
 <i class="ri-close-line text-xl"></i>
-</button>
-</div>
+                    </button>
+                </div>
 <div class="border-b border-gray-200 mb-6">
 <div class="flex space-x-6">
 <button class="settings-tab active pb-3 px-2 text-primary border-b-2 border-primary cursor-pointer">检测配置</button>
 <button class="settings-tab pb-3 px-2 text-gray-500 border-b-2 border-transparent cursor-pointer">界面设置</button>
 <button class="settings-tab pb-3 px-2 text-gray-500 border-b-2 border-transparent cursor-pointer">其他设置</button>
-</div>
-</div>
+                    </div>
+                    </div>
 <div class="space-y-6">
 <div class="flex items-center justify-between">
 <div>
 <h3 class="font-medium text-gray-900">面试官问题显示</h3>
 <p class="text-sm text-gray-500 mt-1">显示面试官提问的文本内容</p>
-</div>
+                </div>
 <label class="custom-switch cursor-pointer">
 <input type="checkbox" id="question-toggle" checked>
 <span class="switch-slider"></span>
 </label>
-</div>
+            </div>
 <div class="flex items-center justify-between">
 <div>
 <h3 class="font-medium text-gray-900">表情检测</h3>
 <p class="text-sm text-gray-500 mt-1">实时分析面部表情变化</p>
-</div>
+                    </div>
 <label class="custom-switch cursor-pointer">
 <input type="checkbox" id="expression-toggle" checked>
 <span class="switch-slider"></span>
 </label>
-</div>
+                </div>
 <div class="flex items-center justify-between">
 <div>
 <h3 class="font-medium text-gray-900">动作检测</h3>
 <p class="text-sm text-gray-500 mt-1">监测肢体语言和姿态变化</p>
-</div>
+            </div>
 <label class="custom-switch cursor-pointer">
 <input type="checkbox" id="motion-toggle" checked>
 <span class="switch-slider"></span>
 </label>
-</div>
+                    </div>
 <div class="flex items-center justify-between">
 <div>
 <h3 class="font-medium text-gray-900">语音情感分析</h3>
 <p class="text-sm text-gray-500 mt-1">分析语音情感和语言特征</p>
-</div>
+                    </div>
 <label class="custom-switch cursor-pointer">
 <input type="checkbox" id="voice-toggle" checked>
 <span class="switch-slider"></span>
 </label>
-</div>
+                </div>
 <div class="flex items-center justify-between">
 <div>
 <h3 class="font-medium text-gray-900">实时提示</h3>
 <p class="text-sm text-gray-500 mt-1">显示回答建议和参考要点</p>
-</div>
+            </div>
 <label class="custom-switch cursor-pointer">
 <input type="checkbox" id="tips-toggle" checked>
 <span class="switch-slider"></span>
 </label>
-</div>
+                    </div>
 </div>
 <div class="mt-6 pt-6 border-t border-gray-200 flex space-x-3">
 <button class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 !rounded-button hover:bg-gray-200 transition-colors cursor-pointer whitespace-nowrap" id="reset-settings">
@@ -529,9 +529,9 @@ return network</pre>
 </button>
 <button class="flex-1 bg-primary text-white px-4 py-2 !rounded-button hover:bg-opacity-90 transition-colors cursor-pointer whitespace-nowrap" id="save-settings">
 保存设置
-</button>
-</div>
-</div>
+                    </button>
+                </div>
+            </div>
 </div>
 <script id="timer-script">
 document.addEventListener('DOMContentLoaded', function() {
@@ -564,28 +564,28 @@ console.error('无法访问摄像头或麦克风:', err);
 </script>
 <script id="panel-control-script">
 document.addEventListener('DOMContentLoaded', function() {
-const mainContent = document.getElementById('main-content');
-const rightPanel = document.getElementById('right-panel');
-const toggleButton = document.getElementById('toggle-panel');
-const panelArrow = document.getElementById('panel-arrow');
-let isPanelVisible = true;
-function togglePanel() {
-isPanelVisible = !isPanelVisible;
-if (isPanelVisible) {
-rightPanel.style.width = '30%';
-rightPanel.style.opacity = '1';
-mainContent.style.paddingRight = '24px';
-panelArrow.classList.remove('ri-arrow-left-s-line');
-panelArrow.classList.add('ri-arrow-right-s-line');
-} else {
-rightPanel.style.width = '0';
-rightPanel.style.opacity = '0';
-mainContent.style.paddingRight = '48px';
-panelArrow.classList.remove('ri-arrow-right-s-line');
-panelArrow.classList.add('ri-arrow-left-s-line');
-}
-}
-toggleButton.addEventListener('click', togglePanel);
+        const mainContent = document.getElementById('main-content');
+        const rightPanel = document.getElementById('right-panel');
+        const toggleButton = document.getElementById('toggle-panel');
+        const panelArrow = document.getElementById('panel-arrow');
+            let isPanelVisible = true;
+            function togglePanel() {
+                isPanelVisible = !isPanelVisible;
+                if (isPanelVisible) {
+                    rightPanel.style.width = '30%';
+                    rightPanel.style.opacity = '1';
+                    mainContent.style.paddingRight = '24px';
+                    panelArrow.classList.remove('ri-arrow-left-s-line');
+                    panelArrow.classList.add('ri-arrow-right-s-line');
+                } else {
+                    rightPanel.style.width = '0';
+                    rightPanel.style.opacity = '0';
+                    mainContent.style.paddingRight = '48px';
+                    panelArrow.classList.remove('ri-arrow-right-s-line');
+                    panelArrow.classList.add('ri-arrow-left-s-line');
+                }
+            }
+            toggleButton.addEventListener('click', togglePanel);
 function updateMetrics() {
 const metrics = {
 expression: {
@@ -632,14 +632,14 @@ setInterval(updateMetrics, 2000);
 </script>
 <script id="audio-visualization-script">
 document.addEventListener('DOMContentLoaded', function() {
-const volumeIndicators = document.querySelectorAll('.volume-indicator');
-function animateVolumeIndicators() {
-volumeIndicators.forEach(indicator => {
-const randomHeight = Math.floor(Math.random() * 15) + 3;
-indicator.style.height = `${randomHeight}px`;
-});
-}
-setInterval(animateVolumeIndicators, 200);
+        const volumeIndicators = document.querySelectorAll('.volume-indicator');
+            function animateVolumeIndicators() {
+                volumeIndicators.forEach(indicator => {
+                    const randomHeight = Math.floor(Math.random() * 15) + 3;
+                    indicator.style.height = `${randomHeight}px`;
+                });
+            }
+            setInterval(animateVolumeIndicators, 200);
 });
 </script>
 <script id="settings-script">
@@ -910,7 +910,7 @@ if (isRecording) {
 icon.classList.remove('ri-pause-line');
 icon.classList.add('ri-play-line');
 text.textContent = '继续面试';
-} else {
+            } else {
 icon.classList.remove('ri-play-line');
 icon.classList.add('ri-pause-line');
 text.textContent = '暂停面试';
@@ -946,7 +946,7 @@ text.textContent = '暂停面试';
       
       const user = await resp.json();
       console.log('✅ 用户验证成功:', user.name);
-    } catch (error) {
+        } catch (error) {
       console.error('获取用户信息失败:', error);
       localStorage.removeItem('access_token');
       window.location.href = '/frontend/login.html';  
@@ -973,7 +973,7 @@ text.textContent = '暂停面试';
           
           if (!this.sessionId) {
               this.showErrorMessage('未找到面试会话ID，请从题目生成页面重新开始');
-              return;
+            return;
           }
           
           console.log('🎯 初始化面试管理器，session_id:', this.sessionId);
@@ -1048,13 +1048,13 @@ text.textContent = '暂停面试';
               console.log('🔍 从Redis获取题目，session_id:', this.sessionId);
               
               const response = await fetch('/api/v1/questions/session', {
-                  method: 'POST',
+                method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ session_id: this.sessionId })
               });
-              
-              const result = await response.json();
-              
+            
+            const result = await response.json();
+            
               if (!result.success) {
                   throw new Error(result.message || '获取题目失败');
               }
@@ -1071,8 +1071,8 @@ text.textContent = '暂停面试';
               this.updateInterviewStats(result.stats);
               
               return this.questions;
-              
-          } catch (error) {
+            
+        } catch (error) {
               console.error('❌ 从Redis获取题目失败:', error);
               throw error;
           }
@@ -1110,7 +1110,7 @@ text.textContent = '暂停面试';
       displayCurrentQuestion() {
           if (!this.questions || this.questions.length === 0) {
               console.error('❌ 没有题目可显示');
-              return;
+                    return;
           }
           
           const currentQuestion = this.questions[this.currentQuestionIndex];
@@ -1143,7 +1143,7 @@ text.textContent = '暂停面试';
                   nextBtn.innerHTML = '结束面试<i class="ri-check-line ml-1"></i>';
                   nextBtn.classList.remove('bg-primary');
                   nextBtn.classList.add('bg-green-600');
-              } else {
+                } else {
                   nextBtn.innerHTML = '下一题<i class="ri-arrow-right-line ml-1"></i>';
                   nextBtn.classList.remove('bg-green-600');
                   nextBtn.classList.add('bg-primary');
@@ -1154,7 +1154,7 @@ text.textContent = '暂停面试';
       nextQuestion() {
           if (this.currentQuestionIndex >= this.questions.length - 1) {
               this.endInterview();
-              return;
+                            return;
           }
           
           this.currentQuestionIndex++;
@@ -1181,21 +1181,21 @@ text.textContent = '暂停面试';
                   <div class="text-center">
                       <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                           <i class="ri-check-line text-2xl text-green-600"></i>
-                      </div>
+                </div>
                       <h3 class="text-xl font-semibold text-gray-900 mb-2">面试完成！</h3>
                       <p class="text-gray-600 mb-6">恭喜您完成了所有面试题目，您的表现很棒！</p>
-                      <div class="flex space-x-3">
+                    <div class="flex space-x-3">
                           <button class="flex-1 px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50" onclick="window.location.href='./setting_page1.html'">
                               返回首页
-                          </button>
+                        </button>
                           <button class="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90" onclick="this.closest('.fixed').remove()">
                               查看评估
-                          </button>
-                      </div>
-                  </div>
-              </div>
-          `;
-          
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
           document.body.appendChild(dialog);
           
           // 清理Redis中的面试会话（可选）
@@ -1212,7 +1212,7 @@ text.textContent = '暂停面试';
               localStorage.removeItem('interview_session_id');
               
               console.log('✅ 面试会话清理完成');
-          } catch (error) {
+        } catch (error) {
               console.warn('⚠️ 面试会话清理失败:', error);
           }
       }
@@ -1260,13 +1260,17 @@ text.textContent = '暂停面试';
               maxRetries: 3         // 最大重试次数
           };
           
-          this.retryCount = 0;
+                    this.retryCount = 0;
           this.analysisIntervals = {
               video: null,
               audio: null
           };
           
-          this.init();
+          // WebSocket状态标志
+          this.isWebSocketAuthenticated = false;
+          this.websocketReady = false;
+        
+        this.init();
       }
       
       async init() {
@@ -1509,9 +1513,15 @@ text.textContent = '暂停面试';
                       resolve();
                   };
                   
-                  this.websocket.onmessage = (event) => {
-                      this.handleAnalysisResult(JSON.parse(event.data));
-                  };
+                                this.websocket.onmessage = (event) => {
+                  try {
+                      const message = JSON.parse(event.data);
+                      console.log('📨 收到WebSocket消息:', message.type, message);
+                      this.handleAnalysisResult(message);
+                  } catch (error) {
+                      console.error('❌ WebSocket消息解析失败:', error, event.data);
+                  }
+              };
                   
                   this.websocket.onclose = (event) => {
                       console.warn('⚠️ WebSocket连接已关闭:', event.code, event.reason);
@@ -1532,10 +1542,10 @@ text.textContent = '暂停面试';
                   
               } catch (error) {
                   reject(error);
-              }
-          });
-      }
-      
+                    }
+                });
+            }
+            
       sendAuthMessage() {
           const sessionId = new URLSearchParams(window.location.search).get('session_id') || 
                           localStorage.getItem('interview_session_id');
@@ -1637,7 +1647,9 @@ text.textContent = '暂停面试';
       }
       
       captureAndAnalyzeFrame() {
-          if (!this.isAnalyzing || !this.websocket || this.websocket.readyState !== WebSocket.OPEN) {
+          if (!this.isAnalyzing || !this.websocket || 
+              this.websocket.readyState !== WebSocket.OPEN || 
+              !this.isWebSocketAuthenticated) {
               return;
           }
           
@@ -1666,6 +1678,7 @@ text.textContent = '暂停面试';
                           height: this.canvas.height
                       }
                   }));
+                  console.log('🎥 视频帧已发送');
               }
               
           } catch (error) {
@@ -1686,10 +1699,12 @@ text.textContent = '暂停面试';
           console.log(`🎵 音频分析已启动，间隔: ${this.config.audioInterval}ms`);
       }
       
-      captureAndAnalyzeAudio() {
-          if (!this.isAnalyzing || !this.websocket || this.websocket.readyState !== WebSocket.OPEN) {
-              return;
-          }
+            captureAndAnalyzeAudio() {
+          if (!this.isAnalyzing || !this.websocket || 
+              this.websocket.readyState !== WebSocket.OPEN || 
+              !this.isWebSocketAuthenticated) {
+            return;
+        }
           
           try {
               // 创建新的MediaRecorder用于录制音频片段
@@ -1731,7 +1746,9 @@ text.textContent = '暂停面试';
               // 转换为base64
               const reader = new FileReader();
               reader.onload = () => {
-                  if (this.websocket && this.websocket.readyState === WebSocket.OPEN) {
+                  if (this.websocket && 
+                      this.websocket.readyState === WebSocket.OPEN && 
+                      this.isWebSocketAuthenticated) {
                       this.websocket.send(JSON.stringify({
                           type: 'audio_chunk',
                           data: {
@@ -1740,11 +1757,12 @@ text.textContent = '暂停面试';
                               duration: this.config.audioInterval
                           }
                       }));
+                      console.log('🎵 音频数据已发送');
                   }
               };
               reader.readAsDataURL(audioBlob);
-              
-          } catch (error) {
+            
+        } catch (error) {
               console.error('❌ 音频发送失败:', error);
           }
       }
@@ -1752,11 +1770,27 @@ text.textContent = '暂停面试';
       handleAnalysisResult(message) {
           try {
               switch (message.type) {
+                  case 'connected':
+                      console.log('🔗 WebSocket连接确认:', message.data);
+                      break;
+                      
+                  case 'auth_success':
+                      console.log('✅ WebSocket认证成功:', message.data);
+                      this.isWebSocketAuthenticated = true;
+                      break;
+                      
+                  case 'auth_error':
+                      console.error('❌ WebSocket认证失败:', message.data);
+                      this.handleError(new Error(`WebSocket认证失败: ${message.data}`));
+                      break;
+                      
                   case 'visual_analysis':
+                      console.log('🎥 收到视觉分析结果:', message.data);
                       this.updateVisualMetrics(message.data);
                       break;
                       
                   case 'audio_analysis':
+                      console.log('🎵 收到音频分析结果:', message.data);
                       this.updateAudioMetrics(message.data);
                       break;
                       
@@ -1768,8 +1802,12 @@ text.textContent = '暂停面试';
                       console.log('📊 分析状态:', message.data);
                       break;
                       
+                  case 'pong':
+                      console.log('🏓 收到pong响应:', message.data);
+                      break;
+                      
                   default:
-                      console.warn('⚠️ 未知消息类型:', message.type);
+                      console.warn('⚠️ 未知消息类型:', message.type, message);
               }
               
           } catch (error) {
@@ -1778,108 +1816,406 @@ text.textContent = '暂停面试';
       }
       
       updateVisualMetrics(visualData) {
-          // 更新表情检测
-          const expressionElement = document.querySelector('[data-metric="expression"]');
-          const expressionConfidenceElement = document.querySelector('[data-metric="expression-confidence"]');
-          
-          if (expressionElement && visualData.dominant_emotion) {
-              const emotionMap = {
-                  'neutral': '自然',
-                  'happy': '微笑',
-                  'surprised': '惊讶',
-                  'focused': '专注',
-                  'confused': '困惑',
-                  'thinking': '思考'
-              };
+          try {
+              // 更新表情检测
+              const expressionElement = document.querySelector('[data-metric="expression"]');
+              const expressionConfidenceElement = document.querySelector('[data-metric="expression-confidence"]');
               
-              expressionElement.textContent = emotionMap[visualData.dominant_emotion] || '自然';
-          }
-          
-          if (expressionConfidenceElement && visualData.emotion_confidence) {
-              const confidence = Math.round(visualData.emotion_confidence * 100);
-              expressionConfidenceElement.style.width = `${confidence}%`;
-              
-              // 更新置信度文本
-              const confidenceText = expressionConfidenceElement.parentElement.nextElementSibling?.querySelector('.text-gray-700:last-child');
-              if (confidenceText) {
-                  confidenceText.textContent = `${confidence}%`;
+              if (expressionElement && visualData.dominant_emotion) {
+                  const emotionMap = {
+                      'neutral': '自然',
+                      'happy': '微笑',
+                      'sad': '悲伤',
+                      'angry': '生气',
+                      'surprised': '惊讶',
+                      'fear': '恐惧',
+                      'disgust': '厌恶',
+                      'focused': '专注',
+                      'confused': '困惑',
+                      'thinking': '思考'
+                  };
+                  
+                  const chineseEmotion = emotionMap[visualData.dominant_emotion] || '自然';
+                  expressionElement.textContent = chineseEmotion;
+                  
+                  // 根据情感类型设置颜色
+                  const positiveEmotions = ['happy', 'focused', 'thinking'];
+                  const negativeEmotions = ['sad', 'angry', 'fear', 'disgust'];
+                  
+                  if (positiveEmotions.includes(visualData.dominant_emotion)) {
+                      expressionElement.style.color = '#10B981'; // 绿色
+                  } else if (negativeEmotions.includes(visualData.dominant_emotion)) {
+                      expressionElement.style.color = '#EF4444'; // 红色
+                  } else {
+                      expressionElement.style.color = '#2196F3'; // 默认蓝色
+                  }
               }
-          }
-          
-          // 更新动作检测
-          const postureElement = document.querySelector('[data-metric="posture"]');
-          const postureConfidenceElement = document.querySelector('[data-metric="posture-confidence"]');
-          
-          if (postureElement && visualData.head_pose_stability) {
-              const poseStability = visualData.head_pose_stability;
-              const poseText = poseStability > 0.8 ? '正坐' : poseStability > 0.6 ? '轻微倾斜' : '姿态不稳';
-              postureElement.textContent = poseText;
-          }
-          
-          if (postureConfidenceElement && visualData.head_pose_stability) {
-              const stability = Math.round(visualData.head_pose_stability * 100);
-              postureConfidenceElement.style.width = `${stability}%`;
               
-              // 更新置信度文本
-              const stabilityText = postureConfidenceElement.parentElement.nextElementSibling?.querySelector('.text-gray-700:last-child');
-              if (stabilityText) {
-                  stabilityText.textContent = `${stability}%`;
+              if (expressionConfidenceElement && typeof visualData.emotion_confidence === 'number') {
+                  const confidence = Math.round(Math.max(0, Math.min(100, visualData.emotion_confidence * 100)));
+                  expressionConfidenceElement.style.width = `${confidence}%`;
+                  
+                  // 根据置信度设置颜色
+                  if (confidence >= 80) {
+                      expressionConfidenceElement.style.backgroundColor = '#10B981'; // 高置信度绿色
+                  } else if (confidence >= 60) {
+                      expressionConfidenceElement.style.backgroundColor = '#F59E0B'; // 中置信度黄色
+                  } else {
+                      expressionConfidenceElement.style.backgroundColor = '#EF4444'; // 低置信度红色
+                  }
+                  
+                  // 更新置信度文本
+                  const confidenceText = expressionConfidenceElement.parentElement.nextElementSibling?.querySelector('.text-gray-700:last-child');
+                  if (confidenceText) {
+                      confidenceText.textContent = `${confidence}%`;
+                  }
               }
+              
+              // 更新动作检测（基于头部姿态稳定性）
+              const postureElement = document.querySelector('[data-metric="posture"]');
+              const postureConfidenceElement = document.querySelector('[data-metric="posture-confidence"]');
+              
+              if (postureElement && typeof visualData.head_pose_stability === 'number') {
+                  const poseStability = Math.max(0, Math.min(1, visualData.head_pose_stability));
+                  let poseText = '未知';
+                  let poseColor = '#6B7280';
+                  
+                  if (poseStability >= 0.85) {
+                      poseText = '坐姿端正';
+                      poseColor = '#10B981';
+                  } else if (poseStability >= 0.70) {
+                      poseText = '姿态良好';
+                      poseColor = '#F59E0B';
+                  } else if (poseStability >= 0.50) {
+                      poseText = '轻微倾斜';
+                      poseColor = '#EF4444';
+                  } else {
+                      poseText = '姿态不稳';
+                      poseColor = '#DC2626';
+                  }
+                  
+                  postureElement.textContent = poseText;
+                  postureElement.style.color = poseColor;
+              }
+              
+              if (postureConfidenceElement && typeof visualData.head_pose_stability === 'number') {
+                  const stability = Math.round(Math.max(0, Math.min(100, visualData.head_pose_stability * 100)));
+                  postureConfidenceElement.style.width = `${stability}%`;
+                  
+                  // 根据稳定性设置颜色
+                  if (stability >= 85) {
+                      postureConfidenceElement.style.backgroundColor = '#10B981';
+                  } else if (stability >= 70) {
+                      postureConfidenceElement.style.backgroundColor = '#F59E0B';
+                  } else {
+                      postureConfidenceElement.style.backgroundColor = '#EF4444';
+                  }
+                  
+                  // 更新稳定性文本
+                  const stabilityText = postureConfidenceElement.parentElement.nextElementSibling?.querySelector('.text-gray-700:last-child');
+                  if (stabilityText) {
+                      stabilityText.textContent = `${stability}%`;
+                  }
+              }
+              
+              // 更新人脸检测状态
+              if (typeof visualData.face_detected === 'boolean') {
+                  const detectionCards = document.querySelectorAll('#expression-card, #motion-card');
+                  detectionCards.forEach(card => {
+                      const statusDot = card.querySelector('.w-2.h-2');
+                      const statusText = card.querySelector('.text-sm.text-gray-500:last-child');
+                      
+                      if (statusDot && statusText) {
+                          if (visualData.face_detected) {
+                              statusDot.classList.remove('bg-red-500', 'bg-yellow-500');
+                              statusDot.classList.add('bg-green-500');
+                              statusText.textContent = '实时检测中';
+                          } else {
+                              statusDot.classList.remove('bg-green-500');
+                              statusDot.classList.add('bg-yellow-500');
+                              statusText.textContent = '未检测到人脸';
+                          }
+                      }
+                  });
+              }
+              
+              // 更新眼神交流比例（如果有的话）
+              if (typeof visualData.eye_contact_ratio === 'number') {
+                  const eyeContactRatio = Math.round(visualData.eye_contact_ratio * 100);
+                  
+                  // 在动作检测卡片中显示眼神交流信息
+                  const motionCard = document.getElementById('motion-card');
+                  if (motionCard) {
+                      const detailsArea = motionCard.querySelector('.flex.flex-wrap.gap-2');
+                      if (detailsArea) {
+                          // 更新或创建眼神交流标签
+                          let eyeContactSpan = detailsArea.querySelector('[data-eye-contact]');
+                          if (!eyeContactSpan) {
+                              eyeContactSpan = document.createElement('span');
+                              eyeContactSpan.className = 'px-2 py-1 bg-gray-100 rounded-full text-xs text-gray-700';
+                              eyeContactSpan.setAttribute('data-eye-contact', 'true');
+                              detailsArea.appendChild(eyeContactSpan);
+                          }
+                          
+                          eyeContactSpan.textContent = `眼神交流 ${eyeContactRatio}%`;
+                          
+                          // 根据眼神交流比例设置颜色
+                          if (eyeContactRatio >= 70) {
+                              eyeContactSpan.className = 'px-2 py-1 bg-green-100 rounded-full text-xs text-green-700';
+                          } else if (eyeContactRatio >= 50) {
+                              eyeContactSpan.className = 'px-2 py-1 bg-yellow-100 rounded-full text-xs text-yellow-700';
+                          } else {
+                              eyeContactSpan.className = 'px-2 py-1 bg-red-100 rounded-full text-xs text-red-700';
+                          }
+                      }
+                  }
+              }
+              
+              console.log('🎥 视觉指标已更新:', {
+                  emotion: visualData.dominant_emotion,
+                  confidence: (visualData.emotion_confidence * 100).toFixed(1) + '%',
+                  faceDetected: visualData.face_detected,
+                  headPoseStability: (visualData.head_pose_stability * 100).toFixed(1) + '%',
+                  eyeContactRatio: (visualData.eye_contact_ratio * 100).toFixed(1) + '%'
+              });
+              
+          } catch (error) {
+              console.error('❌ 更新视觉指标失败:', error);
           }
-          
-          console.log('🎥 视觉指标已更新:', visualData);
       }
       
       updateAudioMetrics(audioData) {
-          // 更新语音情感
-          const voiceEmotionElement = document.querySelector('[data-metric="voice-emotion"]');
-          const voiceConfidenceElement = document.querySelector('[data-metric="voice-confidence"]');
-          
-          if (voiceEmotionElement && audioData.emotion) {
-              const emotionMap = {
-                  'confident': '自信',
-                  'calm': '平静',
-                  'nervous': '紧张',
-                  'excited': '兴奋',
-                  'uncertain': '不确定'
-              };
+          try {
+              // 更新语音情感
+              const voiceEmotionElement = document.querySelector('[data-metric="voice-emotion"]');
+              const voiceConfidenceElement = document.querySelector('[data-metric="voice-confidence"]');
               
-              voiceEmotionElement.textContent = emotionMap[audioData.emotion] || '平静';
-          }
-          
-          if (voiceConfidenceElement && audioData.emotion_confidence) {
-              const confidence = Math.round(audioData.emotion_confidence * 100);
-              voiceConfidenceElement.style.width = `${confidence}%`;
-              
-              // 更新置信度文本
-              const confidenceText = voiceConfidenceElement.parentElement.nextElementSibling?.querySelector('.text-gray-700:last-child');
-              if (confidenceText) {
-                  confidenceText.textContent = `${confidence}%`;
+              if (voiceEmotionElement && audioData.emotion) {
+                  const emotionMap = {
+                      'confident': '自信',
+                      'calm': '平静',
+                      'nervous': '紧张',
+                      'excited': '兴奋',
+                      'uncertain': '不确定',
+                      'happy': '愉快',
+                      'sad': '低落',
+                      'neutral': '中性',
+                      'focused': '专注',
+                      'stressed': '紧张'
+                  };
+                  
+                  const chineseEmotion = emotionMap[audioData.emotion] || '平静';
+                  voiceEmotionElement.textContent = chineseEmotion;
+                  
+                  // 根据情感类型设置颜色
+                  const positiveEmotions = ['confident', 'calm', 'happy', 'excited', 'focused'];
+                  const negativeEmotions = ['nervous', 'uncertain', 'sad', 'stressed'];
+                  
+                  if (positiveEmotions.includes(audioData.emotion)) {
+                      voiceEmotionElement.style.color = '#10B981'; // 绿色
+                  } else if (negativeEmotions.includes(audioData.emotion)) {
+                      voiceEmotionElement.style.color = '#EF4444'; // 红色
+                  } else {
+                      voiceEmotionElement.style.color = '#2196F3'; // 默认蓝色
+                  }
               }
+              
+              if (voiceConfidenceElement && typeof audioData.emotion_confidence === 'number') {
+                  const confidence = Math.round(Math.max(0, Math.min(100, audioData.emotion_confidence * 100)));
+                  voiceConfidenceElement.style.width = `${confidence}%`;
+                  
+                  // 根据置信度设置颜色
+                  if (confidence >= 80) {
+                      voiceConfidenceElement.style.backgroundColor = '#10B981'; // 高置信度绿色
+                  } else if (confidence >= 60) {
+                      voiceConfidenceElement.style.backgroundColor = '#F59E0B'; // 中置信度黄色
+                  } else {
+                      voiceConfidenceElement.style.backgroundColor = '#EF4444'; // 低置信度红色
+                  }
+                  
+                  // 更新置信度文本
+                  const confidenceText = voiceConfidenceElement.parentElement.nextElementSibling?.querySelector('.text-gray-700:last-child');
+                  if (confidenceText) {
+                      confidenceText.textContent = `${confidence}%`;
+                  }
+              }
+              
+              // 更新语速
+              const voiceSpeedElement = document.querySelector('[data-metric="voice-speed"]');
+              const voiceSpeedText = voiceSpeedElement?.parentElement.querySelector('.text-sm.text-primary');
+              
+              if (voiceSpeedElement && typeof audioData.speech_rate === 'number') {
+                  // 正常语速范围：120-180 词/分钟
+                  const speechRate = Math.max(0, audioData.speech_rate);
+                  const speedPercentage = Math.min(100, Math.max(0, (speechRate / 200) * 100));
+                  voiceSpeedElement.style.width = `${speedPercentage}%`;
+                  
+                  // 更新语速文本和颜色
+                  let speedText = '适中';
+                  let speedColor = '#10B981';
+                  
+                  if (speechRate < 100) {
+                      speedText = '偏慢';
+                      speedColor = '#EF4444';
+                  } else if (speechRate > 200) {
+                      speedText = '偏快';
+                      speedColor = '#EF4444';
+                  } else if (speechRate >= 120 && speechRate <= 180) {
+                      speedText = '适中';
+                      speedColor = '#10B981';
+                  } else {
+                      speedText = '一般';
+                      speedColor = '#F59E0B';
+                  }
+                  
+                  if (voiceSpeedText) {
+                      voiceSpeedText.textContent = speedText;
+                      voiceSpeedText.style.color = speedColor;
+                  }
+                  
+                  // 设置进度条颜色
+                  voiceSpeedElement.style.backgroundColor = speedColor;
+              }
+              
+              // 更新音调（基于音调均值和方差）
+              const voicePitchElement = document.querySelector('[data-metric="voice-pitch"]');
+              const voicePitchText = voicePitchElement?.parentElement.querySelector('.text-sm.text-primary');
+              
+              if (voicePitchElement && typeof audioData.pitch_mean === 'number') {
+                  const pitchMean = audioData.pitch_mean;
+                  const pitchVariance = audioData.pitch_variance || 0;
+                  
+                  // 正常音调范围（Hz）：男性 85-180，女性 165-265，平均 125-225
+                  let pitchPercentage = 50; // 默认50%
+                  let pitchText = '自然';
+                  let pitchColor = '#10B981';
+                  
+                  if (pitchMean > 0) {
+                      if (pitchMean < 100) {
+                          pitchText = '偏低';
+                          pitchColor = '#6B7280';
+                          pitchPercentage = Math.max(10, (pitchMean / 100) * 40);
+                      } else if (pitchMean > 300) {
+                          pitchText = '偏高';
+                          pitchColor = '#EF4444';
+                          pitchPercentage = Math.min(90, 60 + ((pitchMean - 300) / 200) * 30);
+                      } else {
+                          pitchText = '自然';
+                          pitchColor = '#10B981';
+                          pitchPercentage = 40 + ((pitchMean - 100) / 200) * 20; // 40-60%范围
+                      }
+                      
+                      // 考虑音调方差（稳定性）
+                      if (pitchVariance > 100) {
+                          pitchText += '(变化大)';
+                          pitchColor = '#F59E0B';
+                      }
+                  }
+                  
+                  voicePitchElement.style.width = `${pitchPercentage}%`;
+                  voicePitchElement.style.backgroundColor = pitchColor;
+                  
+                  if (voicePitchText) {
+                      voicePitchText.textContent = pitchText;
+                      voicePitchText.style.color = pitchColor;
+                  }
+              }
+              
+              // 更新清晰度
+              const voiceClarityElement = document.querySelector('[data-metric="voice-clarity"]');
+              const voiceClarityText = voiceClarityElement?.parentElement.querySelector('.text-sm.text-primary');
+              
+              if (voiceClarityElement && typeof audioData.clarity_score === 'number') {
+                  const clarity = Math.round(Math.max(0, Math.min(100, audioData.clarity_score * 100)));
+                  voiceClarityElement.style.width = `${clarity}%`;
+                  
+                  // 根据清晰度设置文本和颜色
+                  let clarityText = '优秀';
+                  let clarityColor = '#10B981';
+                  
+                  if (clarity >= 90) {
+                      clarityText = '优秀';
+                      clarityColor = '#10B981';
+                  } else if (clarity >= 75) {
+                      clarityText = '良好';
+                      clarityColor = '#059669';
+                  } else if (clarity >= 60) {
+                      clarityText = '一般';
+                      clarityColor = '#F59E0B';
+                  } else {
+                      clarityText = '较差';
+                      clarityColor = '#EF4444';
+                  }
+                  
+                  voiceClarityElement.style.backgroundColor = clarityColor;
+                  
+                  if (voiceClarityText) {
+                      voiceClarityText.textContent = clarityText;
+                      voiceClarityText.style.color = clarityColor;
+                  }
+              }
+              
+              // 更新音频检测状态
+              if (typeof audioData.audio_detected === 'boolean') {
+                  const voiceCard = document.getElementById('voice-card');
+                  if (voiceCard) {
+                      const statusDot = voiceCard.querySelector('.w-2.h-2');
+                      const statusText = voiceCard.querySelector('.text-sm.text-gray-500:last-child');
+                      
+                      if (statusDot && statusText) {
+                          if (audioData.audio_detected) {
+                              statusDot.classList.remove('bg-red-500', 'bg-yellow-500');
+                              statusDot.classList.add('bg-green-500');
+                              statusText.textContent = '实时分析中';
+                          } else {
+                              statusDot.classList.remove('bg-green-500');
+                              statusDot.classList.add('bg-yellow-500');
+                              statusText.textContent = '未检测到音频';
+                          }
+                      }
+                  }
+              }
+              
+              // 更新实时语音识别区域（如果有处理时间等额外信息）
+              if (audioData.processing_time || audioData.volume_mean) {
+                  const speechRecognitionArea = document.querySelector('#voice-card .bg-gray-50.p-3.rounded-lg');
+                  if (speechRecognitionArea) {
+                      let recognitionText = '正在进行实时语音分析...';
+                      
+                      if (typeof audioData.volume_mean === 'number') {
+                          const volumeLevel = audioData.volume_mean;
+                          if (volumeLevel > 0.5) {
+                              recognitionText += ' 音量：较大';
+                          } else if (volumeLevel > 0.2) {
+                              recognitionText += ' 音量：适中';
+                          } else if (volumeLevel > 0.05) {
+                              recognitionText += ' 音量：较小';
+                          } else {
+                              recognitionText += ' 音量：很小';
+                          }
+                      }
+                      
+                      if (typeof audioData.processing_time === 'number') {
+                          recognitionText += ` (处理时间: ${audioData.processing_time.toFixed(1)}ms)`;
+                      }
+                      
+                      speechRecognitionArea.textContent = recognitionText;
+                  }
+              }
+              
+              console.log('🎵 音频指标已更新:', {
+                  emotion: audioData.emotion,
+                  confidence: (audioData.emotion_confidence * 100).toFixed(1) + '%',
+                  audioDetected: audioData.audio_detected,
+                  speechRate: audioData.speech_rate + ' 词/分钟',
+                  pitchMean: audioData.pitch_mean.toFixed(1) + ' Hz',
+                  volumeMean: audioData.volume_mean.toFixed(3),
+                  clarityScore: (audioData.clarity_score * 100).toFixed(1) + '%'
+              });
+              
+          } catch (error) {
+              console.error('❌ 更新音频指标失败:', error);
           }
-          
-          // 更新语速
-          const voiceSpeedElement = document.querySelector('[data-metric="voice-speed"]');
-          if (voiceSpeedElement && audioData.speech_rate) {
-              const speedPercentage = Math.min(100, Math.max(0, (audioData.speech_rate / 200) * 100));
-              voiceSpeedElement.style.width = `${speedPercentage}%`;
-          }
-          
-          // 更新音调
-          const voicePitchElement = document.querySelector('[data-metric="voice-pitch"]');
-          if (voicePitchElement && audioData.pitch_variance) {
-              const pitchPercentage = Math.min(100, Math.max(0, (audioData.pitch_variance / 50) * 100));
-              voicePitchElement.style.width = `${pitchPercentage}%`;
-          }
-          
-          // 更新清晰度
-          const voiceClarityElement = document.querySelector('[data-metric="voice-clarity"]');
-          if (voiceClarityElement && audioData.clarity_score) {
-              const clarity = Math.round(audioData.clarity_score * 100);
-              voiceClarityElement.style.width = `${clarity}%`;
-          }
-          
-          console.log('🎵 音频指标已更新:', audioData);
       }
       
       updateAnalysisStatus(isActive) {
@@ -1890,7 +2226,7 @@ text.textContent = '暂停面试';
               if (isActive) {
                   dot.classList.remove('bg-gray-400');
                   dot.classList.add('bg-green-500');
-              } else {
+            } else {
                   dot.classList.remove('bg-green-500');
                   dot.classList.add('bg-gray-400');
               }
@@ -2063,7 +2399,7 @@ text.textContent = '暂停面试';
               const errorDivs = document.querySelectorAll('#right-panel .bg-red-50, #right-panel .bg-orange-50, #right-panel .bg-yellow-50');
               errorDivs.forEach(div => div.remove());
               
-          } catch (error) {
+        } catch (error) {
               console.error('❌ 重试初始化失败:', error);
               this.showGenericError(new Error('重试初始化失败，请刷新页面或联系技术支持'));
           }
@@ -2165,7 +2501,7 @@ text.textContent = '暂停面试';
           }, 5000); // 每5秒检查一次
           
           // 5分钟后停止健康检查（避免无限运行）
-          setTimeout(() => {
+    setTimeout(() => {
               clearInterval(healthCheckInterval);
               console.log('⏹️ 视频流健康检查已停止');
           }, 5 * 60 * 1000);
@@ -2177,7 +2513,7 @@ text.textContent = '暂停面试';
       toggleAnalysis() {
           if (this.isAnalyzing) {
               this.stopAnalysis();
-          } else {
+                } else {
               this.startAnalysis();
           }
       }
@@ -2226,11 +2562,11 @@ text.textContent = '暂停面试';
                           try {
                               realtimeAnalyzer.startAnalysis();
                               console.log('🔍 实时多模态分析已启动');
-                          } catch (error) {
+                    } catch (error) {
                               console.error('❌ 实时分析启动失败:', error);
                           }
                       }, 2000); // 延迟2秒启动，确保面试界面稳定
-                  } else {
+    } else {
                       console.warn('⚠️ 面试状态异常，无法启动实时分析', {
                           realtimeAnalyzer: !!realtimeAnalyzer,
                           isInterviewStarted: this.isInterviewStarted
@@ -2277,6 +2613,6 @@ text.textContent = '暂停面试';
           realtimeAnalyzer.toggleAnalysis();
       }
   };
-  </script>
-  </body>
-  </html>
+</script>
+</body>
+</html>

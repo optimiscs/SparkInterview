@@ -26,6 +26,62 @@ from datetime import datetime
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+class NumpyEncoder(json.JSONEncoder):
+    """自定义JSON编码器，处理numpy数据类型"""
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        elif isinstance(obj, np.bool_):
+            return bool(obj)
+        elif hasattr(obj, 'item'):  # 处理numpy标量
+            return obj.item()
+        return super().default(obj)
+
+
+def safe_json_dumps(data: Any) -> str:
+    """安全的JSON序列化，自动处理numpy类型"""
+    try:
+        return json.dumps(data, cls=NumpyEncoder, ensure_ascii=False)
+    except Exception as e:
+        logger.error(f"JSON序列化失败: {e}")
+        # 回退到字符串表示
+        return json.dumps({
+            'type': 'error', 
+            'data': f'数据序列化失败: {str(e)}'
+        }, ensure_ascii=False)
+
+
+def clean_analysis_result(result: Dict[str, Any]) -> Dict[str, Any]:
+    """清理分析结果，确保所有数据类型都是JSON安全的"""
+    if not result:
+        return result
+    
+    cleaned = {}
+    for key, value in result.items():
+        if isinstance(value, (np.integer, np.int32, np.int64)):
+            cleaned[key] = int(value)
+        elif isinstance(value, (np.floating, np.float32, np.float64)):
+            cleaned[key] = float(value)
+        elif isinstance(value, np.bool_):
+            cleaned[key] = bool(value)
+        elif isinstance(value, np.ndarray):
+            cleaned[key] = value.tolist()
+        elif isinstance(value, dict):
+            cleaned[key] = clean_analysis_result(value)
+        elif isinstance(value, list):
+            cleaned[key] = [clean_analysis_result(item) if isinstance(item, dict) else item for item in value]
+        elif hasattr(value, 'item'):  # numpy标量
+            cleaned[key] = value.item()
+        else:
+            cleaned[key] = value
+    
+    return cleaned
+
 # Redis客户端
 try:
     redis_client = redis.Redis(host='localhost', port=6379, db=1, decode_responses=True)
@@ -110,7 +166,9 @@ class ConnectionManager:
             websocket = self.active_connections[connection_id]
             if websocket.client_state == WebSocketState.CONNECTED:
                 try:
-                    await websocket.send_text(json.dumps(message, ensure_ascii=False))
+                    # 使用安全的JSON序列化
+                    json_data = safe_json_dumps(message)
+                    await websocket.send_text(json_data)
                 except Exception as e:
                     logger.error(f"❌ 发送消息失败 {connection_id}: {e}")
                     self.disconnect(connection_id)
@@ -212,69 +270,136 @@ class RealtimeAnalysisHandler:
     
     async def _process_video_analysis(self, task: dict):
         """异步处理视频分析"""
+        import time
+        
+        start_time = time.time()
         try:
             connection_id = task['connection_id']
             frame = task['data']
             
+            logger.info(f"🎥 [{connection_id[:8]}] 开始视频分析 (帧大小: {frame.shape})")
+            
             # 使用线程池执行CPU密集型任务
+            analysis_start = time.time()
             loop = asyncio.get_event_loop()
             result = await loop.run_in_executor(
                 executor, 
                 realtime_processor.analyze_video_frame, 
                 frame
             )
+            analysis_time = (time.time() - analysis_start) * 1000
             
             if result:
+                # 清理分析结果，确保JSON安全
+                cleaned_result = clean_analysis_result(result)
+                
+                # 添加性能指标
+                total_time = (time.time() - start_time) * 1000
+                cleaned_result['performance_metrics'] = {
+                    'analysis_time_ms': round(analysis_time, 2),
+                    'total_time_ms': round(total_time, 2),
+                    'timestamp': datetime.now().isoformat()
+                }
+                
                 # 缓存结果
                 self.results_cache[f"{connection_id}_video"] = {
-                    'result': result,
+                    'result': cleaned_result,
                     'timestamp': task['timestamp']
                 }
+                
+                # 打印详细分析结果和性能指标
+                logger.info(f"✅ [{connection_id[:8]}] 视频分析完成:")
+                logger.info(f"   📊 人脸检测: {cleaned_result.get('face_detected', 'N/A')}")
+                logger.info(f"   😊 主要情感: {cleaned_result.get('dominant_emotion', 'N/A')} (置信度: {cleaned_result.get('emotion_confidence', 0):.2f})")
+                logger.info(f"   📐 头部姿态稳定性: {cleaned_result.get('head_pose_stability', 0):.2f}")
+                logger.info(f"   👁️  眼神交流比例: {cleaned_result.get('eye_contact_ratio', 0):.2f}")
+                logger.info(f"   ⚡ 分析耗时: {analysis_time:.1f}ms | 总耗时: {total_time:.1f}ms")
+                
+                # 计算FPS
+                fps = 1000 / total_time if total_time > 0 else 0
+                logger.info(f"   🚀 分析速度: {fps:.1f} FPS")
                 
                 # 发送分析结果
                 await manager.send_personal_message({
                     'type': 'visual_analysis',
-                    'data': result,
+                    'data': cleaned_result,
                     'timestamp': task['timestamp']
                 }, connection_id)
                 
-                logger.debug(f"🎥 视频分析完成: {connection_id}")
+            else:
+                logger.warning(f"⚠️ [{connection_id[:8]}] 视频分析返回空结果")
             
         except Exception as e:
-            logger.error(f"❌ 视频分析处理失败: {e}")
+            error_time = (time.time() - start_time) * 1000
+            logger.error(f"❌ [{connection_id[:8]}] 视频分析处理失败 (耗时: {error_time:.1f}ms): {e}")
     
     async def _process_audio_analysis(self, task: dict):
         """异步处理音频分析"""
+        import time
+        
+        start_time = time.time()
         try:
             connection_id = task['connection_id']
             audio_bytes = task['data']
             
+            logger.info(f"🎵 [{connection_id[:8]}] 开始音频分析 (数据大小: {len(audio_bytes)} bytes)")
+            
             # 使用线程池执行CPU密集型任务
+            analysis_start = time.time()
             loop = asyncio.get_event_loop()
             result = await loop.run_in_executor(
                 executor, 
                 realtime_processor.analyze_audio_chunk, 
                 audio_bytes
             )
+            analysis_time = (time.time() - analysis_start) * 1000
             
             if result:
+                # 清理分析结果，确保JSON安全
+                cleaned_result = clean_analysis_result(result)
+                
+                # 添加性能指标
+                total_time = (time.time() - start_time) * 1000
+                cleaned_result['performance_metrics'] = {
+                    'analysis_time_ms': round(analysis_time, 2),
+                    'total_time_ms': round(total_time, 2),
+                    'timestamp': datetime.now().isoformat()
+                }
+                
                 # 缓存结果
                 self.results_cache[f"{connection_id}_audio"] = {
-                    'result': result,
+                    'result': cleaned_result,
                     'timestamp': task['timestamp']
                 }
+                
+                # 打印详细分析结果和性能指标
+                logger.info(f"✅ [{connection_id[:8]}] 音频分析完成:")
+                logger.info(f"   🔊 音频检测: {cleaned_result.get('audio_detected', 'N/A')}")
+                logger.info(f"   😊 语音情感: {cleaned_result.get('emotion', 'N/A')} (置信度: {cleaned_result.get('emotion_confidence', 0):.2f})")
+                logger.info(f"   🗣️  语速: {cleaned_result.get('speech_rate', 0):.1f} 词/分钟")
+                logger.info(f"   🎼 平均音调: {cleaned_result.get('pitch_mean', 0):.1f} Hz")
+                logger.info(f"   📢 音量: {cleaned_result.get('volume_mean', 0):.3f}")
+                logger.info(f"   🎯 清晰度: {cleaned_result.get('clarity_score', 0):.2f}")
+                logger.info(f"   ⚡ 分析耗时: {analysis_time:.1f}ms | 总耗时: {total_time:.1f}ms")
+                
+                # 计算处理速度（实时比例）
+                audio_duration = task['metadata'].get('duration', 3000)  # 音频时长(毫秒)
+                real_time_ratio = audio_duration / total_time if total_time > 0 else 0
+                logger.info(f"   ⏱️  实时比例: {real_time_ratio:.1f}x (音频{audio_duration}ms / 处理{total_time:.1f}ms)")
                 
                 # 发送分析结果
                 await manager.send_personal_message({
                     'type': 'audio_analysis',
-                    'data': result,
+                    'data': cleaned_result,
                     'timestamp': task['timestamp']
                 }, connection_id)
                 
-                logger.debug(f"🎵 音频分析完成: {connection_id}")
+            else:
+                logger.warning(f"⚠️ [{connection_id[:8]}] 音频分析返回空结果")
             
         except Exception as e:
-            logger.error(f"❌ 音频分析处理失败: {e}")
+            error_time = (time.time() - start_time) * 1000
+            logger.error(f"❌ [{connection_id[:8]}] 音频分析处理失败 (耗时: {error_time:.1f}ms): {e}")
     
     def get_latest_results(self, connection_id: str) -> dict:
         """获取最新的分析结果"""

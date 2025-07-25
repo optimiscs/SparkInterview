@@ -9,15 +9,69 @@ import mediapipe as mp
 from typing import Dict, Any, List, Optional, Tuple
 import logging
 from pathlib import Path
+import sys
+import traceback
+from datetime import datetime
+
+# 配置详细日志
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# DeepFace可用性检查和初始化
+DEEPFACE_AVAILABLE = False
+DEEPFACE_ERROR = None
+
+def check_deepface_availability():
+    """检查DeepFace是否可用并进行初始化测试"""
+    global DEEPFACE_AVAILABLE, DEEPFACE_ERROR
+    
+    try:
+        logger.info("🔍 检查DeepFace可用性...")
+        from deepface import DeepFace
+        
+        # 尝试初始化DeepFace进行简单测试
+        logger.info("🧪 测试DeepFace功能...")
+        
+        # 创建一个测试图像
+        test_image = np.zeros((100, 100, 3), dtype=np.uint8)
+        test_image[30:70, 30:70] = [255, 255, 255]  # 白色方块模拟人脸
+        
+        # 尝试分析测试图像
+        result = DeepFace.analyze(
+            test_image, 
+            actions=['emotion'], 
+            enforce_detection=False,
+            silent=True
+        )
+        
+        DEEPFACE_AVAILABLE = True
+        logger.info("✅ DeepFace初始化成功，情感分析功能可用")
+        return True
+        
+    except ImportError as e:
+        DEEPFACE_ERROR = f"DeepFace未安装: {str(e)}"
+        logger.error(f"❌ {DEEPFACE_ERROR}")
+        logger.info("💡 请安装DeepFace: pip install deepface")
+        return False
+    except Exception as e:
+        DEEPFACE_ERROR = f"DeepFace初始化失败: {str(e)}"
+        logger.error(f"❌ {DEEPFACE_ERROR}")
+        logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+        return False
+
+# 启动时检查DeepFace
+check_deepface_availability()
 
 try:
-    from deepface import DeepFace
-    DEEPFACE_AVAILABLE = True
+    from ..config.settings import model_config
 except ImportError:
-    DEEPFACE_AVAILABLE = False
-    logging.warning("DeepFace not available, using fallback emotion analysis")
-
-from ..config.settings import model_config
+    logger.warning("⚠️ 无法导入model_config，使用默认配置")
+    # 默认配置
+    class DefaultConfig:
+        MEDIAPIPE_CONFIDENCE = 0.5
+        DEEPFACE_BACKEND = 'opencv'
+        AUDIO_SAMPLE_RATE = 22050
+    model_config = DefaultConfig()
 
 
 class VideoAnalyzer:
@@ -58,16 +112,31 @@ class VideoAnalyzer:
     def analyze_video(self, video_path: str) -> Dict[str, Any]:
         """分析视频文件，提取视觉特征"""
         
+        start_time = datetime.now()
+        logger.info(f"🎥 开始视频分析: {video_path}")
+        
         try:
+            # 检查视频文件是否存在
+            if not Path(video_path).exists():
+                raise FileNotFoundError(f"视频文件不存在: {video_path}")
+            
             cap = cv2.VideoCapture(video_path)
             if not cap.isOpened():
                 raise Exception(f"无法打开视频文件: {video_path}")
+            
+            # 获取视频基本信息
+            total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+            fps = cap.get(cv2.CAP_PROP_FPS)
+            duration = total_frames / fps if fps > 0 else 0
+            
+            logger.info(f"📊 视频信息: {total_frames}帧, {fps:.1f}FPS, {duration:.1f}秒")
             
             # 初始化分析结果存储
             head_poses = []
             gaze_directions = []
             emotions_timeline = []
             frame_count = 0
+            processed_frames = 0
             
             while True:
                 ret, frame = cap.read()
@@ -76,47 +145,90 @@ class VideoAnalyzer:
                 
                 frame_count += 1
                 
-                # 转换颜色空间
-                rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                
-                # MediaPipe面部检测
-                results = self.face_mesh.process(rgb_frame)
-                
-                if results.multi_face_landmarks:
-                    face_landmarks = results.multi_face_landmarks[0]
+                try:
+                    # 转换颜色空间
+                    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                     
-                    # 分析头部姿态
-                    head_pose = self._analyze_head_pose(face_landmarks, frame.shape)
-                    if head_pose:
-                        head_poses.append(head_pose)
+                    # MediaPipe面部检测
+                    results = self.face_mesh.process(rgb_frame)
                     
-                    # 分析视线方向
-                    gaze = self._analyze_gaze_direction(face_landmarks, frame.shape)
-                    if gaze:
-                        gaze_directions.append(gaze)
+                    if results.multi_face_landmarks:
+                        processed_frames += 1
+                        face_landmarks = results.multi_face_landmarks[0]
+                        
+                        # 分析头部姿态
+                        head_pose = self._analyze_head_pose(face_landmarks, frame.shape)
+                        if head_pose:
+                            head_poses.append(head_pose)
+                        
+                        # 分析视线方向
+                        gaze = self._analyze_gaze_direction(face_landmarks, frame.shape)
+                        if gaze:
+                            gaze_directions.append(gaze)
+                        
+                        # 情绪分析 (每10帧分析一次以提高效率)
+                        if frame_count % 10 == 0:
+                            emotion = self._analyze_emotion(frame)
+                            if emotion:
+                                emotions_timeline.append({
+                                    'frame': frame_count,
+                                    'timestamp': frame_count / fps,
+                                    **emotion
+                                })
                     
-                    # 情绪分析 (每10帧分析一次以提高效率)
-                    if frame_count % 10 == 0:
-                        emotion = self._analyze_emotion(frame)
-                        if emotion:
-                            emotions_timeline.append({
-                                'frame': frame_count,
-                                'timestamp': frame_count / cap.get(cv2.CAP_PROP_FPS),
-                                **emotion
-                            })
+                    # 进度日志 (每100帧报告一次)
+                    if frame_count % 100 == 0:
+                        progress = (frame_count / total_frames) * 100 if total_frames > 0 else 0
+                        logger.debug(f"📈 视频分析进度: {progress:.1f}% ({frame_count}/{total_frames})")
+                        
+                except Exception as frame_error:
+                    logger.warning(f"⚠️ 第{frame_count}帧分析失败: {str(frame_error)}")
+                    continue
             
             cap.release()
+            
+            # 分析结果统计
+            processing_time = (datetime.now() - start_time).total_seconds()
+            logger.info(f"📊 视频分析完成:")
+            logger.info(f"   - 总帧数: {frame_count}")
+            logger.info(f"   - 检测到人脸的帧数: {processed_frames}")
+            logger.info(f"   - 头部姿态分析: {len(head_poses)}个有效结果")
+            logger.info(f"   - 视线方向分析: {len(gaze_directions)}个有效结果") 
+            logger.info(f"   - 情绪分析: {len(emotions_timeline)}个有效结果")
+            logger.info(f"   - 处理耗时: {processing_time:.2f}秒")
             
             # 计算统计特征
             analysis_result = self._compute_visual_statistics(
                 head_poses, gaze_directions, emotions_timeline
             )
             
+            # 添加处理统计信息
+            analysis_result.update({
+                'processing_stats': {
+                    'total_frames': frame_count,
+                    'processed_frames': processed_frames,
+                    'processing_time_seconds': processing_time,
+                    'head_pose_count': len(head_poses),
+                    'gaze_direction_count': len(gaze_directions),
+                    'emotion_analysis_count': len(emotions_timeline)
+                }
+            })
+            
+            logger.info("✅ 视频分析成功完成")
             return analysis_result
             
         except Exception as e:
-            logging.error(f"视频分析失败: {str(e)}")
-            return self._get_fallback_visual_analysis()
+            processing_time = (datetime.now() - start_time).total_seconds()
+            logger.error(f"❌ 视频分析失败: {str(e)}")
+            logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+            logger.error(f"⏱️ 失败前处理时间: {processing_time:.2f}秒")
+            
+            fallback_result = self._get_fallback_visual_analysis()
+            fallback_result['error_details'] = {
+                'error_message': str(e),
+                'processing_time': processing_time
+            }
+            return fallback_result
     
     def _analyze_head_pose(self, face_landmarks, frame_shape) -> Optional[Dict[str, float]]:
         """分析头部姿态"""
@@ -132,6 +244,7 @@ class VideoAnalyzer:
                     landmark_points.append([lm.x * w, lm.y * h])
             
             if len(landmark_points) < 6:
+                logger.debug("⚠️ 头部姿态分析: 关键点数量不足")
                 return None
             
             image_points = np.array(landmark_points, dtype=np.float64)
@@ -159,12 +272,15 @@ class VideoAnalyzer:
                 
                 return {
                     'pitch': float(angles[0]),  # 俯仰角
-                    'yaw': float(angles[1]),    # 偏航角
+                    'yaw': float(angles[1]),    # 偶航角
                     'roll': float(angles[2])    # 翻滚角
                 }
+            else:
+                logger.debug("⚠️ 头部姿态分析: PnP算法求解失败")
             
         except Exception as e:
-            logging.warning(f"头部姿态分析失败: {str(e)}")
+            logger.warning(f"❌ 头部姿态分析失败: {str(e)}")
+            logger.debug(f"🔧 错误详情: {traceback.format_exc()}")
         
         return None
     
@@ -215,15 +331,24 @@ class VideoAnalyzer:
         """分析情绪"""
         
         if not DEEPFACE_AVAILABLE:
+            logger.warning(f"🚫 DeepFace不可用，使用备用情绪分析: {DEEPFACE_ERROR}")
             return self._fallback_emotion_analysis()
         
         try:
+            logger.debug("😊 开始DeepFace情绪分析...")
+            
+            # 检查帧的有效性
+            if frame is None or frame.size == 0:
+                logger.error("❌ 情绪分析失败: 输入帧为空")
+                return self._fallback_emotion_analysis()
+            
             # 使用DeepFace分析情绪
             result = DeepFace.analyze(
                 frame, 
                 actions=['emotion'], 
                 enforce_detection=False,
-                detector_backend=model_config.DEEPFACE_BACKEND
+                detector_backend=model_config.DEEPFACE_BACKEND,
+                silent=True
             )
             
             if isinstance(result, list):
@@ -231,8 +356,14 @@ class VideoAnalyzer:
             
             emotions = result.get('emotion', {})
             
+            if not emotions:
+                logger.warning("⚠️ DeepFace返回空的情绪结果")
+                return self._fallback_emotion_analysis()
+            
             # 找出主导情绪
             dominant_emotion = max(emotions.items(), key=lambda x: x[1])
+            
+            logger.debug(f"✅ 情绪分析成功: {dominant_emotion[0]} ({dominant_emotion[1]:.2f}%)")
             
             return {
                 'dominant_emotion': dominant_emotion[0],
@@ -241,7 +372,9 @@ class VideoAnalyzer:
             }
             
         except Exception as e:
-            logging.warning(f"情绪分析失败: {str(e)}")
+            logger.error(f"❌ DeepFace情绪分析失败: {str(e)}")
+            logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+            logger.info("🔄 切换到备用情绪分析")
             return self._fallback_emotion_analysis()
     
     def _rotation_matrix_to_euler(self, rotation_matrix) -> Tuple[float, float, float]:
@@ -327,6 +460,7 @@ class VideoAnalyzer:
     
     def _fallback_emotion_analysis(self) -> Dict[str, Any]:
         """DeepFace不可用时的备用情绪分析"""
+        logger.debug("🔄 使用备用情绪分析 (默认值)")
         return {
             'dominant_emotion': 'neutral',
             'dominant_score': 0.7,
@@ -338,7 +472,9 @@ class VideoAnalyzer:
                 'surprise': 0.05,
                 'disgust': 0.025,
                 'fear': 0.025
-            }
+            },
+            'fallback': True,
+            'reason': 'DeepFace不可用或分析失败'
         }
     
     def _get_fallback_visual_analysis(self) -> Dict[str, Any]:
@@ -363,26 +499,54 @@ class AudioAnalyzer:
     def analyze_audio(self, audio_path: str) -> Dict[str, Any]:
         """分析音频文件，提取听觉特征"""
         
+        start_time = datetime.now()
+        logger.info(f"🎵 开始音频分析: {audio_path}")
+        
         try:
+            # 检查音频文件是否存在
+            if not Path(audio_path).exists():
+                raise FileNotFoundError(f"音频文件不存在: {audio_path}")
+            
+            # 检查文件大小
+            file_size = Path(audio_path).stat().st_size
+            if file_size == 0:
+                raise Exception("音频文件为空")
+            
+            logger.info(f"📊 音频文件大小: {file_size / 1024:.1f} KB")
+            
             # 加载音频文件
+            logger.debug("🔄 加载音频文件...")
             y, sr = librosa.load(audio_path, sr=self.sample_rate)
             
             if len(y) == 0:
-                raise Exception("音频文件为空")
+                raise Exception("音频数据为空")
+            
+            duration = len(y) / sr
+            logger.info(f"📊 音频信息: 采样率{sr}Hz, 时长{duration:.2f}秒, {len(y)}个采样点")
             
             # 语速分析
+            logger.debug("🗣️ 分析语速...")
             speech_rate = self._analyze_speech_rate(y, sr)
+            logger.debug(f"✅ 语速分析完成: {speech_rate:.1f} BPM")
             
             # 音高分析
+            logger.debug("🎼 分析音高...")
             pitch_analysis = self._analyze_pitch(y, sr)
+            logger.debug(f"✅ 音高分析完成: 平均{pitch_analysis['mean']:.1f}Hz")
             
             # 音量分析
+            logger.debug("📢 分析音量...")
             volume_analysis = self._analyze_volume(y)
+            logger.debug(f"✅ 音量分析完成: 平均{volume_analysis['mean']:.1f}dB")
             
             # 语音清晰度分析
+            logger.debug("🎯 分析清晰度...")
             clarity_score = self._analyze_clarity(y, sr)
+            logger.debug(f"✅ 清晰度分析完成: {clarity_score:.2f}")
             
-            return {
+            processing_time = (datetime.now() - start_time).total_seconds()
+            
+            result = {
                 'speech_rate_bpm': speech_rate,
                 'pitch_mean': pitch_analysis['mean'],
                 'pitch_variance': pitch_analysis['variance'],
@@ -390,12 +554,30 @@ class AudioAnalyzer:
                 'volume_mean': volume_analysis['mean'],
                 'volume_variance': volume_analysis['variance'],
                 'clarity_score': clarity_score,
-                'audio_duration': len(y) / sr
+                'audio_duration': duration,
+                'processing_stats': {
+                    'processing_time_seconds': processing_time,
+                    'sample_rate': sr,
+                    'samples_count': len(y),
+                    'file_size_bytes': file_size
+                }
             }
             
+            logger.info(f"✅ 音频分析成功完成 (耗时: {processing_time:.2f}秒)")
+            return result
+            
         except Exception as e:
-            logging.error(f"音频分析失败: {str(e)}")
-            return self._get_fallback_audio_analysis()
+            processing_time = (datetime.now() - start_time).total_seconds()
+            logger.error(f"❌ 音频分析失败: {str(e)}")
+            logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+            logger.error(f"⏱️ 失败前处理时间: {processing_time:.2f}秒")
+            
+            fallback_result = self._get_fallback_audio_analysis()
+            fallback_result['error_details'] = {
+                'error_message': str(e),
+                'processing_time': processing_time
+            }
+            return fallback_result
     
     def _analyze_speech_rate(self, y: np.ndarray, sr: int) -> float:
         """分析语速"""
@@ -521,52 +703,99 @@ class MultimodalAnalyzer:
     ) -> Dict[str, Any]:
         """分析面试的音视频数据"""
         
+        start_time = datetime.now()
+        logger.info("🚀 开始多模态面试分析")
+        logger.info(f"📁 视频文件: {video_path if video_path else '未提供'}")
+        logger.info(f"📁 音频文件: {audio_path if audio_path else '未提供'}")
+        
         result = {
             'visual_analysis': None,
             'audio_analysis': None,
-            'analysis_timestamp': None
+            'analysis_timestamp': start_time.isoformat(),
+            'processing_summary': {
+                'video_success': False,
+                'audio_success': False,
+                'errors': []
+            }
         }
         
+        # DeepFace可用性检查
+        if not DEEPFACE_AVAILABLE:
+            logger.warning(f"⚠️ DeepFace不可用，情绪分析将使用备用方案: {DEEPFACE_ERROR}")
+            result['processing_summary']['errors'].append(f"DeepFace不可用: {DEEPFACE_ERROR}")
+        
         # 视觉分析
+        logger.info("=" * 50)
+        logger.info("🎥 开始视觉分析部分")
+        
         if video_path:
             video_file = Path(video_path)
             if video_file.exists() and video_file.stat().st_size > 0:
-                print(f"🎥 开始视频分析: {video_path}")
+                logger.info(f"📂 视频文件有效: {video_file.stat().st_size / (1024*1024):.1f} MB")
                 try:
                     result['visual_analysis'] = self.video_analyzer.analyze_video(video_path)
-                    print("✅ 视频分析完成")
+                    result['processing_summary']['video_success'] = True
+                    logger.info("✅ 视频分析部分完成")
                 except Exception as e:
-                    print(f"⚠️ 视频分析失败: {e}")
+                    error_msg = f"视频分析失败: {str(e)}"
+                    logger.error(f"❌ {error_msg}")
+                    logger.error(f"🔧 错误详情: {traceback.format_exc()}")
                     result['visual_analysis'] = self.video_analyzer._get_fallback_visual_analysis()
+                    result['processing_summary']['errors'].append(error_msg)
             else:
-                print(f"⚠️ 视频文件不存在或为空: {video_path}")
+                error_msg = f"视频文件不存在或为空: {video_path}"
+                logger.warning(f"⚠️ {error_msg}")
                 result['visual_analysis'] = self.video_analyzer._get_fallback_visual_analysis()
+                result['processing_summary']['errors'].append(error_msg)
         else:
-            print("⚠️ 未提供视频文件路径，使用默认视觉分析")
+            logger.info("ℹ️ 未提供视频文件路径，使用默认视觉分析")
             result['visual_analysis'] = self.video_analyzer._get_fallback_visual_analysis()
         
         # 听觉分析
+        logger.info("=" * 50)
+        logger.info("🎵 开始听觉分析部分")
+        
         if audio_path:
             audio_file = Path(audio_path)
             if audio_file.exists() and audio_file.stat().st_size > 0:
-                print(f"🎵 开始音频分析: {audio_path}")
+                logger.info(f"📂 音频文件有效: {audio_file.stat().st_size / 1024:.1f} KB")
                 try:
                     result['audio_analysis'] = self.audio_analyzer.analyze_audio(audio_path)
-                    print("✅ 音频分析完成")
+                    result['processing_summary']['audio_success'] = True
+                    logger.info("✅ 音频分析部分完成")
                 except Exception as e:
-                    print(f"⚠️ 音频分析失败: {e}")
+                    error_msg = f"音频分析失败: {str(e)}"
+                    logger.error(f"❌ {error_msg}")
+                    logger.error(f"🔧 错误详情: {traceback.format_exc()}")
                     result['audio_analysis'] = self.audio_analyzer._get_fallback_audio_analysis()
+                    result['processing_summary']['errors'].append(error_msg)
             else:
-                print(f"⚠️ 音频文件不存在或为空: {audio_path}")
+                error_msg = f"音频文件不存在或为空: {audio_path}"
+                logger.warning(f"⚠️ {error_msg}")
                 result['audio_analysis'] = self.audio_analyzer._get_fallback_audio_analysis()
+                result['processing_summary']['errors'].append(error_msg)
         else:
-            print("⚠️ 未提供音频文件路径，使用默认听觉分析")
+            logger.info("ℹ️ 未提供音频文件路径，使用默认听觉分析")
             result['audio_analysis'] = self.audio_analyzer._get_fallback_audio_analysis()
         
-        # 添加时间戳
-        from datetime import datetime
-        result['analysis_timestamp'] = datetime.now().isoformat()
+        # 分析总结
+        total_processing_time = (datetime.now() - start_time).total_seconds()
+        result['processing_summary']['total_time_seconds'] = total_processing_time
         
+        logger.info("=" * 50)
+        logger.info("📊 多模态分析总结:")
+        logger.info(f"   🎥 视频分析: {'✅ 成功' if result['processing_summary']['video_success'] else '❌ 失败/跳过'}")
+        logger.info(f"   🎵 音频分析: {'✅ 成功' if result['processing_summary']['audio_success'] else '❌ 失败/跳过'}")
+        logger.info(f"   ⏱️ 总处理时间: {total_processing_time:.2f}秒")
+        
+        if result['processing_summary']['errors']:
+            logger.warning(f"   ⚠️ 错误数量: {len(result['processing_summary']['errors'])}")
+            for i, error in enumerate(result['processing_summary']['errors'], 1):
+                logger.warning(f"     {i}. {error}")
+        else:
+            logger.info("   🎉 所有分析均成功完成!")
+        
+        logger.info("🏁 多模态面试分析完成")
         return result
 
 
