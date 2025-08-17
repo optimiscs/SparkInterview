@@ -68,58 +68,8 @@ transform: translateX(24px);
 </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
-<!-- 顶部导航栏 -->
-<div class="bg-white shadow-sm">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="flex justify-between items-center h-16">
-<div class="flex items-center">
-  <a href="../index.html" class="flex items-center">
-    <img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
-    <p class="ml-2 text-lg font-medium">职面星火</p>
-  </a>
-</div>
-<nav class="flex space-x-8">
-<a href="./index.html" class="flex items-center px-3 py-2 text-sm font-medium text-primary">
-<div class="w-5 h-5 flex items-center justify-center mr-2">
-<i class="ri-home-line"></i>
-</div>
-首页
-</a>
-<a href="./frontend/setting_page1.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-<div class="w-5 h-5 flex items-center justify-center mr-2">
-<i class="ri-video-chat-line"></i>
-</div>
-面试模拟
-</a>
-<a href="./frontend/assessment-options.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-<div class="w-5 h-5 flex items-center justify-center mr-2">
-<i class="ri-bar-chart-line"></i>
-</div>
-能力评估
-</a>
-<a href="./frontend/learning-resources.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-<div class="w-5 h-5 flex items-center justify-center mr-2">
-<i class="ri-book-open-line"></i>
-</div>
-学习资源
-</a>
-<a href="./frontend/user-profile.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-<div class="w-5 h-5 flex items-center justify-center mr-2">
-<i class="ri-user-settings-line"></i>
-</div>
-个人中心
-</a>
-</nav>
-
-<a href="./frontend/login.html" data-readdy="true">
-  <button class="text-gray-700 hover:text-primary px-4 py-2 rounded-button whitespace-nowrap">登录</button>
-  </a>
-  <a href="./frontend/register.html" data-readdy="true">
-  <button class="bg-primary text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap">注册</button>
-  </a>
-</div>
-</div>
-</div>
+<!-- 导航栏容器 - 组件会自动插入到这里 -->
+<div id="navbar-container"></div>
 <!-- Hero 区域 -->
 <section class="hero-section w-full">
 <div class="container mx-auto px-4 py-20">
@@ -127,7 +77,7 @@ transform: translateX(24px);
 <h1 class="text-4xl font-bold text-gray-900 mb-6">多模态智能面试平台</h1>
 <p class="text-lg text-gray-700 mb-8">本平台采用前后端分离架构，融合AI大模型、多模态分析与前端可视化等前沿技术，为高校学生和求职者提供真实、智能、个性化的面试体验。</p>
 <div class="flex flex-wrap gap-4">
-<a href="./frontend/setting_page1.html">
+<a href="./frontend/interview_agent.html">
 <button class="bg-primary text-white px-6 py-3 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap">开始模拟面试</button>
 </a>
 <button class="bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">了解更多</button>
@@ -365,7 +315,7 @@ transform: translateX(24px);
 </div>
 </div>
 <div class="mt-12 text-center">
-<a href="./frontend/setting_page1.html">
+<a href="./frontend/interview_agent.html">
 <button class="bg-primary text-white px-6 py-3 rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap">立即开始</button>
 </a>
 </div>
@@ -624,5 +574,8 @@ radarChart.resize();
       }
     });
   </script>
+  
+  <!-- 导入导航栏组件 -->
+  <script src="./frontend/components/navbar.js"></script>
 </body>
 </html>

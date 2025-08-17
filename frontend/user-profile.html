@@ -86,108 +86,10 @@ input:checked + .switch-slider:before {
   transform: translateX(20px);
 }
 </style>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const token = localStorage.getItem('access_token');
-  if (!token) {
-    window.location.href = '/frontend/login.html';
-    return;
-  }
-  
-  // 获取用户信息
-  fetchAndShowUserInfo();
-});
-
-async function fetchAndShowUserInfo() {
-  const token = localStorage.getItem('access_token');
-  if (!token) return;
-  
-  try {
-    const resp = await fetch('/api/v1/profile', {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-    
-    if (!resp.ok) {
-      throw new Error('获取用户信息失败');
-    }
-    
-    const user = await resp.json();
-    const userInfoDiv = document.getElementById('user-info');
-    
-    if (userInfoDiv) {
-      userInfoDiv.innerHTML = `
-        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center overflow-hidden">
-          ${user.avatar_url ? 
-            `<img src="${user.avatar_url}" class="w-full h-full object-cover" alt="头像">` : 
-            `<i class="ri-user-line text-white"></i>`}
-        </div>
-        <div class="ml-2">
-          <p class="text-sm font-medium text-gray-900">${user.name || '未知用户'}</p>
-          <p class="text-xs text-gray-500">${user.role === 'admin' ? '管理员' : user.role === 'teacher' ? '教师' : '学生'}</p>
-        </div>
-      `;
-    }
-  } catch (error) {
-    console.error('获取用户信息失败:', error);
-    localStorage.removeItem('access_token');
-    window.location.href = '/frontend/login.html';
-  }
-}
-</script>
 </head>
 <body class="bg-gray-50 min-h-screen">
-<!-- 顶部导航栏 -->
-<div class="bg-white shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-  <div class="flex justify-between items-center h-16">
-  <a href="assessment-options.html" class="flex items-center">
-    <img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
-    <p class="ml-2 text-lg font-medium">职面星火</p>
-  </a>
-  <nav class="flex space-x-8">
-  <a href="../index.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-home-line"></i>
-  </div>
-  首页
-  </a>
-  <a href="./setting_page1.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-video-chat-line"></i>
-  </div>
-  面试模拟
-  </a>
-  <a href="./assessment-options.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-bar-chart-line"></i>
-  </div>
-  能力评估
-  </a>
-  <a href="./learning-resources.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-book-open-line"></i>
-  </div>
-  学习资源
-  </a>
-  <a href="./user-profile.html" class="flex items-center px-3 py-2 text-sm font-medium text-primary">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-user-settings-line"></i>
-  </div>
-  个人中心
-  </a>
-  </nav>
-  <div id="user-info" class="flex items-center">
-  <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-  <i class="ri-user-line text-white"></i>
-  </div>
-  <div class="ml-2">
-  <p class="text-sm font-medium text-gray-900">加载中...</p>
-  <p class="text-xs text-gray-500">请稍候</p>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
+<!-- 导航栏容器 - 组件会自动插入到这里 -->
+<div id="navbar-container"></div>
 
 <!-- 主要内容区域 -->
 <main class="container mx-auto px-4 py-8">
@@ -237,6 +139,49 @@ async function fetchAndShowUserInfo() {
               <p>热爱前端技术，擅长 Vue、React 框架，对用户体验和交互设计有浓厚兴趣。目前正在学习数据可视化和 WebGL 相关技术，希望在面试中展现自己的技术实力和学习能力。</p>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- 快捷操作卡片 -->
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">快捷操作</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <a href="./Resume_management.html" class="group block bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 text-center hover:from-blue-100 hover:to-indigo-100 transition-all duration-200 border border-blue-200 hover:border-blue-300">
+            <div class="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-3 group-hover:bg-blue-200 transition-colors">
+              <div class="w-6 h-6 flex items-center justify-center text-blue-600">
+                <i class="ri-file-text-line"></i>
+              </div>
+            </div>
+            <h3 class="text-sm font-semibold text-gray-900 mb-1">我的简历</h3>
+            <p class="text-xs text-gray-600">管理和优化简历</p>
+          </a>
+          <a href="./interview_agent.html" class="group block bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-4 text-center hover:from-green-100 hover:to-emerald-100 transition-all duration-200 border border-green-200 hover:border-green-300">
+            <div class="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-3 group-hover:bg-green-200 transition-colors">
+              <div class="w-6 h-6 flex items-center justify-center text-green-600">
+                <i class="ri-video-chat-line"></i>
+              </div>
+            </div>
+            <h3 class="text-sm font-semibold text-gray-900 mb-1">AI面试</h3>
+            <p class="text-xs text-gray-600">模拟面试练习</p>
+          </a>
+          <a href="./assessment-options.html" class="group block bg-gradient-to-br from-purple-50 to-violet-50 rounded-lg p-4 text-center hover:from-purple-100 hover:to-violet-100 transition-all duration-200 border border-purple-200 hover:border-purple-300">
+            <div class="w-12 h-12 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-3 group-hover:bg-purple-200 transition-colors">
+              <div class="w-6 h-6 flex items-center justify-center text-purple-600">
+                <i class="ri-bar-chart-line"></i>
+              </div>
+            </div>
+            <h3 class="text-sm font-semibold text-gray-900 mb-1">能力评估</h3>
+            <p class="text-xs text-gray-600">测试专业技能</p>
+          </a>
+          <a href="./learning-resources.html" class="group block bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg p-4 text-center hover:from-orange-100 hover:to-amber-100 transition-all duration-200 border border-orange-200 hover:border-orange-300">
+            <div class="w-12 h-12 mx-auto bg-orange-100 rounded-full flex items-center justify-center mb-3 group-hover:bg-orange-200 transition-colors">
+              <div class="w-6 h-6 flex items-center justify-center text-orange-600">
+                <i class="ri-book-open-line"></i>
+              </div>
+            </div>
+            <h3 class="text-sm font-semibold text-gray-900 mb-1">学习资源</h3>
+            <p class="text-xs text-gray-600">提升专业能力</p>
+          </a>
         </div>
       </div>
 
@@ -977,5 +922,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 </script>
+    <!-- 导入导航栏组件 -->
+    <script src="./components/navbar.js"></script>
 </body>
 </html>

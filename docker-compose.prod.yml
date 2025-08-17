@@ -1,0 +1,100 @@
+# docker-compose.prod.yml - 职面星火多模态面试系统生产环境配置
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: interview_nginx_prod
+    ports:
+      - "80:80"
+      - "443:443"  # HTTPS端口
+    volumes:
+      - ./dist:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro  # SSL证书目录
+    networks:
+      - interview-network
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: interview_backend_prod
+    networks:
+      - interview-network
+    depends_on:
+      - redis
+      - chromadb
+    env_file:
+      - config.env
+    environment:
+      PYTHONPATH: /app
+      LOG_LEVEL: INFO
+      DEBUG_MODE: false
+      API_RELOAD: false
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    restart: unless-stopped
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
+
+  redis:
+    image: redis:alpine
+    container_name: interview_redis_prod
+    volumes:
+      - redis-data:/data
+    networks:
+      - interview-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: interview_chromadb_prod
+    volumes:
+      - chromadb-data:/chroma/chroma
+    networks:
+      - interview-network
+    environment:
+      - CHROMA_SERVER_HOST=0.0.0.0
+      - CHROMA_SERVER_HTTP_PORT=8000
+      - CHROMA_SERVER_CORS_ALLOW_ORIGINS=["*"]
+    restart: unless-stopped
+
+  # 可选：监控服务
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: interview_prometheus_prod
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks:
+      - interview-network
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: interview_grafana_prod
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - interview-network
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+
+networks:
+  interview-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+  chromadb-data:
+  prometheus-data:
+  grafana-data:

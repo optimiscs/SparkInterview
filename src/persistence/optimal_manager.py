@@ -36,9 +36,20 @@ class OptimalPersistenceManager:
             # 初始化SQLite数据库
             await self._init_database()
             
-            # 初始化Redis连接
+            # 初始化Redis连接 (兼容aioredis 1.3.1)
             try:
-                self.redis = await aioredis.from_url(self.redis_url)
+                # 解析Redis URL
+                import urllib.parse
+                parsed = urllib.parse.urlparse(self.redis_url)
+                host = parsed.hostname or 'localhost'
+                port = parsed.port or 6379
+                db = int(parsed.path.lstrip('/')) if parsed.path and parsed.path != '/' else 0
+                
+                self.redis = await aioredis.create_redis_pool(
+                    f'redis://{host}:{port}',
+                    db=db,
+                    encoding='utf-8'
+                )
                 await self.redis.ping()
                 logger.info("✅ Redis连接成功")
             except Exception as e:

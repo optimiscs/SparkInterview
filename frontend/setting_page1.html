@@ -715,58 +715,8 @@ content: "\f3c2";
 </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
-    <!-- 顶部导航栏 -->
-<div class="bg-white shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-  <div class="flex justify-between items-center h-16">
-  <a href="assessment-options.html" class="flex items-center">
-    <img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
-    <p class="ml-2 text-lg font-medium">职面星火</p>
-  </a>
-  <nav class="flex space-x-8">
-  <a href="../index.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-home-line"></i>
-  </div>
-  首页
-  </a>
-  <a href="./setting_page1.html" class="flex items-center px-3 py-2 text-sm font-medium text-primary">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-video-chat-line"></i>
-  </div>
-  面试模拟
-  </a>
-  <a href="./assessment-options.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-bar-chart-line"></i>
-  </div>
-  能力评估
-  </a>
-  <a href="./learning-resources.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-book-open-line"></i>
-  </div>
-  学习资源
-  </a>
-  <a href="./user-profile.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-user-settings-line"></i>
-  </div>
-  个人中心
-  </a>
-  </nav>
-  <div id="user-info" class="flex items-center">
-  <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-  <i class="ri-user-line text-white"></i>
-  </div>
-  <div class="ml-2">
-  <p class="text-sm font-medium text-gray-900">加载中...</p>
-  <p class="text-xs text-gray-500">请稍候</p>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
+    <!-- 导航栏容器 - 组件会自动插入到这里 -->
+    <div id="navbar-container"></div>
 <div class="flex h-screen">
 
 <!-- 中间主要内容区 -->
@@ -1013,5 +963,7 @@ content: "\f3c2";
 
 
 
+    <!-- 导入导航栏组件 -->
+    <script src="./components/navbar.js"></script>
 </body>
 </html>

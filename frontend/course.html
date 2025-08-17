@@ -72,34 +72,8 @@ color: #E5E7EB;
 </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
-<!-- 顶部导航栏 -->
-<header class="bg-white shadow-sm sticky top-0 z-50">
-<div class="container mx-auto px-4 py-3 flex justify-between items-center">
-<div class="flex items-center">
-<a href="https://readdy.ai/home/95b52a2e-78c3-4162-b2e2-e2497cd401ae/955e1b2d-0963-4c97-bc72-dca034feca35" data-readdy="true" class="flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors mr-6">
-<div class="w-8 h-8 flex items-center justify-center">
-<i class="ri-arrow-left-line"></i>
-</div>
-<span>返回</span>
-</a>
-<img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
-<span class="ml-2 text-lg font-medium">职面星火</span>
-</div>
-<div class="flex items-center space-x-4">
-<button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
-<i class="ri-share-line"></i>
-</button>
-<button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
-<i class="ri-heart-line"></i>
-</button>
-<div class="flex items-center space-x-2">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-<i class="ri-user-line text-gray-500"></i>
-</div>
-<span class="text-gray-700 hidden md:inline">张明远</span>
-</div>
-</div>
-</div>
+<!-- 导航栏容器 - 组件会自动插入到这里 -->
+    <div id="navbar-container"></div>
 </header>
 
 <!-- 课程概览区域 -->
@@ -1530,5 +1504,7 @@ progressChart.resize();
 });
 </script>
 
+    <!-- 导入导航栏组件 -->
+    <script src="./components/navbar.js"></script>
 </body>
 </html>

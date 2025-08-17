@@ -1,0 +1,37 @@
+{
+  "id": "resume_20250817_160557_4c9ef402",
+  "version_name": "软件开发岗-",
+  "target_position": "前端开发工程师",
+  "template_type": "classic",
+  "basic_info": {
+    "name": "张雨萌",
+    "phone": "138-8888-8888",
+    "email": "zhang.yumeng@email.com",
+    "github": "github.com/zhangyumeng"
+  },
+  "education": {
+    "school": "北京理工大学",
+    "major": "计算机科学与技术",
+    "degree": "本科",
+    "startTime": "2021.09",
+    "endTime": "2025.06"
+  },
+  "projects": [
+    {
+      "name": "智能学习管理系统",
+      "time": "2024.03 - 2024.06",
+      "techStack": "Vue.js, Spring Boot, MySQL, Redis",
+      "description": "• 负责前端界面设计与开发，使用 Vue.js 构建响应式用户界面\n• 设计并实现用户认证系统，支持多角色权限管理\n• 优化数据库查询性能，将平均响应时间从 800ms 降低至 200ms\n• 项目获得校级创新创业大赛二等奖，用户满意度达 95%"
+    }
+  ],
+  "skills": {
+    "programmingLanguages": "Java, Python, JavaScript, C++",
+    "frontend": "Vue.js, React, HTML5, CSS3",
+    "backend": "Spring Boot, Django, Node.js",
+    "database": "MySQL, PostgreSQL, Redis, MongoDB"
+  },
+  "internship": [],
+  "created_at": "2025-08-17T16:05:57.110749",
+  "updated_at": "2025-08-17T16:17:44.772312",
+  "status": "active"
+}

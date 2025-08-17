@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智能面试官 - AI 模拟面试平台</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<style>
+:where([class^="ri-"])::before {
+content: "\f3c2";
+}
+
+/* 流式聊天动画效果 */
+.typing-cursor {
+display: inline-block;
+animation: blink 1s infinite;
+font-weight: bold;
+color: #3B82F6;
+}
+
+@keyframes blink {
+0%, 50% { opacity: 1; }
+51%, 100% { opacity: 0; }
+}
+
+/* 消息滑入动画 */
+.message-slide-in {
+animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+from {
+    transform: translateY(20px);
+    opacity: 0;
+}
+to {
+    transform: translateY(0);
+    opacity: 1;
+}
+}
+
+/* 改善流式文本渲染 */
+.message-content {
+word-wrap: break-word;
+white-space: pre-wrap;
+line-height: 1.6;
+}
+
+/* WebSocket连接状态指示器 */
+.connection-indicator {
+position: fixed;
+top: 20px;
+right: 20px;
+padding: 8px 16px;
+border-radius: 20px;
+font-size: 12px;
+font-weight: 500;
+z-index: 1000;
+transition: all 0.3s ease;
+}
+
+.connection-indicator.connected {
+background-color: #10B981;
+color: white;
+}
+
+.connection-indicator.disconnected {
+background-color: #EF4444;
+color: white;
+}
+
+.connection-indicator.connecting {
+background-color: #F59E0B;
+color: white;
+}
+
+/* 加载动画优化 */
+.loading-dots {
+display: inline-flex;
+align-items: center;
+gap: 4px;
+}
+
+.loading-dots .dot {
+width: 4px;
+height: 4px;
+border-radius: 50%;
+background-color: #6B7280;
+animation: loading 1.4s infinite ease-in-out;
+}
+
+.loading-dots .dot:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots .dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes loading {
+0%, 80%, 100% {
+    transform: scale(0);
+}
+40% {
+    transform: scale(1);
+}
+}
+
+/* 自定义滚动条 */
+#chat-messages-container::-webkit-scrollbar {
+width: 6px;
+}
+
+#chat-messages-container::-webkit-scrollbar-track {
+background: #f1f5f9;
+border-radius: 3px;
+}
+
+#chat-messages-container::-webkit-scrollbar-thumb {
+background: #cbd5e1;
+border-radius: 3px;
+}
+
+#chat-messages-container::-webkit-scrollbar-thumb:hover {
+background: #94a3b8;
+}
+
+/* 错误提示样式优化 */
+.error-message {
+border-left: 4px solid #EF4444;
+background: linear-gradient(90deg, #FEF2F2 0%, #ffffff 100%);
+animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+0%, 100% { transform: translateX(0); }
+25% { transform: translateX(-5px); }
+75% { transform: translateX(5px); }
+}
+</style>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#3B82F6',
+secondary: '#E0F2FE'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+<!-- 导航栏容器 - 组件会自动插入到这里 -->
+    <div id="navbar-container"></div>
+<!-- 顶部进度导航 -->
+<div class="w-full bg-white border-b border-gray-100 py-4">
+<div class="max-w-6xl mx-auto px-6">
+<div class="flex items-center justify-center space-x-8">
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<i class="ri-file-text-line text-white text-sm"></i>
+</div>
+<span class="text-sm font-medium text-primary">简历解析</span>
+</div>
+<div class="w-12 h-0.5 bg-primary"></div>
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center animate-pulse">
+<i class="ri-briefcase-line text-white text-sm"></i>
+</div>
+<span class="text-sm font-medium text-primary">岗位确认</span>
+</div>
+<div class="w-12 h-0.5 bg-gray-200"></div>
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+<i class="ri-user-heart-line text-gray-400 text-sm"></i>
+</div>
+<span class="text-sm text-gray-400">行为面试</span>
+</div>
+<div class="w-12 h-0.5 bg-gray-200"></div>
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+<i class="ri-question-line text-gray-400 text-sm"></i>
+</div>
+<span class="text-sm text-gray-400">专业提问</span>
+</div>
+<div class="w-12 h-0.5 bg-gray-200"></div>
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+<i class="ri-bar-chart-line text-gray-400 text-sm"></i>
+</div>
+<span class="text-sm text-gray-400">复盘总结</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 主要内容区域 -->
+<div class="flex-1 flex">
+<!-- 左侧会话历史 -->
+<div class="w-80 bg-gray-50 border-r border-gray-100 flex flex-col">
+<div class="p-4 border-b border-gray-100 space-y-3">
+<button id="new-interview-btn" class="w-full py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2 !rounded-button">
+<i class="ri-add-line"></i>
+<span>新建面试</span>
+</button>
+<div class="relative">
+<input type="text" placeholder="搜索面试记录..." class="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+<div class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 flex items-center justify-center">
+<i class="ri-search-line text-gray-400 text-sm"></i>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-3">
+<!-- 会话列表将由JavaScript动态生成 -->
+</div>
+</div>
+<!-- 中央对话区域 -->
+<div class="flex-1 flex flex-col bg-white">
+<div class="flex-1 overflow-y-auto p-6 space-y-6" id="chat-messages-container">
+<!-- 动态消息将在这里显示 -->
+<div class="flex items-center justify-center py-8">
+<div class="flex items-center space-x-2 text-gray-500">
+<div class="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+<span class="text-sm">正在连接AI面试官...</span>
+</div>
+</div>
+</div>
+<!-- 底部输入区域 -->
+<div class="border-t border-gray-100 p-4">
+<div class="flex items-end space-x-4">
+<div class="flex space-x-2">
+<button class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors !rounded-button">
+<i class="ri-attachment-line text-gray-600"></i>
+</button>
+<button id="voiceToggle" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors !rounded-button">
+<i class="ri-mic-line text-gray-600"></i>
+</button>
+</div>
+<div class="flex-1 relative">
+<textarea id="messageInput" placeholder="输入您的回答..." class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm" rows="1"></textarea>
+<div id="voiceIndicator" class="absolute inset-0 bg-primary bg-opacity-10 rounded-lg hidden flex items-center justify-center">
+<div class="flex space-x-1">
+<div class="w-1 h-4 bg-primary rounded-full animate-pulse"></div>
+<div class="w-1 h-6 bg-primary rounded-full animate-pulse" style="animation-delay: 0.1s"></div>
+<div class="w-1 h-5 bg-primary rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
+<div class="w-1 h-7 bg-primary rounded-full animate-pulse" style="animation-delay: 0.3s"></div>
+</div>
+</div>
+</div>
+<button id="sendButton" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap !rounded-button">
+发送
+</button>
+</div>
+</div>
+</div>
+<!-- 右侧分析面板 -->
+<div id="analysisPanel" class="w-96 bg-gray-50 border-l border-gray-100 flex flex-col transition-all duration-300">
+<div class="relative">
+<button id="collapseToggle" class="absolute -left-8 top-1/2 -translate-y-1/2 w-8 h-16 bg-gray-50 border border-l-0 border-gray-100 rounded-l-lg flex items-center justify-center transition-colors hover:bg-gray-100 !rounded-none">
+<i class="ri-arrow-right-s-line text-gray-600 transition-transform duration-300"></i>
+</button>
+<div class="p-4 border-b border-gray-100">
+<h3 class="text-lg font-semibold text-gray-900">实时分析</h3>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- 微表情分析 -->
+<div class="bg-white rounded-lg p-4 border border-gray-200">
+<div class="flex items-center space-x-2 mb-3">
+<div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+<i class="ri-emotion-line text-blue-600 text-sm"></i>
+</div>
+<h4 class="text-sm font-medium text-gray-900">微表情分析</h4>
+</div>
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-xs text-gray-600">自信度</span>
+<span class="text-xs font-medium text-green-600">85%</span>
+</div>
+<div class="w-full bg-gray-200 rounded-full h-2">
+<div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs text-gray-600">紧张度</span>
+<span class="text-xs font-medium text-yellow-600">25%</span>
+</div>
+<div class="w-full bg-gray-200 rounded-full h-2">
+<div class="bg-yellow-500 h-2 rounded-full" style="width: 25%"></div>
+</div>
+</div>
+</div>
+<!-- 体态语言分析 -->
+<div class="bg-white rounded-lg p-4 border border-gray-200">
+<div class="flex items-center space-x-2 mb-3">
+<div class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
+<i class="ri-body-scan-line text-purple-600 text-sm"></i>
+</div>
+<h4 class="text-sm font-medium text-gray-900">体态语言</h4>
+</div>
+<div class="space-y-2 text-xs">
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 bg-green-500 rounded-full"></div>
+<span class="text-gray-700">眼神接触良好</span>
+</div>
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 bg-green-500 rounded-full"></div>
+<span class="text-gray-700">坐姿端正</span>
+</div>
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+<span class="text-gray-700">手势略显紧张</span>
+</div>
+</div>
+</div>
+<!-- 回答质量评估 -->
+<div class="bg-white rounded-lg p-4 border border-gray-200">
+<div class="flex items-center space-x-2 mb-3">
+<div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+<i class="ri-chat-check-line text-green-600 text-sm"></i>
+</div>
+<h4 class="text-sm font-medium text-gray-900">回答质量</h4>
+</div>
+<div class="space-y-3">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="text-xs text-gray-600">内容完整性</span>
+<span class="text-xs font-medium text-green-600">90%</span>
+</div>
+<div class="w-full bg-gray-200 rounded-full h-2">
+<div class="bg-green-500 h-2 rounded-full" style="width: 90%"></div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="text-xs text-gray-600">逻辑清晰度</span>
+<span class="text-xs font-medium text-blue-600">78%</span>
+</div>
+<div class="w-full bg-gray-200 rounded-full h-2">
+<div class="bg-blue-500 h-2 rounded-full" style="width: 78%"></div>
+</div>
+</div>
+<div class="text-xs text-gray-600 bg-blue-50 p-2 rounded">
+<i class="ri-lightbulb-line text-blue-600 mr-1"></i>
+建议使用 STAR 法则结构化回答
+</div>
+</div>
+</div>
+<!-- 即时优化建议 -->
+<div class="bg-white rounded-lg p-4 border border-gray-200">
+<div class="flex items-center space-x-2 mb-3">
+<div class="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center">
+<i class="ri-magic-line text-orange-600 text-sm"></i>
+</div>
+<h4 class="text-sm font-medium text-gray-900">优化建议</h4>
+</div>
+<div class="space-y-2 text-xs">
+<div class="bg-orange-50 p-3 rounded border-l-4 border-orange-400">
+<p class="text-gray-700 mb-1">语速控制</p>
+<p class="text-gray-600">适当放慢语速，让面试官更好地理解您的表达</p>
+</div>
+<div class="bg-blue-50 p-3 rounded border-l-4 border-blue-400">
+<p class="text-gray-700 mb-1">举例说明</p>
+<p class="text-gray-600">可以结合具体项目经历来支撑您的技能描述</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+    <!-- 面板切换脚本 -->
+    <script src="./js/panel-toggle.js"></script>
+    <!-- 语音输入脚本 -->
+    <script src="./js/voice-input.js"></script>
+    <!-- 面试管理脚本 -->
+    <script src="./js/interview-management.js"></script>
+    <!-- 消息输入和聊天管理脚本 -->
+    <script src="./js/message-input.js"></script>
+
+
+    <!-- 导入导航栏组件 -->
+    <script src="./components/navbar.js"></script>
+</body>
+</html>

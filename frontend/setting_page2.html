@@ -58,67 +58,8 @@ box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 </head>
 <body class="bg-gray-50 min-h-screen">
 <div class="flex h-screen flex-col">
-<!-- 顶部导航栏 -->
-<div class="bg-white shadow-sm">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="flex justify-between items-center h-16">
-<div class="flex items-center">
-<a href="./setting_page1.html" data-readdy="true" class="flex items-center text-gray-600 hover:text-gray-900 mr-6">
-<div class="w-5 h-5 flex items-center justify-center mr-2">
-<i class="ri-arrow-left-line"></i>
-</div>
-返回配置
-</a>
-
-<nav class="flex space-x-8">
-  <a href="assessment-options.html" class="flex items-center">
-    <img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
-    <p class="text-sm text-gray-600 ml-2">职面星火</p>
-  </a>
-  <nav class="flex space-x-8">
-  <a href="../index.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-home-line"></i>
-  </div>
-  首页
-  </a>
-  <a href="./setting_page1.html" class="flex items-center px-3 py-2 text-sm font-medium text-primary">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-video-chat-line"></i>
-  </div>
-  面试模拟
-  </a>
-  <a href="./assessment-options.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-bar-chart-line"></i>
-  </div>
-  能力评估
-  </a>
-  <a href="./learning-resources.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-book-open-line"></i>
-  </div>
-  学习资源
-  </a>
-  <a href="./user-profile.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-user-settings-line"></i>
-  </div>
-  个人中心
-  </a>
-</nav>
-<div class="flex items-center">
-<div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-<i class="ri-user-line text-white"></i>
-</div>
-<div class="ml-2">
-<p class="text-sm font-medium text-gray-900">李明华</p>
-<p class="text-xs text-gray-500">高级用户</p>
-</div>
-</div>
-</div>
-</div>
-</div>
+<!-- 导航栏容器 - 组件会自动插入到这里 -->
+    <div id="navbar-container"></div>
 <!-- 主要内容区 -->
 <div class="flex-1 flex overflow-hidden bg-gray-50">
 <!-- 左侧主要内容区 -->
@@ -905,5 +846,7 @@ function showDialog(title, message) {
 
 </script>
 
+    <!-- 导入导航栏组件 -->
+    <script src="./components/navbar.js"></script>
 </body>
 </html>

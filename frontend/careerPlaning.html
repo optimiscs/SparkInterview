@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智能简历管理平台</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#3b82f6',
+secondary: '#8b5cf6'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+<style>
+:where([class^="ri-"])::before {
+content: "\f3c2";
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<div class="flex h-screen">
+<!-- 左侧导航栏 -->
+<div class="w-80 bg-white shadow-lg flex flex-col">
+<!-- 用户信息区域 -->
+<div class="p-6 border-b border-gray-100">
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+<i class="ri-user-line text-white text-xl"></i>
+</div>
+<div>
+<h3 class="font-semibold text-gray-900">张雨萌</h3>
+<p class="text-sm text-gray-500">计算机科学与技术</p>
+</div>
+</div>
+</div>
+<!-- 导航菜单 -->
+<nav class="flex-1 p-4">
+<div class="space-y-2">
+<div class="nav-item active bg-primary/10 text-primary rounded-lg p-3 cursor-pointer flex items-center space-x-3">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-brain-line"></i>
+</div>
+<span class="font-medium">智能分析与诊断</span>
+</div>
+<div class="nav-item text-gray-600 hover:bg-gray-50 rounded-lg p-3 cursor-pointer flex items-center space-x-3">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-git-branch-line"></i>
+</div>
+<span class="font-medium">版本控制与定制化</span>
+</div>
+<div class="nav-item text-gray-600 hover:bg-gray-50 rounded-lg p-3 cursor-pointer flex items-center space-x-3">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-roadmap-line"></i>
+</div>
+<span class="font-medium">职业发展规划</span>
+</div>
+<div class="nav-item text-gray-600 hover:bg-gray-50 rounded-lg p-3 cursor-pointer flex items-center space-x-3">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-layout-line"></i>
+</div>
+<span class="font-medium">简历模板库</span>
+</div>
+</div>
+<!-- 简历版本管理 -->
+<div class="mt-8">
+<h4 class="text-sm font-semibold text-gray-900 mb-3">我的简历版本</h4>
+<div class="space-y-2">
+<div class="version-item bg-primary/5 border border-primary/20 rounded-lg p-3 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-gray-900">软件开发岗-简历</span>
+<span class="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">当前</span>
+</div>
+<p class="text-xs text-gray-500 mt-1">最后修改：2024-12-15</p>
+</div>
+<div class="version-item hover:bg-gray-50 rounded-lg p-3 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-gray-900">产品经理岗-简历</span>
+</div>
+<p class="text-xs text-gray-500 mt-1">最后修改：2024-12-10</p>
+</div>
+<div class="version-item hover:bg-gray-50 rounded-lg p-3 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-gray-900">国企专用-简历</span>
+</div>
+<p class="text-xs text-gray-500 mt-1">最后修改：2024-12-08</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- 底部操作按钮 -->
+<div class="p-4 border-t border-gray-100">
+<a href="https://readdy.ai/home/95b52a2e-78c3-4162-b2e2-e2497cd401ae/2cd95192-c0e7-441b-b9ad-e883c667cab4" data-readdy="true">
+<button class="w-full bg-primary text-white py-3 rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">
+新建简历版本
+</button>
+</a>
+</div>
+</div>
+<!-- 右侧主要内容区 -->
+<div class="flex-1 flex flex-col">
+<!-- 头部操作栏 -->
+<div class="bg-white border-b border-gray-200 p-6">
+<div class="flex items-center justify-between">
+<div>
+<h1 class="text-2xl font-bold text-gray-900">智能分析与诊断</h1>
+<p class="text-gray-500 mt-1">基于 AI 的深度简历分析，助您打造完美简历</p>
+</div>
+<div class="flex items-center space-x-3">
+<button id="uploadResumeBtn" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">
+<div class="w-4 h-4 inline-flex items-center justify-center mr-2">
+<i class="ri-upload-line"></i>
+</div>
+导入简历
+</button>
+<div id="uploadDialog" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+<div class="bg-white rounded-xl w-[480px] p-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-semibold text-gray-900">导入简历</h3>
+<button id="closeUploadDialog" class="text-gray-400 hover:text-gray-600">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-close-line"></i>
+</div>
+</button>
+</div>
+<div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-4 cursor-pointer hover:border-primary transition-colors">
+<input type="file" id="fileInput" class="hidden" accept=".pdf,.doc,.docx">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+<i class="ri-upload-cloud-line text-2xl text-primary"></i>
+</div>
+<p class="text-gray-900 font-medium mb-1">点击或拖拽文件到此处上传</p>
+<p class="text-sm text-gray-500">支持 PDF、Word 格式文件</p>
+</div>
+<div id="uploadProgress" class="hidden">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm text-gray-700" id="fileName">文件名称.pdf</span>
+<span class="text-sm text-gray-500" id="fileSize">2.5MB</span>
+</div>
+<div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+<div id="progressBar" class="bg-primary h-2 rounded-full" style="width: 0%"></div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-500" id="uploadStatus">正在上传...</span>
+<span class="text-sm text-primary" id="progressPercent">0%</span>
+</div>
+</div>
+</div>
+</div>
+<button class="px-4 py-2 bg-secondary text-white rounded-button hover:bg-secondary/90 transition-colors whitespace-nowrap">
+<div class="w-4 h-4 inline-flex items-center justify-center mr-2">
+<i class="ri-download-line"></i>
+</div>
+导出 PDF
+</button>
+</div>
+</div>
+</div>
+<!-- 主要内容区域 -->
+<div class="flex-1 flex">
+<!-- 简历预览区域 -->
+<div class="flex-1 p-6">
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 h-full">
+<div class="p-6 border-b border-gray-100">
+<h2 class="text-lg font-semibold text-gray-900">简历预览</h2>
+</div>
+<div class="p-6 h-full overflow-y-auto">
+<!-- 简历内容 -->
+<div class="max-w-2xl mx-auto bg-white">
+<!-- 个人信息 -->
+<div class="text-center mb-8">
+<h1 class="text-3xl font-bold text-gray-900 mb-2">张雨萌</h1>
+<div class="flex justify-center items-center space-x-6 text-gray-600">
+<span class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center mr-2">
+<i class="ri-phone-line"></i>
+</div>
+138-8888-8888
+</span>
+<span class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center mr-2">
+<i class="ri-mail-line"></i>
+</div>
+zhang.yumeng@email.com
+</span>
+<span class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center mr-2">
+<i class="ri-github-line"></i>
+</div>
+github.com/zhangyumeng
+</span>
+</div>
+</div>
+<!-- 教育背景 -->
+<div class="mb-8">
+<h2 class="text-xl font-bold text-gray-900 mb-4 border-b-2 border-primary pb-2">教育背景</h2>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-semibold text-gray-900">北京理工大学</h3>
+<p class="text-gray-600">计算机科学与技术 | 本科</p>
+</div>
+<span class="text-gray-500">2021.09 - 2025.06</span>
+</div>
+<p class="text-gray-600 mt-2">GPA: 3.8/4.0 | 专业排名：前 15%</p>
+</div>
+</div>
+</div>
+<!-- 项目经历 -->
+<div class="mb-8">
+<h2 class="text-xl font-bold text-gray-900 mb-4 border-b-2 border-primary pb-2">项目经历</h2>
+<div class="space-y-6">
+<div class="project-item">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-semibold text-gray-900">智能学习管理系统</h3>
+<span class="text-gray-500">2024.03 - 2024.06</span>
+</div>
+<p class="text-gray-600 mb-2">技术栈：Vue.js, Spring Boot, MySQL, Redis</p>
+<ul class="text-gray-700 space-y-1">
+<li>• 负责前端界面设计与开发，使用 Vue.js 构建响应式用户界面</li>
+<li>• 设计并实现用户认证系统，支持多角色权限管理</li>
+<li>• 优化数据库查询性能，将平均响应时间从 800ms 降低至 200ms</li>
+<li>• 项目获得校级创新创业大赛二等奖，用户满意度达 95%</li>
+</ul>
+</div>
+<div class="project-item">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-semibold text-gray-900">电商数据分析平台</h3>
+<span class="text-gray-500">2023.09 - 2024.01</span>
+</div>
+<p class="text-gray-600 mb-2">技术栈：Python, Django, PostgreSQL, Echarts</p>
+<ul class="text-gray-700 space-y-1">
+<li>• 开发数据可视化模块，实现销售趋势、用户行为等多维度分析</li>
+<li>• 构建自动化数据处理流水线，处理效率提升 60%</li>
+<li>• 设计实时监控仪表板，帮助运营团队及时发现异常数据</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- 技能清单 -->
+<div class="mb-8">
+<h2 class="text-xl font-bold text-gray-900 mb-4 border-b-2 border-primary pb-2">技能清单</h2>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<h4 class="font-semibold text-gray-900 mb-2">编程语言</h4>
+<p class="text-gray-700">Java, Python, JavaScript, C++</p>
+</div>
+<div>
+<h4 class="font-semibold text-gray-900 mb-2">前端技术</h4>
+<p class="text-gray-700">Vue.js, React, HTML5, CSS3</p>
+</div>
+<div>
+<h4 class="font-semibold text-gray-900 mb-2">后端技术</h4>
+<p class="text-gray-700">Spring Boot, Django, Node.js</p>
+</div>
+<div>
+<h4 class="font-semibold text-gray-900 mb-2">数据库</h4>
+<p class="text-gray-700">MySQL, PostgreSQL, Redis, MongoDB</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 智能分析面板 -->
+<div class="w-96 p-6 bg-gray-50">
+<div class="space-y-6">
+<!-- JD 匹配分析 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+<h3 class="text-lg font-semibold text-gray-900 mb-4">JD 智能匹配分析</h3>
+<div class="mb-4">
+<label class="block text-sm font-medium text-gray-700 mb-2">粘贴目标岗位 JD</label>
+<textarea class="w-full h-24 p-3 border border-gray-300 rounded-lg text-sm resize-none" placeholder="请粘贴您心仪岗位的职位描述..."></textarea>
+<button class="mt-2 w-full bg-primary text-white py-2 rounded-button text-sm hover:bg-primary/90 transition-colors whitespace-nowrap">开始分析</button>
+</div>
+<div class="jd-analysis-result">
+<div class="mb-4">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-medium text-gray-700">整体匹配度</span>
+<span class="text-sm font-bold text-primary">85%</span>
+</div>
+<div class="w-full bg-gray-200 rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<div id="matchChart" class="h-48 mb-4"></div>
+<div class="space-y-2">
+<div class="bg-green-50 border border-green-200 rounded-lg p-3">
+<h4 class="text-sm font-semibold text-green-800 mb-1">优势技能</h4>
+<p class="text-xs text-green-700">Java, Spring Boot, 数据库设计</p>
+</div>
+<div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+<h4 class="text-sm font-semibold text-yellow-800 mb-1">需要加强</h4>
+<p class="text-xs text-yellow-700">微服务架构, Docker, Kubernetes</p>
+</div>
+</div>
+</div>
+</div>
+<!-- STAR 原则检测 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+<h3 class="text-lg font-semibold text-gray-900 mb-4">STAR 原则检测</h3>
+<div class="space-y-4">
+<div class="star-item border border-gray-200 rounded-lg p-4">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-medium text-gray-900">智能学习管理系统</span>
+<div class="flex space-x-1">
+<span class="w-2 h-2 bg-green-400 rounded-full"></span>
+<span class="w-2 h-2 bg-green-400 rounded-full"></span>
+<span class="w-2 h-2 bg-green-400 rounded-full"></span>
+<span class="w-2 h-2 bg-yellow-400 rounded-full"></span>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-2 text-xs">
+<div class="text-center">
+<div class="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-1">S</div>
+<span class="text-green-600">完整</span>
+</div>
+<div class="text-center">
+<div class="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-1">T</div>
+<span class="text-green-600">清晰</span>
+</div>
+<div class="text-center">
+<div class="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-1">A</div>
+<span class="text-green-600">详细</span>
+</div>
+<div class="text-center">
+<div class="w-6 h-6 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-1">R</div>
+<span class="text-yellow-600">可优化</span>
+</div>
+</div>
+<div class="mt-3 p-2 bg-blue-50 rounded text-xs text-blue-700">
+<strong>建议：</strong>在结果部分添加更具体的量化数据，如"用户活跃度提升 40%"
+</div>
+</div>
+<div class="star-item border border-gray-200 rounded-lg p-4">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-medium text-gray-900">电商数据分析平台</span>
+<div class="flex space-x-1">
+<span class="w-2 h-2 bg-green-400 rounded-full"></span>
+<span class="w-2 h-2 bg-green-400 rounded-full"></span>
+<span class="w-2 h-2 bg-green-400 rounded-full"></span>
+<span class="w-2 h-2 bg-green-400 rounded-full"></span>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-2 text-xs">
+<div class="text-center">
+<div class="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-1">S</div>
+<span class="text-green-600">完整</span>
+</div>
+<div class="text-center">
+<div class="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-1">T</div>
+<span class="text-green-600">清晰</span>
+</div>
+<div class="text-center">
+<div class="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-1">A</div>
+<span class="text-green-600">详细</span>
+</div>
+<div class="text-center">
+<div class="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-1">R</div>
+<span class="text-green-600">优秀</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 简历健康度扫描 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+<h3 class="text-lg font-semibold text-gray-900 mb-4">简历健康度扫描</h3>
+<div class="text-center mb-4">
+<div id="healthChart" class="h-32"></div>
+<p class="text-2xl font-bold text-green-600 mt-2">92分</p>
+<p class="text-sm text-gray-500">整体健康度良好</p>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center mr-3">
+<i class="ri-check-line text-green-600"></i>
+</div>
+<span class="text-sm text-green-800">格式规范</span>
+</div>
+<span class="text-xs text-green-600">通过</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center mr-3">
+<i class="ri-check-line text-green-600"></i>
+</div>
+<span class="text-sm text-green-800">联系方式</span>
+</div>
+<span class="text-xs text-green-600">完整</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center mr-3">
+<i class="ri-alert-line text-yellow-600"></i>
+</div>
+<span class="text-sm text-yellow-800">篇幅长度</span>
+</div>
+<span class="text-xs text-yellow-600">略长</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center mr-3">
+<i class="ri-check-line text-green-600"></i>
+</div>
+<span class="text-sm text-green-800">语法检查</span>
+</div>
+<span class="text-xs text-green-600">无误</span>
+</div>
+</div>
+<button class="w-full mt-4 bg-secondary text-white py-2 rounded-button text-sm hover:bg-secondary/90 transition-colors whitespace-nowrap">一键优化建议</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script id="navigation">
+document.addEventListener('DOMContentLoaded', function() {
+const navItems = document.querySelectorAll('.nav-item');
+const mainContent = document.querySelector('.flex-1.flex.flex-col');
+const careerContent = `
+<div class="bg-white border-b border-gray-200 p-6">
+<div class="flex items-center justify-between">
+<div>
+<h1 class="text-2xl font-bold text-gray-900">职业发展规划</h1>
+<p class="text-gray-500 mt-1">基于您的背景和目标，为您规划最优职业发展路径</p>
+</div>
+</div>
+</div>
+<div class="flex-1 p-6 bg-gray-50">
+<div class="grid grid-cols-2 gap-6">
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+<h3 class="text-lg font-semibold text-gray-900 mb-4">职业路径规划</h3>
+<div id="careerPathChart" class="h-80"></div>
+</div>
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+<h3 class="text-lg font-semibold text-gray-900 mb-4">技能发展建议</h3>
+<div class="space-y-4">
+<div class="p-4 bg-blue-50 rounded-lg">
+<h4 class="font-medium text-blue-900 mb-2">核心技能提升</h4>
+<div class="space-y-3">
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-blue-800">系统架构设计</span>
+<span class="text-blue-600">优先级高</span>
+</div>
+<div class="w-full bg-blue-200 rounded-full h-2">
+<div class="bg-blue-600 h-2 rounded-full" style="width: 35%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-blue-800">微服务开发</span>
+<span class="text-blue-600">优先级高</span>
+</div>
+<div class="w-full bg-blue-200 rounded-full h-2">
+<div class="bg-blue-600 h-2 rounded-full" style="width: 45%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 bg-green-50 rounded-lg">
+<h4 class="font-medium text-green-900 mb-2">软技能培养</h4>
+<div class="space-y-3">
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-green-800">项目管理</span>
+<span class="text-green-600">持续提升</span>
+</div>
+<div class="w-full bg-green-200 rounded-full h-2">
+<div class="bg-green-600 h-2 rounded-full" style="width: 60%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-green-800">团队协作</span>
+<span class="text-green-600">持续提升</span>
+</div>
+<div class="w-full bg-green-200 rounded-full h-2">
+<div class="bg-green-600 h-2 rounded-full" style="width: 75%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+<h3 class="text-lg font-semibold text-gray-900 mb-4">行业趋势分析</h3>
+<div id="industryTrendChart" class="h-80"></div>
+</div>
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+<h3 class="text-lg font-semibold text-gray-900 mb-4">目标岗位推荐</h3>
+<div class="space-y-4">
+<div class="p-4 border border-gray-200 rounded-lg hover:border-primary transition-colors cursor-pointer">
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-medium text-gray-900">高级后端工程师</h4>
+<span class="text-primary text-sm">匹配度 92%</span>
+</div>
+<p class="text-gray-600 text-sm mb-3">薪资范围：30k-45k</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">Java</span>
+<span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">Spring Cloud</span>
+<span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">微服务</span>
+</div>
+</div>
+<div class="p-4 border border-gray-200 rounded-lg hover:border-primary transition-colors cursor-pointer">
+<div class="flex items-center justify-between mb-2">
+<h4 class="font-medium text-gray-900">技术架构师</h4>
+<span class="text-primary text-sm">匹配度 85%</span>
+</div>
+<p class="text-gray-600 text-sm mb-3">薪资范围：45k-60k</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">系统架构</span>
+<span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">技术管理</span>
+<span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">分布式</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>`;
+const originalContent = mainContent.innerHTML;
+navItems.forEach(item => {
+item.addEventListener('click', function() {
+if (this.classList.contains('active')) {
+this.classList.add('animate-pulse');
+setTimeout(() => {
+this.classList.remove('animate-pulse');
+}, 1000);
+return;
+}
+navItems.forEach(nav => {
+nav.classList.remove('active', 'bg-primary/10', 'text-primary');
+nav.classList.add('text-gray-600', 'hover:bg-gray-50');
+});
+this.classList.remove('text-gray-600', 'hover:bg-gray-50');
+this.classList.add('active', 'bg-primary/10', 'text-primary');
+if (this.querySelector('span').textContent === '职业发展规划') {
+mainContent.innerHTML = careerContent;
+initCareerCharts();
+} else if (this.querySelector('span').textContent === '智能分析与诊断') {
+mainContent.innerHTML = originalContent;
+const chartsScript = document.getElementById('charts');
+if (chartsScript) {
+eval(chartsScript.textContent);
+}
+}
+});
+});
+function initCareerCharts() {
+const careerPathChart = echarts.init(document.getElementById('careerPathChart'));
+const industryTrendChart = echarts.init(document.getElementById('industryTrendChart'));
+const careerPathOption = {
+animation: false,
+tooltip: {
+trigger: 'item'
+},
+series: [{
+type: 'graph',
+layout: 'force',
+roam: true,
+nodes: [
+{name: '当前\n后端开发', value: 20, category: 0, symbolSize: 60},
+{name: '高级后端\n工程师', value: 15, category: 1, symbolSize: 50},
+{name: '技术\n架构师', value: 10, category: 1, symbolSize: 50},
+{name: '技术\n总监', value: 5, category: 2, symbolSize: 40}
+],
+categories: [
+{name: '当前'},
+{name: '2-3年'},
+{name: '3-5年'}
+],
+edges: [
+{source: '当前\n后端开发', target: '高级后端\n工程师'},
+{source: '高级后端\n工程师', target: '技术\n架构师'},
+{source: '技术\n架构师', target: '技术\n总监'}
+],
+lineStyle: {
+color: 'rgba(87, 181, 231, 1)',
+width: 2
+},
+itemStyle: {
+color: 'rgba(87, 181, 231, 1)'
+},
+label: {
+show: true,
+position: 'inside',
+color: '#fff',
+fontSize: 12
+},
+force: {
+repulsion: 1000,
+edgeLength: 120
+}
+}]
+};
+const industryTrendOption = {
+animation: false,
+tooltip: {
+trigger: 'axis'
+},
+xAxis: {
+type: 'category',
+data: ['2024', '2025', '2026', '2027', '2028'],
+axisLine: {
+lineStyle: {
+color: '#e5e7eb'
+}
+}
+},
+yAxis: {
+type: 'value',
+name: '需求量',
+axisLine: {
+lineStyle: {
+color: '#e5e7eb'
+}
+},
+splitLine: {
+lineStyle: {
+color: '#e5e7eb'
+}
+}
+},
+series: [{
+name: '后端开发',
+type: 'line',
+smooth: true,
+data: [100, 120, 140, 160, 180],
+lineStyle: {
+color: 'rgba(87, 181, 231, 1)'
+},
+itemStyle: {
+color: 'rgba(87, 181, 231, 1)'
+},
+areaStyle: {
+color: 'rgba(87, 181, 231, 0.1)'
+}
+}]
+};
+careerPathChart.setOption(careerPathOption);
+industryTrendChart.setOption(industryTrendOption);
+window.addEventListener('resize', function() {
+careerPathChart.resize();
+industryTrendChart.resize();
+});
+}
+});
+</script>
+<script id="versionManagement">
+document.addEventListener('DOMContentLoaded', function() {
+const versionItems = document.querySelectorAll('.version-item');
+versionItems.forEach(item => {
+item.addEventListener('click', function() {
+versionItems.forEach(version => {
+version.classList.remove('bg-primary/5', 'border-primary/20');
+version.classList.add('hover:bg-gray-50');
+const currentBadge = version.querySelector('.text-primary.bg-primary\\/10');
+if (currentBadge) {
+currentBadge.remove();
+}
+});
+this.classList.remove('hover:bg-gray-50');
+this.classList.add('bg-primary/5', 'border-primary/20');
+const titleDiv = this.querySelector('.flex.items-center.justify-between');
+if (!titleDiv.querySelector('.text-primary.bg-primary\\/10')) {
+const currentBadge = document.createElement('span');
+currentBadge.className = 'text-xs text-primary bg-primary/10 px-2 py-1 rounded-full';
+currentBadge.textContent = '当前';
+titleDiv.appendChild(currentBadge);
+}
+});
+});
+});
+</script>
+<script id="charts">
+document.addEventListener('DOMContentLoaded', function() {
+const matchChart = echarts.init(document.getElementById('matchChart'));
+const matchOption = {
+animation: false,
+radar: {
+indicator: [
+{ name: '技术能力', max: 100 },
+{ name: '项目经验', max: 100 },
+{ name: '教育背景', max: 100 },
+{ name: '工作经验', max: 100 },
+{ name: '软技能', max: 100 }
+],
+radius: 60,
+axisLine: { lineStyle: { color: '#e5e7eb' } },
+splitLine: { lineStyle: { color: '#e5e7eb' } },
+axisLabel: { fontSize: 10, color: '#6b7280' }
+},
+series: [{
+type: 'radar',
+data: [{
+value: [85, 78, 92, 45, 88],
+name: '匹配度',
+areaStyle: { color: 'rgba(87, 181, 231, 0.1)' },
+lineStyle: { color: 'rgba(87, 181, 231, 1)' },
+itemStyle: { color: 'rgba(87, 181, 231, 1)' }
+}]
+}],
+grid: { top: 0, bottom: 0, left: 0, right: 0 }
+};
+matchChart.setOption(matchOption);
+const healthChart = echarts.init(document.getElementById('healthChart'));
+const healthOption = {
+animation: false,
+series: [{
+type: 'gauge',
+startAngle: 180,
+endAngle: 0,
+min: 0,
+max: 100,
+radius: '80%',
+center: ['50%', '70%'],
+axisLine: {
+lineStyle: {
+width: 8,
+color: [[0.6, '#ff6b6b'], [0.8, '#ffd93d'], [1, '#6bcf7f']]
+}
+},
+pointer: {
+itemStyle: { color: '#6bcf7f' }
+},
+axisTick: { show: false },
+splitLine: { show: false },
+axisLabel: { show: false },
+detail: { show: false },
+data: [{ value: 92 }]
+}],
+grid: { top: 0, bottom: 0, left: 0, right: 0 }
+};
+healthChart.setOption(healthOption);
+window.addEventListener('resize', function() {
+matchChart.resize();
+healthChart.resize();
+});
+});
+</script>
+<script id="interactions">
+document.addEventListener('DOMContentLoaded', function() {
+const uploadBtn = document.getElementById('uploadResumeBtn');
+const uploadDialog = document.getElementById('uploadDialog');
+const closeBtn = document.getElementById('closeUploadDialog');
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const uploadProgress = document.getElementById('uploadProgress');
+const progressBar = document.getElementById('progressBar');
+const fileName = document.getElementById('fileName');
+const fileSize = document.getElementById('fileSize');
+const uploadStatus = document.getElementById('uploadStatus');
+const progressPercent = document.getElementById('progressPercent');
+uploadBtn.addEventListener('click', () => {
+uploadDialog.classList.remove('hidden');
+});
+closeBtn.addEventListener('click', () => {
+uploadDialog.classList.add('hidden');
+resetUploadState();
+});
+dropZone.addEventListener('click', () => {
+fileInput.click();
+});
+dropZone.addEventListener('dragover', (e) => {
+e.preventDefault();
+dropZone.classList.add('border-primary');
+});
+dropZone.addEventListener('dragleave', () => {
+dropZone.classList.remove('border-primary');
+});
+dropZone.addEventListener('drop', (e) => {
+e.preventDefault();
+dropZone.classList.remove('border-primary');
+const file = e.dataTransfer.files[0];
+handleFileUpload(file);
+});
+fileInput.addEventListener('change', (e) => {
+const file = e.target.files[0];
+handleFileUpload(file);
+});
+function handleFileUpload(file) {
+if (!file) return;
+const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+if (!allowedTypes.includes(file.type)) {
+showUploadError('不支持的文件格式');
+return;
+}
+fileName.textContent = file.name;
+fileSize.textContent = formatFileSize(file.size);
+dropZone.classList.add('hidden');
+uploadProgress.classList.remove('hidden');
+simulateUpload();
+}
+function simulateUpload() {
+let progress = 0;
+const interval = setInterval(() => {
+progress += 5;
+progressBar.style.width = `${progress}%`;
+progressPercent.textContent = `${progress}%`;
+if (progress >= 100) {
+clearInterval(interval);
+uploadStatus.textContent = '解析中...';
+setTimeout(() => {
+uploadDialog.classList.add('hidden');
+resetUploadState();
+refreshPreview();
+}, 1000);
+}
+}, 100);
+}
+function showUploadError(message) {
+uploadStatus.textContent = message;
+uploadStatus.classList.add('text-red-500');
+setTimeout(resetUploadState, 3000);
+}
+function resetUploadState() {
+dropZone.classList.remove('hidden');
+uploadProgress.classList.add('hidden');
+progressBar.style.width = '0%';
+uploadStatus.textContent = '正在上传...';
+uploadStatus.classList.remove('text-red-500');
+fileInput.value = '';
+}
+function refreshPreview() {
+// Here you would typically update the resume preview and analysis results
+// For now, we'll just show a success message
+const messageDiv = document.createElement('div');
+messageDiv.className = 'fixed top-4 right-4 bg-green-50 text-green-800 px-4 py-2 rounded-lg shadow-lg z-50';
+messageDiv.textContent = '简历导入成功';
+document.body.appendChild(messageDiv);
+setTimeout(() => messageDiv.remove(), 3000);
+}
+function formatFileSize(bytes) {
+if (bytes === 0) return '0 B';
+const k = 1024;
+const sizes = ['B', 'KB', 'MB', 'GB'];
+const i = Math.floor(Math.log(bytes) / Math.log(k));
+return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
+const jdTextarea = document.querySelector('textarea');
+const analyzeBtn = document.querySelector('.jd-analysis-result').previousElementSibling.querySelector('button');
+const analysisResult = document.querySelector('.jd-analysis-result');
+analyzeBtn.addEventListener('click', function() {
+if (jdTextarea.value.trim()) {
+this.textContent = '分析中...';
+this.disabled = true;
+setTimeout(() => {
+this.textContent = '重新分析';
+this.disabled = false;
+analysisResult.style.display = 'block';
+}, 2000);
+}
+});
+const starItems = document.querySelectorAll('.star-item');
+starItems.forEach(item => {
+item.addEventListener('mouseenter', function() {
+this.style.transform = 'translateY(-2px)';
+this.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+});
+item.addEventListener('mouseleave', function() {
+this.style.transform = 'translateY(0)';
+this.style.boxShadow = 'none';
+});
+});
+});
+</script>
+    <!-- 导入导航栏组件 -->
+    <script src="./components/navbar.js"></script>
+</body>
+</html>

@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>创建简历版本 - 智能简历管理平台</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#3b82f6',
+secondary: '#8b5cf6'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+<style>
+:where([class^="ri-"])::before {
+content: "\f3c2";
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- 导航栏容器 - 组件会自动插入到这里 -->
+<div id="navbar-container"></div>
+
+<!-- 主要内容区域 -->
+<div class="max-w-4xl mx-auto px-6 py-8 pb-24">
+<!-- 页面头部 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+<div class="flex items-center space-x-3 mb-6">
+<button onclick="window.location.href='./Resume_management.html'" class="w-10 h-10 flex items-center justify-center border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+<i class="ri-arrow-left-line text-gray-600"></i>
+</button>
+<h1 class="text-xl font-bold text-gray-900">创建新的简历版本</h1>
+</div>
+
+<!-- 基本信息设置 -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">版本名称 <span class="text-red-500">*</span></label>
+<input type="text" id="versionName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm" placeholder="为这个版本起个名字，如：字节跳动-前端开发">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">目标岗位 <span class="text-red-500">*</span></label>
+<div class="relative">
+<button id="jobPositionBtn" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm text-left flex items-center justify-between">
+<span id="jobPositionText" class="text-gray-500">请选择目标岗位</span>
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</button>
+<div id="jobPositionDropdown" class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+<div class="py-1">
+<div class="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm" data-value="frontend">前端开发工程师</div>
+<div class="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm" data-value="backend">后端开发工程师</div>
+<div class="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm" data-value="fullstack">全栈开发工程师</div>
+<div class="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm" data-value="mobile">移动端开发工程师</div>
+<div class="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm" data-value="ai">AI算法工程师</div>
+<div class="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm" data-value="data">数据分析师</div>
+<div class="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm" data-value="product">产品经理</div>
+<div class="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm" data-value="ui">UI/UX设计师</div>
+<div class="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm" data-value="other">其他岗位</div>
+</div>
+</div>
+</div>
+<div id="customJobInput" class="hidden mt-4">
+<label class="block text-sm font-medium text-gray-700 mb-2">自定义岗位名称</label>
+<input type="text" id="customJob" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm" placeholder="请输入具体的岗位名称">
+</div>
+</div>
+</div>
+</div>
+
+<!-- 模板选择区域 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+<h2 class="text-lg font-semibold text-gray-900 mb-6">选择简历模板</h2>
+<div class="grid grid-cols-3 gap-6">
+<div class="template-card border-2 border-primary bg-primary/5 rounded-lg p-4 cursor-pointer" data-template="modern">
+<div class="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center border border-gray-200">
+<img src="https://readdy.ai/api/search-image?query=modern%20professional%20resume%20template%20with%20clean%20layout%2C%20blue%20accents%2C%20organized%20sections%20for%20contact%20info%20education%20and%20experience%2C%20minimalist%20design%20on%20white%20background&width=240&height=320&seq=template1&orientation=portrait" alt="现代简约模板" class="w-full h-full object-cover rounded-lg">
+</div>
+<h3 class="font-medium text-gray-900 text-center">现代简约</h3>
+<p class="text-xs text-gray-500 text-center mt-1">适合技术岗位</p>
+</div>
+<div class="template-card border-2 border-gray-200 hover:border-primary hover:bg-primary/5 rounded-lg p-4 cursor-pointer transition-all" data-template="classic">
+<div class="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center border border-gray-200">
+<img src="https://readdy.ai/api/search-image?query=classic%20professional%20resume%20template%20with%20traditional%20layout%2C%20formal%20structure%2C%20elegant%20typography%2C%20business%20style%20with%20organized%20sections%20on%20white%20background&width=240&height=320&seq=template2&orientation=portrait" alt="经典商务模板" class="w-full h-full object-cover rounded-lg">
+</div>
+<h3 class="font-medium text-gray-900 text-center">经典商务</h3>
+<p class="text-xs text-gray-500 text-center mt-1">适合传统行业</p>
+</div>
+<div class="template-card border-2 border-gray-200 hover:border-primary hover:bg-primary/5 rounded-lg p-4 cursor-pointer transition-all" data-template="creative">
+<div class="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center border border-gray-200">
+<img src="https://readdy.ai/api/search-image?query=creative%20professional%20resume%20template%20with%20innovative%20layout%2C%20colorful%20accents%2C%20modern%20design%20elements%2C%20artistic%20structure%20for%20creative%20professionals%20on%20white%20background&width=240&height=320&seq=template3&orientation=portrait" alt="创意设计模板" class="w-full h-full object-cover rounded-lg">
+</div>
+<h3 class="font-medium text-gray-900 text-center">创意设计</h3>
+<p class="text-xs text-gray-500 text-center mt-1">适合设计岗位</p>
+</div>
+</div>
+</div>
+
+<!-- 关键信息编辑 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-semibold text-gray-900">关键信息编辑</h2>
+<button id="expandAllBtn" class="text-sm text-primary hover:text-primary/80 transition-colors">
+展开全部
+</button>
+</div>
+<div class="space-y-4" id="resumeSections">
+<div class="section-item border border-gray-200 rounded-lg">
+<div class="flex items-center justify-between p-4 cursor-pointer" data-section="personal">
+<div class="flex items-center space-x-3">
+<div class="w-6 h-6 flex items-center justify-center">
+<input type="checkbox" id="personalToggle" checked class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+</div>
+<div class="w-5 h-5 flex items-center justify-center text-gray-600">
+<i class="ri-user-line"></i>
+</div>
+<span class="font-medium text-gray-900">个人信息</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">已完善</span>
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-right-s-line section-arrow transition-transform"></i>
+</div>
+</div>
+</div>
+<div class="section-content hidden p-4 border-t border-gray-200">
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+<input type="text" value="张雨萌" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">手机号码</label>
+<input type="text" value="138-8888-8888" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">邮箱地址</label>
+<input type="email" value="zhang.yumeng@email.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">GitHub</label>
+<input type="text" value="github.com/zhangyumeng" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+</div>
+</div>
+</div>
+
+<div class="section-item border border-gray-200 rounded-lg">
+<div class="flex items-center justify-between p-4 cursor-pointer" data-section="education">
+<div class="flex items-center space-x-3">
+<div class="w-6 h-6 flex items-center justify-center">
+<input type="checkbox" id="educationToggle" checked class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+</div>
+<div class="w-5 h-5 flex items-center justify-center text-gray-600">
+<i class="ri-graduation-cap-line"></i>
+</div>
+<span class="font-medium text-gray-900">教育背景</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">已完善</span>
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-right-s-line section-arrow transition-transform"></i>
+</div>
+</div>
+</div>
+<div class="section-content hidden p-4 border-t border-gray-200">
+<div class="space-y-4">
+<div class="p-4 bg-gray-50 rounded-lg">
+<div class="grid grid-cols-2 gap-4 mb-3">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">学校名称</label>
+<input type="text" value="北京理工大学" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">专业</label>
+<input type="text" value="计算机科学与技术" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">学历</label>
+<input type="text" value="本科" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">入学时间</label>
+<input type="text" value="2021.09" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">毕业时间</label>
+<input type="text" value="2025.06" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="section-item border border-gray-200 rounded-lg">
+<div class="flex items-center justify-between p-4 cursor-pointer" data-section="projects">
+<div class="flex items-center space-x-3">
+<div class="w-6 h-6 flex items-center justify-center">
+<input type="checkbox" id="projectsToggle" checked class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+</div>
+<div class="w-5 h-5 flex items-center justify-center text-gray-600">
+<i class="ri-code-box-line"></i>
+</div>
+<span class="font-medium text-gray-900">项目经历</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="text-xs text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full">需优化</span>
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-right-s-line section-arrow transition-transform"></i>
+</div>
+</div>
+</div>
+<div class="section-content hidden p-4 border-t border-gray-200">
+<div class="space-y-4">
+<div class="p-4 bg-gray-50 rounded-lg">
+<div class="flex items-center justify-between mb-3">
+<h4 class="font-medium text-gray-900">智能学习管理系统</h4>
+<button class="text-red-500 hover:text-red-700 text-sm">删除</button>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-3">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">项目名称</label>
+<input type="text" value="智能学习管理系统" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">项目时间</label>
+<input type="text" value="2024.03 - 2024.06" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+</div>
+<div class="mb-3">
+<label class="block text-sm font-medium text-gray-700 mb-2">技术栈</label>
+<input type="text" value="Vue.js, Spring Boot, MySQL, Redis" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">项目描述</label>
+<textarea rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary resize-none">• 负责前端界面设计与开发，使用 Vue.js 构建响应式用户界面
+• 设计并实现用户认证系统，支持多角色权限管理
+• 优化数据库查询性能，将平均响应时间从 800ms 降低至 200ms
+• 项目获得校级创新创业大赛二等奖，用户满意度达 95%</textarea>
+</div>
+</div>
+<button class="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-primary hover:text-primary transition-colors">
+<div class="w-4 h-4 inline-flex items-center justify-center mr-2">
+<i class="ri-add-line"></i>
+</div>
+添加项目经历
+</button>
+</div>
+</div>
+</div>
+
+<div class="section-item border border-gray-200 rounded-lg">
+<div class="flex items-center justify-between p-4 cursor-pointer" data-section="skills">
+<div class="flex items-center space-x-3">
+<div class="w-6 h-6 flex items-center justify-center">
+<input type="checkbox" id="skillsToggle" checked class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+</div>
+<div class="w-5 h-5 flex items-center justify-center text-gray-600">
+<i class="ri-tools-line"></i>
+</div>
+<span class="font-medium text-gray-900">技能清单</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">已完善</span>
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-right-s-line section-arrow transition-transform"></i>
+</div>
+</div>
+</div>
+<div class="section-content hidden p-4 border-t border-gray-200">
+<div class="grid grid-cols-2 gap-4">
+<div class="p-3 bg-gray-50 rounded-lg">
+<label class="block text-sm font-medium text-gray-700 mb-2">编程语言</label>
+<input type="text" value="Java, Python, JavaScript, C++" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+<div class="p-3 bg-gray-50 rounded-lg">
+<label class="block text-sm font-medium text-gray-700 mb-2">前端技术</label>
+<input type="text" value="Vue.js, React, HTML5, CSS3" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+<div class="p-3 bg-gray-50 rounded-lg">
+<label class="block text-sm font-medium text-gray-700 mb-2">后端技术</label>
+<input type="text" value="Spring Boot, Django, Node.js" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+<div class="p-3 bg-gray-50 rounded-lg">
+<label class="block text-sm font-medium text-gray-700 mb-2">数据库</label>
+<input type="text" value="MySQL, PostgreSQL, Redis, MongoDB" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+</div>
+</div>
+</div>
+</div>
+
+<div class="section-item border border-gray-200 rounded-lg">
+<div class="flex items-center justify-between p-4 cursor-pointer" data-section="internship">
+<div class="flex items-center space-x-3">
+<div class="w-6 h-6 flex items-center justify-center">
+<input type="checkbox" id="internshipToggle" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+</div>
+<div class="w-5 h-5 flex items-center justify-center text-gray-600">
+<i class="ri-briefcase-line"></i>
+</div>
+<span class="font-medium text-gray-900">实习经历</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">未填写</span>
+<div class="w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-arrow-right-s-line section-arrow transition-transform"></i>
+</div>
+</div>
+</div>
+        <div class="section-content hidden p-4 border-t border-gray-200">
+        <div class="text-center py-8">
+        <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+        <i class="ri-briefcase-line text-gray-400 text-xl"></i>
+        </div>
+        <p class="text-gray-500 mb-4">暂无实习经历</p>
+        <button class="px-4 py-2 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap">
+        添加实习经历
+        </button>
+        </div>
+        </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- 底部操作区 -->
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-6">
+<div class="max-w-4xl mx-auto flex items-center justify-between">
+<button id="cancelBtn" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">
+取消
+</button>
+<div class="flex items-center space-x-4">
+<button id="saveBtn" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">
+保存草稿
+</button>
+<div class="text-sm text-gray-500">
+<span class="text-primary">*</span> 必填信息已完成 3/4
+</div>
+<button id="createBtn" class="px-8 py-3 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap font-medium opacity-50 cursor-not-allowed" disabled>
+创建简历版本
+</button>
+</div>
+</div>
+</div>
+
+<script id="jobPositionDropdown">
+document.addEventListener('DOMContentLoaded', function() {
+const jobPositionBtn = document.getElementById('jobPositionBtn');
+const jobPositionDropdown = document.getElementById('jobPositionDropdown');
+const jobPositionText = document.getElementById('jobPositionText');
+const customJobInput = document.getElementById('customJobInput');
+const dropdownItems = jobPositionDropdown.querySelectorAll('[data-value]');
+
+jobPositionBtn.addEventListener('click', function(e) {
+e.stopPropagation();
+jobPositionDropdown.classList.toggle('hidden');
+});
+
+dropdownItems.forEach(item => {
+item.addEventListener('click', function() {
+const value = this.getAttribute('data-value');
+const text = this.textContent;
+
+jobPositionText.textContent = text;
+jobPositionText.classList.remove('text-gray-500');
+jobPositionText.classList.add('text-gray-900');
+jobPositionDropdown.classList.add('hidden');
+
+if (value === 'other') {
+customJobInput.classList.remove('hidden');
+} else {
+customJobInput.classList.add('hidden');
+}
+
+// 触发表单验证
+console.log('岗位选择changed:', text);
+// 延迟执行验证，确保DOM已更新
+setTimeout(() => {
+if (typeof validateForm === 'function') {
+validateForm();
+}
+}, 100);
+});
+});
+
+document.addEventListener('click', function() {
+jobPositionDropdown.classList.add('hidden');
+});
+});
+</script>
+
+<script id="templateSelection">
+document.addEventListener('DOMContentLoaded', function() {
+const templateCards = document.querySelectorAll('.template-card');
+
+templateCards.forEach(card => {
+card.addEventListener('click', function() {
+templateCards.forEach(c => {
+c.classList.remove('border-primary', 'bg-primary/5');
+c.classList.add('border-gray-200', 'hover:border-primary', 'hover:bg-primary/5');
+});
+
+this.classList.remove('border-gray-200', 'hover:border-primary', 'hover:bg-primary/5');
+this.classList.add('border-primary', 'bg-primary/5');
+});
+});
+});
+</script>
+
+<script id="sectionManagement">
+document.addEventListener('DOMContentLoaded', function() {
+const sectionItems = document.querySelectorAll('.section-item');
+const expandAllBtn = document.getElementById('expandAllBtn');
+let allExpanded = false;
+
+sectionItems.forEach(item => {
+const header = item.querySelector('[data-section]');
+const content = item.querySelector('.section-content');
+const arrow = item.querySelector('.section-arrow');
+
+header.addEventListener('click', function() {
+const isExpanded = !content.classList.contains('hidden');
+
+if (isExpanded) {
+content.classList.add('hidden');
+arrow.style.transform = 'rotate(0deg)';
+} else {
+content.classList.remove('hidden');
+arrow.style.transform = 'rotate(90deg)';
+}
+});
+});
+
+expandAllBtn.addEventListener('click', function() {
+const contents = document.querySelectorAll('.section-content');
+const arrows = document.querySelectorAll('.section-arrow');
+
+if (allExpanded) {
+contents.forEach(content => content.classList.add('hidden'));
+arrows.forEach(arrow => arrow.style.transform = 'rotate(0deg)');
+this.textContent = '展开全部';
+allExpanded = false;
+} else {
+contents.forEach(content => content.classList.remove('hidden'));
+arrows.forEach(arrow => arrow.style.transform = 'rotate(90deg)');
+this.textContent = '收起全部';
+allExpanded = true;
+}
+});
+});
+</script>
+
+<script id="formValidation">
+document.addEventListener('DOMContentLoaded', function() {
+const versionNameInput = document.getElementById('versionName');
+const createBtn = document.getElementById('createBtn');
+const cancelBtn = document.getElementById('cancelBtn');
+const saveBtn = document.getElementById('saveBtn');
+
+// 检查编辑模式
+let isEditMode = false;
+let editResumeId = null;
+let originalResumeData = null;
+
+// 解析URL参数
+function getURLParams() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+        id: params.get('id'),
+        action: params.get('action')
+    };
+}
+
+// 检查是否为编辑模式
+function checkEditMode() {
+    const params = getURLParams();
+    if (params.id && params.action === 'edit') {
+        isEditMode = true;
+        editResumeId = params.id;
+        console.log('编辑模式激活，简历ID:', editResumeId);
+        return true;
+    }
+    return false;
+}
+
+function validateForm() {
+try {
+const versionName = versionNameInput ? versionNameInput.value.trim() : '';
+const jobPositionElement = document.getElementById('jobPositionText');
+const jobPosition = jobPositionElement ? jobPositionElement.textContent.trim() : '';
+
+console.log('表单验证:', { versionName, jobPosition });
+
+if (versionName && jobPosition && jobPosition !== '请选择目标岗位') {
+createBtn.disabled = false;
+createBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+console.log('表单验证通过，按钮已启用');
+} else {
+createBtn.disabled = true;
+createBtn.classList.add('opacity-50', 'cursor-not-allowed');
+console.log('表单验证失败，按钮禁用');
+}
+} catch (error) {
+console.error('表单验证错误:', error);
+}
+}
+
+// 收集表单数据的函数
+function collectFormData() {
+// 获取基本信息
+const versionName = versionNameInput.value.trim();
+const targetPosition = document.getElementById('jobPositionText').textContent;
+const customJob = document.getElementById('customJob').value.trim();
+const actualPosition = targetPosition === '其他岗位' && customJob ? customJob : targetPosition;
+
+// 获取选中的模板
+const selectedTemplate = document.querySelector('.template-card.border-primary');
+const templateType = selectedTemplate ? selectedTemplate.getAttribute('data-template') : 'modern';
+
+// 获取个人信息 - 根据当前在页面中的顺序
+const personalSection = document.querySelector('[data-section="personal"]').closest('.section-item');
+const personalInputs = personalSection.querySelectorAll('.section-content input');
+const basicInfo = {
+name: personalInputs[0]?.value || '',
+phone: personalInputs[1]?.value || '',
+email: personalInputs[2]?.value || '',
+github: personalInputs[3]?.value || ''
+};
+
+// 获取教育背景
+const educationSection = document.querySelector('[data-section="education"]').closest('.section-item');
+const educationInputs = educationSection.querySelectorAll('.section-content input');
+const education = {
+school: educationInputs[0]?.value || '',
+major: educationInputs[1]?.value || '',
+degree: educationInputs[2]?.value || '',
+startTime: educationInputs[3]?.value || '',
+endTime: educationInputs[4]?.value || ''
+};
+
+// 获取项目经历
+const projects = [];
+const projectsSection = document.querySelector('[data-section="projects"]').closest('.section-item');
+const projectItems = projectsSection.querySelectorAll('.section-content .p-4.bg-gray-50.rounded-lg');
+projectItems.forEach(item => {
+const projectInputs = item.querySelectorAll('input');
+const projectTextarea = item.querySelector('textarea');
+const projectName = projectInputs[0]?.value || '';
+const projectTime = projectInputs[1]?.value || '';
+const techStack = projectInputs[2]?.value || '';
+const description = projectTextarea?.value || '';
+
+if (projectName) {
+projects.push({
+name: projectName,
+time: projectTime,
+techStack: techStack,
+description: description
+});
+}
+});
+
+// 获取技能清单
+const skillsSection = document.querySelector('[data-section="skills"]').closest('.section-item');
+const skillsInputs = skillsSection.querySelectorAll('.section-content input');
+const skills = {
+programmingLanguages: skillsInputs[0]?.value || '',
+frontend: skillsInputs[1]?.value || '',
+backend: skillsInputs[2]?.value || '',
+database: skillsInputs[3]?.value || ''
+};
+
+// 获取实习经历（目前为空）
+const internship = [];
+
+return {
+version_name: versionName,
+target_position: actualPosition,
+template_type: templateType,
+basic_info: basicInfo,
+education: education,
+projects: projects,
+skills: skills,
+internship: internship
+};
+}
+
+// API调用函数
+async function callAPI(endpoint, method = 'POST', data = null) {
+try {
+const url = `/api/v1/resume${endpoint}`;
+const options = {
+method: method,
+headers: {
+'Content-Type': 'application/json',
+'Authorization': `Bearer ${localStorage.getItem('access_token') || ''}`
+}
+};
+
+if (data && method !== 'GET') {
+options.body = JSON.stringify(data);
+}
+
+const response = await fetch(url, options);
+const result = await response.json();
+
+if (!response.ok) {
+throw new Error(result.detail || '请求失败');
+}
+
+return result;
+} catch (error) {
+console.error('API调用失败:', error);
+throw error;
+}
+}
+
+// 加载现有简历数据（编辑模式）
+async function loadExistingResumeData(resumeId) {
+    try {
+        console.log('加载简历数据:', resumeId);
+        const response = await callAPI(`/detail/${resumeId}`, 'GET');
+        
+        if (response.success && response.data) {
+            originalResumeData = response.data;
+            populateFormWithData(response.data);
+            updateUIForEditMode();
+            console.log('简历数据加载成功');
+            return true;
+        } else {
+            throw new Error('简历数据加载失败');
+        }
+    } catch (error) {
+        console.error('加载简历数据失败:', error);
+        showErrorMessage('无法加载简历数据：' + error.message);
+        return false;
+    }
+}
+
+// 用数据填充表单
+function populateFormWithData(resumeData) {
+    console.log('填充表单数据:', resumeData);
+    
+    // 填充基本信息
+    if (resumeData.version_name) {
+        versionNameInput.value = resumeData.version_name;
+    }
+    
+    // 填充目标岗位
+    if (resumeData.target_position) {
+        const jobPositionText = document.getElementById('jobPositionText');
+        jobPositionText.textContent = resumeData.target_position;
+        jobPositionText.classList.remove('text-gray-500');
+        jobPositionText.classList.add('text-gray-900');
+    }
+    
+    // 选择模板
+    if (resumeData.template_type) {
+        const templateCards = document.querySelectorAll('.template-card');
+        templateCards.forEach(card => {
+            card.classList.remove('border-primary', 'bg-primary/5');
+            card.classList.add('border-gray-200');
+            
+            if (card.getAttribute('data-template') === resumeData.template_type) {
+                card.classList.remove('border-gray-200');
+                card.classList.add('border-primary', 'bg-primary/5');
+            }
+        });
+    }
+    
+    // 填充个人信息
+    const basicInfo = resumeData.basic_info || {};
+    const personalSection = document.querySelector('[data-section="personal"]').closest('.section-item');
+    const personalInputs = personalSection.querySelectorAll('.section-content input');
+    
+    if (personalInputs[0] && basicInfo.name) personalInputs[0].value = basicInfo.name;
+    if (personalInputs[1] && basicInfo.phone) personalInputs[1].value = basicInfo.phone;
+    if (personalInputs[2] && basicInfo.email) personalInputs[2].value = basicInfo.email;
+    if (personalInputs[3] && basicInfo.github) personalInputs[3].value = basicInfo.github;
+    
+    // 填充教育背景
+    const education = resumeData.education || {};
+    const educationSection = document.querySelector('[data-section="education"]').closest('.section-item');
+    const educationInputs = educationSection.querySelectorAll('.section-content input');
+    
+    if (educationInputs[0] && education.school) educationInputs[0].value = education.school;
+    if (educationInputs[1] && education.major) educationInputs[1].value = education.major;
+    if (educationInputs[2] && education.degree) educationInputs[2].value = education.degree;
+    if (educationInputs[3] && education.startTime) educationInputs[3].value = education.startTime;
+    if (educationInputs[4] && education.endTime) educationInputs[4].value = education.endTime;
+    
+    // 填充项目经历
+    const projects = resumeData.projects || [];
+    if (projects.length > 0) {
+        const project = projects[0]; // 目前只处理第一个项目
+        const projectsSection = document.querySelector('[data-section="projects"]').closest('.section-item');
+        const projectItem = projectsSection.querySelector('.section-content .p-4.bg-gray-50.rounded-lg');
+        
+        if (projectItem) {
+            const projectInputs = projectItem.querySelectorAll('input');
+            const projectTextarea = projectItem.querySelector('textarea');
+            
+            if (projectInputs[0] && project.name) projectInputs[0].value = project.name;
+            if (projectInputs[1] && project.time) projectInputs[1].value = project.time;
+            if (projectInputs[2] && project.techStack) projectInputs[2].value = project.techStack;
+            if (projectTextarea && project.description) projectTextarea.value = project.description;
+        }
+    }
+    
+    // 填充技能清单
+    const skills = resumeData.skills || {};
+    const skillsSection = document.querySelector('[data-section="skills"]').closest('.section-item');
+    const skillsInputs = skillsSection.querySelectorAll('.section-content input');
+    
+    if (skillsInputs[0] && skills.programmingLanguages) skillsInputs[0].value = skills.programmingLanguages;
+    if (skillsInputs[1] && skills.frontend) skillsInputs[1].value = skills.frontend;
+    if (skillsInputs[2] && skills.backend) skillsInputs[2].value = skills.backend;
+    if (skillsInputs[3] && skills.database) skillsInputs[3].value = skills.database;
+    
+    console.log('表单数据填充完成');
+}
+
+// 更新UI以反映编辑模式
+function updateUIForEditMode() {
+    // 更新页面标题
+    const pageTitle = document.querySelector('h1');
+    if (pageTitle) {
+        pageTitle.textContent = '编辑简历版本';
+    }
+    
+    // 更新创建按钮文字
+    createBtn.textContent = '保存修改';
+    
+    // 更新保存草稿按钮文字
+    saveBtn.textContent = '更新草稿';
+}
+
+// 创建或更新简历
+async function createResume() {
+try {
+if (isEditMode) {
+createBtn.textContent = '保存中...';
+} else {
+createBtn.textContent = '创建中...';
+}
+createBtn.disabled = true;
+
+const formData = collectFormData();
+
+let response;
+if (isEditMode) {
+// 编辑模式：调用更新API
+response = await callAPI(`/update/${editResumeId}`, 'PUT', formData);
+} else {
+// 创建模式：调用创建API
+response = await callAPI('/create', 'POST', formData);
+}
+
+if (response.success) {
+showSuccessMessage(isEditMode ? '简历修改保存成功！' : '简历版本创建成功！');
+setTimeout(() => {
+window.location.href = './Resume_management.html';
+}, 1500);
+} else {
+throw new Error(response.message || (isEditMode ? '保存失败' : '创建失败'));
+}
+} catch (error) {
+showErrorMessage(error.message || (isEditMode ? '简历修改失败，请稍后重试' : '简历创建失败，请稍后重试'));
+createBtn.textContent = isEditMode ? '保存修改' : '创建简历版本';
+createBtn.disabled = false;
+}
+}
+
+// 保存草稿
+async function saveDraft() {
+try {
+if (isEditMode) {
+saveBtn.textContent = '更新中...';
+} else {
+saveBtn.textContent = '保存中...';
+}
+saveBtn.disabled = true;
+
+const formData = collectFormData();
+
+let response;
+if (isEditMode) {
+// 编辑模式：更新为草稿状态
+formData.status = 'draft';
+response = await callAPI(`/update/${editResumeId}`, 'PUT', formData);
+} else {
+// 创建模式：保存为草稿
+response = await callAPI('/save-draft', 'POST', formData);
+}
+
+if (response.success) {
+showSuccessMessage(isEditMode ? '草稿更新成功！' : '草稿保存成功！');
+setTimeout(() => {
+saveBtn.textContent = isEditMode ? '更新草稿' : '保存草稿';
+saveBtn.disabled = false;
+}, 1500);
+} else {
+throw new Error(response.message || '保存失败');
+}
+} catch (error) {
+showErrorMessage(error.message || (isEditMode ? '草稿更新失败，请稍后重试' : '草稿保存失败，请稍后重试'));
+saveBtn.textContent = isEditMode ? '更新草稿' : '保存草稿';
+saveBtn.disabled = false;
+}
+}
+
+// 确保所有元素都正确获取
+if (!versionNameInput) {
+console.error('版本名称输入框未找到');
+return;
+}
+if (!createBtn) {
+console.error('创建按钮未找到');
+return;
+}
+
+// 初始设置按钮为禁用状态
+createBtn.disabled = true;
+createBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+versionNameInput.addEventListener('input', validateForm);
+
+// 为岗位选择添加变化监听
+const jobPositionBtn = document.getElementById('jobPositionBtn');
+if (jobPositionBtn) {
+// 监听岗位选择变化
+const observer = new MutationObserver(function() {
+validateForm();
+});
+observer.observe(document.getElementById('jobPositionText'), {
+childList: true,
+characterData: true,
+subtree: true
+});
+}
+
+createBtn.addEventListener('click', function(e) {
+e.preventDefault();
+console.log('创建按钮被点击, disabled状态:', this.disabled);
+if (!this.disabled) {
+createResume();
+} else {
+console.log('按钮处于禁用状态，无法创建简历');
+}
+});
+
+cancelBtn.addEventListener('click', function() {
+if (hasUnsavedChanges()) {
+showConfirmDialog('确定要取消吗？未保存的更改将丢失。', function() {
+window.location.href = './Resume_management.html';
+});
+} else {
+window.location.href = './Resume_management.html';
+}
+});
+
+saveBtn.addEventListener('click', function() {
+if (!this.disabled) {
+saveDraft();
+}
+});
+
+function hasUnsavedChanges() {
+return versionNameInput.value.trim() !== '';
+}
+
+function showSuccessMessage(message) {
+const messageDiv = document.createElement('div');
+messageDiv.className = 'fixed top-6 right-6 bg-green-50 text-green-800 px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2';
+messageDiv.innerHTML = `
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-check-line text-green-600"></i>
+</div>
+<span>${message}</span>
+`;
+document.body.appendChild(messageDiv);
+setTimeout(() => messageDiv.remove(), 3000);
+}
+
+function showErrorMessage(message) {
+const messageDiv = document.createElement('div');
+messageDiv.className = 'fixed top-6 right-6 bg-red-50 text-red-800 px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2';
+messageDiv.innerHTML = `
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-close-line text-red-600"></i>
+</div>
+<span>${message}</span>
+`;
+document.body.appendChild(messageDiv);
+setTimeout(() => messageDiv.remove(), 4000);
+}
+
+function showConfirmDialog(message, onConfirm) {
+const dialog = document.createElement('div');
+dialog.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+dialog.innerHTML = `
+<div class="bg-white rounded-xl p-6 max-w-md mx-4">
+<h3 class="text-lg font-semibold text-gray-900 mb-3">确认操作</h3>
+<p class="text-gray-600 mb-6">${message}</p>
+<div class="flex space-x-3 justify-end">
+<button class="cancel-confirm px-4 py-2 border border-gray-300 text-gray-700 rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">取消</button>
+<button class="confirm-action px-4 py-2 bg-red-500 text-white rounded-button hover:bg-red-600 transition-colors whitespace-nowrap">确定</button>
+</div>
+</div>
+`;
+document.body.appendChild(dialog);
+
+dialog.querySelector('.cancel-confirm').addEventListener('click', () => {
+dialog.remove();
+});
+
+dialog.querySelector('.confirm-action').addEventListener('click', () => {
+dialog.remove();
+onConfirm();
+});
+}
+
+// 初始化处理
+async function initializePage() {
+    // 检查编辑模式
+    if (checkEditMode()) {
+        console.log('检测到编辑模式，加载简历数据...');
+        
+        // 显示加载提示
+        const pageTitle = document.querySelector('h1');
+        if (pageTitle) {
+            pageTitle.textContent = '加载简历数据中...';
+        }
+        
+        // 加载现有简历数据
+        const success = await loadExistingResumeData(editResumeId);
+        
+        if (!success) {
+            // 加载失败，返回管理页面
+            setTimeout(() => {
+                window.location.href = './Resume_management.html';
+            }, 2000);
+            return;
+        }
+    }
+    
+    // 执行表单验证
+    setTimeout(() => {
+        validateForm();
+        console.log('页面初始化完成，执行表单验证');
+    }, 200);
+}
+
+// 调用初始化
+initializePage();
+
+// 添加调试按钮功能
+window.debugValidation = function() {
+console.log('=== 调试信息 ===');
+console.log('versionNameInput:', versionNameInput);
+console.log('versionName value:', versionNameInput ? versionNameInput.value : 'null');
+console.log('jobPositionText element:', document.getElementById('jobPositionText'));
+console.log('jobPositionText content:', document.getElementById('jobPositionText')?.textContent);
+console.log('createBtn:', createBtn);
+console.log('createBtn.disabled:', createBtn ? createBtn.disabled : 'null');
+validateForm();
+};
+
+console.log('简历创建页面脚本加载完成，可以在控制台运行 debugValidation() 进行调试');
+});
+</script>
+
+<script id="checkboxInteractions">
+document.addEventListener('DOMContentLoaded', function() {
+const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+checkboxes.forEach(checkbox => {
+checkbox.addEventListener('change', function() {
+const sectionItem = this.closest('.section-item');
+if (sectionItem) {
+if (this.checked) {
+sectionItem.style.opacity = '1';
+} else {
+sectionItem.style.opacity = '0.6';
+}
+}
+});
+});
+});
+</script>
+    <!-- 导入导航栏组件 -->
+    <script src="./components/navbar.js"></script>
+</body>
+</html>

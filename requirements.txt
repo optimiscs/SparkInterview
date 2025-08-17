@@ -1,42 +1,93 @@
-# FastAPI相关依赖
-fastapi>=0.104.1
-uvicorn[standard]>=0.24.0
-pydantic>=2.5.0
-python-multipart>=0.0.6
+# ===== 在conda环境xunfei中测试通过的依赖列表 =====
+# 使用以下命令安装: pip install -r requirements.txt
 
-# 原有后端依赖
-langchain>=0.1.0
-langchain-community>=0.0.10
-langgraph>=0.0.26
-PyPDF2>=3.0.1
-pypdf>=3.17.0
-python-docx>=1.1.0
-chromadb>=0.4.18
-scikit-learn>=1.3.2
-matplotlib>=3.8.2
-plotly>=5.17.0
-Pillow>=10.1.0
+# FastAPI Web框架核心依赖
+fastapi==0.116.1
+uvicorn[standard]==0.35.0
+pydantic==2.11.7
+python-multipart==0.0.20
 
-# 多模态分析依赖
-opencv-python>=4.8.1.78
-mediapipe>=0.10.8
-librosa>=0.10.1
-pyaudio>=0.2.11
-speech-recognition>=3.10.0
-transformers>=4.36.0
-torch>=2.1.1
-torchvision>=0.16.1
-soundfile>=0.12.1
+# HTTP和网络相关
+requests==2.32.4
+httpx==0.28.1
+aiohttp==3.12.14
+aiofiles==24.1.0
 
-# 其他工具依赖
-requests>=2.31.0
-aiofiles>=23.2.1
-jinja2>=3.1.2
-python-jose[cryptography]>=3.3.0
-passlib[bcrypt]>=1.7.4
-python-dateutil>=2.8.2
+# 模板和工具
+jinja2==3.1.6
+python-dateutil==2.9.0.post0
 
-# 数据持久化依赖
-aiosqlite>=0.19.0
-aioredis>=2.0.1
-redis>=5.0.1
+# AI和机器学习框架 
+openai==1.97.1
+sentence-transformers==5.0.0
+transformers==4.53.3
+torch==2.7.1
+torchvision==0.22.1
+
+# LangChain生态系统
+langchain==0.3.27
+langchain-community==0.3.27
+langchain-core==0.3.72
+langchain-text-splitters==0.3.9
+langgraph==0.5.4
+
+langsmith==0.4.8
+
+# 文档处理
+PyPDF2==3.0.1
+pypdf==5.8.0
+python-docx==1.2.0
+
+# 向量数据库和搜索
+chromadb==1.0.15
+
+# 科学计算基础包
+numpy==1.26.4
+scipy==1.15.3
+scikit-learn==1.7.1
+matplotlib==3.10.3
+plotly==6.2.0
+pandas==2.3.1
+
+# 图像处理和计算机视觉
+Pillow==11.3.0
+opencv-python==4.11.0.86
+opencv-contrib-python==4.11.0.86
+mediapipe==0.10.14
+
+# 音频处理
+librosa==0.11.0
+soundfile==0.13.1
+sounddevice==0.5.2
+PyAudio==0.2.14
+SpeechRecognition==3.14.3
+
+# 深度学习和AI模型
+tensorflow==2.19.0
+tf-keras==2.19.0
+keras==3.10.0
+deepface==0.0.93
+
+# 数据持久化
+aiosqlite==0.21.0
+aioredis==1.3.1
+redis==6.2.0
+hiredis==3.2.1
+SQLAlchemy==2.0.41
+
+# 认证和安全
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+cryptography==45.0.5
+
+# 兼容性和支持库
+protobuf==4.25.8
+absl-py==2.3.1
+flatbuffers==25.2.10
+opt-einsum==3.4.0
+packaging==25.0
+typing-extensions==4.14.1
+urllib3==2.5.0
+certifi==2025.7.14
+
+socksio==1.0.0

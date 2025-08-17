@@ -1,0 +1,49 @@
+{
+  "frame_count": 150,
+  "timestamp": 1753453794395,
+  "analysis_result": {
+    "timestamp": "2025-07-25T22:29:54.414086",
+    "processing_time": 0,
+    "face_detected": true,
+    "frame_size": {
+      "width": 640,
+      "height": 480
+    },
+    "analysis_mode": "high_precision",
+    "pitch": -172.10891453963043,
+    "yaw": -19.51603293290952,
+    "roll": -0.728491138335758,
+    "head_pose_stability": 0.0,
+    "rotation_magnitude": 173.21340798213876,
+    "gaze_direction": {
+      "x": 2.726774215698242,
+      "y": -1.308274269104004,
+      "magnitude": 3.024380793914083,
+      "eye_contact_score": 0.9395123841217183
+    },
+    "dominant_emotion": "fear",
+    "emotion_confidence": 0.6037382607148004,
+    "emotion_distribution": {
+      "angry": 0.001503251788594042,
+      "disgust": 4.345238421173317e-05,
+      "fear": 0.6037382607148004,
+      "happy": 0.009708334917823662,
+      "sad": 0.07090390573786565,
+      "surprise": 0.0004425530733045129,
+      "neutral": 0.31366024180176755
+    },
+    "emotion_stability": 0.6828271931997677,
+    "estimated_age": 27.0,
+    "gender_prediction": {
+      "Woman": 1.5456809662282467,
+      "Man": 98.45431447029114
+    },
+    "facial_features": {
+      "eye_aspect_ratio": 0.027243039365051507,
+      "mouth_aspect_ratio": 0.04143763015214903,
+      "facial_symmetry": 0.7339031718342637,
+      "alertness_score": 0.05448607873010301
+    }
+  },
+  "saved_at": "2025-07-25T22:29:54.696593"
+}

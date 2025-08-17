@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>页面标题 - 职面星火</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#3b82f6',
+secondary: '#8b5cf6'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+}
+</script>
+<style>
+:where([class^="ri-"])::before {
+content: "\f3c2";
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 导航栏容器 - 组件会自动插入到这里 -->
+    <div id="navbar-container"></div>
+    
+    <!-- 主要内容区域 -->
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">页面内容</h1>
+        <p class="text-gray-700">这里是页面的主要内容...</p>
+    </main>
+
+    <!-- 导入导航栏组件 -->
+    <script src="./components/navbar.js"></script>
+    
+    <!-- 页面特定的JavaScript -->
+    <script>
+        // 页面特定的逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成');
+        });
+    </script>
+</body>
+</html>

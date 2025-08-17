@@ -58,108 +58,10 @@ height: 2px;
 background-color: #2196F3;
 }
 </style>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const token = localStorage.getItem('access_token');
-  if (!token) {
-    window.location.href = '/frontend/login.html';
-    return;
-  }
-  
-  // 获取用户信息
-  fetchAndShowUserInfo();
-});
 
-async function fetchAndShowUserInfo() {
-  const token = localStorage.getItem('access_token');
-  if (!token) return;
-  
-  try {
-    const resp = await fetch('/api/v1/profile', {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-    
-    if (!resp.ok) {
-      throw new Error('获取用户信息失败');
-    }
-    
-    const user = await resp.json();
-    const userInfoDiv = document.getElementById('user-info');
-    
-    if (userInfoDiv) {
-      userInfoDiv.innerHTML = `
-        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center overflow-hidden">
-          ${user.avatar_url ? 
-            `<img src="${user.avatar_url}" class="w-full h-full object-cover" alt="头像">` : 
-            `<i class="ri-user-line text-white"></i>`}
-        </div>
-        <div class="ml-2">
-          <p class="text-sm font-medium text-gray-900">${user.name || '未知用户'}</p>
-          <p class="text-xs text-gray-500">${user.role === 'admin' ? '管理员' : user.role === 'teacher' ? '教师' : '学生'}</p>
-        </div>
-      `;
-    }
-  } catch (error) {
-    console.error('获取用户信息失败:', error);
-    localStorage.removeItem('access_token');
-    window.location.href = '/frontend/login.html';
-  }
-}
-</script>
 </head>
 <body class="bg-gray-50 min-h-screen">
-<!-- 顶部导航栏 -->
-<div class="bg-white shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-  <div class="flex justify-between items-center h-16">
-  <a href="assessment-options.html" class="flex items-center">
-    <img src="./static/logo.png" alt="logo" class="h-8 w-8 mr-2 inline-block align-middle">
-    <p class="ml-2 text-lg font-medium">职面星火</p>
-  </a>
-  <nav class="flex space-x-8">
-  <a href="../index.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-home-line"></i>
-  </div>
-  首页
-  </a>
-  <a href="./setting_page1.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-video-chat-line"></i>
-  </div>
-  面试模拟
-  </a>
-  <a href="./assessment-options.html" class="flex items-center px-3 py-2 text-sm font-medium text-primary">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-bar-chart-line"></i>
-  </div>
-  能力评估
-  </a>
-  <a href="./learning-resources.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-book-open-line"></i>
-  </div>
-  学习资源
-  </a>
-  <a href="./user-profile.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-  <div class="w-5 h-5 flex items-center justify-center mr-2">
-  <i class="ri-user-settings-line"></i>
-  </div>
-  个人中心
-  </a>
-  </nav>
-  <div id="user-info" class="flex items-center">
-  <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-  <i class="ri-user-line text-white"></i>
-  </div>
-  <div class="ml-2">
-  <p class="text-sm font-medium text-gray-900">加载中...</p>
-  <p class="text-xs text-gray-500">请稍候</p>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
+
 <!-- 主要内容区域 -->
 <main class="container mx-auto px-4 py-8">
 <div class="flex items-center justify-between mb-8">
@@ -823,6 +725,9 @@ button.click();
 });
 });
 </script>
+
+<!-- 导入导航栏组件 -->
+<script src="./components/navbar.js"></script>
 
 <!-- 通用导航脚本 -->
 <script>

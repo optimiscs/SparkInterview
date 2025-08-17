@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 
 from api.routers import users, interviews, assessments, resources, resume_parser
-from api.routers import questions
+from api.routers import questions, chat
 from api.websocket_server import websocket_endpoint
 from src.config.settings import system_config
 
@@ -127,6 +127,7 @@ app.include_router(assessments.router, prefix="/api/v1", tags=["能力评估"])
 app.include_router(resources.router, prefix="/api/v1", tags=["学习资源"])
 app.include_router(resume_parser.router, prefix="/api/v1/resume", tags=["简历解析"])
 app.include_router(questions.router, prefix="/api/v1", tags=["题目生成"])
+app.include_router(chat.router, prefix="/api/v1", tags=["智能聊天"])
 
 # 注册WebSocket路由
 @app.websocket("/ws/multimodal-analysis")

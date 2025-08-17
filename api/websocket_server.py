@@ -18,7 +18,7 @@ from fastapi import WebSocket, WebSocketDisconnect
 from fastapi.websockets import WebSocketState
 import redis
 
-from src.tools.realtime_analyzer import RealtimeMultimodalProcessor
+from src.tools.unified_multimodal_analyzer import create_unified_processor
 from src.database.sqlite_manager import db_manager
 from datetime import datetime
 
@@ -91,8 +91,8 @@ except Exception as e:
     logger.error(f"⚠️ Redis连接失败: {e}")
     redis_client = None
 
-# 线程池用于异步处理分析任务
-executor = ThreadPoolExecutor(max_workers=4)
+# 线程池用于异步处理分析任务 - 增加工作线程
+executor = ThreadPoolExecutor(max_workers=6)  # 增加线程数支持高精度分析
 
 
 def verify_websocket_token(access_token: str) -> dict:
@@ -195,42 +195,50 @@ class ConnectionManager:
 # 全局连接管理器
 manager = ConnectionManager()
 
-# 实时分析处理器
-realtime_processor = RealtimeMultimodalProcessor()
+# 统一多模态分析处理器 - 高精度模式
+unified_processor = create_unified_processor()
 
 
-class RealtimeAnalysisHandler:
-    """实时分析处理器"""
+class EnhancedAnalysisHandler:
+    """增强分析处理器 - 高精度模式"""
     
     def __init__(self):
-        self.processing_queue = asyncio.Queue(maxsize=100)
+        self.processing_queue = asyncio.Queue(maxsize=200)  # 增加队列容量
         self.results_cache = {}  # 缓存最近的分析结果
+        self.frame_counter = {}  # 每个连接的帧计数器
         
     async def handle_video_frame(self, connection_id: str, frame_data: dict):
-        """处理视频帧"""
+        """处理视频帧 - 高精度模式"""
         try:
             # 解码base64图像
-            frame_base64 = frame_data['frame'].split(',')[1]  # 移除data:image/jpeg;base64,前缀
+            frame_base64 = frame_data['frame'].split(',')[1]
             frame_bytes = base64.b64decode(frame_base64)
             
-            # 转换为OpenCV格式
+            # 高质量图像转换
             image = Image.open(io.BytesIO(frame_bytes))
             frame = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
             
-            # 添加到处理队列
+            # 帧计数
+            if connection_id not in self.frame_counter:
+                self.frame_counter[connection_id] = 0
+            self.frame_counter[connection_id] += 1
+            
+            # 构建分析任务
             analysis_task = {
                 'type': 'video',
                 'connection_id': connection_id,
                 'data': frame,
                 'timestamp': frame_data['timestamp'],
+                'frame_count': self.frame_counter[connection_id],
                 'metadata': {
                     'width': frame_data.get('width', 640),
-                    'height': frame_data.get('height', 480)
+                    'height': frame_data.get('height', 480),
+                    'quality': 'high_precision'
                 }
             }
             
-            # 异步处理（避免阻塞）
-            asyncio.create_task(self._process_video_analysis(analysis_task))
+            # 异步处理
+            asyncio.create_task(self._process_video_analysis_enhanced(analysis_task))
             
         except Exception as e:
             logger.error(f"❌ 视频帧处理失败 {connection_id}: {e}")
@@ -240,13 +248,13 @@ class RealtimeAnalysisHandler:
             }, connection_id)
     
     async def handle_audio_chunk(self, connection_id: str, audio_data: dict):
-        """处理音频片段"""
+        """处理音频片段 - 高精度模式"""
         try:
             # 解码base64音频
             audio_base64 = audio_data['audio']
             audio_bytes = base64.b64decode(audio_base64)
             
-            # 添加到处理队列
+            # 构建分析任务
             analysis_task = {
                 'type': 'audio',
                 'connection_id': connection_id,
@@ -254,12 +262,13 @@ class RealtimeAnalysisHandler:
                 'timestamp': audio_data['timestamp'],
                 'metadata': {
                     'duration': audio_data.get('duration', 3000),
-                    'format': 'webm'
+                    'format': 'webm',
+                    'quality': 'high_precision'
                 }
             }
             
             # 异步处理
-            asyncio.create_task(self._process_audio_analysis(analysis_task))
+            asyncio.create_task(self._process_audio_analysis_enhanced(analysis_task))
             
         except Exception as e:
             logger.error(f"❌ 音频片段处理失败 {connection_id}: {e}")
@@ -268,56 +277,74 @@ class RealtimeAnalysisHandler:
                 'data': f'音频片段处理失败: {str(e)}'
             }, connection_id)
     
-    async def _process_video_analysis(self, task: dict):
-        """异步处理视频分析"""
+    async def _process_video_analysis_enhanced(self, task: dict):
+        """增强视频分析处理"""
         import time
         
         start_time = time.time()
         try:
             connection_id = task['connection_id']
             frame = task['data']
+            frame_count = task['frame_count']
             
-            logger.info(f"🎥 [{connection_id[:8]}] 开始视频分析 (帧大小: {frame.shape})")
+            logger.info(f"🎥 [{connection_id[:8]}] 开始高精度视频分析 (帧#{frame_count})")
             
-            # 使用线程池执行CPU密集型任务
+            # 使用线程池执行高精度分析
             analysis_start = time.time()
             loop = asyncio.get_event_loop()
+            
+            # 决定是否保存帧 (每50帧或重要帧)
+            save_frame = (frame_count % 50 == 0)
+            
+            # 创建包装函数以支持关键字参数
+            def analyze_video_wrapper(frame, save_frame, frame_count, timestamp):
+                return unified_processor.analyze_video_frame(
+                    frame, 
+                    save_frame=save_frame,
+                    frame_count=frame_count,
+                    timestamp=timestamp
+                )
+            
             result = await loop.run_in_executor(
                 executor, 
-                realtime_processor.analyze_video_frame, 
-                frame
+                analyze_video_wrapper,
+                frame,
+                save_frame,
+                frame_count,
+                task['timestamp']
             )
             analysis_time = (time.time() - analysis_start) * 1000
             
             if result:
-                # 清理分析结果，确保JSON安全
+                # 清理分析结果
                 cleaned_result = clean_analysis_result(result)
                 
-                # 添加性能指标
+                # 添加增强的性能指标
                 total_time = (time.time() - start_time) * 1000
                 cleaned_result['performance_metrics'] = {
                     'analysis_time_ms': round(analysis_time, 2),
                     'total_time_ms': round(total_time, 2),
+                    'frame_number': frame_count,
+                    'analysis_mode': 'high_precision',
                     'timestamp': datetime.now().isoformat()
                 }
                 
                 # 缓存结果
                 self.results_cache[f"{connection_id}_video"] = {
                     'result': cleaned_result,
-                    'timestamp': task['timestamp']
+                    'timestamp': task['timestamp'],
+                    'frame_count': frame_count
                 }
                 
-                # 打印详细分析结果和性能指标
-                logger.info(f"✅ [{connection_id[:8]}] 视频分析完成:")
-                logger.info(f"   📊 人脸检测: {cleaned_result.get('face_detected', 'N/A')}")
-                logger.info(f"   😊 主要情感: {cleaned_result.get('dominant_emotion', 'N/A')} (置信度: {cleaned_result.get('emotion_confidence', 0):.2f})")
-                logger.info(f"   📐 头部姿态稳定性: {cleaned_result.get('head_pose_stability', 0):.2f}")
-                logger.info(f"   👁️  眼神交流比例: {cleaned_result.get('eye_contact_ratio', 0):.2f}")
-                logger.info(f"   ⚡ 分析耗时: {analysis_time:.1f}ms | 总耗时: {total_time:.1f}ms")
-                
-                # 计算FPS
-                fps = 1000 / total_time if total_time > 0 else 0
-                logger.info(f"   🚀 分析速度: {fps:.1f} FPS")
+                # 详细的分析结果日志
+                logger.info(f"✅ [{connection_id[:8]}] 高精度视频分析完成 (帧#{frame_count}):")
+                logger.info(f"   🎭 情绪: {cleaned_result.get('dominant_emotion', 'N/A')} "
+                           f"(置信度: {cleaned_result.get('emotion_confidence', 0):.3f})")
+                logger.info(f"   🗣️ 年龄估计: {cleaned_result.get('estimated_age', 'N/A')}")
+                logger.info(f"   📐 头部姿态: P{cleaned_result.get('pitch', 0):.1f}° "
+                           f"Y{cleaned_result.get('yaw', 0):.1f}° R{cleaned_result.get('roll', 0):.1f}°")
+                logger.info(f"   👁️ 眼神接触: {cleaned_result.get('gaze_direction', {}).get('eye_contact_score', 0):.3f}")
+                logger.info(f"   ⚡ 处理耗时: {analysis_time:.1f}ms | 总耗时: {total_time:.1f}ms")
                 
                 # 发送分析结果
                 await manager.send_personal_message({
@@ -331,10 +358,15 @@ class RealtimeAnalysisHandler:
             
         except Exception as e:
             error_time = (time.time() - start_time) * 1000
-            logger.error(f"❌ [{connection_id[:8]}] 视频分析处理失败 (耗时: {error_time:.1f}ms): {e}")
+            logger.error(f"❌ [{connection_id[:8]}] 高精度视频分析失败 (耗时: {error_time:.1f}ms): {e}")
+            # 发送错误信息但不中断连接
+            await manager.send_personal_message({
+                'type': 'analysis_error',
+                'data': f'视频分析失败: {str(e)}'
+            }, connection_id)
     
-    async def _process_audio_analysis(self, task: dict):
-        """异步处理音频分析"""
+    async def _process_audio_analysis_enhanced(self, task: dict):
+        """增强音频分析处理"""
         import time
         
         start_time = time.time()
@@ -342,20 +374,20 @@ class RealtimeAnalysisHandler:
             connection_id = task['connection_id']
             audio_bytes = task['data']
             
-            logger.info(f"🎵 [{connection_id[:8]}] 开始音频分析 (数据大小: {len(audio_bytes)} bytes)")
+            logger.info(f"🎵 [{connection_id[:8]}] 开始高精度音频分析 (大小: {len(audio_bytes)} bytes)")
             
-            # 使用线程池执行CPU密集型任务
+            # 使用线程池执行高精度分析
             analysis_start = time.time()
             loop = asyncio.get_event_loop()
             result = await loop.run_in_executor(
                 executor, 
-                realtime_processor.analyze_audio_chunk, 
+                unified_processor.analyze_audio_chunk, 
                 audio_bytes
             )
             analysis_time = (time.time() - analysis_start) * 1000
             
             if result:
-                # 清理分析结果，确保JSON安全
+                # 清理分析结果
                 cleaned_result = clean_analysis_result(result)
                 
                 # 添加性能指标
@@ -363,6 +395,7 @@ class RealtimeAnalysisHandler:
                 cleaned_result['performance_metrics'] = {
                     'analysis_time_ms': round(analysis_time, 2),
                     'total_time_ms': round(total_time, 2),
+                    'analysis_mode': 'high_precision',
                     'timestamp': datetime.now().isoformat()
                 }
                 
@@ -372,24 +405,20 @@ class RealtimeAnalysisHandler:
                     'timestamp': task['timestamp']
                 }
                 
-                # 打印详细分析结果和性能指标
-                logger.info(f"✅ [{connection_id[:8]}] 音频分析完成:")
-                logger.info(f"   🔊 音频检测: {cleaned_result.get('audio_detected', 'N/A')}")
-                logger.info(f"   😊 语音情感: {cleaned_result.get('emotion', 'N/A')} (置信度: {cleaned_result.get('emotion_confidence', 0):.2f})")
-                logger.info(f"   🗣️  语速: {cleaned_result.get('speech_rate', 0):.1f} 词/分钟")
-                logger.info(f"   🎼 平均音调: {cleaned_result.get('pitch_mean', 0):.1f} Hz")
-                logger.info(f"   📢 音量: {cleaned_result.get('volume_mean', 0):.3f}")
-                logger.info(f"   🎯 清晰度: {cleaned_result.get('clarity_score', 0):.2f}")
-                logger.info(f"   ⚡ 分析耗时: {analysis_time:.1f}ms | 总耗时: {total_time:.1f}ms")
-                
-                # 计算处理速度（实时比例）
-                audio_duration = task['metadata'].get('duration', 3000)  # 音频时长(毫秒)
-                real_time_ratio = audio_duration / total_time if total_time > 0 else 0
-                logger.info(f"   ⏱️  实时比例: {real_time_ratio:.1f}x (音频{audio_duration}ms / 处理{total_time:.1f}ms)")
+                # 详细的分析结果日志
+                logger.info(f"✅ [{connection_id[:8]}] 高精度音频分析完成:")
+                logger.info(f"   🗣️ 语音情感: {cleaned_result.get('speech_emotion', 'N/A')} "
+                           f"(置信度: {cleaned_result.get('emotion_confidence', 0):.3f})")
+                logger.info(f"   🎼 音调: {cleaned_result.get('pitch_mean_hz', 0):.1f}Hz "
+                           f"(范围: {cleaned_result.get('pitch_range_hz', 0):.1f}Hz)")
+                logger.info(f"   📢 音量: {cleaned_result.get('volume_mean_db', 0):.1f}dB")
+                logger.info(f"   🎯 清晰度: {cleaned_result.get('clarity_score', 0):.3f}")
+                logger.info(f"   🔊 语音质量: SNR {cleaned_result.get('speech_quality', {}).get('estimated_snr_db', 0):.1f}dB")
+                logger.info(f"   ⚡ 处理耗时: {analysis_time:.1f}ms | 总耗时: {total_time:.1f}ms")
                 
                 # 发送分析结果
                 await manager.send_personal_message({
-                    'type': 'audio_analysis',
+                    'type': 'audio_analysis_enhanced',
                     'data': cleaned_result,
                     'timestamp': task['timestamp']
                 }, connection_id)
@@ -399,7 +428,12 @@ class RealtimeAnalysisHandler:
             
         except Exception as e:
             error_time = (time.time() - start_time) * 1000
-            logger.error(f"❌ [{connection_id[:8]}] 音频分析处理失败 (耗时: {error_time:.1f}ms): {e}")
+            logger.error(f"❌ [{connection_id[:8]}] 高精度音频分析失败 (耗时: {error_time:.1f}ms): {e}")
+            # 发送错误信息但不中断连接
+            await manager.send_personal_message({
+                'type': 'analysis_error',
+                'data': f'音频分析失败: {str(e)}'
+            }, connection_id)
     
     def get_latest_results(self, connection_id: str) -> dict:
         """获取最新的分析结果"""
@@ -409,12 +443,17 @@ class RealtimeAnalysisHandler:
         return {
             'video': self.results_cache.get(video_key, {}).get('result'),
             'audio': self.results_cache.get(audio_key, {}).get('result'),
+            'video_frame_count': self.results_cache.get(video_key, {}).get('frame_count', 0),
             'timestamp': datetime.now().isoformat()
         }
+    
+    def get_comprehensive_stats(self) -> dict:
+        """获取综合性能统计"""
+        return unified_processor.get_comprehensive_stats()
 
 
-# 全局分析处理器
-analysis_handler = RealtimeAnalysisHandler()
+# 全局增强分析处理器
+analysis_handler = EnhancedAnalysisHandler()
 
 
 async def websocket_endpoint(websocket: WebSocket):
@@ -490,6 +529,9 @@ async def handle_message(connection_id: str, message: dict):
         elif message_type == 'get_status':
             await handle_get_status(connection_id)
             
+        elif message_type == 'get_performance_stats':
+            await handle_get_performance_stats(connection_id)
+            
         elif message_type == 'ping':
             await manager.send_personal_message({
                 'type': 'pong',
@@ -551,10 +593,11 @@ async def handle_auth(connection_id: str, auth_data: dict):
 
 
 async def handle_get_status(connection_id: str):
-    """处理状态查询"""
+    """处理状态查询 - 增强版"""
     try:
         conn_info = manager.connection_info.get(connection_id, {})
         latest_results = analysis_handler.get_latest_results(connection_id)
+        comprehensive_stats = analysis_handler.get_comprehensive_stats()
         
         status = {
             'connection_id': connection_id,
@@ -562,15 +605,18 @@ async def handle_get_status(connection_id: str):
             'session_id': conn_info.get('session_id'),
             'connected_at': conn_info.get('connected_at', datetime.now()).isoformat(),
             'analysis_active': conn_info.get('analysis_active', False),
+            'analysis_mode': 'high_precision',
             'latest_results': latest_results,
             'server_stats': {
                 'active_connections': manager.get_active_connections_count(),
-                'processing_queue_size': analysis_handler.processing_queue.qsize()
-            }
+                'processing_queue_size': analysis_handler.processing_queue.qsize(),
+                'deepface_status': comprehensive_stats.get('deepface_status', 'unknown')
+            },
+            'performance_stats': comprehensive_stats
         }
         
         await manager.send_personal_message({
-            'type': 'status',
+            'type': 'status_enhanced',
             'data': status
         }, connection_id)
         
@@ -582,5 +628,38 @@ async def handle_get_status(connection_id: str):
         }, connection_id)
 
 
+async def handle_get_performance_stats(connection_id: str):
+    """处理性能统计查询"""
+    try:
+        comprehensive_stats = analysis_handler.get_comprehensive_stats()
+        video_stats = unified_processor.video_analyzer.get_performance_stats()
+        
+        performance_data = {
+            'unified_processor_stats': comprehensive_stats,
+            'video_analyzer_stats': video_stats,
+            'deepface_available': unified_processor.video_analyzer.emotion_cache.get('deepface_available', False),
+            'server_info': {
+                'active_connections': manager.get_active_connections_count(),
+                'executor_threads': executor._max_workers,
+                'analysis_mode': 'high_precision'
+            },
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        await manager.send_personal_message({
+            'type': 'performance_stats',
+            'data': performance_data
+        }, connection_id)
+        
+        logger.debug(f"📊 发送性能统计给 {connection_id[:8]}")
+        
+    except Exception as e:
+        logger.error(f"❌ 性能统计查询失败 {connection_id}: {e}")
+        await manager.send_personal_message({
+            'type': 'error',
+            'data': f'性能统计查询失败: {str(e)}'
+        }, connection_id)
+
+
 # 导出管理器供其他模块使用
-__all__ = ['websocket_endpoint', 'manager', 'analysis_handler'] 
+__all__ = ['websocket_endpoint', 'manager', 'analysis_handler', 'unified_processor'] 

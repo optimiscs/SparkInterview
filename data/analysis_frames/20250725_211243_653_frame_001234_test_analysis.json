@@ -1,0 +1,22 @@
+{
+  "frame_count": 1234,
+  "timestamp": 12.34,
+  "frame_type": "test",
+  "analysis_result": {
+    "head_pose": {
+      "pitch": 5.2,
+      "yaw": -3.1,
+      "roll": 1.8
+    },
+    "gaze": {
+      "gaze_x": 10.5,
+      "gaze_y": -5.2,
+      "gaze_magnitude": 11.7
+    },
+    "emotion": {
+      "dominant_emotion": "happy",
+      "dominant_score": 85.3
+    }
+  },
+  "saved_at": "2025-07-25T21:12:43.660367"
+}

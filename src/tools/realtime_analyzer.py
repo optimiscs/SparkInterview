@@ -12,13 +12,14 @@ import logging
 from typing import Dict, Any, Optional, Tuple
 from datetime import datetime
 import time
+import traceback
 
 try:
     from deepface import DeepFace
     DEEPFACE_AVAILABLE = True
 except ImportError:
     DEEPFACE_AVAILABLE = False
-    logging.warning("DeepFace not available, using fallback emotion analysis")
+    logging.error("❌ DeepFace not available, emotion analysis will fail")
 
 logger = logging.getLogger(__name__)
 
@@ -56,10 +57,12 @@ class RealtimeVideoAnalyzer:
         """分析单帧视频"""
         start_time = time.time()
         
+        if frame is None or frame.size == 0:
+            error_msg = "输入视频帧为空或无效"
+            logger.error(f"❌ {error_msg}")
+            raise ValueError(error_msg)
+        
         try:
-            if frame is None or frame.size == 0:
-                return self._get_default_result()
-            
             # 转换颜色空间
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             h, w = frame.shape[:2]
@@ -70,33 +73,28 @@ class RealtimeVideoAnalyzer:
             analysis_result = {
                 'timestamp': datetime.now().isoformat(),
                 'processing_time': 0,
-                'face_detected': False,
-                'head_pose_stability': 0.7,
-                'gaze_direction': {'x': 0, 'y': 0},
-                'dominant_emotion': 'neutral',
-                'emotion_confidence': 0.7,
-                'emotion_stability': 0.8,
-                'eye_contact_ratio': 0.7
+                'face_detected': False
             }
             
-            if results.multi_face_landmarks:
-                face_landmarks = results.multi_face_landmarks[0]
-                analysis_result['face_detected'] = True
-                
-                # 头部姿态分析（轻量级）
-                head_pose = self._analyze_head_pose_light(face_landmarks, (w, h))
-                if head_pose:
-                    analysis_result.update(head_pose)
-                
-                # 视线方向分析（简化版）
-                gaze = self._analyze_gaze_light(face_landmarks, (w, h))
-                if gaze:
-                    analysis_result['gaze_direction'] = gaze
-                
-                # 情绪分析（带缓存）
-                emotion = self._analyze_emotion_cached(frame)
-                if emotion:
-                    analysis_result.update(emotion)
+            if not results.multi_face_landmarks:
+                error_msg = "视频帧中未检测到人脸"
+                logger.error(f"❌ {error_msg}")
+                raise Exception(error_msg)
+            
+            face_landmarks = results.multi_face_landmarks[0]
+            analysis_result['face_detected'] = True
+            
+            # 头部姿态分析（轻量级）
+            head_pose = self._analyze_head_pose_light(face_landmarks, (w, h))
+            analysis_result.update(head_pose)
+            
+            # 视线方向分析（简化版）
+            gaze = self._analyze_gaze_light(face_landmarks, (w, h))
+            analysis_result['gaze_direction'] = gaze
+            
+            # 情绪分析（带缓存）
+            emotion = self._analyze_emotion_cached(frame)
+            analysis_result.update(emotion)
             
             # 记录处理时间
             processing_time = time.time() - start_time
@@ -107,7 +105,8 @@ class RealtimeVideoAnalyzer:
             
         except Exception as e:
             logger.error(f"❌ 视频帧分析失败: {e}")
-            return self._get_default_result()
+            logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+            raise
     
     def _analyze_head_pose_light(self, landmarks, frame_shape) -> Dict[str, float]:
         """轻量级头部姿态分析"""
@@ -143,8 +142,9 @@ class RealtimeVideoAnalyzer:
             }
             
         except Exception as e:
-            logger.debug(f"头部姿态分析失败: {e}")
-            return {'head_pose_stability': 0.7}
+            logger.error(f"❌ 头部姿态分析失败: {e}")
+            logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+            raise
     
     def _analyze_gaze_light(self, landmarks, frame_shape) -> Dict[str, float]:
         """轻量级视线方向分析"""
@@ -170,8 +170,9 @@ class RealtimeVideoAnalyzer:
             }
             
         except Exception as e:
-            logger.debug(f"视线分析失败: {e}")
-            return {'x': 0, 'y': 0}
+            logger.error(f"❌ 视线分析失败: {e}")
+            logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+            raise
     
     def _analyze_emotion_cached(self, frame: np.ndarray) -> Optional[Dict[str, Any]]:
         """带缓存的情绪分析"""
@@ -197,7 +198,9 @@ class RealtimeVideoAnalyzer:
     def _analyze_emotion_fast(self, frame: np.ndarray) -> Dict[str, Any]:
         """快速情绪分析"""
         if not DEEPFACE_AVAILABLE:
-            return self._get_fallback_emotion()
+            error_msg = "DeepFace不可用，无法进行情绪分析"
+            logger.error(f"❌ {error_msg}")
+            raise Exception(error_msg)
         
         try:
             # 缩小图片以提高速度
@@ -214,6 +217,12 @@ class RealtimeVideoAnalyzer:
                 result = result[0]
             
             emotions = result.get('emotion', {})
+            
+            if not emotions:
+                error_msg = "DeepFace返回空的情绪结果"
+                logger.error(f"❌ {error_msg}")
+                raise Exception(error_msg)
+            
             dominant_emotion = max(emotions.items(), key=lambda x: x[1])
             
             return {
@@ -223,37 +232,9 @@ class RealtimeVideoAnalyzer:
             }
             
         except Exception as e:
-            logger.debug(f"情绪分析失败: {e}")
-            return self._get_fallback_emotion()
-    
-    def _get_fallback_emotion(self) -> Dict[str, Any]:
-        """备用情绪结果"""
-        return {
-            'dominant_emotion': 'neutral',
-            'emotion_confidence': 0.7,
-            'emotion_distribution': {
-                'neutral': 0.7,
-                'happy': 0.1,
-                'focused': 0.1,
-                'surprised': 0.05,
-                'sad': 0.05
-            }
-        }
-    
-    def _get_default_result(self) -> Dict[str, Any]:
-        """默认分析结果"""
-        return {
-            'timestamp': datetime.now().isoformat(),
-            'processing_time': 0,
-            'face_detected': False,
-            'head_pose_stability': 0.7,
-            'gaze_direction': {'x': 0, 'y': 0},
-            'dominant_emotion': 'neutral',
-            'emotion_confidence': 0.7,
-            'emotion_stability': 0.8,
-            'eye_contact_ratio': 0.7,
-            'error': True
-        }
+            logger.error(f"❌ 情绪分析失败: {e}")
+            logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+            raise
 
 
 class RealtimeAudioAnalyzer:
@@ -270,24 +251,24 @@ class RealtimeAudioAnalyzer:
         """分析音频片段"""
         start_time = time.time()
         
+        if not audio_bytes or len(audio_bytes) == 0:
+            error_msg = "输入音频数据为空"
+            logger.error(f"❌ {error_msg}")
+            raise ValueError(error_msg)
+        
         try:
             # 将音频字节转换为numpy array
             audio_data = self._bytes_to_audio(audio_bytes)
             
             if audio_data is None or len(audio_data) == 0:
-                return self._get_default_audio_result()
+                error_msg = "音频数据转换失败或为空"
+                logger.error(f"❌ {error_msg}")
+                raise Exception(error_msg)
             
             analysis_result = {
                 'timestamp': datetime.now().isoformat(),
                 'processing_time': 0,
-                'audio_detected': True,
-                'speech_rate': 120,
-                'pitch_mean': 150,
-                'pitch_variance': 20,
-                'volume_mean': 0.5,
-                'clarity_score': 0.8,
-                'emotion': 'calm',
-                'emotion_confidence': 0.7
+                'audio_detected': True
             }
             
             # 基础音频特征分析
@@ -307,7 +288,8 @@ class RealtimeAudioAnalyzer:
             
         except Exception as e:
             logger.error(f"❌ 音频分析失败: {e}")
-            return self._get_default_audio_result()
+            logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+            raise
     
     def _bytes_to_audio(self, audio_bytes: bytes) -> Optional[np.ndarray]:
         """将音频字节转换为numpy数组"""
@@ -322,33 +304,53 @@ class RealtimeAudioAnalyzer:
                 return y
                 
         except Exception as e:
-            logger.debug(f"音频转换失败: {e}")
-            return None
+            logger.error(f"❌ 音频转换失败: {e}")
+            logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+            raise
     
     def _analyze_audio_features(self, audio_data: np.ndarray) -> Dict[str, Any]:
         """分析基础音频特征"""
         try:
             # 语速估算（基于零交叉率）
             zcr = librosa.feature.zero_crossing_rate(audio_data)[0]
+            if len(zcr) == 0:
+                error_msg = "零交叉率计算失败"
+                logger.error(f"❌ {error_msg}")
+                raise Exception(error_msg)
             speech_rate = np.mean(zcr) * 1000  # 转换为BPM估算
             
             # 音高分析（简化版）
             pitches, magnitudes = librosa.piptrack(y=audio_data, sr=self.sample_rate)
             pitch_values = pitches[magnitudes > np.max(magnitudes) * 0.1]
             
-            if len(pitch_values) > 0:
-                pitch_mean = np.mean(pitch_values[pitch_values > 0])
-                pitch_variance = np.var(pitch_values[pitch_values > 0])
-            else:
-                pitch_mean = 150
-                pitch_variance = 20
+            if len(pitch_values) == 0:
+                error_msg = "音高分析失败：未检测到有效音高"
+                logger.error(f"❌ {error_msg}")
+                raise Exception(error_msg)
+                
+            valid_pitches = pitch_values[pitch_values > 0]
+            if len(valid_pitches) == 0:
+                error_msg = "音高分析失败：所有音高值无效"
+                logger.error(f"❌ {error_msg}")
+                raise Exception(error_msg)
+                
+            pitch_mean = np.mean(valid_pitches)
+            pitch_variance = np.var(valid_pitches)
             
             # 音量分析
             rms = librosa.feature.rms(y=audio_data)[0]
+            if len(rms) == 0:
+                error_msg = "音量分析失败：RMS计算结果为空"
+                logger.error(f"❌ {error_msg}")
+                raise Exception(error_msg)
             volume_mean = np.mean(rms)
             
             # 清晰度评估（基于频谱重心）
             spectral_centroids = librosa.feature.spectral_centroid(y=audio_data, sr=self.sample_rate)[0]
+            if len(spectral_centroids) == 0:
+                error_msg = "清晰度分析失败：频谱重心计算结果为空"
+                logger.error(f"❌ {error_msg}")
+                raise Exception(error_msg)
             clarity_score = min(1.0, np.mean(spectral_centroids) / 2000)
             
             return {
@@ -360,20 +362,20 @@ class RealtimeAudioAnalyzer:
             }
             
         except Exception as e:
-            logger.debug(f"音频特征分析失败: {e}")
-            return {
-                'speech_rate': 120,
-                'pitch_mean': 150,
-                'pitch_variance': 20,
-                'volume_mean': 0.5,
-                'clarity_score': 0.8
-            }
+            logger.error(f"❌ 音频特征分析失败: {e}")
+            logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+            raise
     
     def _analyze_audio_emotion(self, audio_data: np.ndarray) -> Dict[str, Any]:
         """音频情感分析（简化版）"""
         try:
             # 基于音频特征的简单情感判断
             rms = librosa.feature.rms(y=audio_data)[0]
+            if len(rms) == 0:
+                error_msg = "情感分析失败：无法计算音量特征"
+                logger.error(f"❌ {error_msg}")
+                raise Exception(error_msg)
+                
             volume_level = np.mean(rms)
             
             # 基于音量和频率变化推断情感
@@ -396,27 +398,9 @@ class RealtimeAudioAnalyzer:
             }
             
         except Exception as e:
-            logger.debug(f"音频情感分析失败: {e}")
-            return {
-                'emotion': 'calm',
-                'emotion_confidence': 0.7
-            }
-    
-    def _get_default_audio_result(self) -> Dict[str, Any]:
-        """默认音频分析结果"""
-        return {
-            'timestamp': datetime.now().isoformat(),
-            'processing_time': 0,
-            'audio_detected': False,
-            'speech_rate': 120,
-            'pitch_mean': 150,
-            'pitch_variance': 20,
-            'volume_mean': 0.5,
-            'clarity_score': 0.8,
-            'emotion': 'calm',
-            'emotion_confidence': 0.7,
-            'error': True
-        }
+            logger.error(f"❌ 音频情感分析失败: {e}")
+            logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+            raise
 
 
 class RealtimeMultimodalProcessor:
@@ -432,7 +416,9 @@ class RealtimeMultimodalProcessor:
             'audio_analysis_count': 0,
             'avg_video_time': 0,
             'avg_audio_time': 0,
-            'start_time': time.time()
+            'start_time': time.time(),
+            'video_errors': 0,
+            'audio_errors': 0
         }
         
         logger.info("✅ 实时多模态处理器初始化完成")
@@ -445,27 +431,31 @@ class RealtimeMultimodalProcessor:
         frame_info = f"帧大小: {frame.shape}" if frame is not None else "空帧"
         logger.debug(f"🎥 [分析器] 开始视频帧分析 ({frame_info})")
         
-        result = self.video_analyzer.analyze_frame(frame)
-        
-        # 更新性能统计
-        processing_time = time.time() - start_time
-        self.performance_stats['video_analysis_count'] += 1
-        count = self.performance_stats['video_analysis_count']
-        self.performance_stats['avg_video_time'] = (
-            (self.performance_stats['avg_video_time'] * (count - 1) + processing_time) / count
-        )
-        
-        # 记录分析完成和详细信息
-        if result:
+        try:
+            result = self.video_analyzer.analyze_frame(frame)
+            
+            # 更新性能统计
+            processing_time = time.time() - start_time
+            self.performance_stats['video_analysis_count'] += 1
+            count = self.performance_stats['video_analysis_count']
+            self.performance_stats['avg_video_time'] = (
+                (self.performance_stats['avg_video_time'] * (count - 1) + processing_time) / count
+            )
+            
+            # 记录分析完成和详细信息
             logger.debug(f"✅ [分析器] 视频帧分析完成:")
             logger.debug(f"   - 处理时间: {processing_time*1000:.1f}ms")
             logger.debug(f"   - 累计分析: {count} 帧")
             logger.debug(f"   - 平均耗时: {self.performance_stats['avg_video_time']*1000:.1f}ms")
             logger.debug(f"   - 实时FPS: {1/processing_time:.1f}")
-        else:
-            logger.warning(f"⚠️ [分析器] 视频帧分析返回空结果")
-        
-        return result
+            
+            return result
+            
+        except Exception as e:
+            self.performance_stats['video_errors'] += 1
+            logger.error(f"❌ [分析器] 视频帧分析失败: {e}")
+            logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+            raise
     
     def analyze_audio_chunk(self, audio_bytes: bytes) -> Dict[str, Any]:
         """分析音频片段"""
@@ -475,18 +465,18 @@ class RealtimeMultimodalProcessor:
         audio_info = f"音频大小: {len(audio_bytes)} bytes" if audio_bytes else "空音频"
         logger.debug(f"🎵 [分析器] 开始音频片段分析 ({audio_info})")
         
-        result = self.audio_analyzer.analyze_chunk(audio_bytes)
-        
-        # 更新性能统计
-        processing_time = time.time() - start_time
-        self.performance_stats['audio_analysis_count'] += 1
-        count = self.performance_stats['audio_analysis_count']
-        self.performance_stats['avg_audio_time'] = (
-            (self.performance_stats['avg_audio_time'] * (count - 1) + processing_time) / count
-        )
-        
-        # 记录分析完成和详细信息
-        if result:
+        try:
+            result = self.audio_analyzer.analyze_chunk(audio_bytes)
+            
+            # 更新性能统计
+            processing_time = time.time() - start_time
+            self.performance_stats['audio_analysis_count'] += 1
+            count = self.performance_stats['audio_analysis_count']
+            self.performance_stats['avg_audio_time'] = (
+                (self.performance_stats['avg_audio_time'] * (count - 1) + processing_time) / count
+            )
+            
+            # 记录分析完成和详细信息
             logger.debug(f"✅ [分析器] 音频片段分析完成:")
             logger.debug(f"   - 处理时间: {processing_time*1000:.1f}ms")
             logger.debug(f"   - 累计分析: {count} 个片段")
@@ -494,10 +484,14 @@ class RealtimeMultimodalProcessor:
             # 假设音频片段通常为3秒，计算实时比例
             real_time_ratio = 3000 / (processing_time * 1000) if processing_time > 0 else 0
             logger.debug(f"   - 实时比例: {real_time_ratio:.1f}x")
-        else:
-            logger.warning(f"⚠️ [分析器] 音频片段分析返回空结果")
-        
-        return result
+            
+            return result
+            
+        except Exception as e:
+            self.performance_stats['audio_errors'] += 1
+            logger.error(f"❌ [分析器] 音频片段分析失败: {e}")
+            logger.error(f"🔧 错误详情: {traceback.format_exc()}")
+            raise
     
     def get_performance_stats(self) -> Dict[str, Any]:
         """获取性能统计信息"""
@@ -507,10 +501,14 @@ class RealtimeMultimodalProcessor:
             'runtime_seconds': round(runtime, 2),
             'video_analyses': self.performance_stats['video_analysis_count'],
             'audio_analyses': self.performance_stats['audio_analysis_count'],
+            'video_errors': self.performance_stats['video_errors'],
+            'audio_errors': self.performance_stats['audio_errors'],
             'avg_video_processing_ms': round(self.performance_stats['avg_video_time'] * 1000, 2),
             'avg_audio_processing_ms': round(self.performance_stats['avg_audio_time'] * 1000, 2),
             'video_fps': round(self.performance_stats['video_analysis_count'] / runtime, 2) if runtime > 0 else 0,
-            'audio_chunks_per_second': round(self.performance_stats['audio_analysis_count'] / runtime, 2) if runtime > 0 else 0
+            'audio_chunks_per_second': round(self.performance_stats['audio_analysis_count'] / runtime, 2) if runtime > 0 else 0,
+            'video_error_rate': round(self.performance_stats['video_errors'] / max(1, self.performance_stats['video_analysis_count']), 3),
+            'audio_error_rate': round(self.performance_stats['audio_errors'] / max(1, self.performance_stats['audio_analysis_count']), 3)
         }
     
     def print_performance_summary(self):
@@ -519,20 +517,20 @@ class RealtimeMultimodalProcessor:
         
         logger.info("📊 === 实时多模态分析性能摘要 ===")
         logger.info(f"   🕐 运行时间: {stats['runtime_seconds']} 秒")
-        logger.info(f"   🎥 视频分析: {stats['video_analyses']} 帧 | 平均: {stats['avg_video_processing_ms']}ms | FPS: {stats['video_fps']}")
-        logger.info(f"   🎵 音频分析: {stats['audio_analyses']} 片段 | 平均: {stats['avg_audio_processing_ms']}ms | 片段/秒: {stats['audio_chunks_per_second']}")
+        logger.info(f"   🎥 视频分析: {stats['video_analyses']} 帧 | 平均: {stats['avg_video_processing_ms']}ms | FPS: {stats['video_fps']} | 错误率: {stats['video_error_rate']*100:.1f}%")
+        logger.info(f"   🎵 音频分析: {stats['audio_analyses']} 片段 | 平均: {stats['avg_audio_processing_ms']}ms | 片段/秒: {stats['audio_chunks_per_second']} | 错误率: {stats['audio_error_rate']*100:.1f}%")
         
         # 性能评估
-        if stats['avg_video_processing_ms'] < 100:
+        if stats['avg_video_processing_ms'] < 100 and stats['video_error_rate'] < 0.1:
             video_perf = "优秀"
-        elif stats['avg_video_processing_ms'] < 200:
+        elif stats['avg_video_processing_ms'] < 200 and stats['video_error_rate'] < 0.2:
             video_perf = "良好"  
         else:
             video_perf = "需要优化"
             
-        if stats['avg_audio_processing_ms'] < 500:
+        if stats['avg_audio_processing_ms'] < 500 and stats['audio_error_rate'] < 0.1:
             audio_perf = "优秀"
-        elif stats['avg_audio_processing_ms'] < 1000:
+        elif stats['avg_audio_processing_ms'] < 1000 and stats['audio_error_rate'] < 0.2:
             audio_perf = "良好"
         else:
             audio_perf = "需要优化"
@@ -547,7 +545,9 @@ class RealtimeMultimodalProcessor:
             'audio_analysis_count': 0,
             'avg_video_time': 0,
             'avg_audio_time': 0,
-            'start_time': time.time()
+            'start_time': time.time(),
+            'video_errors': 0,
+            'audio_errors': 0
         }
         logger.info("📊 性能统计已重置")
 
