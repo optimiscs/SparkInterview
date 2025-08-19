@@ -1,0 +1,29 @@
+# LangGraph智能体依赖 - 更新到最新稳定版本
+# 在原有requirements.txt基础上添加
+
+# LangChain生态系统 - 使用最新稳定版本
+langchain>=0.2.0
+langchain-community>=0.2.0  
+langchain-core>=0.2.0
+
+# LangGraph工作流框架 - 使用最新版本避免版本冲突
+langgraph>=0.2.0
+
+# 检查点持久化支持
+aiosqlite>=0.19.0
+
+# 类型检查和验证
+typing-extensions>=4.8.0
+
+# 可选：图可视化 - 仅在需要时安装
+# graphviz
+# pygraphviz
+
+# WebSocket支持增强
+websockets>=11.0.0
+
+# HTTP异步客户端（测试用）
+httpx>=0.25.0
+
+# 路径处理
+pathlib2>=2.3.7

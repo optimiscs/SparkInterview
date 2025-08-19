@@ -1,8 +1,9 @@
 {
-  "id": "resume_20250817_160557_4c9ef402",
-  "version_name": "软件开发岗-",
-  "target_position": "前端开发工程师",
-  "template_type": "classic",
+  "id": "resume_20250819_164037_b451e206",
+  "user_id": "b6d6f45f-6b6b-40ea-8777-80ab000c12fe",
+  "version_name": "软件开发岗-简历",
+  "target_position": "后端开发工程师",
+  "template_type": "modern",
   "basic_info": {
     "name": "张雨萌",
     "phone": "138-8888-8888",
@@ -31,7 +32,28 @@
     "database": "MySQL, PostgreSQL, Redis, MongoDB"
   },
   "internship": [],
-  "created_at": "2025-08-17T16:05:57.110749",
-  "updated_at": "2025-08-17T16:17:44.772312",
-  "status": "active"
+  "created_at": "2025-08-19T16:40:37.733747",
+  "updated_at": "2025-08-19T16:41:17.326188",
+  "status": "active",
+  "version": "v4",
+  "version_history": [
+    {
+      "version": "v1",
+      "updated_at": "2025-08-19T16:40:37.733792",
+      "change_summary": "简历内容更新"
+    },
+    {
+      "version": "v2",
+      "updated_at": "2025-08-19T16:40:37.788019",
+      "change_summary": "简历内容更新"
+    },
+    {
+      "version": "v3",
+      "updated_at": "2025-08-19T16:41:17.326188",
+      "change_summary": "简历内容更新"
+    }
+  ],
+  "analysis_status": "COMPLETED",
+  "version_id": "resume_20250819_164037_b451e206_v4",
+  "analysis_updated_at": "2025-08-19T16:41:17.326176"
 }

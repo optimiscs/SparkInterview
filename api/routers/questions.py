@@ -12,7 +12,7 @@ import uuid
 import os
 import redis
 
-from src.models.spark_client import SparkLLM
+from src.models.spark_client import create_spark_model
 from src.database.chroma_manager import chroma_manager
 
 # Redis配置
@@ -27,7 +27,7 @@ except Exception as e:
 router = APIRouter(prefix="/questions", tags=["questions"])
 
 # 初始化Spark客户端
-spark_client = SparkLLM()
+spark_client = create_spark_model(model_type="creative", temperature=0.7)
 
 class QuestionGenerationRequest(BaseModel):
     """题目生成请求模型"""

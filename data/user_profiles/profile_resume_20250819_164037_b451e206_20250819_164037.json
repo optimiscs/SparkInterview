@@ -1,0 +1,28 @@
+{
+  "profile_id": "profile_resume_20250819_164037_b451e206_20250819_164037",
+  "resume_id": "resume_20250819_164037_b451e206",
+  "user_id": "b6d6f45f-6b6b-40ea-8777-80ab000c12fe",
+  "profile_data": {
+    "basic_info": {
+      "name": "张雨萌",
+      "target_position": "后端开发工程师",
+      "target_field": "后端开发"
+    },
+    "personalized_welcome": {
+      "greeting": "您好 张雨萌！很高兴在今天的面试中与您相遇。我注意到您应聘的是后端开发工程师职位，相信您一定有很多精彩的经历要分享。让我们开始愉快的交流吧！",
+      "tone": "friendly"
+    },
+    "metadata": {
+      "generated_at": "2025-08-19T16:41:17.334611",
+      "generation_mode": "celery_worker"
+    }
+  },
+  "status": "completed",
+  "created_at": "2025-08-19T16:41:17.334623",
+  "worker_info": {
+    "task_id": "becf0e86-10da-4e82-90ee-b71a48937242",
+    "worker_hostname": "worker@optimiscdeMacBook-Air.local",
+    "processed_by": "celery_worker"
+  },
+  "saved_at": "2025-08-19T16:41:17.335087"
+}

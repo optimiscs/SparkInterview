@@ -11,8 +11,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 
 from api.routers import users, interviews, assessments, resources, resume_parser
-from api.routers import questions, chat
-from api.websocket_server import websocket_endpoint
+from api.routers import questions, chat, langgraph_chat, voice_recognition
+# from api.websocket_server import websocket_endpoint  # 暂时禁用WebSocket以避免视频分析器问题
 from src.config.settings import system_config
 
 
@@ -122,18 +122,20 @@ app.add_middleware(
 
 # 注册API路由
 app.include_router(users.router, prefix="/api/v1", tags=["用户管理"])
-app.include_router(interviews.router, prefix="/api/v1", tags=["面试系统"])
+app.include_router(interviews.router, prefix="/api/v1/interviews", tags=["面试系统"])
 app.include_router(assessments.router, prefix="/api/v1", tags=["能力评估"])
 app.include_router(resources.router, prefix="/api/v1", tags=["学习资源"])
 app.include_router(resume_parser.router, prefix="/api/v1/resume", tags=["简历解析"])
 app.include_router(questions.router, prefix="/api/v1", tags=["题目生成"])
 app.include_router(chat.router, prefix="/api/v1", tags=["智能聊天"])
+app.include_router(langgraph_chat.router, prefix="/api/v1", tags=["LangGraph智能体"])
+app.include_router(voice_recognition.router, prefix="/api/v1/voice", tags=["语音识别"])
 
-# 注册WebSocket路由
-@app.websocket("/ws/multimodal-analysis")
-async def websocket_multimodal_analysis(websocket: WebSocket):
-    """实时多模态分析WebSocket端点"""
-    await websocket_endpoint(websocket)
+# 注册WebSocket路由 - 暂时禁用
+# @app.websocket("/ws/multimodal-analysis")
+# async def websocket_multimodal_analysis(websocket: WebSocket):
+#     """实时多模态分析WebSocket端点"""
+#     await websocket_endpoint(websocket)
 
 # 根路径重定向到首页
 @app.get("/", include_in_schema=False)

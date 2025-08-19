@@ -609,6 +609,23 @@ internship: internship
 };
 }
 
+// 从目标职位推断目标领域
+function getTargetFieldFromPosition(position) {
+const fieldMapping = {
+'前端开发工程师': '前端开发',
+'后端开发工程师': '后端开发', 
+'全栈开发工程师': '全栈开发',
+'移动端开发工程师': '移动开发',
+'AI算法工程师': '人工智能',
+'数据分析师': '数据分析',
+'产品经理': '产品管理',
+'UI/UX设计师': 'UI设计',
+'其他岗位': '技术'
+};
+
+return fieldMapping[position] || '技术';
+}
+
 // API调用函数
 async function callAPI(endpoint, method = 'POST', data = null) {
 try {
@@ -782,9 +799,38 @@ response = await callAPI('/create', 'POST', formData);
 
 if (response.success) {
 showSuccessMessage(isEditMode ? '简历修改保存成功！' : '简历版本创建成功！');
+
+// 如果是新创建简历，启动用户画像生成
+if (!isEditMode && response.resume_id) {
+// 获取表单数据用于画像生成
+const formData = collectFormData();
+const targetField = getTargetFieldFromPosition(formData.target_position);
+
+try {
+// 调用画像生成API
+const profileResponse = await callAPI('/generate-profile', 'POST', {
+resume_id: response.resume_id,
+user_name: formData.basic_info.name || '用户',
+target_position: formData.target_position,
+target_field: targetField
+});
+
+if (profileResponse.success) {
+console.log('✅ 用户画像生成已启动:', profileResponse.profile_id);
+showSuccessMessage('简历创建成功！正在为您生成个性化画像...');
+} else {
+console.warn('⚠️ 画像生成启动失败:', profileResponse.error);
+// 不影响主流程，只记录警告
+}
+} catch (profileError) {
+console.warn('⚠️ 画像生成请求失败:', profileError);
+// 不影响主流程
+}
+}
+
 setTimeout(() => {
 window.location.href = './Resume_management.html';
-}, 1500);
+}, 2000); // 稍微延长等待时间，给用户看到画像生成提示
 } else {
 throw new Error(response.message || (isEditMode ? '保存失败' : '创建失败'));
 }

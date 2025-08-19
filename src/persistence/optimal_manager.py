@@ -8,7 +8,7 @@ import json
 import gzip
 import asyncio
 import aiosqlite
-import aioredis
+import redis.asyncio as redis
 from datetime import datetime, timedelta
 from typing import Dict, Optional, List
 import logging
@@ -36,7 +36,7 @@ class OptimalPersistenceManager:
             # 初始化SQLite数据库
             await self._init_database()
             
-            # 初始化Redis连接 (兼容aioredis 1.3.1)
+            # 初始化Redis连接 (使用现代redis.asyncio)
             try:
                 # 解析Redis URL
                 import urllib.parse
@@ -45,10 +45,12 @@ class OptimalPersistenceManager:
                 port = parsed.port or 6379
                 db = int(parsed.path.lstrip('/')) if parsed.path and parsed.path != '/' else 0
                 
-                self.redis = await aioredis.create_redis_pool(
-                    f'redis://{host}:{port}',
+                self.redis = redis.Redis(
+                    host=host,
+                    port=port,
                     db=db,
-                    encoding='utf-8'
+                    decode_responses=True,  # 自动解码为字符串
+                    health_check_interval=30
                 )
                 await self.redis.ping()
                 logger.info("✅ Redis连接成功")
@@ -310,7 +312,7 @@ class OptimalPersistenceManager:
             if self.redis:
                 cached_info = await self.redis.hgetall(f"task:info:{task_id}")
                 if cached_info:
-                    return {k.decode(): v.decode() for k, v in cached_info.items()}
+                    return cached_info  # decode_responses=True 自动解码
             
             # 从数据库获取
             async with aiosqlite.connect(self.db_path) as db:
@@ -410,7 +412,7 @@ class OptimalPersistenceManager:
     async def close(self):
         """关闭连接"""
         if self.redis:
-            await self.redis.close()
+            await self.redis.aclose()  # 现代redis.asyncio使用aclose()
 
 # 全局实例
 persistence_manager = OptimalPersistenceManager() 

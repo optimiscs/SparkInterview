@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LangGraph智能面试演示 - 职面星火</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<style>
+/* 流式文本动画 */
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+.typing-cursor {
+    display: inline-block;
+    animation: blink 1s infinite;
+    font-weight: bold;
+    color: #3B82F6;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+.message-slide-in {
+    animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.loading-dots .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #6B7280;
+    animation: loading 1.4s infinite ease-in-out;
+    display: inline-block;
+    margin: 0 2px;
+}
+
+.loading-dots .dot:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots .dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes loading {
+    0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+    40% { transform: scale(1); opacity: 1; }
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 顶部导航 -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <h1 class="text-2xl font-bold text-blue-600">🤖 LangGraph智能面试演示</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="connection-status" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-600">
+                        <i class="ri-loader-line animate-spin mr-1"></i>
+                        连接中...
+                    </div>
+                    <button id="login-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        登录测试
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- 左侧控制面板 -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="ri-settings-line mr-2"></i>
+                        控制面板
+                    </h2>
+                    
+                    <!-- 用户信息设置 -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">用户姓名</label>
+                            <input id="user-name" type="text" value="测试用户" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">目标职位</label>
+                            <select id="target-position" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="算法工程师">算法工程师</option>
+                                <option value="前端工程师">前端工程师</option>
+                                <option value="后端工程师">后端工程师</option>
+                                <option value="数据科学家">数据科学家</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">目标领域</label>
+                            <select id="target-field" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="人工智能">人工智能</option>
+                                <option value="前端开发">前端开发</option>
+                                <option value="后端开发">后端开发</option>
+                                <option value="数据科学">数据科学</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">简历摘要</label>
+                            <textarea id="resume-text" rows="3" 
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                      placeholder="输入简历摘要...">本科毕业，熟悉Python和机器学习，有3年工作经验</textarea>
+                        </div>
+                    </div>
+
+                    <!-- 操作按钮 -->
+                    <div class="space-y-3 mt-6">
+                        <button id="start-interview" 
+                                class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
+                            <i class="ri-play-line mr-2"></i>
+                            启动LangGraph智能体
+                        </button>
+                        <button id="health-check" 
+                                class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center">
+                            <i class="ri-heart-pulse-line mr-2"></i>
+                            健康检查
+                        </button>
+                        <button id="clear-chat" 
+                                class="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center">
+                            <i class="ri-delete-bin-line mr-2"></i>
+                            清空对话
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 智能体状态面板 -->
+                <div class="bg-white rounded-lg shadow-sm p-6 mt-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="ri-robot-line mr-2 text-blue-600"></i>
+                        智能体状态
+                    </h2>
+                    <div id="agent-status" class="space-y-3 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">会话ID:</span>
+                            <span id="session-id" class="text-gray-500">未创建</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">信息完整度:</span>
+                            <span id="completeness" class="text-blue-600 font-medium">0%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">用户情绪:</span>
+                            <span id="user-emotion" class="px-2 py-0.5 bg-gray-100 rounded text-gray-700">未知</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">当前策略:</span>
+                            <span id="current-action" class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded">等待中</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 中央对话区域 -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-sm flex flex-col h-96">
+                    <!-- 对话标题 -->
+                    <div class="border-b border-gray-200 p-4">
+                        <h2 class="text-lg font-semibold text-gray-900 flex items-center">
+                            <i class="ri-chat-3-line mr-2"></i>
+                            LangGraph智能对话
+                        </h2>
+                    </div>
+
+                    <!-- 消息显示区域 -->
+                    <div id="messages-container" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+                        <div class="text-center text-gray-500 py-8">
+                            <i class="ri-robot-line text-4xl mb-2"></i>
+                            <p>点击"启动LangGraph智能体"开始面试</p>
+                        </div>
+                    </div>
+
+                    <!-- 输入区域 -->
+                    <div class="border-t border-gray-200 p-4">
+                        <div class="flex space-x-3">
+                            <input id="message-input" type="text" 
+                                   placeholder="输入您的回答..." 
+                                   class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   disabled>
+                            <button id="send-message" 
+                                    class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                                    disabled>
+                                <i class="ri-send-plane-line"></i>
+                            </button>
+                        </div>
+                        <div class="flex justify-between mt-2 text-xs text-gray-500">
+                            <span>回车发送</span>
+                            <span id="message-status">等待智能体启动</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API响应详情 -->
+                <div class="bg-white rounded-lg shadow-sm p-6 mt-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="ri-code-line mr-2"></i>
+                        API响应详情
+                    </h3>
+                    <pre id="api-response" class="bg-gray-100 rounded-lg p-4 text-xs overflow-auto max-h-64">等待API调用...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let currentSessionId = null;
+        let isProcessing = false;
+
+        // DOM元素
+        const messagesContainer = document.getElementById('messages-container');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-message');
+        const startButton = document.getElementById('start-interview');
+        const healthButton = document.getElementById('health-check');
+        const clearButton = document.getElementById('clear-chat');
+        const loginButton = document.getElementById('login-btn');
+        const connectionStatus = document.getElementById('connection-status');
+        const apiResponse = document.getElementById('api-response');
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            bindEventListeners();
+            checkConnection();
+            
+            // 模拟登录（演示用）
+            setTimeout(mockLogin, 1000);
+        });
+
+        function bindEventListeners() {
+            startButton.addEventListener('click', startLangGraphInterview);
+            sendButton.addEventListener('click', sendMessage);
+            healthButton.addEventListener('click', checkHealth);
+            clearButton.addEventListener('click', clearChat);
+            loginButton.addEventListener('click', mockLogin);
+            
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !isProcessing) {
+                    sendMessage();
+                }
+            });
+        }
+
+        // 模拟登录
+        function mockLogin() {
+            localStorage.setItem('access_token', 'demo-token-12345');
+            updateConnectionStatus('connected', '已连接');
+            loginButton.textContent = '已登录';
+            loginButton.disabled = true;
+        }
+
+        // 检查连接状态
+        async function checkConnection() {
+            updateConnectionStatus('connecting', '连接中...');
+            // 简化的连接检查
+            setTimeout(() => {
+                if (localStorage.getItem('access_token')) {
+                    updateConnectionStatus('connected', '已连接');
+                } else {
+                    updateConnectionStatus('disconnected', '未登录');
+                }
+            }, 1000);
+        }
+
+        function updateConnectionStatus(status, message) {
+            const statusClasses = {
+                'connected': 'bg-green-100 text-green-700',
+                'disconnected': 'bg-red-100 text-red-700',
+                'connecting': 'bg-yellow-100 text-yellow-700'
+            };
+            
+            const statusIcons = {
+                'connected': 'ri-checkbox-circle-line',
+                'disconnected': 'ri-close-circle-line',
+                'connecting': 'ri-loader-line animate-spin'
+            };
+            
+            connectionStatus.className = `px-3 py-1 rounded-full text-sm ${statusClasses[status]}`;
+            connectionStatus.innerHTML = `<i class="${statusIcons[status]} mr-1"></i>${message}`;
+        }
+
+        // 启动LangGraph面试
+        async function startLangGraphInterview() {
+            if (isProcessing) return;
+            
+            try {
+                isProcessing = true;
+                updateButtonState(startButton, true, '启动中...');
+                
+                const token = localStorage.getItem('access_token');
+                if (!token) {
+                    throw new Error('请先登录');
+                }
+
+                const userInfo = {
+                    user_name: document.getElementById('user-name').value,
+                    target_position: document.getElementById('target-position').value,
+                    target_field: document.getElementById('target-field').value,
+                    resume_text: document.getElementById('resume-text').value
+                };
+
+                const response = await fetch('/api/v1/langgraph-chat/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(userInfo)
+                });
+
+                const data = await response.json();
+                updateAPIResponse('POST /langgraph-chat/start', data);
+
+                if (data.success) {
+                    currentSessionId = data.session_id;
+                    updateAgentStatus(data);
+                    
+                    // 显示欢迎消息
+                    addMessage('assistant', data.message);
+                    
+                    // 启用输入
+                    messageInput.disabled = false;
+                    sendButton.disabled = false;
+                    document.getElementById('message-status').textContent = '智能体已启动，开始对话';
+                    
+                    showSuccess('LangGraph智能体启动成功！');
+                } else {
+                    throw new Error(data.error || '启动失败');
+                }
+
+            } catch (error) {
+                console.error('启动失败:', error);
+                showError(`启动失败: ${error.message}`);
+            } finally {
+                isProcessing = false;
+                updateButtonState(startButton, false, '启动LangGraph智能体');
+            }
+        }
+
+        // 发送消息
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message || isProcessing || !currentSessionId) return;
+
+            try {
+                isProcessing = true;
+                updateButtonState(sendButton, true);
+                
+                // 显示用户消息
+                addMessage('user', message);
+                messageInput.value = '';
+
+                const token = localStorage.getItem('access_token');
+                const response = await fetch('/api/v1/langgraph-chat/message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        session_id: currentSessionId,
+                        message: message
+                    })
+                });
+
+                const data = await response.json();
+                updateAPIResponse('POST /langgraph-chat/message', data);
+
+                if (data.success) {
+                    // 显示智能体回复
+                    addMessage('assistant', data.message, data);
+                    updateAgentStatus(data);
+                } else {
+                    addMessage('assistant', data.message || '处理失败', { error: data.error });
+                }
+
+            } catch (error) {
+                console.error('发送消息失败:', error);
+                addMessage('assistant', `处理失败: ${error.message}`, { error: error.message });
+            } finally {
+                isProcessing = false;
+                updateButtonState(sendButton, false);
+            }
+        }
+
+        // 健康检查
+        async function checkHealth() {
+            try {
+                updateButtonState(healthButton, true, '检查中...');
+                
+                const response = await fetch('/api/v1/langgraph-chat/health');
+                const data = await response.json();
+                
+                updateAPIResponse('GET /langgraph-chat/health', data);
+                
+                if (data.status === 'healthy') {
+                    showSuccess(`系统健康 - ${data.message}`);
+                } else {
+                    showError(`系统不健康 - ${data.message}`);
+                }
+
+            } catch (error) {
+                showError(`健康检查失败: ${error.message}`);
+            } finally {
+                updateButtonState(healthButton, false, '健康检查');
+            }
+        }
+
+        // 清空对话
+        function clearChat() {
+            messagesContainer.innerHTML = `
+                <div class="text-center text-gray-500 py-8">
+                    <i class="ri-robot-line text-4xl mb-2"></i>
+                    <p>对话已清空</p>
+                </div>
+            `;
+            apiResponse.textContent = '等待API调用...';
+        }
+
+        // 添加消息到界面
+        function addMessage(role, content, extra = {}) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message-slide-in';
+            
+            const isUser = role === 'user';
+            const isError = extra.error;
+            const alignClass = isUser ? 'justify-end' : 'justify-start';
+            const bgClass = isError ? 'bg-red-50 border border-red-200' : 
+                           isUser ? 'bg-blue-600 text-white' : 'bg-white border border-gray-200';
+            
+            let statusIndicators = '';
+            if (!isUser && extra) {
+                const indicators = [];
+                if (extra.user_emotion) {
+                    indicators.push(`<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">${getEmotionDisplay(extra.user_emotion)}</span>`);
+                }
+                if (extra.completeness_score !== undefined) {
+                    indicators.push(`<span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">完整度${Math.round(extra.completeness_score * 100)}%</span>`);
+                }
+                if (extra.decision && extra.decision.action_type) {
+                    indicators.push(`<span class="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs">${getActionDisplay(extra.decision.action_type)}</span>`);
+                }
+                if (indicators.length > 0) {
+                    statusIndicators = `<div class="flex flex-wrap gap-2 mb-2">${indicators.join('')}</div>`;
+                }
+            }
+
+            // 清空初始提示
+            if (messagesContainer.querySelector('.text-center')) {
+                messagesContainer.innerHTML = '';
+            }
+
+            messageDiv.innerHTML = `
+                <div class="flex ${alignClass}">
+                    <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${bgClass}">
+                        ${!isUser ? '<div class="flex items-center mb-1"><i class="ri-robot-line mr-1"></i><span class="text-xs font-medium">LangGraph智能体</span></div>' : ''}
+                        ${statusIndicators}
+                        <div class="text-sm">${content}</div>
+                        <div class="text-xs opacity-70 mt-1">${new Date().toLocaleTimeString()}</div>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // 更新智能体状态
+        function updateAgentStatus(data) {
+            if (data.session_id) {
+                document.getElementById('session-id').textContent = data.session_id.substring(0, 8) + '...';
+            }
+            if (data.completeness_score !== undefined) {
+                document.getElementById('completeness').textContent = Math.round(data.completeness_score * 100) + '%';
+            }
+            if (data.user_emotion) {
+                const emotionEl = document.getElementById('user-emotion');
+                emotionEl.textContent = getEmotionDisplay(data.user_emotion);
+                emotionEl.className = `px-2 py-0.5 rounded text-xs ${getEmotionClass(data.user_emotion)}`;
+            }
+            if (data.decision && data.decision.action_type) {
+                const actionEl = document.getElementById('current-action');
+                actionEl.textContent = getActionDisplay(data.decision.action_type);
+                actionEl.className = `px-2 py-0.5 rounded text-xs ${getActionClass(data.decision.action_type)}`;
+            }
+        }
+
+        // 更新API响应显示
+        function updateAPIResponse(endpoint, data) {
+            apiResponse.textContent = `=== ${endpoint} ===\n${JSON.stringify(data, null, 2)}`;
+        }
+
+        // 工具函数
+        function updateButtonState(button, isLoading, text) {
+            if (isLoading) {
+                button.disabled = true;
+                button.innerHTML = `<i class="ri-loader-line animate-spin mr-2"></i>${text || '处理中...'}`;
+            } else {
+                button.disabled = false;
+                button.innerHTML = text || button.textContent;
+            }
+        }
+
+        function showSuccess(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            toast.innerHTML = `<i class="ri-check-line mr-2"></i>${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => document.body.removeChild(toast), 3000);
+        }
+
+        function showError(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            toast.innerHTML = `<i class="ri-error-warning-line mr-2"></i>${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => document.body.removeChild(toast), 5000);
+        }
+
+        function getEmotionDisplay(emotion) {
+            const emotions = { 'neutral': '中性', 'anxious': '紧张', 'confident': '自信', 'confused': '困惑' };
+            return emotions[emotion] || emotion;
+        }
+
+        function getEmotionClass(emotion) {
+            const classes = {
+                'neutral': 'bg-gray-100 text-gray-700',
+                'anxious': 'bg-yellow-100 text-yellow-700',
+                'confident': 'bg-green-100 text-green-700',
+                'confused': 'bg-blue-100 text-blue-700'
+            };
+            return classes[emotion] || 'bg-gray-100 text-gray-700';
+        }
+
+        function getActionDisplay(action) {
+            const actions = {
+                'ask_question': '询问信息',
+                'provide_comfort': '情感支持',
+                'generate_question': '生成问题',
+                'update_database': '更新数据'
+            };
+            return actions[action] || action;
+        }
+
+        function getActionClass(action) {
+            const classes = {
+                'ask_question': 'bg-blue-100 text-blue-800',
+                'provide_comfort': 'bg-green-100 text-green-800',
+                'generate_question': 'bg-purple-100 text-purple-800',
+                'update_database': 'bg-orange-100 text-orange-800'
+            };
+            return classes[action] || 'bg-gray-100 text-gray-800';
+        }
+    </script>
+</body>
+</html>

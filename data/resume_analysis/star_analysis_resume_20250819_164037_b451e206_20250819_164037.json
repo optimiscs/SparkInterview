@@ -1,0 +1,40 @@
+{
+  "analysis_id": "star_analysis_resume_20250819_164037_b451e206_20250819_164037",
+  "resume_id": "resume_20250819_164037_b451e206",
+  "analysis_type": "star_principle",
+  "status": "completed",
+  "star_principle": {
+    "overall_score": 67,
+    "star_items": [
+      {
+        "name": "智能学习管理系统",
+        "situation_score": 50,
+        "task_score": 40,
+        "action_score": 65,
+        "result_score": 85,
+        "overall_score": 67,
+        "suggestions": [
+          "补充项目背景：说明项目发起原因（如教育数字化转型需求）、团队规模（几人组队/分工角色）、技术环境（部署平台/应用场景）",
+          "明确任务目标：定义核心业务目标（如提升教学效率XX%）、关键挑战（如高并发场景下的性能瓶颈）",
+          "细化行动过程：展开技术实现细节（如采用JWT+RBAC实现权限管理、Redis缓存策略设计）、个人承担模块（如独立负责登录模块重构）",
+          "强化结果关联：将性能优化与业务价值挂钩（如支撑日均UV增长至X万），突出奖项含金量（全省/全国级赛事级别）"
+        ]
+      }
+    ],
+    "improvement_suggestions": [
+      "整体优化建议1：建立STAR叙事框架——开篇用1句话概括项目背景（Why），再分述目标（What）、行动（How）、成果（Result）",
+      "整体优化建议2：量化成果时采用对比法（优化前/后指标）、百分比法（性能提升比例）、排名法（同类系统对比位次）",
+      "整体优化建议3：通过动词强化个人贡献（主导/设计/攻克/协调），标注技术难点解决方案（如分布式锁实现方案选型）"
+    ],
+    "analysis_timestamp": "2025-08-19T16:40:37.823211"
+  },
+  "timestamp": "2025-08-19T16:41:17.324491",
+  "worker_info": {
+    "task_id": "4510270d-a543-47c4-9eb6-9aac903050cf",
+    "worker_hostname": "worker@optimiscdeMacBook-Air.local",
+    "processed_by": "celery_worker"
+  },
+  "saved_at": "2025-08-19T16:41:17.324533",
+  "resume_version": "v3",
+  "version_id": "resume_20250819_164037_b451e206_v3"
+}

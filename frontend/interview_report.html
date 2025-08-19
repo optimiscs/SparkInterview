@@ -658,26 +658,36 @@ border-radius: 50%;
 <a href="./assessment-options.html" class="px-5 py-2 bg-primary text-white rounded-button whitespace-nowrap">前往能力评估</a>
 </div>
 </main>
+<!-- 智能报告生成器 -->
+<script src="./js/interview-report-generator.js"></script>
+
 <script id="chart-script">
-// 全局变量存储报告数据
+// 全局变量存储报告数据（保持兼容性）
 let reportData = null;
 let charts = {};
 
-// 页面加载完成后获取数据
+// 页面加载完成后获取数据 - 使用新的报告生成器
 document.addEventListener('DOMContentLoaded', function() {
-    // 首先尝试从后端获取数据
-    loadReportData().then(() => {
-        // 数据加载完成后初始化图表
-        initCharts();
-    }).catch(error => {
-        console.error('加载报告数据失败，使用默认数据:', error);
-        // 如果获取数据失败，使用静态数据
-        initCharts();
-    });
+    // 新的报告生成器会自动处理数据加载和图表初始化
+    // 这里保持原有的兼容性代码，以防报告生成器失败时的降级
+    
+    // 延迟初始化，给报告生成器时间加载
+    setTimeout(() => {
+        // 如果报告生成器没有成功加载数据，使用降级逻辑
+        if (!window.reportGenerator || !window.reportGenerator.reportData) {
+            console.warn('⚠️ 报告生成器未加载数据，使用降级模式');
+            loadReportDataFallback().then(() => {
+                initCharts();
+            }).catch(error => {
+                console.error('降级加载也失败，使用默认数据:', error);
+                initCharts();
+            });
+        }
+    }, 2000);
 });
 
-// 加载报告数据
-async function loadReportData() {
+// 降级加载报告数据（保持兼容性）
+async function loadReportDataFallback() {
     try {
         // 从URL参数获取报告ID或面试参数
         const urlParams = new URLSearchParams(window.location.search);
