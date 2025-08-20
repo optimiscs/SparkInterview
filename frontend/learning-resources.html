@@ -57,6 +57,31 @@ input[type="number"]::-webkit-outer-spin-button {
 -webkit-appearance: none;
 margin: 0;
 }
+/* 筛选标签美化 */
+.chip { 
+  padding: 6px 10px; 
+  border: 1px solid #e5e7eb; 
+  border-radius: 9999px; 
+  font-size: 12px; 
+  color: #374151; 
+  background: #ffffff; 
+  transition: all 0.15s ease; 
+}
+.chip:hover { 
+  border-color: #2196F3; 
+  color: #2196F3; 
+}
+.chip.active { 
+  background: #2196F3; 
+  border-color: #2196F3; 
+  color: #ffffff; 
+  box-shadow: 0 2px 8px rgba(33,150,243,0.25); 
+}
+.chip-group-title { 
+  color: #6b7280; 
+  font-size: 12px; 
+  margin-right: 6px; 
+}
 </style>
 <!-- 导航栏容器 - 组件会自动插入到这里 -->
     <div id="navbar-container"></div>
@@ -70,7 +95,7 @@ margin: 0;
 <h1 class="text-2xl font-bold text-gray-900">学习资源中心</h1>
 <div class="flex items-center space-x-4">
 <div class="relative">
-<input type="text" placeholder="搜索学习资源" class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 text-sm w-64">
+<input id="resource-search-input-top" type="text" placeholder="搜索学习资源" class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 text-sm w-64">
 <div class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center text-gray-400">
 <i class="ri-search-line"></i>
 </div>
@@ -115,7 +140,7 @@ margin: 0;
 <h2 class="text-xl font-semibold text-gray-900">基于评估推荐</h2>
 <button class="text-primary hover:text-primary-dark text-sm">查看全部</button>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div id="recommended-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <!-- 推荐资源卡片1 -->
 <div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
 <div class="relative h-40 overflow-hidden">
@@ -203,7 +228,7 @@ margin: 0;
 </button>
 </div>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div id="popular-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <!-- 热门资源卡片1 -->
 <div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
 <div class="relative h-40 overflow-hidden">
@@ -296,7 +321,9 @@ margin: 0;
 </button>
 </div>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+<!-- 搜索与筛选已独立为右侧卡片展示 -->
+<div id="all-resources-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <!-- 资源卡片1 -->
 <div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
 <div class="relative h-40 overflow-hidden">
@@ -436,19 +463,13 @@ margin: 0;
 </div>
 <!-- 分页 -->
 <div class="flex items-center justify-between mt-8">
-<div class="text-sm text-gray-500">显示 1-4 条，共 24 条</div>
+<div id="pagination-info" class="text-sm text-gray-500"></div>
 <div class="flex space-x-1">
-<button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 bg-white">
+<button id="pagination-prev" class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 bg-white">
 <i class="ri-arrow-left-s-line"></i>
 </button>
-<button class="w-8 h-8 flex items-center justify-center rounded-full border border-primary text-white bg-primary">1</button>
-<button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-700 bg-white hover:border-primary hover:text-primary">2</button>
-<button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-700 bg-white hover:border-primary hover:text-primary">3</button>
-<button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-700 bg-white">
-<i class="ri-more-line"></i>
-</button>
-<button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-700 bg-white hover:border-primary hover:text-primary">6</button>
-<button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-700 bg-white">
+<div id="pagination-pages" class="flex space-x-1"></div>
+<button id="pagination-next" class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-700 bg-white">
 <i class="ri-arrow-right-s-line"></i>
 </button>
 </div>
@@ -457,6 +478,7 @@ margin: 0;
 </div>
 <!-- 右侧个性化推荐区 -->
 <div class="lg:col-span-3 space-y-6">
+
 <!-- 能力评估结果 -->
 <div class="bg-white rounded-lg shadow-sm p-6">
 <h2 class="text-xl font-semibold text-gray-900 mb-4">能力评估结果</h2>
@@ -601,6 +623,43 @@ margin: 0;
 </div>
 </div>
 </div>
+  <!-- 学习资源筛选与搜索（右侧独立卡片） -->
+  <div class="bg-white rounded-lg shadow-sm p-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">筛选与搜索</h2>
+    <div class="mb-4">
+      <div class="relative">
+        <input id="resource-search-input" type="text" placeholder="搜索学习资源（标题/描述/关键词）" class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 text-sm w-full">
+        <div class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center text-gray-400">
+          <i class="ri-search-line"></i>
+        </div>
+      </div>
+    </div>
+    <div id="filter-chips" class="space-y-3">
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="chip-group-title">类型</span>
+        <div id="chip-type" class="flex gap-2 flex-wrap"></div>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="chip-group-title">领域</span>
+        <div id="chip-field" class="flex gap-2 flex-wrap"></div>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="chip-group-title">能力</span>
+        <div id="chip-competency" class="flex gap-2 flex-wrap"></div>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="chip-group-title">难度</span>
+        <div id="chip-difficulty" class="flex gap-2 flex-wrap"></div>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="chip-group-title">关键词</span>
+        <div id="chip-keywords" class="flex gap-2 flex-wrap"></div>
+      </div>
+      <div class="pt-1">
+        <button id="clear-filters" class="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm">清空所有筛选</button>
+      </div>
+    </div>
+</div>
 </div>
 </main>
 <script id="chart-script">
@@ -719,6 +778,378 @@ button.click();
 });
 </script>
 
+<!-- 动态加载学习资源脚本（从 data/learning_resources/learning_resources.json 读取并渲染） -->
+<script id="dynamic-learning-resources">
+document.addEventListener('DOMContentLoaded', async function () {
+  const DATA_URL = '/data/learning_resources/learning_resources.json';
+
+  const competencyLabelMap = {
+    professional_knowledge: '技术能力',
+    communication_ability: '沟通表达',
+    logical_thinking: '逻辑思维',
+    learning_ability: '学习能力',
+    stress_resilience: '团队/抗压',
+    stress_resistance: '团队/抗压',
+    innovation: '创新思维',
+    expression_ability: '沟通表达',
+    skill_match: '技能匹配'
+  };
+
+  const categoryButtonToCompetency = {
+    '全部资源': null,
+    '技术能力类': 'professional_knowledge',
+    '沟通表达类': 'communication_ability',
+    '逻辑思维类': 'logical_thinking',
+    '学习能力类': 'learning_ability',
+    '团队协作类': 'stress_resilience',
+    '创新思维类': 'innovation'
+  };
+
+  const difficultyStars = {
+    beginner: 2,
+    intermediate: 3,
+    advanced: 4
+  };
+
+  const typeIconMap = {
+    video: 'ri-video-line',
+    article: 'ri-article-line',
+    course: 'ri-book-open-line',
+    book: 'ri-book-3-line',
+    practice: 'ri-presentation-line',
+    website: 'ri-global-line',
+    project: 'ri-code-box-line',
+    tool: 'ri-tools-line'
+  };
+
+  // 中英文标签映射（用于标签展示更友好）
+  const i18nLabel = {
+    // type
+    video: '视频', article: '文章', course: '课程', book: '书籍', website: '网站', project: '项目', tool: '工具', practice: '练习',
+    // difficulty
+    beginner: '初级', intermediate: '中级', advanced: '高级',
+    // competency（已有中文映射）
+    professional_knowledge: '技术能力', communication_ability: '沟通表达', logical_thinking: '逻辑思维', learning_ability: '学习能力',
+    stress_resilience: '团队/抗压', stress_resistance: '团队/抗压', innovation: '创新思维', expression_ability: '沟通表达', skill_match: '技能匹配',
+  };
+
+  // 多维过滤：每个维度多选 OR；不同维度之间 AND
+  const activeFilters = {
+    type: new Set(),
+    field: new Set(),
+    competency: new Set(),
+    difficulty: new Set(),
+    keywords: new Set()
+  };
+
+  function toggleFilter(dim, value) {
+    const set = activeFilters[dim];
+    if (set.has(value)) set.delete(value); else set.add(value);
+  }
+
+  function applyFacetFilters(list) {
+    function includeBy(dim, val) {
+      const set = activeFilters[dim];
+      if (set.size === 0) return true;
+      if (dim === 'keywords') {
+        const raw = (val || '').toString().toLowerCase();
+        // 只要资源关键词包含任一已选关键词
+        for (const kw of set) if (raw.includes(kw.toLowerCase())) return true;
+        return false;
+      }
+      return set.has((val || '').toString());
+    }
+    return list.filter(it =>
+      includeBy('type', it.type) &&
+      includeBy('field', it.field) &&
+      includeBy('competency', it.competency) &&
+      includeBy('difficulty', it.difficulty) &&
+      includeBy('keywords', it.keywords)
+    );
+  }
+
+  function renderStars(difficulty) {
+    const filled = difficultyStars[difficulty] || 3;
+    let html = '';
+    for (let i = 0; i < 5; i++) {
+      html += `<i class="${i < filled ? 'ri-star-fill' : 'ri-star-line empty'}"></i>`;
+    }
+    return html;
+  }
+
+  function renderResourceCard(item) {
+    const tag = competencyLabelMap[item.competency] || (item.field || '资源');
+    const stars = renderStars(item.difficulty);
+    const icon = typeIconMap[item.type] || 'ri-links-line';
+    const imageRaw = item.image || '';
+    const image = imageRaw ? (imageRaw.startsWith('http') || imageRaw.startsWith('/') ? imageRaw : ('/' + imageRaw)) : 'https://via.placeholder.com/400x200?text=Resource';
+    const durationOrTime = item.type === 'video' || item.type === 'course' ? '学习时长' : (item.type === 'book' ? '阅读时间' : '');
+    return `
+    <div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer" onclick="window.open('${item.url}', '_blank')">
+      <div class="relative h-40 overflow-hidden">
+        <img src="${image}" alt="${item.title}" class="w-full h-full object-cover object-top">
+        <div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+          <div class="w-7 h-7 flex items-center justify-center">
+            <i class="${icon} text-primary"></i>
+          </div>
+        </div>
+      </div>
+      <div class="p-4">
+        <div class="flex justify-between items-start mb-2">
+          <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">${tag}</span>
+          <div class="difficulty-stars">${stars}</div>
+        </div>
+        <h3 class="font-medium text-gray-900 mb-1">${item.title}</h3>
+        <p class="text-sm text-gray-500 mb-3">${(item.description || '').slice(0, 80)}${item.description && item.description.length > 80 ? '…' : ''}</p>
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-gray-500">${durationOrTime}</span>
+          <button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">查看详情</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function renderGrid(container, list) {
+    container.innerHTML = list.map(renderResourceCard).join('');
+  }
+
+  function pickRecommended(list, count = 4) {
+    const seen = new Set();
+    const picked = [];
+    for (const item of list) {
+      const key = item.competency || 'unknown';
+      if (!seen.has(key)) {
+        picked.push(item);
+        seen.add(key);
+      }
+      if (picked.length >= count) break;
+    }
+    if (picked.length < count) {
+      for (const it of list) {
+        if (!picked.includes(it)) picked.push(it);
+        if (picked.length >= count) break;
+      }
+    }
+    return picked.slice(0, count);
+  }
+
+  function pickPopular(list, count = 4) {
+    const scored = list.map(it => ({
+      item: it,
+      score: (it.keywords ? String(it.keywords).split(',').length : 0) + (it.description ? it.description.length / 100 : 0)
+    }));
+    scored.sort((a, b) => b.score - a.score);
+    return scored.slice(0, count).map(s => s.item);
+  }
+
+  let allData = [];
+  let filteredCompetency = null;
+  let searchQuery = '';
+  const pageSize = 8;
+  let currentPage = 1;
+
+  function normalizeText(text) {
+    return (text || '').toString().toLowerCase();
+  }
+
+  function filterByCompetency(list, competency) {
+    if (!competency) return list;
+    return list.filter(it => (it.competency === competency) ||
+                              (competency === 'stress_resilience' && it.competency === 'stress_resistance'));
+  }
+
+  function filterBySearch(list, query) {
+    const q = normalizeText(query);
+    if (!q) return list;
+    return list.filter(it =>
+      normalizeText(it.title).includes(q) ||
+      normalizeText(it.description).includes(q) ||
+      normalizeText(it.keywords).includes(q)
+    );
+  }
+
+  function getFilteredList() {
+    const byCategory = filterByCompetency(allData, filteredCompetency);
+    const bySearch = filterBySearch(byCategory, searchQuery);
+    return applyFacetFilters(bySearch);
+  }
+
+  function renderAllResources() {
+    const container = document.getElementById('all-resources-grid');
+    const filtered = getFilteredList();
+    const start = (currentPage - 1) * pageSize;
+    const pageItems = filtered.slice(start, start + pageSize);
+    renderGrid(container, pageItems);
+    const info = document.getElementById('pagination-info');
+    if (info) {
+      const end = Math.min(start + pageSize, filtered.length);
+      info.textContent = `显示 ${filtered.length === 0 ? 0 : (start + 1)}-${end} 条，共 ${filtered.length} 条`;
+    }
+    renderPaginationPages(filtered.length);
+    refreshPrevNextState(filtered.length);
+  }
+
+  function renderPaginationPages(totalItems) {
+    const pagesWrap = document.getElementById('pagination-pages');
+    if (!pagesWrap) return;
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+    const btns = [];
+    function pageBtn(p) {
+      const isActive = p === currentPage;
+      const base = 'w-8 h-8 flex items-center justify-center rounded-full border text-sm';
+      const active = ' border-primary text-white bg-primary';
+      const normal = ' border-gray-200 text-gray-700 bg-white hover:border-primary hover:text-primary';
+      return `<button data-page="${p}" class="${base}${isActive ? active : normal}">${p}</button>`;
+    }
+    if (totalPages <= 7) {
+      for (let p = 1; p <= totalPages; p++) btns.push(pageBtn(p));
+    } else {
+      btns.push(pageBtn(1));
+      if (currentPage > 3) btns.push('<span class="px-1 text-gray-400">…</span>');
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+      for (let p = start; p <= end; p++) btns.push(pageBtn(p));
+      if (currentPage < totalPages - 2) btns.push('<span class="px-1 text-gray-400">…</span>');
+      btns.push(pageBtn(totalPages));
+    }
+    pagesWrap.innerHTML = btns.join('');
+    pagesWrap.querySelectorAll('button[data-page]').forEach(b => {
+      b.addEventListener('click', () => {
+        const p = parseInt(b.getAttribute('data-page'));
+        if (!isNaN(p) && p !== currentPage) {
+          currentPage = p;
+          renderAllResources();
+        }
+      });
+    });
+  }
+
+  function refreshPrevNextState(totalItems) {
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+    const prev = document.getElementById('pagination-prev');
+    const next = document.getElementById('pagination-next');
+    if (prev) prev.disabled = currentPage <= 1;
+    if (next) next.disabled = currentPage >= totalPages;
+  }
+
+  try {
+    const resp = await fetch(DATA_URL);
+    const data = await resp.json();
+    allData = Array.isArray(data) ? data.map((d, idx) => ({
+      id: d.id || `res_${idx}`,
+      title: d.title || '未命名资源',
+      description: d.description || '',
+      url: d.url || '#',
+      image: d.image || '',
+      type: (d.type || 'article').toLowerCase(),
+      field: d.field || '',
+      competency: d.competency || '',
+      keywords: d.keywords || '',
+      difficulty: (d.difficulty || 'intermediate').toLowerCase()
+    })) : [];
+
+    // 生成各维度可选标签（基于全量数据去重）
+    const uniq = (arr) => Array.from(new Set(arr.filter(Boolean)));
+    const allTypes = uniq(allData.map(d => d.type));
+    const allFields = uniq(allData.map(d => d.field));
+    const allCompetencies = uniq(allData.map(d => d.competency));
+    const allDifficulties = uniq(allData.map(d => d.difficulty));
+    // keywords 以逗号或空格分割简单抽取常见词（控制数量）
+    const keywordPool = uniq(allData.flatMap(d => String(d.keywords || '').split(/[;,\s]+/))).slice(0, 20);
+
+    function renderChips(containerId, items, dim) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = items.map(v => {
+        const text = i18nLabel[v] || v;
+        return `<button data-dim="${dim}" data-val="${v}" class="chip">${text}</button>`;
+      }).join('');
+      container.querySelectorAll('button[data-dim]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const dimKey = btn.getAttribute('data-dim');
+          const val = btn.getAttribute('data-val');
+          toggleFilter(dimKey, val);
+          // 视觉激活
+          btn.classList.toggle('active');
+          // 重置页码并渲染
+          currentPage = 1;
+          renderAllResources();
+        });
+      });
+    }
+
+    renderChips('chip-type', allTypes, 'type');
+    renderChips('chip-field', allFields, 'field');
+    renderChips('chip-competency', allCompetencies, 'competency');
+    renderChips('chip-difficulty', allDifficulties, 'difficulty');
+    renderChips('chip-keywords', keywordPool, 'keywords');
+
+    // 清空筛选
+    const clearBtn = document.getElementById('clear-filters');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        Object.values(activeFilters).forEach(set => set.clear());
+        document.querySelectorAll('#filter-chips .chip.active').forEach(el => el.classList.remove('active'));
+        searchQuery = '';
+        const searchInput = document.getElementById('resource-search-input');
+        if (searchInput) searchInput.value = '';
+        currentPage = 1;
+        renderAllResources();
+      });
+    }
+
+    const recommended = pickRecommended(allData, 2);
+    const popular = pickPopular(allData, 4);
+    const recommendedGrid = document.getElementById('recommended-grid');
+    const popularGrid = document.getElementById('popular-grid');
+    renderGrid(recommendedGrid, recommended);
+    renderGrid(popularGrid, popular);
+
+    renderAllResources();
+
+    const buttons = document.querySelectorAll('.category-button');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const label = btn.textContent.trim();
+        filteredCompetency = categoryButtonToCompetency[label] || null;
+        currentPage = 1;
+        renderAllResources();
+      });
+    });
+
+    // 搜索
+    const searchInput = document.getElementById('resource-search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        searchQuery = searchInput.value || '';
+        currentPage = 1;
+        renderAllResources();
+      });
+    }
+
+    // 分页按钮
+    const prev = document.getElementById('pagination-prev');
+    const next = document.getElementById('pagination-next');
+    if (prev) prev.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderAllResources();
+      }
+    });
+    if (next) next.addEventListener('click', () => {
+      const total = getFilteredList().length;
+      const totalPages = Math.max(1, Math.ceil(total / pageSize));
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderAllResources();
+      }
+    });
+
+  } catch (e) {
+    console.error('加载学习资源失败:', e);
+  }
+});
+</script>
 <!-- 通用导航脚本 -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
