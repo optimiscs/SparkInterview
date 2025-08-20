@@ -1,890 +1,1065 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>学习资源 - 职面星火</title>
-<script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script>tailwind.config={theme:{extend:{colors:{primary:'#2196F3',secondary:'#FF5722'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
-<style>
-:where([class^="ri-"])::before { content: "\f3c2"; }
-body {
-font-family: "Noto Sans SC", "Roboto", sans-serif;
-}
-.resource-card {
-transition: transform 0.2s, box-shadow 0.2s;
-}
-.resource-card:hover {
-transform: translateY(-4px);
-box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-.category-button {
-transition: all 0.2s;
-}
-.category-button.active {
-background-color: #2196F3;
-color: white;
-}
-.custom-progress {
-height: 6px;
-background-color: #E5E7EB;
-border-radius: 3px;
-overflow: hidden;
-}
-.custom-progress-bar {
-height: 100%;
-border-radius: 3px;
-transition: width 0.3s ease;
-}
-.difficulty-stars {
-display: inline-flex;
-align-items: center;
-}
-.difficulty-stars i {
-color: #FFB400;
-margin-right: 2px;
-}
-.difficulty-stars i.empty {
-color: #E5E7EB;
-}
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
--webkit-appearance: none;
-margin: 0;
-}
-/* 筛选标签美化 */
-.chip { 
-  padding: 6px 10px; 
-  border: 1px solid #e5e7eb; 
-  border-radius: 9999px; 
-  font-size: 12px; 
-  color: #374151; 
-  background: #ffffff; 
-  transition: all 0.15s ease; 
-}
-.chip:hover { 
-  border-color: #2196F3; 
-  color: #2196F3; 
-}
-.chip.active { 
-  background: #2196F3; 
-  border-color: #2196F3; 
-  color: #ffffff; 
-  box-shadow: 0 2px 8px rgba(33,150,243,0.25); 
-}
-.chip-group-title { 
-  color: #6b7280; 
-  font-size: 12px; 
-  margin-right: 6px; 
-}
-</style>
-<!-- 导航栏容器 - 组件会自动插入到这里 -->
-    <div id="navbar-container"></div>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学习资源 - 职面星火</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>tailwind.config = { theme: { extend: { colors: { primary: '#2196F3', secondary: '#FF5722' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px' } } } }</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+  <style>
+    :where([class^="ri-"])::before {
+      content: "\f3c2";
+    }
+
+    body {
+      font-family: "Noto Sans SC", "Roboto", sans-serif;
+    }
+
+    .resource-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .category-button {
+      transition: all 0.2s;
+    }
+
+    .category-button.active {
+      background-color: #2196F3;
+      color: white;
+    }
+
+    .custom-progress {
+      height: 6px;
+      background-color: #E5E7EB;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .custom-progress-bar {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .difficulty-stars {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .difficulty-stars i {
+      color: #FFB400;
+      margin-right: 2px;
+    }
+
+    .difficulty-stars i.empty {
+      color: #E5E7EB;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* 筛选标签美化 */
+    .chip {
+      padding: 6px 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 9999px;
+      font-size: 12px;
+      color: #374151;
+      background: #ffffff;
+      transition: all 0.15s ease;
+    }
+
+    .chip:hover {
+      border-color: #2196F3;
+      color: #2196F3;
+    }
+
+    .chip.active {
+      background: #2196F3;
+      border-color: #2196F3;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(33, 150, 243, 0.25);
+    }
+
+    .chip-group-title {
+      color: #6b7280;
+      font-size: 12px;
+      margin-right: 6px;
+    }
+  </style>
+  <!-- 导航栏容器 - 组件会自动插入到这里 -->
+  <div id="navbar-container"></div>
 </head>
+
 <body class="bg-gray-50 min-h-screen">
-<!-- 导航栏容器 - 组件会自动插入到这里 -->
-    <div id="navbar-container"></div>
-<!-- 主要内容区域 -->
-<main class="container mx-auto px-4 py-8">
-<div class="flex items-center justify-between mb-6">
-<h1 class="text-2xl font-bold text-gray-900">学习资源中心</h1>
-<div class="flex items-center space-x-4">
-<div class="relative">
-<input id="resource-search-input-top" type="text" placeholder="搜索学习资源" class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 text-sm w-64">
-<div class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center text-gray-400">
-<i class="ri-search-line"></i>
-</div>
-</div>
-<div class="flex items-center space-x-2">
-<div class="relative">
-<button class="flex items-center space-x-2 px-4 py-2 border border-gray-200 rounded-lg text-gray-700 bg-white hover:bg-gray-50 text-sm whitespace-nowrap">
-<span>资源类型</span>
-<i class="ri-arrow-down-s-line"></i>
-</button>
-<!-- 下拉菜单将通过JS控制显示 -->
-</div>
-<div class="relative">
-<button class="flex items-center space-x-2 px-4 py-2 border border-gray-200 rounded-lg text-gray-700 bg-white hover:bg-gray-50 text-sm whitespace-nowrap">
-<span>排序方式</span>
-<i class="ri-arrow-down-s-line"></i>
-</button>
-<!-- 下拉菜单将通过JS控制显示 -->
-</div>
-</div>
-</div>
-</div>
-<!-- 主要内容网格布局 -->
-<div class="grid grid-cols-1 lg:grid-cols-10 gap-8">
-<!-- 左侧资源展示区 -->
-<div class="lg:col-span-7 space-y-6">
-<!-- 资源分类导航 -->
-<div class="bg-white rounded-lg shadow-sm p-4">
-<div class="flex flex-wrap gap-2">
-<button class="category-button active px-4 py-2 rounded-full text-sm whitespace-nowrap">全部资源</button>
-<button class="category-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">技术能力类</button>
-<button class="category-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">沟通表达类</button>
-<button class="category-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">逻辑思维类</button>
-<button class="category-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">学习能力类</button>
-<button class="category-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">团队协作类</button>
-<button class="category-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">创新思维类</button>
-</div>
-</div>
-<!-- 推荐资源 -->
-<div class="bg-white rounded-lg shadow-sm p-6">
-<div class="flex items-center justify-between mb-4">
-<h2 class="text-xl font-semibold text-gray-900">基于评估推荐</h2>
-<button class="text-primary hover:text-primary-dark text-sm">查看全部</button>
-</div>
-<div id="recommended-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<!-- 推荐资源卡片1 -->
-<div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
-<div class="relative h-40 overflow-hidden">
-<img src="https://readdy.ai/api/search-image?query=Professional%20video%20tutorial%20on%20effective%20communication%20skills%2C%20business%20presentation%20with%20clear%20visual%20aids%2C%20high%20quality%20educational%20content%20with%20clean%20background&width=400&height=200&seq=1&orientation=landscape" alt="沟通技巧视频教程" class="w-full h-full object-cover object-top">
-<div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
-<div class="w-7 h-7 flex items-center justify-center">
-<i class="ri-video-line text-primary"></i>
-</div>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start mb-2">
-<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">沟通表达</span>
-<div class="difficulty-stars">
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-line empty"></i>
-<i class="ri-star-line empty"></i>
-<i class="ri-star-line empty"></i>
-</div>
-</div>
-<h3 class="font-medium text-gray-900 mb-1">高效沟通技巧视频教程</h3>
-<p class="text-sm text-gray-500 mb-3">学习如何在面试和工作中进行清晰有效的沟通</p>
-<div class="flex items-center justify-between text-sm mb-2">
-<span class="text-gray-500">学习进度</span>
-<span class="text-gray-700">15%</span>
-</div>
-<div class="custom-progress mb-3">
-<div class="custom-progress-bar bg-primary" style="width: 15%"></div>
-</div>
-<div class="flex items-center justify-between">
-<span class="text-sm text-gray-500">时长: 45 分钟</span>
-<button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">继续学习</button>
-</div>
-</div>
-</div>
-<!-- 推荐资源卡片2 -->
-<div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
-<div class="relative h-40 overflow-hidden">
-<img src="https://readdy.ai/api/search-image?query=Creative%20thinking%20and%20innovation%20workshop%2C%20brainstorming%20session%20with%20colorful%20sticky%20notes%20on%20whiteboard%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=2&orientation=landscape" alt="创新思维训练" class="w-full h-full object-cover object-top">
-<div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
-<div class="w-7 h-7 flex items-center justify-center">
-<i class="ri-file-pdf-line text-primary"></i>
-</div>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start mb-2">
-<span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">创新思维</span>
-<div class="difficulty-stars">
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-line empty"></i>
-<i class="ri-star-line empty"></i>
-</div>
-</div>
-<h3 class="font-medium text-gray-900 mb-1">创新思维训练指南</h3>
-<p class="text-sm text-gray-500 mb-3">培养创造性解决问题的能力，提升创新思维水平</p>
-<div class="flex items-center justify-between text-sm mb-2">
-<span class="text-gray-500">学习进度</span>
-<span class="text-gray-700">0%</span>
-</div>
-<div class="custom-progress mb-3">
-<div class="custom-progress-bar bg-primary" style="width: 0%"></div>
-</div>
-<div class="flex items-center justify-between">
-<span class="text-sm text-gray-500">阅读时间: 30 分钟</span>
-<button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">开始学习</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- 热门资源 -->
-<div class="bg-white rounded-lg shadow-sm p-6">
-<div class="flex items-center justify-between mb-4">
-<h2 class="text-xl font-semibold text-gray-900">热门学习资源</h2>
-<div class="flex space-x-2">
-<button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 bg-white">
-<i class="ri-arrow-left-s-line"></i>
-</button>
-<button class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-700 bg-white">
-<i class="ri-arrow-right-s-line"></i>
-</button>
-</div>
-</div>
-<div id="popular-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<!-- 热门资源卡片1 -->
-<div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
-<div class="relative h-40 overflow-hidden">
-<img src="https://readdy.ai/api/search-image?query=Python%20programming%20tutorial%2C%20code%20on%20screen%20with%20modern%20IDE%20interface%2C%20professional%20software%20development%20educational%20content%20with%20clean%20background&width=400&height=200&seq=3&orientation=landscape" alt="Python编程实战" class="w-full h-full object-cover object-top">
-<div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
-<div class="w-7 h-7 flex items-center justify-center">
-<i class="ri-video-line text-primary"></i>
-</div>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start mb-2">
-<span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">技术能力</span>
-<div class="difficulty-stars">
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-line empty"></i>
-<i class="ri-star-line empty"></i>
-</div>
-</div>
-<h3 class="font-medium text-gray-900 mb-1">Python 编程实战教程</h3>
-<p class="text-sm text-gray-500 mb-3">从基础到高级的 Python 编程技能培训课程</p>
-<div class="flex items-center justify-between text-sm mb-2">
-<span class="text-gray-500">学习人数</span>
-<span class="text-gray-700">2,458</span>
-</div>
-<div class="flex items-center justify-between">
-<div class="flex items-center">
-<div class="w-5 h-5 flex items-center justify-center text-yellow-500">
-<i class="ri-star-fill"></i>
-</div>
-<span class="ml-1 text-sm text-gray-700">4.8</span>
-</div>
-<button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">查看详情</button>
-</div>
-</div>
-</div>
-<!-- 热门资源卡片2 -->
-<div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
-<div class="relative h-40 overflow-hidden">
-<img src="https://readdy.ai/api/search-image?query=Logical%20thinking%20and%20problem%20solving%20workshop%2C%20analytical%20thinking%20exercise%20with%20diagrams%20and%20flowcharts%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=4&orientation=landscape" alt="逻辑思维训练" class="w-full h-full object-cover object-top">
-<div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
-<div class="w-7 h-7 flex items-center justify-center">
-<i class="ri-presentation-line text-primary"></i>
-</div>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start mb-2">
-<span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">逻辑思维</span>
-<div class="difficulty-stars">
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-line empty"></i>
-</div>
-</div>
-<h3 class="font-medium text-gray-900 mb-1">逻辑思维与问题解决</h3>
-<p class="text-sm text-gray-500 mb-3">提升分析问题和解决复杂问题的能力</p>
-<div class="flex items-center justify-between text-sm mb-2">
-<span class="text-gray-500">学习人数</span>
-<span class="text-gray-700">1,879</span>
-</div>
-<div class="flex items-center justify-between">
-<div class="flex items-center">
-<div class="w-5 h-5 flex items-center justify-center text-yellow-500">
-<i class="ri-star-fill"></i>
-</div>
-<span class="ml-1 text-sm text-gray-700">4.7</span>
-</div>
-<button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">查看详情</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- 全部学习资源 -->
-<div class="bg-white rounded-lg shadow-sm p-6">
-<div class="flex items-center justify-between mb-6">
-<h2 class="text-xl font-semibold text-gray-900">全部学习资源</h2>
-<div class="flex items-center space-x-2">
-<span class="text-sm text-gray-500">显示方式:</span>
-<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white">
-<i class="ri-layout-grid-line"></i>
-</button>
-<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-700 bg-white">
-<i class="ri-list-check-2"></i>
-</button>
-</div>
-</div>
-
-<!-- 搜索与筛选已独立为右侧卡片展示 -->
-<div id="all-resources-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<!-- 资源卡片1 -->
-<div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
-<div class="relative h-40 overflow-hidden">
-<img src="https://readdy.ai/api/search-image?query=Team%20collaboration%20workshop%2C%20diverse%20group%20of%20professionals%20working%20together%20on%20a%20project%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=5&orientation=landscape" alt="团队协作技巧" class="w-full h-full object-cover object-top">
-<div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
-<div class="w-7 h-7 flex items-center justify-center">
-<i class="ri-video-line text-primary"></i>
-</div>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start mb-2">
-<span class="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full">团队协作</span>
-<div class="difficulty-stars">
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-line empty"></i>
-<i class="ri-star-line empty"></i>
-</div>
-</div>
-<h3 class="font-medium text-gray-900 mb-1">高效团队协作技巧</h3>
-<p class="text-sm text-gray-500 mb-3">学习如何在团队中高效协作与沟通</p>
-<div class="flex items-center justify-between">
-<div class="flex items-center">
-<div class="w-5 h-5 flex items-center justify-center text-yellow-500">
-<i class="ri-star-fill"></i>
-</div>
-<span class="ml-1 text-sm text-gray-700">4.6</span>
-</div>
-<span class="text-sm text-gray-500">时长: 60 分钟</span>
-</div>
-</div>
-</div>
-<!-- 资源卡片2 -->
-<div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
-<div class="relative h-40 overflow-hidden">
-<img src="https://readdy.ai/api/search-image?query=Data%20structure%20and%20algorithms%20visualization%2C%20computer%20science%20education%20with%20diagrams%20and%20code%20examples%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=6&orientation=landscape" alt="数据结构与算法" class="w-full h-full object-cover object-top">
-<div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
-<div class="w-7 h-7 flex items-center justify-center">
-<i class="ri-book-open-line text-primary"></i>
-</div>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start mb-2">
-<span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">技术能力</span>
-<div class="difficulty-stars">
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-line empty"></i>
-</div>
-</div>
-<h3 class="font-medium text-gray-900 mb-1">数据结构与算法精讲</h3>
-<p class="text-sm text-gray-500 mb-3">深入理解数据结构与算法的核心概念</p>
-<div class="flex items-center justify-between">
-<div class="flex items-center">
-<div class="w-5 h-5 flex items-center justify-center text-yellow-500">
-<i class="ri-star-fill"></i>
-</div>
-<span class="ml-1 text-sm text-gray-700">4.9</span>
-</div>
-<span class="text-sm text-gray-500">阅读时间: 120 分钟</span>
-</div>
-</div>
-</div>
-<!-- 资源卡片3 -->
-<div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
-<div class="relative h-40 overflow-hidden">
-<img src="https://readdy.ai/api/search-image?query=Learning%20strategies%20and%20techniques%2C%20student%20studying%20efficiently%20with%20books%20and%20digital%20devices%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=7&orientation=landscape" alt="高效学习方法" class="w-full h-full object-cover object-top">
-<div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
-<div class="w-7 h-7 flex items-center justify-center">
-<i class="ri-file-pdf-line text-primary"></i>
-</div>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start mb-2">
-<span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">学习能力</span>
-<div class="difficulty-stars">
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-line empty"></i>
-<i class="ri-star-line empty"></i>
-<i class="ri-star-line empty"></i>
-</div>
-</div>
-<h3 class="font-medium text-gray-900 mb-1">高效学习方法指南</h3>
-<p class="text-sm text-gray-500 mb-3">掌握快速学习和知识内化的技巧</p>
-<div class="flex items-center justify-between">
-<div class="flex items-center">
-<div class="w-5 h-5 flex items-center justify-center text-yellow-500">
-<i class="ri-star-fill"></i>
-</div>
-<span class="ml-1 text-sm text-gray-700">4.5</span>
-</div>
-<span class="text-sm text-gray-500">阅读时间: 25 分钟</span>
-</div>
-</div>
-</div>
-<!-- 资源卡片4 -->
-<div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
-<div class="relative h-40 overflow-hidden">
-<img src="https://readdy.ai/api/search-image?query=Public%20speaking%20and%20presentation%20skills%2C%20professional%20speaker%20giving%20presentation%20to%20audience%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=8&orientation=landscape" alt="公众演讲技巧" class="w-full h-full object-cover object-top">
-<div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
-<div class="w-7 h-7 flex items-center justify-center">
-<i class="ri-presentation-line text-primary"></i>
-</div>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start mb-2">
-<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">沟通表达</span>
-<div class="difficulty-stars">
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-fill"></i>
-<i class="ri-star-line empty"></i>
-<i class="ri-star-line empty"></i>
-</div>
-</div>
-<h3 class="font-medium text-gray-900 mb-1">公众演讲与表达技巧</h3>
-<p class="text-sm text-gray-500 mb-3">提升演讲魅力和表达清晰度的专业指导</p>
-<div class="flex items-center justify-between">
-<div class="flex items-center">
-<div class="w-5 h-5 flex items-center justify-center text-yellow-500">
-<i class="ri-star-fill"></i>
-</div>
-<span class="ml-1 text-sm text-gray-700">4.7</span>
-</div>
-<span class="text-sm text-gray-500">时长: 90 分钟</span>
-</div>
-</div>
-</div>
-</div>
-<!-- 分页 -->
-<div class="flex items-center justify-between mt-8">
-<div id="pagination-info" class="text-sm text-gray-500"></div>
-<div class="flex space-x-1">
-<button id="pagination-prev" class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 bg-white">
-<i class="ri-arrow-left-s-line"></i>
-</button>
-<div id="pagination-pages" class="flex space-x-1"></div>
-<button id="pagination-next" class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-700 bg-white">
-<i class="ri-arrow-right-s-line"></i>
-</button>
-</div>
-</div>
-</div>
-</div>
-<!-- 右侧个性化推荐区 -->
-<div class="lg:col-span-3 space-y-6">
-
-<!-- 能力评估结果 -->
-<div class="bg-white rounded-lg shadow-sm p-6">
-<h2 class="text-xl font-semibold text-gray-900 mb-4">能力评估结果</h2>
-<div id="radar-chart" class="w-full h-60"></div>
-<div class="mt-4 p-4 bg-primary bg-opacity-5 rounded-lg">
-<h3 class="font-medium text-gray-900 mb-2">学习建议</h3>
-<p class="text-sm text-gray-700 mb-3">根据您的能力评估结果，建议重点提升以下能力：</p>
-<ul class="space-y-2">
-<li class="flex items-start">
-<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
-<i class="ri-checkbox-circle-line"></i>
-</div>
-<span class="text-sm text-gray-700">创新思维能力</span>
-</li>
-<li class="flex items-start">
-<div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
-<i class="ri-checkbox-circle-line"></i>
-</div>
-<span class="text-sm text-gray-700">沟通表达能力</span>
-</li>
-</ul>
-<div class="mt-4">
-<a href="#" data-readdy="true" class="text-primary hover:text-primary-dark text-sm font-medium">查看完整评估报告</a>
-</div>
-</div>
-</div>
-<!-- 学习进度 -->
-<div class="bg-white rounded-lg shadow-sm p-6">
-<h2 class="text-xl font-semibold text-gray-900 mb-4">我的学习进度</h2>
-<div class="space-y-4">
-<div>
-<div class="flex items-center justify-between mb-1">
-<span class="text-sm font-medium text-gray-700">Python 编程实战教程</span>
-<span class="text-sm text-gray-500">65%</span>
-</div>
-<div class="custom-progress">
-<div class="custom-progress-bar bg-primary" style="width: 65%"></div>
-</div>
-</div>
-<div>
-<div class="flex items-center justify-between mb-1">
-<span class="text-sm font-medium text-gray-700">高效沟通技巧视频教程</span>
-<span class="text-sm text-gray-500">15%</span>
-</div>
-<div class="custom-progress">
-<div class="custom-progress-bar bg-primary" style="width: 15%"></div>
-</div>
-</div>
-<div>
-<div class="flex items-center justify-between mb-1">
-<span class="text-sm font-medium text-gray-700">数据结构与算法精讲</span>
-<span class="text-sm text-gray-500">40%</span>
-</div>
-<div class="custom-progress">
-<div class="custom-progress-bar bg-primary" style="width: 40%"></div>
-</div>
-</div>
-<div>
-<div class="flex items-center justify-between mb-1">
-<span class="text-sm font-medium text-gray-700">团队协作与冲突处理</span>
-<span class="text-sm text-gray-500">90%</span>
-</div>
-<div class="custom-progress">
-<div class="custom-progress-bar bg-green-500" style="width: 90%"></div>
-</div>
-</div>
-</div>
-<div class="mt-4 text-center">
-<button class="text-primary hover:text-primary-dark text-sm font-medium">查看全部课程</button>
-</div>
-</div>
-<!-- 热门标签 -->
-<div class="bg-white rounded-lg shadow-sm p-6">
-<h2 class="text-xl font-semibold text-gray-900 mb-4">热门标签</h2>
-<div class="flex flex-wrap gap-2">
-<span class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">Python</span>
-<span class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">数据结构</span>
-<span class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">沟通技巧</span>
-<span class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">团队协作</span>
-<span class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">面试技巧</span>
-<span class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">算法</span>
-<span class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">创新思维</span>
-<span class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">前端开发</span>
-<span class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">学习方法</span>
-<span class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">演讲技巧</span>
-</div>
-</div>
-<!-- 最新上线 -->
-<div class="bg-white rounded-lg shadow-sm p-6">
-<h2 class="text-xl font-semibold text-gray-900 mb-4">最新上线</h2>
-<div class="space-y-4">
-<div class="flex items-start">
-<div class="w-16 h-16 rounded overflow-hidden flex-shrink-0">
-<img src="https://readdy.ai/api/search-image?query=System%20design%20interview%20preparation%2C%20architecture%20diagram%20on%20whiteboard%2C%20professional%20educational%20content%20with%20clean%20background&width=100&height=100&seq=9&orientation=squarish" alt="系统设计面试" class="w-full h-full object-cover object-top">
-</div>
-<div class="ml-3">
-<h3 class="font-medium text-gray-900 text-sm">系统设计面试指南</h3>
-<p class="text-xs text-gray-500 mt-1">掌握系统设计面试的核心方法和技巧</p>
-<div class="flex items-center mt-1">
-<div class="w-4 h-4 flex items-center justify-center text-yellow-500">
-<i class="ri-star-fill"></i>
-</div>
-<span class="ml-1 text-xs text-gray-700">4.9</span>
-<span class="mx-2 text-gray-300">|</span>
-<span class="text-xs text-gray-500">2025-07-01</span>
-</div>
-</div>
-</div>
-<div class="flex items-start">
-<div class="w-16 h-16 rounded overflow-hidden flex-shrink-0">
-<img src="https://readdy.ai/api/search-image?query=Machine%20learning%20fundamentals%2C%20AI%20algorithms%20visualization%2C%20professional%20educational%20content%20with%20clean%20background&width=100&height=100&seq=10&orientation=squarish" alt="机器学习基础" class="w-full h-full object-cover object-top">
-</div>
-<div class="ml-3">
-<h3 class="font-medium text-gray-900 text-sm">机器学习基础教程</h3>
-<p class="text-xs text-gray-500 mt-1">从零开始学习机器学习的核心概念</p>
-<div class="flex items-center mt-1">
-<div class="w-4 h-4 flex items-center justify-center text-yellow-500">
-<i class="ri-star-fill"></i>
-</div>
-<span class="ml-1 text-xs text-gray-700">4.7</span>
-<span class="mx-2 text-gray-300">|</span>
-<span class="text-xs text-gray-500">2025-06-28</span>
-</div>
-</div>
-</div>
-<div class="flex items-start">
-<div class="w-16 h-16 rounded overflow-hidden flex-shrink-0">
-<img src="https://readdy.ai/api/search-image?query=Conflict%20resolution%20in%20workplace%2C%20professional%20mediator%20helping%20team%20resolve%20issues%2C%20professional%20educational%20content%20with%20clean%20background&width=100&height=100&seq=11&orientation=squarish" alt="冲突解决技巧" class="w-full h-full object-cover object-top">
-</div>
-<div class="ml-3">
-<h3 class="font-medium text-gray-900 text-sm">职场冲突解决技巧</h3>
-<p class="text-xs text-gray-500 mt-1">有效处理工作中的冲突和分歧</p>
-<div class="flex items-center mt-1">
-<div class="w-4 h-4 flex items-center justify-center text-yellow-500">
-<i class="ri-star-fill"></i>
-</div>
-<span class="ml-1 text-xs text-gray-700">4.6</span>
-<span class="mx-2 text-gray-300">|</span>
-<span class="text-xs text-gray-500">2025-06-25</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-  <!-- 学习资源筛选与搜索（右侧独立卡片） -->
-  <div class="bg-white rounded-lg shadow-sm p-6">
-    <h2 class="text-xl font-semibold text-gray-900 mb-4">筛选与搜索</h2>
-    <div class="mb-4">
-      <div class="relative">
-        <input id="resource-search-input" type="text" placeholder="搜索学习资源（标题/描述/关键词）" class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 text-sm w-full">
-        <div class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center text-gray-400">
-          <i class="ri-search-line"></i>
+  <!-- 导航栏容器 - 组件会自动插入到这里 -->
+  <div id="navbar-container"></div>
+  <!-- 主要内容区域 -->
+  <main class="container mx-auto px-4 py-8">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-2xl font-bold text-gray-900">学习资源中心</h1>
+      <div class="flex items-center space-x-4">
+        <div class="relative">
+          <input id="resource-search-input-top" type="text" placeholder="搜索学习资源"
+            class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 text-sm w-64">
+          <div
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center text-gray-400">
+            <i class="ri-search-line"></i>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <div class="relative">
+            <button
+              class="flex items-center space-x-2 px-4 py-2 border border-gray-200 rounded-lg text-gray-700 bg-white hover:bg-gray-50 text-sm whitespace-nowrap">
+              <span>资源类型</span>
+              <i class="ri-arrow-down-s-line"></i>
+            </button>
+            <!-- 下拉菜单将通过JS控制显示 -->
+          </div>
+          <div class="relative">
+            <button
+              class="flex items-center space-x-2 px-4 py-2 border border-gray-200 rounded-lg text-gray-700 bg-white hover:bg-gray-50 text-sm whitespace-nowrap">
+              <span>排序方式</span>
+              <i class="ri-arrow-down-s-line"></i>
+            </button>
+            <!-- 下拉菜单将通过JS控制显示 -->
+          </div>
         </div>
       </div>
     </div>
-    <div id="filter-chips" class="space-y-3">
-      <div class="flex items-center gap-2 flex-wrap">
-        <span class="chip-group-title">类型</span>
-        <div id="chip-type" class="flex gap-2 flex-wrap"></div>
+    <!-- 主要内容网格布局 -->
+    <div class="grid grid-cols-1 lg:grid-cols-10 gap-8">
+      <!-- 左侧资源展示区 -->
+      <div class="lg:col-span-7 space-y-6">
+        <!-- 资源分类导航 -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+          <div class="flex flex-wrap gap-2">
+            <button class="category-button active px-4 py-2 rounded-full text-sm whitespace-nowrap">全部资源</button>
+            <button
+              class="category-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">技术能力类</button>
+            <button
+              class="category-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">沟通表达类</button>
+            <button
+              class="category-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">逻辑思维类</button>
+            <button
+              class="category-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">技能匹配类</button>
+            <button
+              class="category-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">学习能力类</button>
+            <button
+              class="category-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">团队协作类</button>
+            <button
+              class="category-button px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 text-sm whitespace-nowrap">创新思维类</button>
+          </div>
+        </div>
+        <!-- 推荐资源 -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold text-gray-900">基于评估推荐</h2>
+            <button class="text-primary hover:text-primary-dark text-sm">查看全部</button>
+          </div>
+          <div id="recommended-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 推荐资源卡片1 -->
+            <div
+              class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
+              <div class="relative h-40 overflow-hidden">
+                <img
+                  src="https://readdy.ai/api/search-image?query=Professional%20video%20tutorial%20on%20effective%20communication%20skills%2C%20business%20presentation%20with%20clear%20visual%20aids%2C%20high%20quality%20educational%20content%20with%20clean%20background&width=400&height=200&seq=1&orientation=landscape"
+                  alt="沟通技巧视频教程" class="w-full h-full object-cover object-top">
+                <div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+                  <div class="w-7 h-7 flex items-center justify-center">
+                    <i class="ri-video-line text-primary"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">沟通表达</span>
+                  <div class="difficulty-stars">
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-line empty"></i>
+                    <i class="ri-star-line empty"></i>
+                    <i class="ri-star-line empty"></i>
+                  </div>
+                </div>
+                <h3 class="font-medium text-gray-900 mb-1">高效沟通技巧视频教程</h3>
+                <p class="text-sm text-gray-500 mb-3">学习如何在面试和工作中进行清晰有效的沟通</p>
+                <div class="flex items-center justify-between text-sm mb-2">
+                  <span class="text-gray-500">学习进度</span>
+                  <span class="text-gray-700">15%</span>
+                </div>
+                <div class="custom-progress mb-3">
+                  <div class="custom-progress-bar bg-primary" style="width: 15%"></div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-500">时长: 45 分钟</span>
+                  <button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">继续学习</button>
+                </div>
+              </div>
+            </div>
+            <!-- 推荐资源卡片2 -->
+            <div
+              class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
+              <div class="relative h-40 overflow-hidden">
+                <img
+                  src="https://readdy.ai/api/search-image?query=Creative%20thinking%20and%20innovation%20workshop%2C%20brainstorming%20session%20with%20colorful%20sticky%20notes%20on%20whiteboard%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=2&orientation=landscape"
+                  alt="创新思维训练" class="w-full h-full object-cover object-top">
+                <div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+                  <div class="w-7 h-7 flex items-center justify-center">
+                    <i class="ri-file-pdf-line text-primary"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">创新思维</span>
+                  <div class="difficulty-stars">
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-line empty"></i>
+                    <i class="ri-star-line empty"></i>
+                  </div>
+                </div>
+                <h3 class="font-medium text-gray-900 mb-1">创新思维训练指南</h3>
+                <p class="text-sm text-gray-500 mb-3">培养创造性解决问题的能力，提升创新思维水平</p>
+                <div class="flex items-center justify-between text-sm mb-2">
+                  <span class="text-gray-500">学习进度</span>
+                  <span class="text-gray-700">0%</span>
+                </div>
+                <div class="custom-progress mb-3">
+                  <div class="custom-progress-bar bg-primary" style="width: 0%"></div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-500">阅读时间: 30 分钟</span>
+                  <button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">开始学习</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 热门资源 -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold text-gray-900">热门学习资源</h2>
+            <div class="flex space-x-2">
+              <button
+                class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 bg-white">
+                <i class="ri-arrow-left-s-line"></i>
+              </button>
+              <button
+                class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-700 bg-white">
+                <i class="ri-arrow-right-s-line"></i>
+              </button>
+            </div>
+          </div>
+          <div id="popular-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 热门资源卡片1 -->
+            <div
+              class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
+              <div class="relative h-40 overflow-hidden">
+                <img
+                  src="https://readdy.ai/api/search-image?query=Python%20programming%20tutorial%2C%20code%20on%20screen%20with%20modern%20IDE%20interface%2C%20professional%20software%20development%20educational%20content%20with%20clean%20background&width=400&height=200&seq=3&orientation=landscape"
+                  alt="Python编程实战" class="w-full h-full object-cover object-top">
+                <div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+                  <div class="w-7 h-7 flex items-center justify-center">
+                    <i class="ri-video-line text-primary"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">技术能力</span>
+                  <div class="difficulty-stars">
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-line empty"></i>
+                    <i class="ri-star-line empty"></i>
+                  </div>
+                </div>
+                <h3 class="font-medium text-gray-900 mb-1">Python 编程实战教程</h3>
+                <p class="text-sm text-gray-500 mb-3">从基础到高级的 Python 编程技能培训课程</p>
+                <div class="flex items-center justify-between text-sm mb-2">
+                  <span class="text-gray-500">学习人数</span>
+                  <span class="text-gray-700">2,458</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+                      <i class="ri-star-fill"></i>
+                    </div>
+                    <span class="ml-1 text-sm text-gray-700">4.8</span>
+                  </div>
+                  <button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">查看详情</button>
+                </div>
+              </div>
+            </div>
+            <!-- 热门资源卡片2 -->
+            <div
+              class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
+              <div class="relative h-40 overflow-hidden">
+                <img
+                  src="https://readdy.ai/api/search-image?query=Logical%20thinking%20and%20problem%20solving%20workshop%2C%20analytical%20thinking%20exercise%20with%20diagrams%20and%20flowcharts%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=4&orientation=landscape"
+                  alt="逻辑思维训练" class="w-full h-full object-cover object-top">
+                <div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+                  <div class="w-7 h-7 flex items-center justify-center">
+                    <i class="ri-presentation-line text-primary"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">逻辑思维</span>
+                  <div class="difficulty-stars">
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-line empty"></i>
+                  </div>
+                </div>
+                <h3 class="font-medium text-gray-900 mb-1">逻辑思维与问题解决</h3>
+                <p class="text-sm text-gray-500 mb-3">提升分析问题和解决复杂问题的能力</p>
+                <div class="flex items-center justify-between text-sm mb-2">
+                  <span class="text-gray-500">学习人数</span>
+                  <span class="text-gray-700">1,879</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+                      <i class="ri-star-fill"></i>
+                    </div>
+                    <span class="ml-1 text-sm text-gray-700">4.7</span>
+                  </div>
+                  <button class="px-3 py-1 bg-primary text-white rounded-button text-sm whitespace-nowrap">查看详情</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 全部学习资源 -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-gray-900">全部学习资源</h2>
+            <div class="flex items-center space-x-2">
+              <span class="text-sm text-gray-500">显示方式:</span>
+              <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white">
+                <i class="ri-layout-grid-line"></i>
+              </button>
+              <button
+                class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-700 bg-white">
+                <i class="ri-list-check-2"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- 搜索与筛选已独立为右侧卡片展示 -->
+          <div id="all-resources-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 资源卡片1 -->
+            <div
+              class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
+              <div class="relative h-40 overflow-hidden">
+                <img
+                  src="https://readdy.ai/api/search-image?query=Team%20collaboration%20workshop%2C%20diverse%20group%20of%20professionals%20working%20together%20on%20a%20project%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=5&orientation=landscape"
+                  alt="团队协作技巧" class="w-full h-full object-cover object-top">
+                <div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+                  <div class="w-7 h-7 flex items-center justify-center">
+                    <i class="ri-video-line text-primary"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full">团队协作</span>
+                  <div class="difficulty-stars">
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-line empty"></i>
+                    <i class="ri-star-line empty"></i>
+                  </div>
+                </div>
+                <h3 class="font-medium text-gray-900 mb-1">高效团队协作技巧</h3>
+                <p class="text-sm text-gray-500 mb-3">学习如何在团队中高效协作与沟通</p>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+                      <i class="ri-star-fill"></i>
+                    </div>
+                    <span class="ml-1 text-sm text-gray-700">4.6</span>
+                  </div>
+                  <span class="text-sm text-gray-500">时长: 60 分钟</span>
+                </div>
+              </div>
+            </div>
+            <!-- 资源卡片2 -->
+            <div
+              class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
+              <div class="relative h-40 overflow-hidden">
+                <img
+                  src="https://readdy.ai/api/search-image?query=Data%20structure%20and%20algorithms%20visualization%2C%20computer%20science%20education%20with%20diagrams%20and%20code%20examples%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=6&orientation=landscape"
+                  alt="数据结构与算法" class="w-full h-full object-cover object-top">
+                <div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+                  <div class="w-7 h-7 flex items-center justify-center">
+                    <i class="ri-book-open-line text-primary"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">技术能力</span>
+                  <div class="difficulty-stars">
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-line empty"></i>
+                  </div>
+                </div>
+                <h3 class="font-medium text-gray-900 mb-1">数据结构与算法精讲</h3>
+                <p class="text-sm text-gray-500 mb-3">深入理解数据结构与算法的核心概念</p>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+                      <i class="ri-star-fill"></i>
+                    </div>
+                    <span class="ml-1 text-sm text-gray-700">4.9</span>
+                  </div>
+                  <span class="text-sm text-gray-500">阅读时间: 120 分钟</span>
+                </div>
+              </div>
+            </div>
+            <!-- 资源卡片3 -->
+            <div
+              class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
+              <div class="relative h-40 overflow-hidden">
+                <img
+                  src="https://readdy.ai/api/search-image?query=Learning%20strategies%20and%20techniques%2C%20student%20studying%20efficiently%20with%20books%20and%20digital%20devices%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=7&orientation=landscape"
+                  alt="高效学习方法" class="w-full h-full object-cover object-top">
+                <div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+                  <div class="w-7 h-7 flex items-center justify-center">
+                    <i class="ri-file-pdf-line text-primary"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">学习能力</span>
+                  <div class="difficulty-stars">
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-line empty"></i>
+                    <i class="ri-star-line empty"></i>
+                    <i class="ri-star-line empty"></i>
+                  </div>
+                </div>
+                <h3 class="font-medium text-gray-900 mb-1">高效学习方法指南</h3>
+                <p class="text-sm text-gray-500 mb-3">掌握快速学习和知识内化的技巧</p>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+                      <i class="ri-star-fill"></i>
+                    </div>
+                    <span class="ml-1 text-sm text-gray-700">4.5</span>
+                  </div>
+                  <span class="text-sm text-gray-500">阅读时间: 25 分钟</span>
+                </div>
+              </div>
+            </div>
+            <!-- 资源卡片4 -->
+            <div
+              class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer">
+              <div class="relative h-40 overflow-hidden">
+                <img
+                  src="https://readdy.ai/api/search-image?query=Public%20speaking%20and%20presentation%20skills%2C%20professional%20speaker%20giving%20presentation%20to%20audience%2C%20professional%20educational%20content%20with%20clean%20background&width=400&height=200&seq=8&orientation=landscape"
+                  alt="公众演讲技巧" class="w-full h-full object-cover object-top">
+                <div class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm">
+                  <div class="w-7 h-7 flex items-center justify-center">
+                    <i class="ri-presentation-line text-primary"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">沟通表达</span>
+                  <div class="difficulty-stars">
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-line empty"></i>
+                    <i class="ri-star-line empty"></i>
+                  </div>
+                </div>
+                <h3 class="font-medium text-gray-900 mb-1">公众演讲与表达技巧</h3>
+                <p class="text-sm text-gray-500 mb-3">提升演讲魅力和表达清晰度的专业指导</p>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <div class="w-5 h-5 flex items-center justify-center text-yellow-500">
+                      <i class="ri-star-fill"></i>
+                    </div>
+                    <span class="ml-1 text-sm text-gray-700">4.7</span>
+                  </div>
+                  <span class="text-sm text-gray-500">时长: 90 分钟</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 分页 -->
+          <div class="flex items-center justify-between mt-8">
+            <div id="pagination-info" class="text-sm text-gray-500"></div>
+            <div class="flex space-x-1">
+              <button id="pagination-prev"
+                class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 bg-white">
+                <i class="ri-arrow-left-s-line"></i>
+              </button>
+              <div id="pagination-pages" class="flex space-x-1"></div>
+              <button id="pagination-next"
+                class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-700 bg-white">
+                <i class="ri-arrow-right-s-line"></i>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="flex items-center gap-2 flex-wrap">
-        <span class="chip-group-title">领域</span>
-        <div id="chip-field" class="flex gap-2 flex-wrap"></div>
+      <!-- 右侧个性化推荐区 -->
+      <div class="lg:col-span-3 space-y-6">
+
+        <!-- 能力评估结果 -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">能力评估结果</h2>
+          <div id="radar-chart" class="w-full h-60"></div>
+          <div class="mt-4 p-4 bg-primary bg-opacity-5 rounded-lg">
+            <h3 class="font-medium text-gray-900 mb-2">学习建议</h3>
+            <p class="text-sm text-gray-700 mb-3">根据您的能力评估结果，建议重点提升以下能力：</p>
+            <ul class="space-y-2">
+              <li class="flex items-start">
+                <div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+                  <i class="ri-checkbox-circle-line"></i>
+                </div>
+                <span class="text-sm text-gray-700">创新思维能力</span>
+              </li>
+              <li class="flex items-start">
+                <div class="w-5 h-5 flex items-center justify-center text-primary mt-0.5 mr-2">
+                  <i class="ri-checkbox-circle-line"></i>
+                </div>
+                <span class="text-sm text-gray-700">沟通表达能力</span>
+              </li>
+            </ul>
+            <div class="mt-4">
+              <a href="#" data-readdy="true"
+                class="text-primary hover:text-primary-dark text-sm font-medium">查看完整评估报告</a>
+            </div>
+          </div>
+        </div>
+        <!-- 学习进度 -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">我的学习进度</h2>
+          <div class="space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-sm font-medium text-gray-700">Python 编程实战教程</span>
+                <span class="text-sm text-gray-500">65%</span>
+              </div>
+              <div class="custom-progress">
+                <div class="custom-progress-bar bg-primary" style="width: 65%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-sm font-medium text-gray-700">高效沟通技巧视频教程</span>
+                <span class="text-sm text-gray-500">15%</span>
+              </div>
+              <div class="custom-progress">
+                <div class="custom-progress-bar bg-primary" style="width: 15%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-sm font-medium text-gray-700">数据结构与算法精讲</span>
+                <span class="text-sm text-gray-500">40%</span>
+              </div>
+              <div class="custom-progress">
+                <div class="custom-progress-bar bg-primary" style="width: 40%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-sm font-medium text-gray-700">团队协作与冲突处理</span>
+                <span class="text-sm text-gray-500">90%</span>
+              </div>
+              <div class="custom-progress">
+                <div class="custom-progress-bar bg-green-500" style="width: 90%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 text-center">
+            <button class="text-primary hover:text-primary-dark text-sm font-medium">查看全部课程</button>
+          </div>
+        </div>
+        <!-- 热门标签 -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">热门标签</h2>
+          <div class="flex flex-wrap gap-2">
+            <span
+              class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">Python</span>
+            <span
+              class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">数据结构</span>
+            <span
+              class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">沟通技巧</span>
+            <span
+              class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">团队协作</span>
+            <span
+              class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">面试技巧</span>
+            <span
+              class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">算法</span>
+            <span
+              class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">创新思维</span>
+            <span
+              class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">前端开发</span>
+            <span
+              class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">学习方法</span>
+            <span
+              class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">演讲技巧</span>
+          </div>
+        </div>
+        <!-- 最新上线 -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">最新上线</h2>
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <div class="w-16 h-16 rounded overflow-hidden flex-shrink-0">
+                <img
+                  src="https://readdy.ai/api/search-image?query=System%20design%20interview%20preparation%2C%20architecture%20diagram%20on%20whiteboard%2C%20professional%20educational%20content%20with%20clean%20background&width=100&height=100&seq=9&orientation=squarish"
+                  alt="系统设计面试" class="w-full h-full object-cover object-top">
+              </div>
+              <div class="ml-3">
+                <h3 class="font-medium text-gray-900 text-sm">系统设计面试指南</h3>
+                <p class="text-xs text-gray-500 mt-1">掌握系统设计面试的核心方法和技巧</p>
+                <div class="flex items-center mt-1">
+                  <div class="w-4 h-4 flex items-center justify-center text-yellow-500">
+                    <i class="ri-star-fill"></i>
+                  </div>
+                  <span class="ml-1 text-xs text-gray-700">4.9</span>
+                  <span class="mx-2 text-gray-300">|</span>
+                  <span class="text-xs text-gray-500">2025-07-01</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <div class="w-16 h-16 rounded overflow-hidden flex-shrink-0">
+                <img
+                  src="https://readdy.ai/api/search-image?query=Machine%20learning%20fundamentals%2C%20AI%20algorithms%20visualization%2C%20professional%20educational%20content%20with%20clean%20background&width=100&height=100&seq=10&orientation=squarish"
+                  alt="机器学习基础" class="w-full h-full object-cover object-top">
+              </div>
+              <div class="ml-3">
+                <h3 class="font-medium text-gray-900 text-sm">机器学习基础教程</h3>
+                <p class="text-xs text-gray-500 mt-1">从零开始学习机器学习的核心概念</p>
+                <div class="flex items-center mt-1">
+                  <div class="w-4 h-4 flex items-center justify-center text-yellow-500">
+                    <i class="ri-star-fill"></i>
+                  </div>
+                  <span class="ml-1 text-xs text-gray-700">4.7</span>
+                  <span class="mx-2 text-gray-300">|</span>
+                  <span class="text-xs text-gray-500">2025-06-28</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <div class="w-16 h-16 rounded overflow-hidden flex-shrink-0">
+                <img
+                  src="https://readdy.ai/api/search-image?query=Conflict%20resolution%20in%20workplace%2C%20professional%20mediator%20helping%20team%20resolve%20issues%2C%20professional%20educational%20content%20with%20clean%20background&width=100&height=100&seq=11&orientation=squarish"
+                  alt="冲突解决技巧" class="w-full h-full object-cover object-top">
+              </div>
+              <div class="ml-3">
+                <h3 class="font-medium text-gray-900 text-sm">职场冲突解决技巧</h3>
+                <p class="text-xs text-gray-500 mt-1">有效处理工作中的冲突和分歧</p>
+                <div class="flex items-center mt-1">
+                  <div class="w-4 h-4 flex items-center justify-center text-yellow-500">
+                    <i class="ri-star-fill"></i>
+                  </div>
+                  <span class="ml-1 text-xs text-gray-700">4.6</span>
+                  <span class="mx-2 text-gray-300">|</span>
+                  <span class="text-xs text-gray-500">2025-06-25</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 学习资源筛选与搜索（右侧独立卡片） -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">筛选与搜索</h2>
+          <div class="mb-4">
+            <div class="relative">
+              <input id="resource-search-input" type="text" placeholder="搜索学习资源（标题/描述/关键词）"
+                class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 text-sm w-full">
+              <div
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center text-gray-400">
+                <i class="ri-search-line"></i>
+              </div>
+            </div>
+          </div>
+          <div id="filter-chips" class="space-y-3">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="chip-group-title">类型</span>
+              <div id="chip-type" class="flex gap-2 flex-wrap"></div>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="chip-group-title">领域</span>
+              <div id="chip-field" class="flex gap-2 flex-wrap"></div>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="chip-group-title">能力</span>
+              <div id="chip-competency" class="flex gap-2 flex-wrap"></div>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="chip-group-title">难度</span>
+              <div id="chip-difficulty" class="flex gap-2 flex-wrap"></div>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="chip-group-title">关键词</span>
+              <div id="chip-keywords" class="flex gap-2 flex-wrap"></div>
+            </div>
+            <div class="pt-1">
+              <button id="clear-filters"
+                class="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm">清空所有筛选</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="flex items-center gap-2 flex-wrap">
-        <span class="chip-group-title">能力</span>
-        <div id="chip-competency" class="flex gap-2 flex-wrap"></div>
-      </div>
-      <div class="flex items-center gap-2 flex-wrap">
-        <span class="chip-group-title">难度</span>
-        <div id="chip-difficulty" class="flex gap-2 flex-wrap"></div>
-      </div>
-      <div class="flex items-center gap-2 flex-wrap">
-        <span class="chip-group-title">关键词</span>
-        <div id="chip-keywords" class="flex gap-2 flex-wrap"></div>
-      </div>
-      <div class="pt-1">
-        <button id="clear-filters" class="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm">清空所有筛选</button>
-      </div>
-    </div>
-</div>
-</div>
-</main>
-<script id="chart-script">
-document.addEventListener('DOMContentLoaded', function() {
-// 雷达图
-const radarChart = echarts.init(document.getElementById('radar-chart'));
-const radarOption = {
-animation: false,
-radar: {
-indicator: [
-{ name: '技术能力', max: 100 },
-{ name: '沟通表达', max: 100 },
-{ name: '逻辑思维', max: 100 },
-{ name: '学习能力', max: 100 },
-{ name: '团队协作', max: 100 },
-{ name: '创新思维', max: 100 }
-],
-radius: '65%',
-splitNumber: 4,
-axisName: {
-color: '#1f2937',
-fontSize: 12
-},
-splitLine: {
-lineStyle: {
-color: 'rgba(224, 225, 228, 0.5)'
-}
-},
-splitArea: {
-show: true,
-areaStyle: {
-color: ['rgba(255, 255, 255, 0.9)', 'rgba(245, 246, 248, 0.6)']
-}
-},
-axisLine: {
-lineStyle: {
-color: 'rgba(224, 225, 228, 0.5)'
-}
-}
-},
-tooltip: {
-backgroundColor: 'rgba(255, 255, 255, 0.9)',
-borderColor: '#e0e1e4',
-textStyle: {
-color: '#1f2937'
-}
-},
-series: [{
-name: '能力评估',
-type: 'radar',
-data: [
-{
-value: [85, 65, 92, 78, 80, 60],
-name: '个人能力',
-symbol: 'none',
-lineStyle: {
-width: 2,
-color: 'rgba(87, 181, 231, 1)'
-},
-areaStyle: {
-color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-{
-offset: 0,
-color: 'rgba(87, 181, 231, 0.3)'
-},
-{
-offset: 1,
-color: 'rgba(87, 181, 231, 0.1)'
-}
-])
-}
-}
-]
-}]
-};
-radarChart.setOption(radarOption);
-// 窗口大小变化时重新调整图表大小
-window.addEventListener('resize', function() {
-radarChart.resize();
-});
-});
-</script>
-<script id="category-button-script">
-document.addEventListener('DOMContentLoaded', function() {
-// 分类按钮交互
-const categoryButtons = document.querySelectorAll('.category-button');
-categoryButtons.forEach(button => {
-button.addEventListener('click', function() {
-// 移除所有按钮的激活状态
-categoryButtons.forEach(btn => {
-btn.classList.remove('active');
-btn.classList.add('bg-gray-100');
-btn.classList.add('text-gray-700');
-});
-// 添加当前按钮的激活状态
-this.classList.add('active');
-this.classList.remove('bg-gray-100');
-this.classList.remove('text-gray-700');
-});
-});
-});
-</script>
-<script id="resource-card-script">
-document.addEventListener('DOMContentLoaded', function() {
-// 资源卡片交互
-const resourceCards = document.querySelectorAll('.resource-card');
-resourceCards.forEach(card => {
-card.addEventListener('click', function() {
-// 这里可以添加点击卡片后的跳转逻辑
-const button = this.querySelector('button');
-if (button) {
-button.click();
-}
-});
-});
-});
-</script>
-
-<!-- 动态加载学习资源脚本（从 data/learning_resources/learning_resources.json 读取并渲染） -->
-<script id="dynamic-learning-resources">
-document.addEventListener('DOMContentLoaded', async function () {
-  const DATA_URL = '/data/learning_resources/learning_resources.json';
-
-  const competencyLabelMap = {
-    professional_knowledge: '技术能力',
-    communication_ability: '沟通表达',
-    logical_thinking: '逻辑思维',
-    learning_ability: '学习能力',
-    stress_resilience: '团队/抗压',
-    stress_resistance: '团队/抗压',
-    innovation: '创新思维',
-    expression_ability: '沟通表达',
-    skill_match: '技能匹配'
-  };
-
-  const categoryButtonToCompetency = {
-    '全部资源': null,
-    '技术能力类': 'professional_knowledge',
-    '沟通表达类': 'communication_ability',
-    '逻辑思维类': 'logical_thinking',
-    '学习能力类': 'learning_ability',
-    '团队协作类': 'stress_resilience',
-    '创新思维类': 'innovation'
-  };
-
-  const difficultyStars = {
-    beginner: 2,
-    intermediate: 3,
-    advanced: 4
-  };
-
-  const typeIconMap = {
-    video: 'ri-video-line',
-    article: 'ri-article-line',
-    course: 'ri-book-open-line',
-    book: 'ri-book-3-line',
-    practice: 'ri-presentation-line',
-    website: 'ri-global-line',
-    project: 'ri-code-box-line',
-    tool: 'ri-tools-line'
-  };
-
-  // 中英文标签映射（用于标签展示更友好）
-  const i18nLabel = {
-    // type
-    video: '视频', article: '文章', course: '课程', book: '书籍', website: '网站', project: '项目', tool: '工具', practice: '练习',
-    // difficulty
-    beginner: '初级', intermediate: '中级', advanced: '高级',
-    // competency（已有中文映射）
-    professional_knowledge: '技术能力', communication_ability: '沟通表达', logical_thinking: '逻辑思维', learning_ability: '学习能力',
-    stress_resilience: '团队/抗压', stress_resistance: '团队/抗压', innovation: '创新思维', expression_ability: '沟通表达', skill_match: '技能匹配',
-  };
-
-  // 多维过滤：每个维度多选 OR；不同维度之间 AND
-  const activeFilters = {
-    type: new Set(),
-    field: new Set(),
-    competency: new Set(),
-    difficulty: new Set(),
-    keywords: new Set()
-  };
-
-  function toggleFilter(dim, value) {
-    const set = activeFilters[dim];
-    if (set.has(value)) set.delete(value); else set.add(value);
-  }
-
-  function applyFacetFilters(list) {
-    function includeBy(dim, val) {
-      const set = activeFilters[dim];
-      if (set.size === 0) return true;
-      if (dim === 'keywords') {
-        const raw = (val || '').toString().toLowerCase();
-        // 只要资源关键词包含任一已选关键词
-        for (const kw of set) if (raw.includes(kw.toLowerCase())) return true;
-        return false;
+  </main>
+  <script id="chart-script">
+    document.addEventListener('DOMContentLoaded', function () {
+      // 雷达图
+      const radarChart = echarts.init(document.getElementById('radar-chart'));
+      const radarOption = {
+        animation: false,
+        radar: {
+          indicator: [
+            { name: '技术能力', max: 100 },
+            { name: '沟通表达', max: 100 },
+            { name: '逻辑思维', max: 100 },
+            { name: '学习能力', max: 100 },
+            { name: '团队协作', max: 100 },
+            { name: '创新思维', max: 100 }
+          ],
+          radius: '65%',
+          splitNumber: 4,
+          axisName: {
+            color: '#1f2937',
+            fontSize: 12
+          },
+          splitLine: {
+            lineStyle: {
+              color: 'rgba(224, 225, 228, 0.5)'
+            }
+          },
+          splitArea: {
+            show: true,
+            areaStyle: {
+              color: ['rgba(255, 255, 255, 0.9)', 'rgba(245, 246, 248, 0.6)']
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: 'rgba(224, 225, 228, 0.5)'
+            }
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          borderColor: '#e0e1e4',
+          textStyle: {
+            color: '#1f2937'
+          }
+        },
+        series: [{
+          name: '能力评估',
+          type: 'radar',
+          data: [
+            {
+              value: [85, 65, 92, 78, 80, 60],
+              name: '个人能力',
+              symbol: 'none',
+              lineStyle: {
+                width: 2,
+                color: 'rgba(87, 181, 231, 1)'
+              },
+              areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: 'rgba(87, 181, 231, 0.3)'
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(87, 181, 231, 0.1)'
+                  }
+                ])
+              }
+            }
+          ]
+        }]
+      };
+      radarChart.setOption(radarOption);
+      // 窗口大小变化时重新调整图表大小
+      window.addEventListener('resize', function () {
+        radarChart.resize();
+      });
+    });
+  </script>
+  <script id="category-button-script">
+    document.addEventListener('DOMContentLoaded', function () {
+      // 分类按钮交互
+      const categoryButtons = document.querySelectorAll('.category-button');
+      categoryButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          // 移除所有按钮的激活状态
+          categoryButtons.forEach(btn => {
+            btn.classList.remove('active');
+            btn.classList.add('bg-gray-100');
+            btn.classList.add('text-gray-700');
+          });
+          // 添加当前按钮的激活状态
+          this.classList.add('active');
+          this.classList.remove('bg-gray-100');
+          this.classList.remove('text-gray-700');
+        });
+      });
+    });
+  </script>
+  <script id="top-search-script">
+    document.addEventListener('DOMContentLoaded', function () {
+      // 顶部联网搜索框：回车或点击图标 -> 新窗口搜索
+      const input = document.getElementById('resource-search-input-top');
+      function go(q) {
+        if (!q) return;
+        const query = q.trim();
+        if (!query) return;
+        if (/^https?:\/\//i.test(query)) {
+          return window.open(query, '_blank');
+        }
+        const url = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+        window.open(url, '_blank');
       }
-      return set.has((val || '').toString());
-    }
-    return list.filter(it =>
-      includeBy('type', it.type) &&
-      includeBy('field', it.field) &&
-      includeBy('competency', it.competency) &&
-      includeBy('difficulty', it.difficulty) &&
-      includeBy('keywords', it.keywords)
-    );
-  }
+      if (input) {
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') go(input.value);
+        });
+        const icon = input.parentElement ? input.parentElement.querySelector('.ri-search-line') : null;
+        if (icon) {
+          icon.style.cursor = 'pointer';
+          icon.addEventListener('click', function () { go(input.value); });
+        }
+      }
+    });
+  </script>
+  <script id="resource-card-script">
+    document.addEventListener('DOMContentLoaded', function () {
+      // 资源卡片交互
+      const resourceCards = document.querySelectorAll('.resource-card');
+      resourceCards.forEach(card => {
+        card.addEventListener('click', function () {
+          // 这里可以添加点击卡片后的跳转逻辑
+          const button = this.querySelector('button');
+          if (button) {
+            button.click();
+          }
+        });
+      });
+    });
+  </script>
 
-  function renderStars(difficulty) {
-    const filled = difficultyStars[difficulty] || 3;
-    let html = '';
-    for (let i = 0; i < 5; i++) {
-      html += `<i class="${i < filled ? 'ri-star-fill' : 'ri-star-line empty'}"></i>`;
-    }
-    return html;
-  }
+  <!-- 动态加载学习资源脚本（从 data/learning_resources/learning_resources.json 读取并渲染） -->
+  <script id="dynamic-learning-resources">
+    document.addEventListener('DOMContentLoaded', async function () {
+      const DATA_URL = '/data/learning_resources/learning_resources.json';
 
-  function renderResourceCard(item) {
-    const tag = competencyLabelMap[item.competency] || (item.field || '资源');
-    const stars = renderStars(item.difficulty);
-    const icon = typeIconMap[item.type] || 'ri-links-line';
-    const imageRaw = item.image || '';
-    const image = imageRaw ? (imageRaw.startsWith('http') || imageRaw.startsWith('/') ? imageRaw : ('/' + imageRaw)) : 'https://via.placeholder.com/400x200?text=Resource';
-    const durationOrTime = item.type === 'video' || item.type === 'course' ? '学习时长' : (item.type === 'book' ? '阅读时间' : '');
-    return `
+      const competencyLabelMap = {
+        professional_knowledge: '技术能力',
+        communication_ability: '沟通表达',
+        logical_thinking: '逻辑思维',
+        learning_ability: '学习能力',
+        stress_resilience: '团队/抗压',
+        stress_resistance: '团队/抗压',
+        innovation: '创新思维',
+        expression_ability: '沟通表达',
+        skill_match: '技能匹配'
+      };
+
+      const categoryButtonToCompetency = {
+        '全部资源': null,
+        '技术能力类': 'professional_knowledge',
+        '沟通表达类': 'communication_ability',
+        '逻辑思维类': 'logical_thinking',
+        '技能匹配类': 'skill_match',
+        '学习能力类': 'learning_ability',
+        '团队协作类': 'stress_resilience',
+        '创新思维类': 'innovation'
+      };
+
+      const difficultyStars = {
+        beginner: 2,
+        intermediate: 3,
+        advanced: 4
+      };
+
+      const typeIconMap = {
+        video: 'ri-video-line',
+        article: 'ri-article-line',
+        course: 'ri-book-open-line',
+        book: 'ri-book-3-line',
+        practice: 'ri-presentation-line',
+        website: 'ri-global-line',
+        project: 'ri-code-box-line',
+        tool: 'ri-tools-line'
+      };
+
+      // 中英文标签映射（用于标签展示更友好）
+      const i18nLabel = {
+        // type
+        video: '视频', article: '文章', course: '课程', book: '书籍', website: '网站', project: '项目', tool: '工具', practice: '练习',
+        // difficulty
+        beginner: '初级', intermediate: '中级', advanced: '高级',
+        // competency（已有中文映射）
+        professional_knowledge: '技术能力', communication_ability: '沟通表达', logical_thinking: '逻辑思维', learning_ability: '学习能力',
+        stress_resilience: '团队/抗压', stress_resistance: '团队/抗压', innovation: '创新思维', expression_ability: '沟通表达', skill_match: '技能匹配',
+      };
+
+      // 多维过滤：每个维度多选 OR；不同维度之间 AND
+      const activeFilters = {
+        type: new Set(),
+        field: new Set(),
+        competency: new Set(),
+        difficulty: new Set(),
+        keywords: new Set()
+      };
+
+      function toggleFilter(dim, value) {
+        const set = activeFilters[dim];
+        if (set.has(value)) set.delete(value); else set.add(value);
+      }
+
+      function applyFacetFilters(list) {
+        function includeBy(dim, val) {
+          const set = activeFilters[dim];
+          if (set.size === 0) return true;
+          if (dim === 'keywords') {
+            const raw = (val || '').toString().toLowerCase();
+            // 只要资源关键词包含任一已选关键词
+            for (const kw of set) if (raw.includes(kw.toLowerCase())) return true;
+            return false;
+          }
+          return set.has((val || '').toString());
+        }
+        return list.filter(it =>
+          includeBy('type', it.type) &&
+          includeBy('field', it.field) &&
+          includeBy('competency', it.competency) &&
+          includeBy('difficulty', it.difficulty) &&
+          includeBy('keywords', it.keywords)
+        );
+      }
+
+      function renderStars(difficulty) {
+        const filled = difficultyStars[difficulty] || 3;
+        let html = '';
+        for (let i = 0; i < 5; i++) {
+          html += `<i class="${i < filled ? 'ri-star-fill' : 'ri-star-line empty'}"></i>`;
+        }
+        return html;
+      }
+
+      function renderResourceCard(item) {
+        const tag = competencyLabelMap[item.competency] || (item.field || '资源');
+        const stars = renderStars(item.difficulty);
+        const icon = typeIconMap[item.type] || 'ri-links-line';
+        const imageRaw = item.image || '';
+        // 生成设计感更强的SVG占位图：按能力/类型区分渐变色，自动分行完整显示标题
+        function titleCard(itemObj) {
+          const title = (itemObj.title || 'Resource').toString();
+          const key = (itemObj.competency || itemObj.type || 'general').toString();
+          // 渐变色系（优先按 competency，其次 type）
+          const themeMap = {
+            professional_knowledge: ['#5B86E5', '#36D1DC'], // 蓝青
+            skill_match: ['#B06AB3', '#4568DC'],            // 紫蓝
+            communication_ability: ['#36D1DC', '#5B86E5'],  // 青蓝
+            logical_thinking: ['#7F7FD5', '#86A8E7'],       // 靛蓝
+            stress_resilience: ['#11998E', '#38EF7D'],      // 绿
+            learning_ability: ['#FF9966', '#FF5E62'],       // 橙红
+            innovation: ['#F7971E', '#FFD200'],             // 金黄
+            video: ['#00C6FF', '#0072FF'],
+            course: ['#84FAB0', '#8FD3F4'],
+            book: ['#A18CD1', '#FBC2EB'],
+            website: ['#74EBD5', '#9FACE6'],
+            project: ['#30CFD0', '#330867'],
+            tool: ['#F5576C', '#F093FB'],
+            general: ['#E0EAFC', '#CFDEF3']
+          };
+          const [c1, c2] = themeMap[key] || themeMap.general;
+          // 文本分行：中文/英文混排，尽量显示完整标题，最多3行
+          function splitLines(t, maxPerLine) {
+            const lines = [];
+            let buf = '';
+            for (const ch of t) {
+              const weight = /[\u4e00-\u9fa5]/.test(ch) ? 1.0 : 0.6; // 英文占比更小
+              if ((buf.replace(/[\x00-\xff]/g, '').length + (buf.length - buf.replace(/[\x00-\xff]/g, '').length) * 0.6) >= maxPerLine) {
+                lines.push(buf);
+                buf = ch;
+              } else {
+                buf += ch;
+              }
+              if (lines.length >= 2 && buf.length > maxPerLine * 1.2) break; // 最多3行
+            }
+            if (buf) lines.push(buf);
+            return lines.slice(0, 3);
+          }
+          const lines = splitLines(title, 16);
+          const baseFont = lines.length === 1 ? 34 : lines.length === 2 ? 28 : 24;
+          // 简单哈希用于clipPath id避免冲突
+          let hash = 0; for (let i = 0; i < title.length; i++) hash = (hash * 31 + title.charCodeAt(i)) >>> 0;
+          const id = 'g' + hash.toString(16);
+          const svg = `
+<svg xmlns='http://www.w3.org/2000/svg' width='800' height='400'>
+  <defs>
+    <linearGradient id='${id}' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0%' stop-color='${c1}'/>
+      <stop offset='100%' stop-color='${c2}'/>
+    </linearGradient>
+    <clipPath id='clip-${id}'>
+      <rect rx='24' ry='24' x='0' y='0' width='800' height='400'/>
+    </clipPath>
+  </defs>
+  <g clip-path='url(#clip-${id})'>
+    <rect width='800' height='400' fill='url(#${id})'/>
+    <!-- 装饰圆与波形 -->
+    <circle cx='720' cy='-20' r='140' fill='rgba(255,255,255,0.09)'/>
+    <circle cx='-20' cy='360' r='120' fill='rgba(255,255,255,0.06)'/>
+    <path d='M0,320 C160,360 320,360 480,320 C640,280 720,300 800,320 L800,400 L0,400 Z' fill='rgba(255,255,255,0.10)'/>
+  </g>
+  <g font-family='Segoe UI, Noto Sans SC, sans-serif' fill='rgba(255,255,255,0.95)'>
+    ${lines.map((ln,i)=>`<text x='40' y='${170 + i*48}' font-size='${baseFont}' font-weight='700'>${ln.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</text>`).join('')}
+  </g>
+</svg>`;
+          return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        }
+        const image = imageRaw ? (imageRaw.startsWith('http') || imageRaw.startsWith('/') ? imageRaw : ('/' + imageRaw)) : titleCard(item);
+        const durationOrTime = item.type === 'video' || item.type === 'course' ? '学习时长' : (item.type === 'book' ? '阅读时间' : '');
+        return `
     <div class="resource-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-primary cursor-pointer" onclick="window.open('${item.url}', '_blank')">
       <div class="relative h-40 overflow-hidden">
         <img src="${image}" alt="${item.title}" class="w-full h-full object-cover object-top">
@@ -907,273 +1082,280 @@ document.addEventListener('DOMContentLoaded', async function () {
         </div>
       </div>
     </div>`;
-  }
-
-  function renderGrid(container, list) {
-    container.innerHTML = list.map(renderResourceCard).join('');
-  }
-
-  function pickRecommended(list, count = 4) {
-    const seen = new Set();
-    const picked = [];
-    for (const item of list) {
-      const key = item.competency || 'unknown';
-      if (!seen.has(key)) {
-        picked.push(item);
-        seen.add(key);
       }
-      if (picked.length >= count) break;
-    }
-    if (picked.length < count) {
-      for (const it of list) {
-        if (!picked.includes(it)) picked.push(it);
-        if (picked.length >= count) break;
+
+      function renderGrid(container, list) {
+        container.innerHTML = list.map(renderResourceCard).join('');
       }
-    }
-    return picked.slice(0, count);
-  }
 
-  function pickPopular(list, count = 4) {
-    const scored = list.map(it => ({
-      item: it,
-      score: (it.keywords ? String(it.keywords).split(',').length : 0) + (it.description ? it.description.length / 100 : 0)
-    }));
-    scored.sort((a, b) => b.score - a.score);
-    return scored.slice(0, count).map(s => s.item);
-  }
-
-  let allData = [];
-  let filteredCompetency = null;
-  let searchQuery = '';
-  const pageSize = 8;
-  let currentPage = 1;
-
-  function normalizeText(text) {
-    return (text || '').toString().toLowerCase();
-  }
-
-  function filterByCompetency(list, competency) {
-    if (!competency) return list;
-    return list.filter(it => (it.competency === competency) ||
-                              (competency === 'stress_resilience' && it.competency === 'stress_resistance'));
-  }
-
-  function filterBySearch(list, query) {
-    const q = normalizeText(query);
-    if (!q) return list;
-    return list.filter(it =>
-      normalizeText(it.title).includes(q) ||
-      normalizeText(it.description).includes(q) ||
-      normalizeText(it.keywords).includes(q)
-    );
-  }
-
-  function getFilteredList() {
-    const byCategory = filterByCompetency(allData, filteredCompetency);
-    const bySearch = filterBySearch(byCategory, searchQuery);
-    return applyFacetFilters(bySearch);
-  }
-
-  function renderAllResources() {
-    const container = document.getElementById('all-resources-grid');
-    const filtered = getFilteredList();
-    const start = (currentPage - 1) * pageSize;
-    const pageItems = filtered.slice(start, start + pageSize);
-    renderGrid(container, pageItems);
-    const info = document.getElementById('pagination-info');
-    if (info) {
-      const end = Math.min(start + pageSize, filtered.length);
-      info.textContent = `显示 ${filtered.length === 0 ? 0 : (start + 1)}-${end} 条，共 ${filtered.length} 条`;
-    }
-    renderPaginationPages(filtered.length);
-    refreshPrevNextState(filtered.length);
-  }
-
-  function renderPaginationPages(totalItems) {
-    const pagesWrap = document.getElementById('pagination-pages');
-    if (!pagesWrap) return;
-    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
-    const btns = [];
-    function pageBtn(p) {
-      const isActive = p === currentPage;
-      const base = 'w-8 h-8 flex items-center justify-center rounded-full border text-sm';
-      const active = ' border-primary text-white bg-primary';
-      const normal = ' border-gray-200 text-gray-700 bg-white hover:border-primary hover:text-primary';
-      return `<button data-page="${p}" class="${base}${isActive ? active : normal}">${p}</button>`;
-    }
-    if (totalPages <= 7) {
-      for (let p = 1; p <= totalPages; p++) btns.push(pageBtn(p));
-    } else {
-      btns.push(pageBtn(1));
-      if (currentPage > 3) btns.push('<span class="px-1 text-gray-400">…</span>');
-      const start = Math.max(2, currentPage - 1);
-      const end = Math.min(totalPages - 1, currentPage + 1);
-      for (let p = start; p <= end; p++) btns.push(pageBtn(p));
-      if (currentPage < totalPages - 2) btns.push('<span class="px-1 text-gray-400">…</span>');
-      btns.push(pageBtn(totalPages));
-    }
-    pagesWrap.innerHTML = btns.join('');
-    pagesWrap.querySelectorAll('button[data-page]').forEach(b => {
-      b.addEventListener('click', () => {
-        const p = parseInt(b.getAttribute('data-page'));
-        if (!isNaN(p) && p !== currentPage) {
-          currentPage = p;
-          renderAllResources();
+      function pickRecommended(list, count = 4) {
+        const seen = new Set();
+        const picked = [];
+        for (const item of list) {
+          const key = item.competency || 'unknown';
+          if (!seen.has(key)) {
+            picked.push(item);
+            seen.add(key);
+          }
+          if (picked.length >= count) break;
         }
-      });
+        if (picked.length < count) {
+          for (const it of list) {
+            if (!picked.includes(it)) picked.push(it);
+            if (picked.length >= count) break;
+          }
+        }
+        return picked.slice(0, count);
+      }
+
+      function pickPopular(list, count = 4) {
+        const scored = list.map(it => ({
+          item: it,
+          score: (it.keywords ? String(it.keywords).split(',').length : 0) + (it.description ? it.description.length / 100 : 0)
+        }));
+        scored.sort((a, b) => b.score - a.score);
+        return scored.slice(0, count).map(s => s.item);
+      }
+
+      let allData = [];
+      let filteredCompetency = null;
+      let searchQuery = '';
+      const pageSize = 8;
+      let currentPage = 1;
+
+      function normalizeText(text) {
+        return (text || '').toString().toLowerCase();
+      }
+
+      function filterByCompetency(list, competency) {
+        if (!competency) return list;
+        return list.filter(it => (it.competency === competency) ||
+          (competency === 'stress_resilience' && it.competency === 'stress_resistance'));
+      }
+
+      function filterBySearch(list, query) {
+        const q = normalizeText(query);
+        if (!q) return list;
+        return list.filter(it =>
+          normalizeText(it.title).includes(q) ||
+          normalizeText(it.description).includes(q) ||
+          normalizeText(it.keywords).includes(q)
+        );
+      }
+
+      function getFilteredList() {
+        const byCategory = filterByCompetency(allData, filteredCompetency);
+        const bySearch = filterBySearch(byCategory, searchQuery);
+        return applyFacetFilters(bySearch);
+      }
+
+      function renderAllResources() {
+        const container = document.getElementById('all-resources-grid');
+        const filtered = getFilteredList();
+        const start = (currentPage - 1) * pageSize;
+        const pageItems = filtered.slice(start, start + pageSize);
+        renderGrid(container, pageItems);
+        const info = document.getElementById('pagination-info');
+        if (info) {
+          const end = Math.min(start + pageSize, filtered.length);
+          info.textContent = `显示 ${filtered.length === 0 ? 0 : (start + 1)}-${end} 条，共 ${filtered.length} 条`;
+        }
+        renderPaginationPages(filtered.length);
+        refreshPrevNextState(filtered.length);
+      }
+
+      function renderPaginationPages(totalItems) {
+        const pagesWrap = document.getElementById('pagination-pages');
+        if (!pagesWrap) return;
+        const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+        const btns = [];
+        function pageBtn(p) {
+          const isActive = p === currentPage;
+          const base = 'w-8 h-8 flex items-center justify-center rounded-full border text-sm';
+          const active = ' border-primary text-white bg-primary';
+          const normal = ' border-gray-200 text-gray-700 bg-white hover:border-primary hover:text-primary';
+          return `<button data-page="${p}" class="${base}${isActive ? active : normal}">${p}</button>`;
+        }
+        if (totalPages <= 7) {
+          for (let p = 1; p <= totalPages; p++) btns.push(pageBtn(p));
+        } else {
+          btns.push(pageBtn(1));
+          if (currentPage > 3) btns.push('<span class="px-1 text-gray-400">…</span>');
+          const start = Math.max(2, currentPage - 1);
+          const end = Math.min(totalPages - 1, currentPage + 1);
+          for (let p = start; p <= end; p++) btns.push(pageBtn(p));
+          if (currentPage < totalPages - 2) btns.push('<span class="px-1 text-gray-400">…</span>');
+          btns.push(pageBtn(totalPages));
+        }
+        pagesWrap.innerHTML = btns.join('');
+        pagesWrap.querySelectorAll('button[data-page]').forEach(b => {
+          b.addEventListener('click', () => {
+            const p = parseInt(b.getAttribute('data-page'));
+            if (!isNaN(p) && p !== currentPage) {
+              currentPage = p;
+              renderAllResources();
+            }
+          });
+        });
+      }
+
+      function refreshPrevNextState(totalItems) {
+        const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+        const prev = document.getElementById('pagination-prev');
+        const next = document.getElementById('pagination-next');
+        if (prev) prev.disabled = currentPage <= 1;
+        if (next) next.disabled = currentPage >= totalPages;
+      }
+
+      try {
+        const resp = await fetch(DATA_URL);
+        const data = await resp.json();
+        // 能力标签同义词归一
+        const competencyAliasMap = {
+          expression_ability: 'communication_ability',
+          stress_resistance: 'stress_resilience'
+        };
+
+        allData = Array.isArray(data) ? data.map((d, idx) => ({
+          id: d.id || `res_${idx}`,
+          title: d.title || '未命名资源',
+          description: d.description || '',
+          url: d.url || '#',
+          image: d.image || d.Image || '',
+          type: (d.type || 'article').toLowerCase(),
+          field: d.field || '',
+          competency: (competencyAliasMap[(d.competency || '').toString().trim()] || (d.competency || '')).toString().trim(),
+          keywords: Array.isArray(d.keywords) ? d.keywords.join(',') : (d.keywords || ''),
+          difficulty: (d.difficulty || 'intermediate').toLowerCase()
+        })) : [];
+
+        // 生成各维度可选标签（基于全量数据去重）
+        const uniq = (arr) => Array.from(new Set(arr.filter(Boolean)));
+        const allTypes = uniq(allData.map(d => d.type));
+        const allFields = uniq(allData.map(d => d.field));
+        const allCompetencies = uniq(allData.map(d => d.competency));
+        const allDifficulties = uniq(allData.map(d => d.difficulty));
+        // keywords 以逗号或空格分割简单抽取常见词（控制数量）
+        const keywordPool = uniq(allData.flatMap(d => String(d.keywords || '').split(/[;,\s]+/))).slice(0, 20);
+
+        function renderChips(containerId, items, dim) {
+          const container = document.getElementById(containerId);
+          if (!container) return;
+          container.innerHTML = items.map(v => {
+            const text = i18nLabel[v] || v;
+            return `<button data-dim="${dim}" data-val="${v}" class="chip">${text}</button>`;
+          }).join('');
+          container.querySelectorAll('button[data-dim]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const dimKey = btn.getAttribute('data-dim');
+              const val = btn.getAttribute('data-val');
+              toggleFilter(dimKey, val);
+              // 视觉激活
+              btn.classList.toggle('active');
+              // 重置页码并渲染
+              currentPage = 1;
+              renderAllResources();
+            });
+          });
+        }
+
+        renderChips('chip-type', allTypes, 'type');
+        renderChips('chip-field', allFields, 'field');
+        renderChips('chip-competency', allCompetencies, 'competency');
+        renderChips('chip-difficulty', allDifficulties, 'difficulty');
+        renderChips('chip-keywords', keywordPool, 'keywords');
+
+        // 清空筛选
+        const clearBtn = document.getElementById('clear-filters');
+        if (clearBtn) {
+          clearBtn.addEventListener('click', () => {
+            Object.values(activeFilters).forEach(set => set.clear());
+            document.querySelectorAll('#filter-chips .chip.active').forEach(el => el.classList.remove('active'));
+            searchQuery = '';
+            const searchInput = document.getElementById('resource-search-input');
+            if (searchInput) searchInput.value = '';
+            currentPage = 1;
+            renderAllResources();
+          });
+        }
+
+        const recommended = pickRecommended(allData, 2);
+        const popular = pickPopular(allData, 4);
+        const recommendedGrid = document.getElementById('recommended-grid');
+        const popularGrid = document.getElementById('popular-grid');
+        renderGrid(recommendedGrid, recommended);
+        renderGrid(popularGrid, popular);
+
+        renderAllResources();
+
+        const buttons = document.querySelectorAll('.category-button');
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const label = btn.textContent.trim();
+            filteredCompetency = categoryButtonToCompetency[label] || null;
+            currentPage = 1;
+            renderAllResources();
+          });
+        });
+
+        // 搜索
+        const searchInput = document.getElementById('resource-search-input');
+        if (searchInput) {
+          searchInput.addEventListener('input', () => {
+            searchQuery = searchInput.value || '';
+            currentPage = 1;
+            renderAllResources();
+          });
+        }
+
+        // 分页按钮
+        const prev = document.getElementById('pagination-prev');
+        const next = document.getElementById('pagination-next');
+        if (prev) prev.addEventListener('click', () => {
+          if (currentPage > 1) {
+            currentPage--;
+            renderAllResources();
+          }
+        });
+        if (next) next.addEventListener('click', () => {
+          const total = getFilteredList().length;
+          const totalPages = Math.max(1, Math.ceil(total / pageSize));
+          if (currentPage < totalPages) {
+            currentPage++;
+            renderAllResources();
+          }
+        });
+
+      } catch (e) {
+        console.error('加载学习资源失败:', e);
+      }
     });
-  }
-
-  function refreshPrevNextState(totalItems) {
-    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
-    const prev = document.getElementById('pagination-prev');
-    const next = document.getElementById('pagination-next');
-    if (prev) prev.disabled = currentPage <= 1;
-    if (next) next.disabled = currentPage >= totalPages;
-  }
-
-  try {
-    const resp = await fetch(DATA_URL);
-    const data = await resp.json();
-    allData = Array.isArray(data) ? data.map((d, idx) => ({
-      id: d.id || `res_${idx}`,
-      title: d.title || '未命名资源',
-      description: d.description || '',
-      url: d.url || '#',
-      image: d.image || '',
-      type: (d.type || 'article').toLowerCase(),
-      field: d.field || '',
-      competency: d.competency || '',
-      keywords: d.keywords || '',
-      difficulty: (d.difficulty || 'intermediate').toLowerCase()
-    })) : [];
-
-    // 生成各维度可选标签（基于全量数据去重）
-    const uniq = (arr) => Array.from(new Set(arr.filter(Boolean)));
-    const allTypes = uniq(allData.map(d => d.type));
-    const allFields = uniq(allData.map(d => d.field));
-    const allCompetencies = uniq(allData.map(d => d.competency));
-    const allDifficulties = uniq(allData.map(d => d.difficulty));
-    // keywords 以逗号或空格分割简单抽取常见词（控制数量）
-    const keywordPool = uniq(allData.flatMap(d => String(d.keywords || '').split(/[;,\s]+/))).slice(0, 20);
-
-    function renderChips(containerId, items, dim) {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-      container.innerHTML = items.map(v => {
-        const text = i18nLabel[v] || v;
-        return `<button data-dim="${dim}" data-val="${v}" class="chip">${text}</button>`;
-      }).join('');
-      container.querySelectorAll('button[data-dim]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const dimKey = btn.getAttribute('data-dim');
-          const val = btn.getAttribute('data-val');
-          toggleFilter(dimKey, val);
-          // 视觉激活
-          btn.classList.toggle('active');
-          // 重置页码并渲染
-          currentPage = 1;
-          renderAllResources();
+  </script>
+  <!-- 通用导航脚本 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // 导航链接点击事件处理
+      const navLinks = document.querySelectorAll('nav a, a[href*="/"]');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+          const href = this.getAttribute('href');
+          if (href && (href.includes('.html') || href.startsWith('/'))) {
+            console.log('导航到:', href);
+          }
         });
       });
-    }
 
-    renderChips('chip-type', allTypes, 'type');
-    renderChips('chip-field', allFields, 'field');
-    renderChips('chip-competency', allCompetencies, 'competency');
-    renderChips('chip-difficulty', allDifficulties, 'difficulty');
-    renderChips('chip-keywords', keywordPool, 'keywords');
-
-    // 清空筛选
-    const clearBtn = document.getElementById('clear-filters');
-    if (clearBtn) {
-      clearBtn.addEventListener('click', () => {
-        Object.values(activeFilters).forEach(set => set.clear());
-        document.querySelectorAll('#filter-chips .chip.active').forEach(el => el.classList.remove('active'));
-        searchQuery = '';
-        const searchInput = document.getElementById('resource-search-input');
-        if (searchInput) searchInput.value = '';
-        currentPage = 1;
-        renderAllResources();
-      });
-    }
-
-    const recommended = pickRecommended(allData, 2);
-    const popular = pickPopular(allData, 4);
-    const recommendedGrid = document.getElementById('recommended-grid');
-    const popularGrid = document.getElementById('popular-grid');
-    renderGrid(recommendedGrid, recommended);
-    renderGrid(popularGrid, popular);
-
-    renderAllResources();
-
-    const buttons = document.querySelectorAll('.category-button');
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const label = btn.textContent.trim();
-        filteredCompetency = categoryButtonToCompetency[label] || null;
-        currentPage = 1;
-        renderAllResources();
-      });
-    });
-
-    // 搜索
-    const searchInput = document.getElementById('resource-search-input');
-    if (searchInput) {
-      searchInput.addEventListener('input', () => {
-        searchQuery = searchInput.value || '';
-        currentPage = 1;
-        renderAllResources();
-      });
-    }
-
-    // 分页按钮
-    const prev = document.getElementById('pagination-prev');
-    const next = document.getElementById('pagination-next');
-    if (prev) prev.addEventListener('click', () => {
-      if (currentPage > 1) {
-        currentPage--;
-        renderAllResources();
+      // 移动端菜单切换
+      const mobileMenuBtn = document.querySelector('.md\\:hidden');
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function () {
+          console.log('切换移动端菜单');
+        });
       }
     });
-    if (next) next.addEventListener('click', () => {
-      const total = getFilteredList().length;
-      const totalPages = Math.max(1, Math.ceil(total / pageSize));
-      if (currentPage < totalPages) {
-        currentPage++;
-        renderAllResources();
-      }
-    });
-
-  } catch (e) {
-    console.error('加载学习资源失败:', e);
-  }
-});
-</script>
-<!-- 通用导航脚本 -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // 导航链接点击事件处理
-    const navLinks = document.querySelectorAll('nav a, a[href*="/"]');
-    navLinks.forEach(link => {
-      link.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
-        if (href && (href.includes('.html') || href.startsWith('/'))) {
-          console.log('导航到:', href);
-        }
-      });
-    });
-    
-    // 移动端菜单切换
-    const mobileMenuBtn = document.querySelector('.md\\:hidden');
-    if (mobileMenuBtn) {
-      mobileMenuBtn.addEventListener('click', function() {
-        console.log('切换移动端菜单');
-      });
-    }
-  });
-</script>
-    <!-- 导入导航栏组件 -->
-    <script src="./components/navbar.js"></script>
+  </script>
+  <!-- 导入导航栏组件 -->
+  <script src="./components/navbar.js"></script>
 </body>
+
 </html>
