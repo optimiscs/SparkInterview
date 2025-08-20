@@ -65,6 +65,7 @@ def build_doc_and_meta(raw: Dict[str, Any], source: str, version: str) -> (str, 
 
     metadata = {
         "title": raw.get("title", ""),
+        "description": raw.get("description", ""),
         "url": raw.get("url", ""),
         "type": (raw.get("type", "article") or "article").lower(),
         "competency": competency,

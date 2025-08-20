@@ -238,7 +238,11 @@ class LearningResourceManager:
             resource_id = resource.get("id", str(uuid.uuid4()))
             
             # 文档内容（标题+描述）
-            doc_text = f"{resource['title']} {resource.get('description', '')}"
+            # 追加关键词以增强召回
+            keywords = resource.get("keywords", "")
+            if isinstance(keywords, list):
+                keywords = ",".join([str(x) for x in keywords])
+            doc_text = f"{resource['title']} {resource.get('description', '')} {keywords}"
             
             # 元数据
             metadata = {
@@ -246,7 +250,12 @@ class LearningResourceManager:
                 "url": resource.get("url", ""),
                 "type": resource.get("type", "article"),
                 "competency": resource.get("competency", "general"),
-                "difficulty": resource.get("difficulty", "beginner")
+                "difficulty": resource.get("difficulty", "beginner"),
+                # 扩展字段，便于展示与过滤
+                "description": resource.get("description", ""),
+                "field": resource.get("field", ""),
+                "keywords": keywords,
+                "image": resource.get("image") or resource.get("Image") or ""
             }
             
             documents.append(doc_text)
@@ -276,7 +285,8 @@ class LearningResourceManager:
             "communication_ability": "沟通表达 演讲技巧",
             "logical_thinking": "逻辑思维 结构化思考",
             "professional_knowledge": "专业知识 技术能力",
-            "stress_resilience": "抗压能力 情绪管理"
+            "stress_resilience": "抗压能力 情绪管理",
+            "skill_match": "岗位技能匹配 技术栈 提升 路线"
         }
         
         query = competency_map.get(competency, competency)

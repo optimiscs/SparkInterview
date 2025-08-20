@@ -1279,10 +1279,45 @@
           });
         }
 
-        const recommended = pickRecommended(allData, 2);
-        const popular = pickPopular(allData, 4);
         const recommendedGrid = document.getElementById('recommended-grid');
         const popularGrid = document.getElementById('popular-grid');
+
+        async function fetchRecommendedFromServer() {
+          try {
+            // 优先从URL参数读取 session_id
+            const params = new URLSearchParams(location.search);
+            const sid = params.get('session_id') || sessionStorage.getItem('last_session_id') || '';
+            if (!sid) return null;
+            const headers = { 'Content-Type': 'application/json' };
+            const token = localStorage.getItem('access_token');
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+            const resp = await fetch(`/api/v1/interviews/learning-path/${sid}`, { headers });
+            if (!resp.ok) return null;
+            const data = await resp.json();
+            if (data && Array.isArray(data.learning_resources) && data.learning_resources.length) {
+              // 转换为本页渲染结构(尽量兼容字段)
+              const list = data.learning_resources.map((r, idx) => ({
+                id: `srv_${idx}`,
+                title: r.title || '未命名资源',
+                description: r.description || '',
+                url: r.url || '#',
+                image: r.image || '',
+                type: (r.type || 'article').toLowerCase(),
+                field: r.field || '',
+                competency: r.competency || '',
+                keywords: r.keywords || '',
+                difficulty: (r.difficulty || 'intermediate').toLowerCase()
+              }));
+              return list;
+            }
+            return null;
+          } catch (e) { console.warn('推荐接口失败，使用本地回退:', e); return null; }
+        }
+
+        let recommended = await fetchRecommendedFromServer();
+        if (!recommended) recommended = pickRecommended(allData, 2);
+        const popular = pickPopular(allData, 4);
+
         renderGrid(recommendedGrid, recommended);
         renderGrid(popularGrid, popular);
 
