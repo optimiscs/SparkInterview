@@ -696,7 +696,13 @@ async function loadReportDataFallback() {
         let response;
         if (reportId) {
             // 获取特定报告
-            response = await fetch(`/api/v1/reports/${reportId}`);
+            response = await fetch(`/api/v1/langgraph-chat/reports/${reportId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('access_token') || ''}`
+                }
+            });
         } else {
             // 生成新报告（从面试跳转过来的情况）
             const interviewData = {
@@ -706,19 +712,25 @@ async function loadReportDataFallback() {
                 candidate_name: urlParams.get('candidate_name') || '张明远'
             };
             
-            response = await fetch('/api/v1/reports/generate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(interviewData)
-            });
+            // 从面试跳转过来的情况，优先从session_id生成报告
+            const sessionId = urlParams.get('session_id');
+            if (sessionId) {
+                response = await fetch(`/api/v1/langgraph-chat/sessions/${sessionId}/generate-report`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('access_token') || ''}`
+                    }
+                });
+            } else {
+                throw new Error('缺少session_id或report_id参数');
+            }
         }
         
         const result = await response.json();
         
-        if (result.status === 'success') {
-            reportData = result.report;
+        if (result.success) {
+            reportData = result.report_data;
             console.log('报告数据加载成功:', reportData);
             
             // 更新AI状态指示器
@@ -728,7 +740,7 @@ async function loadReportDataFallback() {
             updatePageContent();
             return true;
         } else {
-            throw new Error(result.message);
+            throw new Error(result.message || result.detail);
         }
     } catch (error) {
         console.error('加载报告数据失败:', error);

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频调试测试</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <style>
+        .debug-info {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Monaco', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .video-container {
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .canvas-container {
+            border: 2px solid #ef4444;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8">🎥 视频捕获调试工具</h1>
+        
+        <!-- 控制面板 -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">控制面板</h2>
+            <div class="flex space-x-4">
+                <button id="startCamera" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition">
+                    启动摄像头
+                </button>
+                <button id="stopCamera" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition">
+                    停止摄像头
+                </button>
+                <button id="testCapture" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition" disabled>
+                    测试捕获
+                </button>
+                <button id="clearLog" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition">
+                    清理日志
+                </button>
+            </div>
+        </div>
+        
+        <!-- 视频和Canvas显示 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- 视频显示 -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">📹 原始视频流</h3>
+                <div class="video-container">
+                    <video id="testVideo" class="w-full h-64 bg-gray-800" autoplay muted playsinline></video>
+                </div>
+                <div id="videoStatus" class="mt-4 p-4 bg-gray-50 rounded text-sm">
+                    <strong>视频状态：</strong>等待启动摄像头...
+                </div>
+            </div>
+            
+            <!-- Canvas显示 -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">🖼️ Canvas捕获</h3>
+                <div class="canvas-container">
+                    <canvas id="testCanvas" class="w-full h-64 bg-gray-200"></canvas>
+                </div>
+                <div id="canvasStatus" class="mt-4 p-4 bg-gray-50 rounded text-sm">
+                    <strong>Canvas状态：</strong>等待捕获...
+                </div>
+            </div>
+        </div>
+        
+        <!-- 调试信息 -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h3 class="text-lg font-semibold mb-4">🐛 调试日志</h3>
+            <div id="debugLog" class="debug-info">
+                <p class="text-gray-500">等待操作...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let mediaStream = null;
+        let video = null;
+        let canvas = null;
+        let context = null;
+        let debugLog = null;
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const colors = {
+                'info': 'text-blue-600',
+                'success': 'text-green-600',
+                'warning': 'text-yellow-600',
+                'error': 'text-red-600'
+            };
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `mb-1 ${colors[type] || colors['info']}`;
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            
+            debugLog.appendChild(logEntry);
+            debugLog.scrollTop = debugLog.scrollHeight;
+            
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+        
+        function updateVideoStatus() {
+            const status = document.getElementById('videoStatus');
+            if (!video) {
+                status.innerHTML = '<strong>视频状态：</strong>视频元素未初始化';
+                return;
+            }
+            
+            status.innerHTML = `
+                <strong>视频状态：</strong><br>
+                尺寸: ${video.videoWidth}x${video.videoHeight}<br>
+                ReadyState: ${video.readyState}<br>
+                CurrentTime: ${video.currentTime.toFixed(2)}s<br>
+                Paused: ${video.paused}<br>
+                Muted: ${video.muted}<br>
+                SrcObject: ${!!video.srcObject}<br>
+                视频轨道: ${video.srcObject ? video.srcObject.getVideoTracks().length : 0}
+            `;
+        }
+        
+        function updateCanvasStatus() {
+            const status = document.getElementById('canvasStatus');
+            if (!canvas) {
+                status.innerHTML = '<strong>Canvas状态：</strong>Canvas未初始化';
+                return;
+            }
+            
+            status.innerHTML = `
+                <strong>Canvas状态：</strong><br>
+                尺寸: ${canvas.width}x${canvas.height}<br>
+                Context: ${!!context ? 'OK' : 'Error'}
+            `;
+        }
+        
+        async function startCamera() {
+            try {
+                log('🚀 启动摄像头...', 'info');
+                
+                const constraints = {
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user'
+                    },
+                    audio: false
+                };
+                
+                log(`📋 使用约束: ${JSON.stringify(constraints)}`, 'info');
+                
+                mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+                log('✅ 摄像头访问成功', 'success');
+                
+                video.srcObject = mediaStream;
+                
+                // 等待视频元数据加载
+                video.addEventListener('loadedmetadata', () => {
+                    log(`📺 视频元数据已加载: ${video.videoWidth}x${video.videoHeight}`, 'success');
+                    updateVideoStatus();
+                    document.getElementById('testCapture').disabled = false;
+                });
+                
+                video.addEventListener('canplay', () => {
+                    log('▶️ 视频可以播放', 'success');
+                    updateVideoStatus();
+                });
+                
+                // 定期更新状态
+                setInterval(updateVideoStatus, 1000);
+                
+            } catch (error) {
+                log(`❌ 启动摄像头失败: ${error.message}`, 'error');
+                console.error('摄像头启动失败:', error);
+            }
+        }
+        
+        async function stopCamera() {
+            try {
+                log('⏹️ 停止摄像头...', 'info');
+                
+                if (mediaStream) {
+                    mediaStream.getTracks().forEach(track => track.stop());
+                    mediaStream = null;
+                    log('✅ 摄像头已停止', 'success');
+                }
+                
+                video.srcObject = null;
+                document.getElementById('testCapture').disabled = true;
+                updateVideoStatus();
+                
+            } catch (error) {
+                log(`❌ 停止摄像头失败: ${error.message}`, 'error');
+            }
+        }
+        
+        function testCapture() {
+            try {
+                log('📸 开始测试捕获...', 'info');
+                
+                if (!video.srcObject) {
+                    log('❌ 视频流不存在', 'error');
+                    return;
+                }
+                
+                if (video.videoWidth === 0 || video.videoHeight === 0) {
+                    log('❌ 视频尺寸无效', 'error');
+                    return;
+                }
+                
+                // 设置Canvas尺寸
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                log(`🖼️ Canvas尺寸设置为: ${canvas.width}x${canvas.height}`, 'info');
+                
+                // 先填充红色背景
+                context.fillStyle = '#FF0000';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                log('🔴 Canvas已填充红色背景', 'info');
+                
+                // 绘制视频帧
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                log('✅ 视频帧已绘制到Canvas', 'success');
+                
+                // 检查Canvas内容
+                const imageData = context.getImageData(0, 0, Math.min(canvas.width, 50), Math.min(canvas.height, 50));
+                const data = imageData.data;
+                let hasNonRedPixels = false;
+                let redPixels = 0;
+                let nonRedPixels = 0;
+                
+                for (let i = 0; i < data.length; i += 4) {
+                    if (data[i] === 255 && data[i + 1] === 0 && data[i + 2] === 0) {
+                        redPixels++;
+                    } else {
+                        hasNonRedPixels = true;
+                        nonRedPixels++;
+                    }
+                }
+                
+                log(`🔍 像素分析: 红色=${redPixels}, 非红色=${nonRedPixels}`, 'info');
+                
+                if (hasNonRedPixels) {
+                    log('✅ Canvas包含视频内容！', 'success');
+                } else {
+                    log('❌ Canvas只有红色背景，视频未正确绘制', 'error');
+                }
+                
+                // 转换为Blob并检查大小
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        log(`📦 Blob创建成功: ${blob.size} bytes, 类型: ${blob.type}`, 'success');
+                        
+                        if (blob.size < 1000) {
+                            log('⚠️ Blob大小异常小，可能是空白图像', 'warning');
+                        }
+                        
+                        // 创建下载链接（用于检查图像）
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `test_capture_${Date.now()}.jpg`;
+                        link.textContent = '下载测试图像';
+                        link.className = 'text-blue-600 underline ml-2';
+                        
+                        const downloads = document.getElementById('downloads') || (() => {
+                            const div = document.createElement('div');
+                            div.id = 'downloads';
+                            div.className = 'mt-4 p-4 bg-blue-50 rounded';
+                            div.innerHTML = '<strong>测试图像下载：</strong>';
+                            document.querySelector('.max-w-6xl').appendChild(div);
+                            return div;
+                        })();
+                        
+                        downloads.appendChild(link);
+                        
+                    } else {
+                        log('❌ Blob创建失败', 'error');
+                    }
+                }, 'image/jpeg', 0.8);
+                
+                updateCanvasStatus();
+                
+            } catch (error) {
+                log(`❌ 捕获测试失败: ${error.message}`, 'error');
+                console.error('捕获测试失败:', error);
+            }
+        }
+        
+        function clearLog() {
+            debugLog.innerHTML = '<p class="text-gray-500">日志已清理...</p>';
+        }
+        
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            video = document.getElementById('testVideo');
+            canvas = document.getElementById('testCanvas');
+            context = canvas.getContext('2d');
+            debugLog = document.getElementById('debugLog');
+            
+            // 绑定事件
+            document.getElementById('startCamera').addEventListener('click', startCamera);
+            document.getElementById('stopCamera').addEventListener('click', stopCamera);
+            document.getElementById('testCapture').addEventListener('click', testCapture);
+            document.getElementById('clearLog').addEventListener('click', clearLog);
+            
+            log('🚀 视频调试工具已初始化', 'success');
+            updateVideoStatus();
+            updateCanvasStatus();
+        });
+    </script>
+</body>
+</html>

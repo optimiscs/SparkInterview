@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 面试官 - 沉浸式面试模拟平台</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#3B82F6',
+secondary: '#E0F2FE'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+<style>
+:where([class^="ri-"])::before {
+content: "\f3c2";
+}
+@keyframes breathe {
+0%, 100% { transform: scale(1); opacity: 1; }
+50% { transform: scale(1.05); opacity: 0.8; }
+}
+.breathing {
+animation: breathe 3s ease-in-out infinite;
+}
+.code-editor {
+font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+background: #1e1e1e;
+color: #d4d4d4;
+}
+::-webkit-scrollbar {
+width: 14px;
+height: 14px;
+}
+::-webkit-scrollbar-track {
+background: #1e1e1e;
+}
+::-webkit-scrollbar-thumb {
+background: #424242;
+border: 3px solid #1e1e1e;
+border-radius: 7px;
+}
+::-webkit-scrollbar-thumb:hover {
+background: #4f4f4f;
+}
+::selection {
+background: #264f78;
+}
+.video-container {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.glass-effect {
+background: rgba(255, 255, 255, 0.95);
+backdrop-filter: blur(10px);
+}
+.progress-line {
+background: linear-gradient(90deg, #3B82F6 0%, #E5E7EB 0%);
+transition: background 0.5s ease;
+}
+.active-step .progress-line {
+background: linear-gradient(90deg, #3B82F6 60%, #E5E7EB 60%);
+}
+.mic-pulse {
+box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+animation: pulse 2s infinite;
+}
+@keyframes pulse {
+0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+.subtitle-overlay {
+background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%);
+}
+.fullscreen-mode {
+position: fixed !important;
+top: 0 !important;
+left: 0 !important;
+width: 100vw !important;
+height: 100vh !important;
+z-index: 9999 !important;
+border-radius: 0 !important;
+}
+#expandPanelButton button:hover {
+transform: translateX(-3px);
+}
+#rightEdgeHover {
+/* 调试时可以显示hover区域：background: rgba(255,0,0,0.1); */
+background: transparent;
+cursor: pointer;
+}
+#expandPanelButton {
+pointer-events: all;
+}
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- 导航栏容器 - 组件会自动插入到这里 -->
+<div id="navbar-container"></div>
+<!-- 顶部进度导航 -->
+<div class="bg-white border-b border-gray-100 px-6 py-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center justify-center space-x-8">
+        <div class="flex items-center space-x-2">
+          <div
+            class="w-8 h-8 bg-primary rounded-full flex items-center justify-center breathing"
+          >
+            <i class="ri-check-line text-white text-sm"></i>
+          </div>
+          <span class="text-sm font-medium text-gray-900">简历解析</span>
+        </div>
+        <div class="w-16 h-0.5 progress-line"></div>
+        <div class="flex items-center space-x-2 active-step">
+          <div
+            class="w-8 h-8 bg-primary rounded-full flex items-center justify-center breathing"
+          >
+            <div class="w-2 h-2 bg-white rounded-full"></div>
+          </div>
+          <span class="text-sm font-medium text-primary">行为面试</span>
+        </div>
+        <div class="w-16 h-0.5 bg-gray-200"></div>
+        <div class="flex items-center space-x-2">
+          <div
+            class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"
+          >
+            <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
+          </div>
+          <span class="text-sm text-gray-500">专业深挖</span>
+        </div>
+        <div class="w-16 h-0.5 bg-gray-200"></div>
+        <div class="flex items-center space-x-2">
+          <div
+            class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"
+          >
+            <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
+          </div>
+          <span class="text-sm text-gray-500">反向提问</span>
+        </div>
+        <div class="w-16 h-0.5 bg-gray-200"></div>
+        <div class="flex items-center space-x-2">
+          <div
+            class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"
+          >
+            <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
+          </div>
+          <span class="text-sm text-gray-500">复盘总结</span>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- 主体内容 -->
+<div class="flex h-screen">
+<!-- 左侧会话历史 -->
+<div class="w-80 bg-gray-50 border-r border-gray-100 flex flex-col">
+<div class="p-4 border-b border-gray-100 space-y-3">
+<button id="new-interview-btn" class="w-full py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2 !rounded-button">
+<i class="ri-add-line"></i>
+<span>新建面试</span>
+</button>
+<div class="relative">
+<input type="text" id="session-search-input" placeholder="搜索面试记录..." class="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+<div class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 flex items-center justify-center">
+<i class="ri-search-line text-gray-400 text-sm"></i>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-3" id="sessions-list-container">
+<!-- 会话列表将由JavaScript动态生成 -->
+<div class="flex flex-col items-center justify-center py-8 text-center">
+<div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+<i class="ri-chat-3-line text-gray-400 text-xl"></i>
+</div>
+<p class="text-sm text-gray-500 mb-1">暂无面试记录</p>
+<p class="text-xs text-gray-400">点击上方按钮开始新面试</p>
+</div>
+</div>
+</div>
+<!-- 中央主舞台 -->
+<div class="flex-1 flex flex-col relative">
+<!-- 模式切换按钮 -->
+<div class="absolute top-4 right-4 z-10 flex items-center space-x-2">
+<button id="camera-toggle" class="bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg flex items-center space-x-2 hover:bg-white transition-colors !rounded-button">
+<i class="ri-camera-line text-gray-700"></i>
+<span class="text-xs text-gray-700">摄像头</span>
+</button>
+<button id="mode-switch" class="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 hover:bg-white transition-colors !rounded-button">
+<i class="ri-code-line text-gray-700"></i>
+<span class="text-sm text-gray-700 whitespace-nowrap">代码模式</span>
+</button>
+</div>
+
+<!-- 主内容区域 -->
+<div class="flex-1 relative bg-gradient-to-br from-slate-900 to-slate-800">
+<!-- 主位置区域 -->
+<div id="main-stage" class="absolute inset-4 rounded-xl overflow-hidden">
+<!-- AI 数字人视频 (默认主位置) -->
+<div id="ai-video-main" class="w-full h-full relative video-container">
+<img src="https://readdy.ai/api/search-image?query=professional%20female%20AI%20interviewer%20with%20natural%20expressions%2C%20modern%20office%20background%2C%20clean%20lighting%2C%20realistic%20digital%20human%2C%20friendly%20and%20confident%20demeanor%2C%20business%20attire%2C%20eye%20contact%20with%20camera&width=800&height=600&seq=ai-interviewer-main&orientation=landscape"
+alt="AI面试官" class="w-full h-full object-cover object-top">
+<!-- 实时字幕区域 -->
+<div class="absolute bottom-0 left-0 right-0 subtitle-overlay p-6">
+<div class="bg-black bg-opacity-60 rounded-lg p-3">
+<div class="flex items-start space-x-3">
+<div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+<i class="ri-robot-line text-white text-sm"></i>
+</div>
+<div class="flex-1">
+<p class="text-xs text-gray-300 mb-1">AI面试官 - 星火智能体</p>
+<p id="ai-subtitle-text" class="text-white text-sm leading-relaxed">等待语音输入或文字消息...</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 用户摄像头视频 (可切换到主位置) -->
+<div id="user-video-main" class="w-full h-full relative bg-gray-800 hidden">
+<video id="user-video" class="w-full h-full object-cover" autoplay muted></video>
+<div class="absolute bottom-0 left-0 right-0 subtitle-overlay p-6">
+<div class="bg-black bg-opacity-60 rounded-lg p-3">
+<div class="flex items-start space-x-3">
+<div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+<i class="ri-user-line text-white text-sm"></i>
+</div>
+                        <div class="flex-1">
+                            <p class="text-xs text-gray-300 mb-1">面试者</p>
+                            <p id="user-subtitle-text" class="text-white text-sm leading-relaxed">准备就绪，等待发言...</p>
+                        </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 代码编辑器 (代码模式主位置) -->
+<div id="code-editor-main" class="w-full h-full bg-[#1e1e1e] rounded-lg overflow-hidden flex flex-col hidden">
+<!-- 顶部工具栏 -->
+<div class="bg-[#252526] border-b border-[#3e3e42] px-4 py-2 flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-2">
+<div class="w-3 h-3 bg-red-500 rounded-full"></div>
+<div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+<div class="w-3 h-3 bg-green-500 rounded-full"></div>
+</div>
+<div class="flex items-center space-x-3 border-l border-[#3e3e42] pl-4">
+<label class="text-xs text-gray-300">语言:</label>
+<select id="language-select" class="bg-[#3e3e42] text-gray-300 text-xs px-3 py-1 rounded border-none focus:outline-none focus:ring-1 focus:ring-blue-500">
+<option value="javascript">JavaScript</option>
+<option value="typescript">TypeScript</option>
+<option value="python">Python</option>
+<option value="java">Java</option>
+<option value="cpp">C++</option>
+<option value="csharp">C#</option>
+<option value="go">Go</option>
+<option value="rust">Rust</option>
+<option value="php">PHP</option>
+<option value="sql">SQL</option>
+<option value="html">HTML</option>
+<option value="css">CSS</option>
+</select>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<button id="reset-code" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white transition-colors" title="重置代码">
+<i class="ri-refresh-line"></i>
+</button>
+<button id="format-code" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white transition-colors" title="格式化代码">
+<i class="ri-code-line"></i>
+</button>
+<button id="editor-settings" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white transition-colors" title="编辑器设置">
+<i class="ri-settings-3-line"></i>
+</button>
+<button id="fullscreen-editor" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white transition-colors" title="全屏编辑器">
+<i class="ri-fullscreen-line"></i>
+</button>
+</div>
+</div>
+<!-- Monaco 编辑器容器 -->
+<div id="monaco-editor" class="flex-1"></div>
+<!-- 底部状态栏 -->
+<div class="bg-[#007acc] text-white text-xs px-4 py-1 flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<span id="current-language">JavaScript</span>
+<span>UTF-8</span>
+<span id="cursor-position">行 1, 列 1</span>
+</div>
+<div class="flex items-center space-x-4">
+<span id="character-count">字符: 0</span>
+<span id="line-count">行数: 1</span>
+<span class="text-gray-300">Web IDE v1.0</span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 次位置区域 (右上角小窗) -->
+<div id="secondary-stage" class="absolute top-6 right-6 w-80 h-60 rounded-lg overflow-hidden shadow-xl transition-all duration-300 hidden">
+<!-- AI 数字人小窗 -->
+<div id="ai-video-secondary" class="w-full h-full relative video-container hidden">
+<img src="https://readdy.ai/api/search-image?query=professional%20female%20AI%20interviewer%20with%20natural%20expressions%2C%20modern%20office%20background%2C%20clean%20lighting%2C%20realistic%20digital%20human%2C%20friendly%20and%20confident%20demeanor%2C%20business%20attire%2C%20eye%20contact%20with%20camera&width=400&height=300&seq=ai-interviewer-secondary&orientation=landscape"
+alt="AI面试官" class="w-full h-full object-cover object-top">
+<!-- 小窗字幕 -->
+<div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 p-2">
+<p class="text-white text-xs leading-relaxed" id="ai-subtitle-secondary">AI面试官</p>
+</div>
+<!-- 小窗控制 -->
+<div class="absolute top-2 right-2 flex items-center space-x-1">
+<button class="w-6 h-6 bg-black bg-opacity-50 rounded flex items-center justify-center hover:bg-opacity-70 transition-colors" title="切换到主位置" onclick="switchToMain('ai')">
+<i class="ri-expand-diagonal-line text-white text-xs"></i>
+</button>
+</div>
+</div>
+
+<!-- 用户摄像头小窗 -->
+<div id="user-video-secondary" class="w-full h-full relative bg-gray-800">
+<video id="user-video-small" class="w-full h-full object-cover" autoplay muted></video>
+<!-- 小窗字幕 -->
+<div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 p-2">
+<p class="text-white text-xs leading-relaxed">面试者</p>
+</div>
+<!-- 小窗控制 -->
+<div class="absolute top-2 right-2 flex items-center space-x-1">
+<button class="w-6 h-6 bg-black bg-opacity-50 rounded flex items-center justify-center hover:bg-opacity-70 transition-colors" title="切换到主位置" onclick="switchToMain('user')">
+<i class="ri-expand-diagonal-line text-white text-xs"></i>
+</button>
+<button class="w-6 h-6 bg-black bg-opacity-50 rounded flex items-center justify-center hover:bg-opacity-70 transition-colors" title="关闭摄像头" onclick="toggleCamera(false)">
+<i class="ri-camera-off-line text-white text-xs"></i>
+</button>
+</div>
+</div>
+</div>
+
+<!-- 面试消息容器 (隐藏，用于存储聊天记录) -->
+<div id="chat-messages-container" class="hidden absolute inset-0 bg-white bg-opacity-95 backdrop-blur-sm overflow-y-auto p-6">
+<div class="max-w-4xl mx-auto space-y-4">
+<!-- 消息将通过JavaScript动态添加 -->
+</div>
+</div>
+
+<!-- 切换聊天记录按钮 -->
+<div class="absolute top-4 left-4 z-10">
+<button id="toggle-chat-history" class="bg-black bg-opacity-50 text-white px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-opacity-70 transition-colors text-sm">
+<i class="ri-chat-history-line"></i>
+<span>查看对话</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 鼠标感应区域（右侧边缘） -->
+<div id="rightEdgeHover" class="fixed right-0 top-0 w-8 h-full z-40 pointer-events-auto"></div>
+
+<!-- 展开分析面板按钮（面板收起时显示） -->
+<div id="expandPanelButton" class="fixed right-0 top-1/2 transform -translate-y-1/2 z-50 opacity-0 translate-x-full transition-all duration-300 ease-out">
+<button class="w-12 h-20 bg-primary text-white rounded-l-xl shadow-xl hover:bg-blue-600 transition-all duration-300 flex flex-col items-center justify-center group hover:shadow-2xl">
+<i class="ri-arrow-left-line text-xl mb-1 group-hover:animate-pulse"></i>
+<div class="text-xs leading-none">
+<div>A</div>
+<div>I</div>
+<div>分</div>
+<div>析</div>
+</div>
+</button>
+</div>
+
+<!-- 右侧实时多模态分析面板 -->
+<div id="analysisPanel" class="w-96 bg-white shadow-lg border-l border-gray-200 overflow-y-auto">
+<div class="p-6">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-semibold text-gray-800 flex items-center">
+<div class="w-5 h-5 flex items-center justify-center mr-2">
+<i class="ri-brain-line text-primary"></i>
+</div>
+AI 教练分析
+</h2>
+<div class="flex items-center space-x-2">
+<div class="text-xs text-gray-500" data-analysis-status>准备就绪</div>
+<button id="togglePanel" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors duration-200">
+<i class="ri-arrow-right-line text-gray-600"></i>
+</button>
+</div>
+</div>
+
+<!-- 微表情洞察 -->
+<div class="mb-6">
+<h3 class="text-sm font-semibold text-gray-700 mb-3">
+微表情洞察
+</h3>
+<div class="space-y-2">
+<div class="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-100">
+<span class="text-sm text-green-700">自信度</span>
+<span class="text-sm font-semibold text-green-600">85%</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+<span class="text-sm text-yellow-700">紧张度</span>
+<span class="text-sm font-semibold text-yellow-600">25%</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100">
+<span class="text-sm text-blue-700">专注度</span>
+<span class="text-sm font-semibold text-blue-600">92%</span>
+</div>
+</div>
+</div>
+
+<!-- 体态语言分析 -->
+<div class="mb-6">
+<h3 class="text-sm font-semibold text-gray-700 mb-3">
+体态语言分析
+</h3>
+<div class="space-y-3">
+<!-- 眼神接触分析 -->
+<div class="flex items-start space-x-2">
+<div class="w-2 h-2 bg-green-400 rounded-full mt-2 eye-contact-indicator"></div>
+<div>
+<p class="text-sm text-gray-700 eye-contact-text">眼神接触良好</p>
+<p class="text-xs text-gray-500 eye-contact-desc">保持了 78% 的时间</p>
+</div>
+</div>
+<!-- 坐姿/体态分析 -->
+<div class="flex items-start space-x-2">
+<div class="w-2 h-2 bg-yellow-400 rounded-full mt-2 posture-indicator"></div>
+<div>
+<p class="text-sm text-gray-700 posture-text">坐姿略显紧张</p>
+<p class="text-xs text-gray-500 posture-desc">建议放松肩膀</p>
+</div>
+</div>
+<!-- 手势分析 -->
+<div class="flex items-start space-x-2">
+<div class="w-2 h-2 bg-green-400 rounded-full mt-2 gesture-indicator"></div>
+<div>
+<p class="text-sm text-gray-700 gesture-text">手势表达自然</p>
+<p class="text-xs text-gray-500 gesture-desc">有效辅助了语言表达</p>
+</div>
+</div>
+<!-- 详细数据 (隐藏元素，用于调试) -->
+<div class="hidden">
+<span data-analysis="posture-score">75</span>
+<span data-analysis="body-angle">0</span>
+<span data-analysis="tension-level">25</span>
+<span data-analysis="posture-type">sitting</span>
+<span data-analysis="gesture-activity">0</span>
+<span data-analysis="dominant-gesture">none</span>
+<span data-analysis="hands-detected">false</span>
+</div>
+
+</div>
+</div>
+
+<!-- 实时语调分析 -->
+<div class="mb-6">
+<div class="flex items-center justify-between mb-3">
+<h3 class="text-sm font-semibold text-gray-700 flex items-center">
+<i class="ri-waveform-line text-primary mr-1"></i>
+实时语调分析
+</h3>
+<div id="voice-tone-status" class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full status-stopped">
+未启动
+</div>
+</div>
+
+
+
+<!-- 综合语调图表 -->
+<div class="bg-white border border-gray-200 rounded-lg p-3">
+<div class="flex items-center justify-between mb-2">
+<div class="text-xs text-gray-600 font-medium">语调变化趋势</div>
+<div class="flex items-center space-x-3 text-xs">
+<div class="flex items-center">
+<div class="w-2 h-2 bg-red-500 rounded-full mr-1"></div>
+<span class="text-gray-600">音高</span>
+</div>
+<div class="flex items-center">
+<div class="w-2 h-2 bg-blue-500 rounded-full mr-1"></div>
+<span class="text-gray-600">音量</span>
+</div>
+<div class="flex items-center">
+<div class="w-2 h-2 bg-yellow-500 rounded-full mr-1"></div>
+<span class="text-gray-600">语速</span>
+</div>
+</div>
+</div>
+<div class="h-40">
+<canvas id="voice-tone-chart"></canvas>
+</div>
+</div>
+</div>
+
+<!-- 回答质量评估 -->
+<div class="mb-6">
+<h3 class="text-sm font-semibold text-gray-700 mb-3">
+回答质量评估
+</h3>
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-600">逻辑性</span>
+<div class="flex items-center space-x-2">
+<div class="w-16 h-2 bg-gray-200 rounded-full">
+<div class="w-12 h-2 bg-primary rounded-full"></div>
+</div>
+<span class="text-xs text-gray-500">75%</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-600">完整性</span>
+<div class="flex items-center space-x-2">
+<div class="w-16 h-2 bg-gray-200 rounded-full">
+<div class="w-14 h-2 bg-primary rounded-full"></div>
+</div>
+<span class="text-xs text-gray-500">88%</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-600">相关性</span>
+<div class="flex items-center space-x-2">
+<div class="w-16 h-2 bg-gray-200 rounded-full">
+<div class="w-13 h-2 bg-primary rounded-full"></div>
+</div>
+<span class="text-xs text-gray-500">82%</span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 即时优化建议 -->
+<div>
+<h3 class="text-sm font-semibold text-gray-700 mb-3">
+即时优化建议
+</h3>
+<div class="space-y-2">
+<div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+<p class="text-sm text-blue-700">
+尝试使用 STAR 法则来结构化回答
+</p>
+</div>
+<div class="p-3 bg-green-50 rounded-lg border border-green-100">
+<p class="text-sm text-green-700">语速控制得很好，继续保持</p>
+</div>
+<div class="p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+<p class="text-sm text-yellow-700">
+可以增加一些具体的数据支撑
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 底部控制中心 -->
+<div class="bg-white border-t border-gray-100 px-6 py-4">
+<div class="max-w-4xl mx-auto flex items-center justify-center space-x-8">
+<!-- 文件上传 -->
+<button class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors !rounded-button">
+<i class="ri-attachment-line text-gray-600 text-lg"></i>
+</button>
+<!-- 麦克风控制 -->
+<button class="w-16 h-16 bg-primary rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors mic-pulse !rounded-button">
+<i class="ri-mic-line text-white text-xl"></i>
+</button>
+<!-- 文字输入 -->
+<button class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors !rounded-button">
+<i class="ri-keyboard-line text-gray-600 text-lg"></i>
+</button>
+<!-- 结束面试 -->
+<button id="endInterviewBtn" class="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex items-center space-x-2 !rounded-button whitespace-nowrap">
+<i class="ri-stop-circle-line"></i>
+<span>结束面试</span>
+</button>
+</div>
+<!-- 状态指示 -->
+<div class="flex items-center justify-center mt-3 space-x-4 text-sm text-gray-500">
+<div class="flex items-center space-x-1">
+<div class="w-2 h-2 bg-green-500 rounded-full"></div>
+<span>录音中</span>
+</div>
+<div class="flex items-center space-x-1">
+<div class="w-2 h-2 bg-gray-500 rounded-full" data-status="analysis"></div>
+<span data-status="analysis">AI 分析待启动</span>
+</div>
+<div class="flex items-center space-x-1">
+<i class="ri-time-line text-xs"></i>
+<span>已进行 15:32</span>
+</div>
+</div>
+</div>
+<script id="progress-animation">
+document.addEventListener('DOMContentLoaded', function() {
+const breathingElements = document.querySelectorAll('.breathing');
+breathingElements.forEach(element => {
+element.style.animationDelay = Math.random() * 2 + 's';
+});
+});
+</script>
+<script id="mic-control">
+document.addEventListener('DOMContentLoaded', function() {
+// 注意：这个脚本仅用于UI状态显示
+// 实际的录音控制逻辑由 langgraph-interview.js 处理
+const micButton = document.querySelector('.mic-pulse');
+console.log('🎤 麦克风按钮UI控制器已加载 - 实际录音控制由LangGraph模块处理');
+
+// 保留UI状态切换逻辑（用于视觉反馈）
+if (micButton) {
+    micButton.addEventListener('click', function() {
+        console.log('🎤 麦克风按钮点击 - UI状态将由LangGraph模块更新');
+        // 注意：实际的录音开始/停止逻辑在 langgraph-interview.js 中处理
+    });
+}
+});
+</script>
+<script id="panel-toggle">
+document.addEventListener('DOMContentLoaded', function() {
+const toggleButton = document.getElementById('togglePanel');
+const analysisPanel = document.getElementById('analysisPanel');
+const expandPanelButton = document.getElementById('expandPanelButton');
+const rightEdgeHover = document.getElementById('rightEdgeHover');
+let isPanelVisible = true; // 面板初始状态为显示
+let hoverTimeout = null;
+
+// 显示展开按钮
+function showExpandButton() {
+if (!isPanelVisible && expandPanelButton) {
+expandPanelButton.style.opacity = '1';
+expandPanelButton.style.transform = 'translateY(-50%) translateX(0)';
+}
+}
+
+// 隐藏展开按钮
+function hideExpandButton() {
+if (expandPanelButton) {
+expandPanelButton.style.opacity = '0';
+expandPanelButton.style.transform = 'translateY(-50%) translateX(100%)';
+}
+}
+
+// 切换面板显示状态的函数
+function togglePanel() {
+isPanelVisible = !isPanelVisible;
+const icon = toggleButton?.querySelector('i');
+
+if (isPanelVisible) {
+// 显示面板
+analysisPanel.style.width = '24rem';
+analysisPanel.style.display = 'block';
+analysisPanel.style.opacity = '1';
+analysisPanel.style.transition = 'all 0.3s ease';
+if (icon) icon.className = 'ri-arrow-right-line text-gray-600';
+// 立即隐藏展开按钮
+hideExpandButton();
+console.log('教练分析面板已打开');
+} else {
+// 隐藏面板
+analysisPanel.style.width = '0px';
+analysisPanel.style.display = 'none';
+analysisPanel.style.opacity = '0';
+analysisPanel.style.transition = 'all 0.3s ease';
+if (icon) icon.className = 'ri-arrow-left-line text-gray-600';
+// 面板收起后，展开按钮处于待唤出状态（但仍隐藏）
+console.log('教练分析面板已关闭 - 鼠标靠近右边缘可唤出展开按钮');
+}
+}
+
+// 面板内的切换按钮
+if (toggleButton && analysisPanel) {
+toggleButton.addEventListener('click', togglePanel);
+}
+
+// 展开按钮点击事件
+if (expandPanelButton && analysisPanel) {
+expandPanelButton.addEventListener('click', function() {
+if (!isPanelVisible) {
+togglePanel();
+}
+});
+}
+
+// 右边缘hover检测
+if (rightEdgeHover && expandPanelButton) {
+// 鼠标进入右边缘区域
+rightEdgeHover.addEventListener('mouseenter', function() {
+if (!isPanelVisible) {
+clearTimeout(hoverTimeout);
+showExpandButton();
+}
+});
+
+// 鼠标离开右边缘区域
+rightEdgeHover.addEventListener('mouseleave', function() {
+if (!isPanelVisible) {
+hoverTimeout = setTimeout(() => {
+hideExpandButton();
+}, 500); // 500ms延迟隐藏，给用户时间点击
+}
+});
+
+// 鼠标进入展开按钮区域时取消隐藏
+expandPanelButton.addEventListener('mouseenter', function() {
+if (!isPanelVisible) {
+clearTimeout(hoverTimeout);
+}
+});
+
+// 鼠标离开展开按钮区域时延迟隐藏
+expandPanelButton.addEventListener('mouseleave', function() {
+if (!isPanelVisible) {
+hoverTimeout = setTimeout(() => {
+hideExpandButton();
+}, 300);
+}
+});
+}
+});
+</script>
+<script id="video-stage-control">
+document.addEventListener('DOMContentLoaded', function() {
+// 控制元素
+const cameraToggle = document.getElementById('camera-toggle');
+const modeSwitch = document.getElementById('mode-switch');
+const secondaryStage = document.getElementById('secondary-stage');
+const userVideo = document.getElementById('user-video');
+const userVideoSmall = document.getElementById('user-video-small');
+
+// 当前状态
+let isCameraEnabled = false;
+let isCodeMode = false;
+let currentMainView = 'ai'; // 'ai', 'user', 'code'
+let isRecording = false;
+let userMediaStream = null;
+
+// 视频分析管理器
+let videoAnalysisManager = null;
+
+// 摄像头切换
+async function toggleCamera(enable = !isCameraEnabled) {
+    try {
+        if (enable && !userMediaStream) {
+            // 启用摄像头
+            userMediaStream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                    facingMode: 'user'
+                },
+                audio: false // 音频由麦克风控制处理
+            });
+            
+            userVideo.srcObject = userMediaStream;
+            userVideoSmall.srcObject = userMediaStream;
+            
+            isCameraEnabled = true;
+            cameraToggle.innerHTML = '<i class="ri-camera-fill text-gray-700"></i><span class="text-xs text-gray-700">关闭摄像头</span>';
+            
+            // 显示用户摄像头小窗
+            secondaryStage.classList.remove('hidden');
+            document.getElementById('user-video-secondary').classList.remove('hidden');
+            document.getElementById('ai-video-secondary').classList.add('hidden');
+            
+            // 初始化视频分析管理器
+            await initializeVideoAnalysis();
+            
+            console.log('📹 用户摄像头已启用');
+            
+        } else if (!enable && userMediaStream) {
+            // 禁用摄像头
+            userMediaStream.getTracks().forEach(track => track.stop());
+            userMediaStream = null;
+            
+            // 关闭视频分析
+            await closeVideoAnalysis();
+            
+            isCameraEnabled = false;
+            cameraToggle.innerHTML = '<i class="ri-camera-line text-gray-700"></i><span class="text-xs text-gray-700">摄像头</span>';
+            
+            // 隐藏用户摄像头，如果当前主视图是用户则切回AI
+            if (currentMainView === 'user') {
+                switchToMain('ai');
+            }
+            
+            // 隐藏次位置（除非是代码模式）
+            if (!isCodeMode) {
+                secondaryStage.classList.add('hidden');
+            }
+            
+            console.log('📹 用户摄像头已禁用');
+        }
+    } catch (error) {
+        console.error('❌ 摄像头操作失败:', error);
+        alert('无法访问摄像头，请检查权限设置');
+    }
+}
+
+// 模式切换
+function switchMode() {
+    isCodeMode = !isCodeMode;
+    
+    if (isCodeMode) {
+        // 切换到代码模式
+        currentMainView = 'code';
+        
+        // 隐藏所有视频主视图
+        document.getElementById('ai-video-main').classList.add('hidden');
+        document.getElementById('user-video-main').classList.add('hidden');
+        
+        // 显示代码编辑器主视图
+        document.getElementById('code-editor-main').classList.remove('hidden');
+        
+        // 显示AI数字人小窗
+        secondaryStage.classList.remove('hidden');
+        document.getElementById('ai-video-secondary').classList.remove('hidden');
+        document.getElementById('user-video-secondary').classList.add('hidden');
+        
+        // 更新按钮
+        modeSwitch.innerHTML = '<i class="ri-video-line text-gray-700"></i><span class="text-sm text-gray-700 whitespace-nowrap">视频模式</span>';
+        
+        // 确保Monaco编辑器重新布局
+        setTimeout(() => {
+            if (window.webIDE && window.webIDE.editor) {
+                window.webIDE.editor.layout();
+            }
+        }, 100);
+        
+        console.log('💻 切换到代码模式');
+        
+    } else {
+        // 切换到视频模式
+        currentMainView = 'ai';
+        
+        // 隐藏代码编辑器
+        document.getElementById('code-editor-main').classList.add('hidden');
+        
+        // 显示AI视频主视图
+        document.getElementById('ai-video-main').classList.remove('hidden');
+        document.getElementById('user-video-main').classList.add('hidden');
+        
+        // 更新按钮
+        modeSwitch.innerHTML = '<i class="ri-code-line text-gray-700"></i><span class="text-sm text-gray-700 whitespace-nowrap">代码模式</span>';
+        
+        // 处理次位置显示
+        if (isCameraEnabled) {
+            secondaryStage.classList.remove('hidden');
+            document.getElementById('user-video-secondary').classList.remove('hidden');
+            document.getElementById('ai-video-secondary').classList.add('hidden');
+        } else {
+            secondaryStage.classList.add('hidden');
+        }
+        
+        console.log('📹 切换到视频模式');
+    }
+}
+
+// 主次位置切换
+window.switchToMain = function(target) {
+    if (isCodeMode) return; // 代码模式下不允许切换
+    
+    if (target === 'ai' && currentMainView !== 'ai') {
+        // AI切换到主位置
+        currentMainView = 'ai';
+        
+        // 显示AI主视图，隐藏用户主视图
+        document.getElementById('ai-video-main').classList.remove('hidden');
+        document.getElementById('user-video-main').classList.add('hidden');
+        
+        // 更新次位置显示
+        if (isCameraEnabled) {
+            document.getElementById('user-video-secondary').classList.remove('hidden');
+            document.getElementById('ai-video-secondary').classList.add('hidden');
+        }
+        
+        console.log('🤖 AI切换到主位置');
+        
+    } else if (target === 'user' && currentMainView !== 'user' && isCameraEnabled) {
+        // 用户切换到主位置
+        currentMainView = 'user';
+        
+        // 显示用户主视图，隐藏AI主视图
+        document.getElementById('user-video-main').classList.remove('hidden');
+        document.getElementById('ai-video-main').classList.add('hidden');
+        
+        // 更新次位置显示
+        document.getElementById('ai-video-secondary').classList.remove('hidden');
+        document.getElementById('user-video-secondary').classList.add('hidden');
+        
+        console.log('👤 用户切换到主位置');
+    }
+};
+
+// 基于录音状态自动切换主次位置
+window.updateMainViewByRecording = function(recording) {
+    if (isCodeMode || !isCameraEnabled) return; // 代码模式或无摄像头时不切换
+    
+    isRecording = recording;
+    
+    if (recording && currentMainView !== 'user') {
+        // 用户开始录音，切换到用户主位置
+        switchToMain('user');
+        // 更新用户字幕
+        document.getElementById('user-subtitle-text').textContent = '正在回答问题...';
+    } else if (!recording && currentMainView !== 'ai') {
+        // 用户停止录音，切换到AI主位置
+        switchToMain('ai');
+    }
+};
+
+// 全局摄像头控制函数
+window.toggleCamera = toggleCamera;
+
+// 事件绑定
+if (cameraToggle) {
+    cameraToggle.addEventListener('click', () => toggleCamera());
+}
+
+if (modeSwitch) {
+    modeSwitch.addEventListener('click', switchMode);
+}
+
+console.log('🎬 视频舞台控制器已加载');
+
+// === 视频分析相关函数 ===
+
+/**
+ * 初始化视频分析
+ */
+async function initializeVideoAnalysis() {
+    if (!window.VideoAnalysisManager) {
+        console.error('❌ VideoAnalysisManager未加载');
+        return;
+    }
+    
+    try {
+        // 获取用户ID（从认证管理器或全局变量）
+        let userId = 'user_demo'; // 默认值
+        if (window.AuthManager && typeof window.AuthManager.getCurrentUser === 'function') {
+            const currentUser = window.AuthManager.getCurrentUser();
+            if (currentUser && currentUser.user_id) {
+                userId = currentUser.user_id;
+            }
+        }
+        
+        // 创建视频分析管理器实例
+        videoAnalysisManager = new window.VideoAnalysisManager();
+        
+        // 初始化 - 选择当前可见和可用的视频元素
+        let videoElement = null;
+        
+        // 优先选择主视频元素（如果可见）
+        const mainVideo = document.getElementById('user-video');
+        const smallVideo = document.getElementById('user-video-small');
+        
+        console.log('🔍 检查视频元素状态:');
+        console.log('主视频元素:', {
+            exists: !!mainVideo,
+            srcObject: mainVideo ? !!mainVideo.srcObject : false,
+            visible: mainVideo ? mainVideo.offsetWidth > 0 && mainVideo.offsetHeight > 0 : false,
+            display: mainVideo ? getComputedStyle(mainVideo).display : 'none'
+        });
+        console.log('小视频元素:', {
+            exists: !!smallVideo,
+            srcObject: smallVideo ? !!smallVideo.srcObject : false,
+            visible: smallVideo ? smallVideo.offsetWidth > 0 && smallVideo.offsetHeight > 0 : false,
+            display: smallVideo ? getComputedStyle(smallVideo).display : 'none'
+        });
+        
+        // 选择有媒体流的视频元素，优先选择小视频（通常在右上角显示）
+        if (smallVideo && smallVideo.srcObject) {
+            videoElement = smallVideo;
+            console.log('📹 选择小视频元素 (user-video-small)');
+        } else if (mainVideo && mainVideo.srcObject) {
+            videoElement = mainVideo;
+            console.log('📹 选择主视频元素 (user-video)');
+        }
+        
+        if (!videoElement) {
+            console.error('❌ 找不到可用的视频元素');
+            return;
+        }
+        
+        const initialized = await videoAnalysisManager.initialize(userId, videoElement);
+        if (!initialized) {
+            console.error('❌ 视频分析管理器初始化失败');
+            return;
+        }
+        
+        // 创建分析会话
+        const sessionId = await videoAnalysisManager.createSession(userId);
+        if (!sessionId) {
+            console.error('❌ 创建视频分析会话失败');
+            return;
+        }
+        
+        // 连接WebSocket
+        const connected = await videoAnalysisManager.connectWebSocket(sessionId);
+        if (!connected) {
+            console.error('❌ 连接视频分析WebSocket失败');
+            return;
+        }
+        
+        console.log('✅ 视频分析管理器初始化成功');
+        
+        // 自动开始分析
+        setTimeout(async () => {
+            if (videoAnalysisManager && isCameraEnabled) {
+                await videoAnalysisManager.startAnalysis();
+            }
+        }, 2000); // 等待2秒让摄像头稳定
+        
+    } catch (error) {
+        console.error('❌ 初始化视频分析失败:', error);
+    }
+}
+
+/**
+ * 关闭视频分析
+ */
+async function closeVideoAnalysis() {
+    if (videoAnalysisManager) {
+        try {
+            await videoAnalysisManager.close();
+            videoAnalysisManager = null;
+            console.log('✅ 视频分析已关闭');
+        } catch (error) {
+            console.error('❌ 关闭视频分析失败:', error);
+        }
+    }
+}
+
+/**
+ * 切换视频分析状态
+ */
+async function toggleVideoAnalysis() {
+    if (!videoAnalysisManager) {
+        console.error('❌ 视频分析管理器未初始化');
+        return;
+    }
+    
+    try {
+        if (videoAnalysisManager.isAnalyzing) {
+            await videoAnalysisManager.stopAnalysis();
+            console.log('⏹️ 视频分析已停止');
+        } else {
+            await videoAnalysisManager.startAnalysis();
+            console.log('▶️ 视频分析已开始');
+        }
+    } catch (error) {
+        console.error('❌ 切换视频分析状态失败:', error);
+    }
+}
+
+/**
+ * 获取当前分析结果
+ */
+function getCurrentVideoAnalysis() {
+    if (videoAnalysisManager) {
+        return videoAnalysisManager.getCurrentAnalysis();
+    }
+    return null;
+}
+
+// 全局函数导出
+window.videoAnalysisFunctions = {
+    initializeVideoAnalysis,
+    closeVideoAnalysis,
+    toggleVideoAnalysis,
+    getCurrentVideoAnalysis
+};
+
+});
+</script>
+
+<!-- 语调分析集成脚本 -->
+<script id="voiceToneAnalysisIntegration">
+// 全局语调分析器实例
+let globalVoiceToneAnalyzer = null;
+
+document.addEventListener("DOMContentLoaded", function () {
+    console.log('🎼 初始化语调分析集成');
+    
+    // 创建语调分析器实例
+    globalVoiceToneAnalyzer = new VoiceToneAnalyzer();
+});
+
+/**
+ * 启动语调分析
+ * @param {string} sessionId - 语音会话ID
+ */
+function startVoiceToneAnalysis(sessionId) {
+    try {
+        console.log('🎼 启动语调分析:', sessionId);
+        if (globalVoiceToneAnalyzer) {
+            globalVoiceToneAnalyzer.initialize(sessionId).then(success => {
+                if (success) {
+                    globalVoiceToneAnalyzer.startAnalysis();
+                    console.log('✅ 语调分析启动成功');
+                } else {
+                    console.error('❌ 语调分析启动失败');
+                }
+            });
+        }
+    } catch (error) {
+        console.error('❌ 启动语调分析失败:', error);
+    }
+}
+
+/**
+ * 停止语调分析
+ */
+function stopVoiceToneAnalysis() {
+    try {
+        console.log('🛑 停止语调分析');
+        if (globalVoiceToneAnalyzer) {
+            globalVoiceToneAnalyzer.stopAnalysis();
+        }
+    } catch (error) {
+        console.error('❌ 停止语调分析失败:', error);
+    }
+}
+
+/**
+ * 处理来自WebSocket的语调分析数据
+ * @param {Object} data - 语调分析数据
+ */
+function handleVoiceToneAnalysis(data) {
+    try {
+        if (globalVoiceToneAnalyzer) {
+            globalVoiceToneAnalyzer.processAnalysisData(data);
+        }
+    } catch (error) {
+        console.error('❌ 处理语调分析数据失败:', error);
+    }
+}
+
+/**
+ * 测试体态语言分析功能
+ */
+function testBodyLanguageAnalysis() {
+    console.log('🧪 开始测试体态语言分析功能');
+    
+    // 模拟后端发送的分析数据
+    const testData = {
+        body_language: {
+            posture_score: Math.floor(Math.random() * 100),
+            body_angle: Math.floor(Math.random() * 30) - 15,
+            tension_level: Math.floor(Math.random() * 100),
+            posture_type: 'sitting',
+            eye_contact_ratio: Math.floor(Math.random() * 100)
+        },
+        gestures: {
+            gesture_activity: Math.floor(Math.random() * 100),
+            dominant_gesture: ['none', 'pointing', 'open_palm', 'thumbs_up'][Math.floor(Math.random() * 4)],
+            hands_detected: Math.floor(Math.random() * 3)
+        },
+        timestamp: Date.now()
+    };
+    
+    console.log('🧪 测试数据:', testData);
+    
+    // 查找体态语言分析器并测试
+    if (window.videoAnalysisManager && window.videoAnalysisManager.bodyLanguageAnalyzer) {
+        console.log('✅ 找到体态语言分析器，开始测试');
+        window.videoAnalysisManager.bodyLanguageAnalyzer.processAnalysisData(testData);
+    } else {
+        console.log('⚠️ 未找到体态语言分析器，尝试手动创建');
+        
+        // 手动创建并测试
+        if (window.BodyLanguageAnalyzer) {
+            const testAnalyzer = new window.BodyLanguageAnalyzer();
+            testAnalyzer.startAnalysis();
+            testAnalyzer.processAnalysisData(testData);
+        } else {
+            console.error('❌ BodyLanguageAnalyzer类未加载');
+        }
+    }
+}
+</script>
+<script src="js/code-editor.js"></script>
+<script>
+// 初始化Web IDE
+document.addEventListener('DOMContentLoaded', function() {
+    // 等待模式切换系统初始化后再初始化IDE
+    setTimeout(() => {
+        if (window.webIDE) {
+            window.webIDE.init().catch(error => {
+                console.error('Web IDE 初始化失败:', error);
+            });
+        }
+    }, 1000);
+});
+</script>
+    <!-- 导入LangGraph配置 -->
+    <script src="./js/langgraph-config.js"></script>
+    <!-- 导入LangGraph面试系统 -->
+    <script src="./js/langgraph-interview.js"></script>
+    <!-- 导入视频分析管理器 -->
+    <script src="./js/video-analysis-manager.js"></script>
+    <!-- 导入导航栏组件 -->
+    <script src="./components/navbar.js"></script>
+        <!-- 认证管理器（必须首先加载） -->
+        <script src="./js/auth-manager.js"></script>
+        <!-- 面试完成和报告生成 -->
+        <script src="./js/interview-completion.js"></script>
+        <!-- 语调分析器样式 -->
+        <style>
+            /* 语调分析状态指示器 */
+            .status-indicator {
+                border-radius: 9999px;
+                padding: 2px 8px;
+                font-size: 0.75rem;
+            }
+            .status-normal {
+                background-color: #dcfce7;
+                color: #166534;
+            }
+            .status-low {
+                background-color: #fef3c7;
+                color: #d97706;
+            }
+            .status-high {
+                background-color: #fee2e2;
+                color: #dc2626;
+            }
+            
+            /* 语调分析面板状态 */
+            .status-analyzing {
+                background-color: #dbeafe;
+                color: #1d4ed8;
+                animation: pulse 2s infinite;
+            }
+            .status-stopped {
+                background-color: #f3f4f6;
+                color: #6b7280;
+            }
+            
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.7; }
+            }
+            
+            /* Chart.js 图表容器样式 */
+            #voice-tone-chart {
+                height: 100% !important;
+                max-height: 160px !important;
+            }
+        </style>
+        
+        <!-- 语调分析器脚本 -->
+        <script src="./js/voice-tone-analyzer.js"></script>
+        <!-- 体态语言分析器脚本 -->
+        <script src="./js/body-language-analyzer.js"></script>
+        
+        <!-- 面板切换脚本 -->
+        <script src="./js/panel-toggle.js"></script>
+      
+    
+</body>
+</html></html>

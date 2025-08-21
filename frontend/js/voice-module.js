@@ -1,6 +1,17 @@
 /**
  * 简化语音模块 - 统一语音识别和聊天集成
  * 合并了原有的三个语音JS文件的功能，简化停止方式
+ * 
+ * 完整音频录制配置：
+ * - 录制所有音频数据，包含噪音、静音和背景声音
+ * - 禁用浏览器音频处理（回声消除、噪声抑制等）
+ * - 确保不丢失任何语音内容，包括轻声、模糊音等
+ * - 40ms间隔连续发送音频片段
+ * 
+ * 调试命令：
+ * simplifiedVoiceModule.enableDebugMode(true)    // 启用调试模式
+ * simplifiedVoiceModule.setRecordAllAudio(true)  // 启用完整录音
+ * simplifiedVoiceModule.getConfig()              // 查看当前配置
  */
 
 class SimplifiedVoiceModule {
@@ -22,6 +33,13 @@ class SimplifiedVoiceModule {
         // 状态
         this.currentMessageId = null;
         this.backendSessionId = null;
+        this.waitingForFinal = false;
+        this.finalResultTimeout = null;
+        this.lastRecognizedText = '';  // 保存最后一次识别的文本
+        
+        // 音频配置
+        this.recordAllAudio = true;  // 录制所有音频，包含噪音和静音
+        this.debugMode = false;  // 调试模式
         
         this.init();
     }
@@ -128,11 +146,24 @@ class SimplifiedVoiceModule {
                 this.websocket.send(JSON.stringify({ command: 'stop' }));
             }
             
-            // 更新UI
+            // 立即更新UI状态，但不隐藏预览窗口
             this.updateUI(false);
-            this.showPreview(false);
             
-            console.log('✅ 语音识别已停止');
+            // 等待最终结果，设置超时机制
+            this.waitingForFinal = true;
+            
+            // 立即更新消息状态为"处理中"
+            this.updateVoiceMessage(this.lastRecognizedText || this.recognizedText, false);
+            
+            // 更新预览窗口文本
+            this.updateVoiceText((this.lastRecognizedText || this.recognizedText) + ' (处理中...)');
+            
+            this.finalResultTimeout = setTimeout(() => {
+                console.log('⏰ 等待最终结果超时，使用当前文本');
+                this.handleTimeoutFinal();
+            }, 2000); // 等待2秒获取最终结果
+            
+            console.log('✅ 语音识别停止中，等待最终结果...');
             
         } catch (error) {
             console.error('❌ 停止失败:', error);
@@ -145,10 +176,15 @@ class SimplifiedVoiceModule {
             audio: {
                 sampleRate: 16000,
                 channelCount: 1,
-                echoCancellation: true,
-                noiseSuppression: true
+                echoCancellation: false,      // 禁用回声消除，保留完整音频
+                noiseSuppression: false,      // 禁用噪声抑制，包含所有声音
+                autoGainControl: false,       // 禁用自动增益控制
+                latency: 0.01,               // 降低延迟
+                volume: 1.0                  // 最大音量
             }
         });
+        
+        console.log('🎤 音频流配置: 完整录音模式，包含噪音和静音');
     }
     
     async createSession() {
@@ -228,26 +264,31 @@ class SimplifiedVoiceModule {
             // 创建音频源
             const source = this.audioContext.createMediaStreamSource(this.audioStream);
             
-            // 音频分片配置：每40ms发送640样本(1280字节)
+            // 音频分片配置：每40ms发送640样本(1280字节) - 完整录音模式
             this.chunkDuration = 40; // ms
             this.chunkSamples = Math.floor(16000 * this.chunkDuration / 1000); // 640 samples
             this.chunkBytes = this.chunkSamples * 2; // 1280 bytes (16-bit samples)
             this.audioBuffer = new Float32Array(0);
             
-            console.log(`🎵 音频配置: ${this.chunkDuration}ms间隔, ${this.chunkSamples}样本, ${this.chunkBytes}字节`);
+            console.log(`🎵 音频配置: ${this.chunkDuration}ms间隔, ${this.chunkSamples}样本, ${this.chunkBytes}字节 [完整录音模式]`);
             
             // 创建处理器节点 (使用1024样本缓冲区，然后进行分片)
             this.processor = this.audioContext.createScriptProcessor(1024, 1, 1);
             
-            // 处理音频数据
+            // 处理音频数据 - 完整录音模式
             this.processor.onaudioprocess = (event) => {
                 if (this.isRecording && this.websocket?.readyState === WebSocket.OPEN) {
                     const inputBuffer = event.inputBuffer.getChannelData(0);
                     
-                    // 将新的音频数据添加到缓冲区
+                    if (this.debugMode) {
+                        const energy = this.calculateAudioEnergy(inputBuffer);
+                        console.log(`🎤 捕获音频: ${inputBuffer.length}样本, 能量: ${energy.toFixed(6)}`);
+                    }
+                    
+                    // 将新的音频数据添加到缓冲区（录制所有音频）
                     this.audioBuffer = this.appendToBuffer(this.audioBuffer, inputBuffer);
                     
-                    // 按照40ms/1280字节的规格分片发送
+                    // 按照40ms/1280字节的规格分片发送（包含所有噪音和静音）
                     this.processAudioChunks();
                 }
             };
@@ -276,16 +317,16 @@ class SimplifiedVoiceModule {
             // 提取一个分片 (640 samples = 40ms)
             const chunk = this.audioBuffer.slice(0, this.chunkSamples);
             
-            // 简单的音频活动检测（避免发送静音）
-            const isActive = this.detectAudioActivity(chunk);
+            // 转换为PCM16格式并发送（发送所有音频，包含噪音和静音）
+            const pcmData = this.convertToPCM16(chunk);
             
-            if (isActive) {
-                // 转换为PCM16格式并发送
-                const pcmData = this.convertToPCM16(chunk);
+            // 发送音频数据 - 不进行任何过滤
+            if (this.websocket && this.websocket.readyState === WebSocket.OPEN) {
+                this.websocket.send(pcmData);
                 
-                // 发送音频数据
-                if (this.websocket && this.websocket.readyState === WebSocket.OPEN) {
-                    this.websocket.send(pcmData);
+                if (this.debugMode) {
+                    const energy = this.calculateAudioEnergy(chunk);
+                    console.log(`📤 发送音频数据: ${pcmData.byteLength} bytes, 能量: ${energy.toFixed(6)}`);
                 }
             }
             
@@ -294,19 +335,14 @@ class SimplifiedVoiceModule {
         }
     }
     
-    detectAudioActivity(audioData) {
-        if (!audioData || audioData.length === 0) return false;
+    calculateAudioEnergy(audioData) {
+        if (!audioData || audioData.length === 0) return 0;
         
-        // 计算音频能量
         let energy = 0;
         for (let i = 0; i < audioData.length; i++) {
             energy += audioData[i] * audioData[i];
         }
-        const averageEnergy = energy / audioData.length;
-        
-        // 简单的阈值检测
-        const threshold = 0.001;
-        return averageEnergy > threshold;
+        return energy / audioData.length;
     }
     
     convertToPCM16(float32Array) {
@@ -345,17 +381,45 @@ class SimplifiedVoiceModule {
         const text = result.text || result.accumulated_text || '';
         if (text) {
             this.recognizedText = text;
+            this.lastRecognizedText = text;  // 保存最后的识别文本
             this.updateVoiceText(text);
             this.updateVoiceMessage(text, false);
         }
     }
     
     handleFinalResult(result) {
+        // 清除超时定时器
+        if (this.finalResultTimeout) {
+            clearTimeout(this.finalResultTimeout);
+            this.finalResultTimeout = null;
+        }
+        
+        this.waitingForFinal = false;
+        
         const finalText = result.text || result.accumulated_text || '';
         const cleanText = this.cleanText(finalText);
         
         if (cleanText && cleanText.length >= 1) {
             console.log('✅ 识别完成:', cleanText);
+            this.sendMessage(cleanText);
+        } else {
+            this.showError('未识别到有效内容');
+        }
+        
+        this.cleanup();
+    }
+    
+    handleTimeoutFinal() {
+        console.log('⏰ 超时处理，使用最后识别的文本:', this.lastRecognizedText);
+        
+        this.waitingForFinal = false;
+        this.finalResultTimeout = null;
+        
+        // 使用最后识别的文本作为最终结果
+        const cleanText = this.cleanText(this.lastRecognizedText);
+        
+        if (cleanText && cleanText.length >= 1) {
+            console.log('✅ 超时识别完成:', cleanText);
             this.sendMessage(cleanText);
         } else {
             this.showError('未识别到有效内容');
@@ -439,12 +503,18 @@ class SimplifiedVoiceModule {
             contentDiv.textContent = text || '正在听取您的语音...';
         }
         
-        if (isFinal) {
-            const headerDiv = messageElement?.querySelector('.flex.items-center');
-            if (headerDiv) {
+        // 更新状态显示
+        const headerDiv = messageElement?.querySelector('.flex.items-center');
+        if (headerDiv) {
+            if (isFinal) {
                 headerDiv.innerHTML = `
                     <i class="ri-check-line text-green-300"></i>
                     <span class="text-sm text-green-300">识别完成</span>
+                `;
+            } else if (this.waitingForFinal) {
+                headerDiv.innerHTML = `
+                    <i class="ri-time-line text-yellow-300"></i>
+                    <span class="text-sm text-yellow-300">处理中...</span>
                 `;
             }
         }
@@ -454,6 +524,9 @@ class SimplifiedVoiceModule {
     
     sendMessage(text) {
         if (!text?.trim()) return;
+        
+        // 先更新消息状态为完成
+        this.updateVoiceMessage(text, true);
         
         // 设置到输入框
         if (this.messageInput) {
@@ -511,6 +584,13 @@ class SimplifiedVoiceModule {
     
     cleanup() {
         this.isRecording = false;
+        this.waitingForFinal = false;
+        
+        // 清除超时定时器
+        if (this.finalResultTimeout) {
+            clearTimeout(this.finalResultTimeout);
+            this.finalResultTimeout = null;
+        }
         
         // 清理音频缓冲区
         if (this.audioBuffer) {
@@ -543,11 +623,33 @@ class SimplifiedVoiceModule {
         
         // 重置状态
         this.recognizedText = '';
+        this.lastRecognizedText = '';
         this.currentMessageId = null;
         
         // 更新UI
         this.updateUI(false);
         this.showPreview(false);
+    }
+    
+    // 配置方法
+    enableDebugMode(enabled = true) {
+        this.debugMode = enabled;
+        console.log(`🐛 调试模式: ${enabled ? '启用' : '禁用'}`);
+    }
+    
+    setRecordAllAudio(enabled = true) {
+        this.recordAllAudio = enabled;
+        console.log(`🎤 完整音频录制: ${enabled ? '启用' : '禁用'}`);
+    }
+    
+    // 获取当前配置
+    getConfig() {
+        return {
+            recordAllAudio: this.recordAllAudio,
+            debugMode: this.debugMode,
+            isRecording: this.isRecording,
+            backendSessionId: this.backendSessionId
+        };
     }
     
     destroy() {

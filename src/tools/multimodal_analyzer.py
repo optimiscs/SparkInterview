@@ -83,13 +83,33 @@ class VideoAnalyzer:
     """视频分析器 - 处理视觉模态"""
     
     def __init__(self):
-        # 初始化MediaPipe
+        # 初始化MediaPipe Face Mesh
         self.mp_face_mesh = mp.solutions.face_mesh
         self.mp_drawing = mp.solutions.drawing_utils
         self.face_mesh = self.mp_face_mesh.FaceMesh(
             static_image_mode=False,
             max_num_faces=1,
             refine_landmarks=True,
+            min_detection_confidence=model_config.MEDIAPIPE_CONFIDENCE,
+            min_tracking_confidence=model_config.MEDIAPIPE_CONFIDENCE
+        )
+        
+        # 初始化MediaPipe Pose
+        self.mp_pose = mp.solutions.pose
+        self.pose = self.mp_pose.Pose(
+            static_image_mode=False,
+            model_complexity=1,
+            enable_segmentation=False,
+            min_detection_confidence=model_config.MEDIAPIPE_CONFIDENCE,
+            min_tracking_confidence=model_config.MEDIAPIPE_CONFIDENCE
+        )
+        
+        # 初始化MediaPipe Hands
+        self.mp_hands = mp.solutions.hands
+        self.hands = self.mp_hands.Hands(
+            static_image_mode=False,
+            max_num_hands=2,
+            model_complexity=1,
             min_detection_confidence=model_config.MEDIAPIPE_CONFIDENCE,
             min_tracking_confidence=model_config.MEDIAPIPE_CONFIDENCE
         )
@@ -227,6 +247,8 @@ class VideoAnalyzer:
             # 初始化分析结果存储
             head_poses = []
             gaze_directions = []
+            body_language_results = []
+            gesture_results = []
             emotions_timeline = []
             frame_count = 0
             processed_frames = 0
@@ -272,6 +294,24 @@ class VideoAnalyzer:
                                     **emotion
                                 })
                         
+                        # 体态语言分析
+                        body_language = self._analyze_body_language(frame)
+                        if body_language:
+                            body_language_results.append({
+                                'frame': frame_count,
+                                'timestamp': timestamp,
+                                **body_language
+                            })
+                        
+                        # 手势分析
+                        gestures = self._analyze_gestures(frame)
+                        if gestures:
+                            gesture_results.append({
+                                'frame': frame_count,
+                                'timestamp': timestamp,
+                                **gestures
+                            })
+                        
                         # 保存关键分析帧 (每30帧保存一次，或者有重要分析结果时)
                         should_save = (frame_count % 30 == 0 or 
                                      (emotion and emotion.get('dominant_score', 0) > 70) or
@@ -281,7 +321,9 @@ class VideoAnalyzer:
                             analysis_result = {
                                 'head_pose': head_pose,
                                 'gaze': gaze,
-                                'emotion': emotion
+                                'emotion': emotion,
+                                'body_language': body_language,
+                                'gestures': gestures
                             }
                             
                             saved_path = self._save_analysis_frame(
@@ -322,12 +364,14 @@ class VideoAnalyzer:
             logger.info(f"   - 头部姿态分析: {len(head_poses)}个有效结果")
             logger.info(f"   - 视线方向分析: {len(gaze_directions)}个有效结果") 
             logger.info(f"   - 情绪分析: {len(emotions_timeline)}个有效结果")
+            logger.info(f"   - 体态语言分析: {len(body_language_results)}个有效结果")
+            logger.info(f"   - 手势分析: {len(gesture_results)}个有效结果")
             logger.info(f"   - 保存的关键帧: {len(saved_frames)}个")
             logger.info(f"   - 处理耗时: {processing_time:.2f}秒")
             
             # 计算统计特征
             analysis_result = self._compute_visual_statistics(
-                head_poses, gaze_directions, emotions_timeline
+                head_poses, gaze_directions, emotions_timeline, body_language_results, gesture_results
             )
             
             # 添加处理统计信息
@@ -339,6 +383,8 @@ class VideoAnalyzer:
                     'head_pose_count': len(head_poses),
                     'gaze_direction_count': len(gaze_directions),
                     'emotion_analysis_count': len(emotions_timeline),
+                    'body_language_count': len(body_language_results),
+                    'gesture_count': len(gesture_results),
                     'saved_frames_count': len(saved_frames),
                     'save_directory': str(self.save_dir.absolute())
                 },
@@ -523,11 +569,230 @@ class VideoAnalyzer:
         
         return np.degrees([x, y, z])
     
+    def _analyze_body_language(self, frame: np.ndarray) -> Optional[Dict[str, Any]]:
+        """分析体态语言 - 使用MediaPipe Pose"""
+        try:
+            # 转换为RGB格式
+            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            
+            # 进行姿态检测
+            results = self.pose.process(rgb_frame)
+            
+            if not results.pose_landmarks:
+                logger.debug("🤷 未检测到身体姿态")
+                return None
+            
+            landmarks = results.pose_landmarks.landmark
+            
+            # 关键点索引
+            LEFT_SHOULDER = self.mp_pose.PoseLandmark.LEFT_SHOULDER.value
+            RIGHT_SHOULDER = self.mp_pose.PoseLandmark.RIGHT_SHOULDER.value
+            LEFT_HIP = self.mp_pose.PoseLandmark.LEFT_HIP.value
+            RIGHT_HIP = self.mp_pose.PoseLandmark.RIGHT_HIP.value
+            NOSE = self.mp_pose.PoseLandmark.NOSE.value
+            
+            # 计算肩膀水平度
+            left_shoulder = landmarks[LEFT_SHOULDER]
+            right_shoulder = landmarks[RIGHT_SHOULDER]
+            shoulder_slope = abs(left_shoulder.y - right_shoulder.y)
+            
+            # 计算身体倾斜度 (基于肩膀和臀部的偏移)
+            left_hip = landmarks[LEFT_HIP]
+            right_hip = landmarks[RIGHT_HIP]
+            
+            shoulder_center_x = (left_shoulder.x + right_shoulder.x) / 2
+            hip_center_x = (left_hip.x + right_hip.x) / 2
+            body_angle = abs(shoulder_center_x - hip_center_x) * 180  # 转换为角度
+            
+            # 计算姿态分数 (0-100)
+            posture_score = max(0, 100 - (shoulder_slope * 500) - (body_angle * 2))
+            
+            # 计算身体稳定性
+            nose_position = landmarks[NOSE]
+            center_offset = abs(nose_position.x - 0.5)  # 相对于画面中心的偏移
+            
+            # 分析坐姿/站姿状态
+            shoulder_hip_distance = abs(left_shoulder.y - left_hip.y)
+            posture_type = "sitting" if shoulder_hip_distance < 0.3 else "standing"
+            
+            # 检测紧张迹象
+            tension_indicators = 0
+            if shoulder_slope > 0.05:  # 肩膀不平
+                tension_indicators += 1
+            if body_angle > 10:  # 身体过度倾斜
+                tension_indicators += 1
+            if center_offset > 0.15:  # 偏离中心过多
+                tension_indicators += 1
+                
+            tension_level = min(100, tension_indicators * 30)
+            
+            logger.debug(f"🧍 体态分析: 姿态分数={posture_score:.1f}, 身体角度={body_angle:.1f}°, 紧张度={tension_level}")
+            
+            return {
+                'posture_score': float(posture_score),
+                'body_angle': float(body_angle),
+                'shoulder_slope': float(shoulder_slope),
+                'tension_level': float(tension_level),
+                'posture_type': posture_type,
+                'center_offset': float(center_offset),
+                'body_stability': float(1.0 - center_offset)
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ 体态语言分析失败: {str(e)}")
+            return None
+    
+    def _analyze_gestures(self, frame: np.ndarray) -> Optional[Dict[str, Any]]:
+        """分析手势 - 使用MediaPipe Hands"""
+        try:
+            # 转换为RGB格式
+            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            
+            # 进行手部检测
+            results = self.hands.process(rgb_frame)
+            
+            if not results.multi_hand_landmarks:
+                logger.debug("👋 未检测到手部")
+                return {
+                    'hands_detected': 0,
+                    'gesture_activity': 0.0,
+                    'dominant_gesture': 'none',
+                    'hand_positions': []
+                }
+            
+            hands_data = []
+            total_movement = 0.0
+            
+            for idx, hand_landmarks in enumerate(results.multi_hand_landmarks):
+                landmarks = hand_landmarks.landmark
+                
+                # 关键点索引
+                WRIST = 0
+                THUMB_TIP = 4
+                INDEX_TIP = 8
+                MIDDLE_TIP = 12
+                RING_TIP = 16
+                PINKY_TIP = 20
+                
+                # 计算手的位置 (基于手腕)
+                wrist = landmarks[WRIST]
+                hand_position = (wrist.x, wrist.y)
+                
+                # 计算手指的展开程度
+                finger_tips = [
+                    landmarks[THUMB_TIP],
+                    landmarks[INDEX_TIP], 
+                    landmarks[MIDDLE_TIP],
+                    landmarks[RING_TIP],
+                    landmarks[PINKY_TIP]
+                ]
+                
+                # 计算手指间的平均距离 (表示手的展开程度)
+                finger_spread = 0
+                for i in range(len(finger_tips)):
+                    for j in range(i + 1, len(finger_tips)):
+                        tip1, tip2 = finger_tips[i], finger_tips[j]
+                        distance = np.sqrt((tip1.x - tip2.x)**2 + (tip1.y - tip2.y)**2)
+                        finger_spread += distance
+                
+                finger_spread /= 10  # 标准化
+                
+                # 计算手的移动量 (基于相对位置变化)
+                movement = abs(wrist.x - 0.5) + abs(wrist.y - 0.5)
+                total_movement += movement
+                
+                # 简单的手势识别
+                gesture_type = self._classify_gesture(landmarks)
+                
+                hands_data.append({
+                    'hand_index': idx,
+                    'position': hand_position,
+                    'finger_spread': float(finger_spread),
+                    'movement': float(movement),
+                    'gesture_type': gesture_type
+                })
+            
+            # 计算整体手势活跃度
+            gesture_activity = min(100, total_movement * 200)
+            
+            # 确定主导手势
+            gesture_types = [hand['gesture_type'] for hand in hands_data]
+            dominant_gesture = max(set(gesture_types), key=gesture_types.count) if gesture_types else 'none'
+            
+            logger.debug(f"👋 手势分析: 检测到{len(hands_data)}只手, 活跃度={gesture_activity:.1f}, 主导手势={dominant_gesture}")
+            
+            return {
+                'hands_detected': len(hands_data),
+                'gesture_activity': float(gesture_activity),
+                'dominant_gesture': dominant_gesture,
+                'hand_positions': hands_data,
+                'total_movement': float(total_movement)
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ 手势分析失败: {str(e)}")
+            return None
+    
+    def _classify_gesture(self, landmarks) -> str:
+        """简单的手势分类"""
+        try:
+            # 关键点
+            wrist = landmarks[0]
+            thumb_tip = landmarks[4]
+            index_tip = landmarks[8]
+            middle_tip = landmarks[12]
+            ring_tip = landmarks[16]
+            pinky_tip = landmarks[20]
+            
+            # 计算手指相对于手腕的位置
+            fingers_up = []
+            
+            # 拇指 (特殊处理，因为方向不同)
+            if thumb_tip.x > wrist.x:  # 假设右手
+                fingers_up.append(thumb_tip.x > landmarks[3].x)
+            else:  # 左手
+                fingers_up.append(thumb_tip.x < landmarks[3].x)
+            
+            # 其他四指
+            finger_tips = [index_tip, middle_tip, ring_tip, pinky_tip]
+            finger_pips = [landmarks[6], landmarks[10], landmarks[14], landmarks[18]]
+            
+            for tip, pip in zip(finger_tips, finger_pips):
+                fingers_up.append(tip.y < pip.y)
+            
+            # 简单手势识别
+            fingers_count = sum(fingers_up)
+            
+            if fingers_count == 0:
+                return "fist"
+            elif fingers_count == 1:
+                if fingers_up[1]:  # 只有食指
+                    return "pointing"
+                elif fingers_up[0]:  # 只有拇指
+                    return "thumbs_up"
+                else:
+                    return "one_finger"
+            elif fingers_count == 2:
+                if fingers_up[1] and fingers_up[2]:  # 食指和中指
+                    return "peace"
+                else:
+                    return "two_fingers"
+            elif fingers_count == 5:
+                return "open_hand"
+            else:
+                return "partial_open"
+                
+        except Exception as e:
+            logger.debug(f"⚠️ 手势分类失败: {str(e)}")
+            return "unknown"
+    
     def _compute_visual_statistics(
         self, 
         head_poses: List[Dict], 
         gaze_directions: List[Dict], 
-        emotions_timeline: List[Dict]
+        emotions_timeline: List[Dict],
+        body_language_results: List[Dict] = None,
+        gesture_results: List[Dict] = None
     ) -> Dict[str, Any]:
         """计算视觉分析统计特征"""
         
@@ -587,6 +852,40 @@ class VideoAnalyzer:
                 result['emotion_stability'] = 1.0 - negative_ratio
         else:
             logger.warning("⚠️ 情绪分析数据为空")
+        
+        # 体态语言分析统计
+        if body_language_results:
+            posture_scores = [bl.get('posture_score', 0) for bl in body_language_results if 'posture_score' in bl]
+            if posture_scores:
+                result['avg_posture_score'] = float(np.mean(posture_scores))
+                result['posture_stability'] = float(1.0 - (np.std(posture_scores) / 100.0))
+            
+            # 身体倾斜度统计
+            body_angles = [bl.get('body_angle', 0) for bl in body_language_results if 'body_angle' in bl]
+            if body_angles:
+                result['avg_body_angle'] = float(np.mean(body_angles))
+                result['body_angle_variance'] = float(np.var(body_angles))
+        else:
+            logger.warning("⚠️ 体态语言分析数据为空")
+        
+        # 手势分析统计
+        if gesture_results:
+            gesture_activity = [gr.get('gesture_activity', 0) for gr in gesture_results if 'gesture_activity' in gr]
+            if gesture_activity:
+                result['avg_gesture_activity'] = float(np.mean(gesture_activity))
+                result['gesture_expressiveness'] = float(np.max(gesture_activity))
+            
+            # 手势类型分布
+            gesture_types = {}
+            for gr in gesture_results:
+                gesture_type = gr.get('dominant_gesture', 'unknown')
+                gesture_types[gesture_type] = gesture_types.get(gesture_type, 0) + 1
+            
+            if gesture_types:
+                result['dominant_gesture_type'] = max(gesture_types.items(), key=lambda x: x[1])[0]
+                result['gesture_variety'] = len(gesture_types)
+        else:
+            logger.warning("⚠️ 手势分析数据为空")
         
         return result
 

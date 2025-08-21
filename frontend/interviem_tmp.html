@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI 面试模拟平台</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#3B82F6",
+              secondary: "#F8FAFC",
+            },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :where([class^="ri-"])::before {
+          content: "\f3c2";
+      }
+
+      @keyframes breathe {
+          0%, 100% { transform: scale(1); opacity: 0.8; }
+          50% { transform: scale(1.05); opacity: 1; }
+      }
+
+      .breathing {
+          animation: breathe 2s ease-in-out infinite;
+      }
+
+      .mic-active {
+          background: linear-gradient(45deg, #3B82F6, #60A5FA);
+          box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+      }
+
+      .video-frame {
+          background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+      }
+    </style>
+  </head>
+  <body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+    <!-- 顶部动态进度导航 -->
+    <div class="w-full bg-white shadow-sm border-b border-slate-200">
+      <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-center space-x-8">
+          <div class="flex items-center space-x-2">
+            <div
+              class="w-8 h-8 bg-primary rounded-full flex items-center justify-center breathing"
+            >
+              <i class="ri-file-text-line text-white text-sm"></i>
+            </div>
+            <span class="text-sm font-medium text-primary">简历解析</span>
+          </div>
+          <div class="w-12 h-0.5 bg-slate-200"></div>
+          <div class="flex items-center space-x-2">
+            <div
+              class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center"
+            >
+              <i class="ri-target-line text-slate-500 text-sm"></i>
+            </div>
+            <span class="text-sm text-slate-500">岗位匹配</span>
+          </div>
+          <div class="w-12 h-0.5 bg-slate-200"></div>
+          <div class="flex items-center space-x-2">
+            <div
+              class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center"
+            >
+              <i class="ri-chat-smile-line text-slate-500 text-sm"></i>
+            </div>
+            <span class="text-sm text-slate-500">破冰环节</span>
+          </div>
+          <div class="w-12 h-0.5 bg-slate-200"></div>
+          <div class="flex items-center space-x-2">
+            <div
+              class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center"
+            >
+              <i class="ri-user-voice-line text-slate-500 text-sm"></i>
+            </div>
+            <span class="text-sm text-slate-500">行为面试</span>
+          </div>
+          <div class="w-12 h-0.5 bg-slate-200"></div>
+          <div class="flex items-center space-x-2">
+            <div
+              class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center"
+            >
+              <i class="ri-brain-line text-slate-500 text-sm"></i>
+            </div>
+            <span class="text-sm text-slate-500">专业深挖</span>
+          </div>
+          <div class="w-12 h-0.5 bg-slate-200"></div>
+          <div class="flex items-center space-x-2">
+            <div
+              class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center"
+            >
+              <i class="ri-question-answer-line text-slate-500 text-sm"></i>
+            </div>
+            <span class="text-sm text-slate-500">反向提问</span>
+          </div>
+          <div class="w-12 h-0.5 bg-slate-200"></div>
+          <div class="flex items-center space-x-2">
+            <div
+              class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center"
+            >
+              <i class="ri-bar-chart-line text-slate-500 text-sm"></i>
+            </div>
+            <span class="text-sm text-slate-500">复盘总结</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex h-screen pt-20">
+      <!-- 左侧面试归档长廊 -->
+      <div
+        class="w-80 bg-white shadow-lg border-r border-slate-200 overflow-y-auto"
+      >
+        <div class="p-6">
+          <h2
+            class="text-lg font-semibold text-slate-800 mb-4 flex items-center"
+          >
+            <div class="w-5 h-5 flex items-center justify-center mr-2">
+              <i class="ri-history-line text-primary"></i>
+            </div>
+            面试记录
+          </h2>
+          <div class="space-y-4">
+            <div
+              class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-100 cursor-pointer hover:shadow-md transition-all duration-200"
+            >
+              <div class="flex items-start justify-between mb-2">
+                <h3 class="font-medium text-slate-800">产品经理</h3>
+                <span class="text-xs text-slate-500">2024-12-20</span>
+              </div>
+              <p class="text-sm text-slate-600 mb-2">腾讯科技有限公司</p>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span class="text-xs text-slate-600">表现优秀</span>
+                </div>
+                <span class="text-sm font-semibold text-primary">88分</span>
+              </div>
+            </div>
+
+            <div
+              class="bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg p-4 border border-slate-100 cursor-pointer hover:shadow-md transition-all duration-200"
+            >
+              <div class="flex items-start justify-between mb-2">
+                <h3 class="font-medium text-slate-800">前端工程师</h3>
+                <span class="text-xs text-slate-500">2024-12-18</span>
+              </div>
+              <p class="text-sm text-slate-600 mb-2">字节跳动科技有限公司</p>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                  <span class="text-xs text-slate-600">表现良好</span>
+                </div>
+                <span class="text-sm font-semibold text-primary">76分</span>
+              </div>
+            </div>
+
+            <div
+              class="bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg p-4 border border-slate-100 cursor-pointer hover:shadow-md transition-all duration-200"
+            >
+              <div class="flex items-start justify-between mb-2">
+                <h3 class="font-medium text-slate-800">数据分析师</h3>
+                <span class="text-xs text-slate-500">2024-12-15</span>
+              </div>
+              <p class="text-sm text-slate-600 mb-2">阿里巴巴集团</p>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
+                  <span class="text-xs text-slate-600">需要改进</span>
+                </div>
+                <span class="text-sm font-semibold text-primary">65分</span>
+              </div>
+            </div>
+
+            <div
+              class="bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg p-4 border border-slate-100 cursor-pointer hover:shadow-md transition-all duration-200"
+            >
+              <div class="flex items-start justify-between mb-2">
+                <h3 class="font-medium text-slate-800">UI 设计师</h3>
+                <span class="text-xs text-slate-500">2024-12-12</span>
+              </div>
+              <p class="text-sm text-slate-600 mb-2">美团科技有限公司</p>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span class="text-xs text-slate-600">表现优秀</span>
+                </div>
+                <span class="text-sm font-semibold text-primary">82分</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 中央沉浸式互动视窗 -->
+      <div class="flex-1 flex flex-col">
+        <div class="flex-1 p-6">
+          <div class="grid grid-cols-2 gap-6 h-full">
+            <!-- AI 面试官视频窗口 -->
+            <div class="video-frame rounded-2xl p-6 flex flex-col">
+              <div
+                class="flex-1 bg-white rounded-xl shadow-inner overflow-hidden relative"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center"
+                >
+                  <img
+                    src="https://readdy.ai/api/search-image?query=professional%20friendly%20AI%20interviewer%20digital%20human%20avatar%20with%20natural%20expressions%2C%20modern%20office%20background%2C%20clean%20lighting%2C%20corporate%20professional%20appearance%2C%20realistic%203D%20rendering%2C%20warm%20smile%2C%20business%20attire&width=600&height=400&seq=ai_interviewer_001&orientation=landscape"
+                    alt="AI 面试官"
+                    class="w-full h-full object-cover object-top rounded-xl"
+                  />
+                </div>
+                <div
+                  class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1"
+                >
+                  <span class="text-sm font-medium text-slate-700"
+                    >AI 面试官 - 李诚</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- 用户视频窗口 -->
+            <div class="video-frame rounded-2xl p-6 flex flex-col">
+              <div
+                class="flex-1 bg-white rounded-xl shadow-inner overflow-hidden relative"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-br from-slate-100 to-gray-100 flex items-center justify-center"
+                >
+                  <div class="text-center">
+                    <div
+                      class="w-16 h-16 bg-slate-300 rounded-full flex items-center justify-center mx-auto mb-3"
+                    >
+                      <i class="ri-user-line text-slate-500 text-2xl"></i>
+                    </div>
+                    <p class="text-sm text-slate-500">摄像头未开启</p>
+                  </div>
+                </div>
+                <div
+                  class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1"
+                >
+                  <span class="text-sm font-medium text-slate-700"
+                    >候选人 - 张明</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 底部多功能控制中心 -->
+        <div class="bg-white border-t border-slate-200 p-6">
+          <div class="flex items-center justify-center space-x-8">
+            <!-- 文件上传 -->
+            <button
+              class="w-12 h-12 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center transition-colors duration-200 !rounded-button whitespace-nowrap"
+            >
+              <i class="ri-upload-line text-slate-600"></i>
+            </button>
+
+            <!-- 麦克风控制 -->
+            <button
+              id="micButton"
+              class="w-16 h-16 bg-primary hover:bg-blue-600 rounded-full flex items-center justify-center transition-all duration-200 !rounded-button whitespace-nowrap"
+            >
+              <i class="ri-mic-line text-white text-xl"></i>
+            </button>
+
+            <!-- 文字输入 -->
+            <button
+              class="w-12 h-12 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center transition-colors duration-200 !rounded-button whitespace-nowrap"
+            >
+              <i class="ri-keyboard-line text-slate-600"></i>
+            </button>
+
+            <!-- 结束面试 -->
+            <button
+              class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors duration-200 !rounded-button whitespace-nowrap"
+            >
+              结束面试
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧实时多模态分析面板 -->
+      <div
+        id="analysisPanel"
+        class="w-96 bg-white shadow-lg border-l border-slate-200 overflow-y-auto"
+      >
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-semibold text-slate-800 flex items-center">
+              <div class="w-5 h-5 flex items-center justify-center mr-2">
+                <i class="ri-brain-line text-primary"></i>
+              </div>
+              AI 教练分析
+            </h2>
+            <button
+              id="togglePanel"
+              class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-lg flex items-center justify-center transition-colors duration-200"
+            >
+              <i class="ri-arrow-right-line text-slate-600"></i>
+            </button>
+          </div>
+
+          <!-- 微表情洞察 -->
+          <div class="mb-6">
+            <h3 class="text-sm font-semibold text-slate-700 mb-3">
+              微表情洞察
+            </h3>
+            <div class="space-y-2">
+              <div
+                class="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-100"
+              >
+                <span class="text-sm text-green-700">自信度</span>
+                <span class="text-sm font-semibold text-green-600">85%</span>
+              </div>
+              <div
+                class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-100"
+              >
+                <span class="text-sm text-yellow-700">紧张度</span>
+                <span class="text-sm font-semibold text-yellow-600">25%</span>
+              </div>
+              <div
+                class="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100"
+              >
+                <span class="text-sm text-blue-700">专注度</span>
+                <span class="text-sm font-semibold text-blue-600">92%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 体态语言分析 -->
+          <div class="mb-6">
+            <h3 class="text-sm font-semibold text-slate-700 mb-3">
+              体态语言分析
+            </h3>
+            <div class="space-y-3">
+              <div class="flex items-start space-x-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full mt-2"></div>
+                <div>
+                  <p class="text-sm text-slate-700">眼神接触良好</p>
+                  <p class="text-xs text-slate-500">保持了 78% 的时间</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-2">
+                <div class="w-2 h-2 bg-yellow-400 rounded-full mt-2"></div>
+                <div>
+                  <p class="text-sm text-slate-700">坐姿略显紧张</p>
+                  <p class="text-xs text-slate-500">建议放松肩膀</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full mt-2"></div>
+                <div>
+                  <p class="text-sm text-slate-700">手势表达自然</p>
+                  <p class="text-xs text-slate-500">有效辅助了语言表达</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 语音语调分析 -->
+          <div class="mb-6">
+            <h3 class="text-sm font-semibold text-slate-700 mb-3">
+              语音语调分析
+            </h3>
+            <div id="voiceChart" class="h-32 bg-slate-50 rounded-lg"></div>
+          </div>
+
+          <!-- 回答质量评估 -->
+          <div class="mb-6">
+            <h3 class="text-sm font-semibold text-slate-700 mb-3">
+              回答质量评估
+            </h3>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-slate-600">逻辑性</span>
+                <div class="flex items-center space-x-2">
+                  <div class="w-16 h-2 bg-slate-200 rounded-full">
+                    <div class="w-12 h-2 bg-primary rounded-full"></div>
+                  </div>
+                  <span class="text-xs text-slate-500">75%</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-slate-600">完整性</span>
+                <div class="flex items-center space-x-2">
+                  <div class="w-16 h-2 bg-slate-200 rounded-full">
+                    <div class="w-14 h-2 bg-primary rounded-full"></div>
+                  </div>
+                  <span class="text-xs text-slate-500">88%</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-slate-600">相关性</span>
+                <div class="flex items-center space-x-2">
+                  <div class="w-16 h-2 bg-slate-200 rounded-full">
+                    <div class="w-13 h-2 bg-primary rounded-full"></div>
+                  </div>
+                  <span class="text-xs text-slate-500">82%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 即时优化建议 -->
+          <div>
+            <h3 class="text-sm font-semibold text-slate-700 mb-3">
+              即时优化建议
+            </h3>
+            <div class="space-y-2">
+              <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                <p class="text-sm text-blue-700">
+                  尝试使用 STAR 法则来结构化回答
+                </p>
+              </div>
+              <div class="p-3 bg-green-50 rounded-lg border border-green-100">
+                <p class="text-sm text-green-700">语速控制得很好，继续保持</p>
+              </div>
+              <div class="p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+                <p class="text-sm text-yellow-700">
+                  可以增加一些具体的数据支撑
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script id="microphoneControl">
+      document.addEventListener("DOMContentLoaded", function () {
+        const micButton = document.getElementById("micButton");
+        let isMicActive = false;
+
+        micButton.addEventListener("click", function () {
+          isMicActive = !isMicActive;
+
+          if (isMicActive) {
+            micButton.classList.add("mic-active");
+            micButton.innerHTML = '<i class="ri-mic-fill text-white text-xl"></i>';
+          } else {
+            micButton.classList.remove("mic-active");
+            micButton.innerHTML = '<i class="ri-mic-line text-white text-xl"></i>';
+          }
+        });
+      });
+    </script>
+
+    <script id="panelToggle">
+      document.addEventListener("DOMContentLoaded", function () {
+        const toggleButton = document.getElementById("togglePanel");
+        const analysisPanel = document.getElementById("analysisPanel");
+        let isPanelVisible = true;
+
+        toggleButton.addEventListener("click", function () {
+          isPanelVisible = !isPanelVisible;
+
+          if (isPanelVisible) {
+            analysisPanel.style.display = "block";
+            toggleButton.innerHTML =
+              '<i class="ri-arrow-right-line text-slate-600"></i>';
+          } else {
+            analysisPanel.style.display = "none";
+            toggleButton.innerHTML =
+              '<i class="ri-arrow-left-line text-slate-600"></i>';
+          }
+        });
+      });
+    </script>
+
+    <script id="voiceAnalysisChart">
+      document.addEventListener("DOMContentLoaded", function () {
+        const voiceChart = echarts.init(document.getElementById("voiceChart"));
+
+        const option = {
+          animation: false,
+          grid: {
+            top: 10,
+            left: 10,
+            right: 10,
+            bottom: 10,
+          },
+          xAxis: {
+            type: "category",
+            data: ["0s", "10s", "20s", "30s", "40s", "50s"],
+            axisLine: { show: false },
+            axisTick: { show: false },
+            axisLabel: { fontSize: 10, color: "#64748b" },
+          },
+          yAxis: {
+            type: "value",
+            axisLine: { show: false },
+            axisTick: { show: false },
+            axisLabel: { show: false },
+            splitLine: { show: false },
+          },
+          series: [
+            {
+              data: [120, 132, 101, 134, 90, 230],
+              type: "line",
+              smooth: true,
+              lineStyle: {
+                color: "rgba(87, 181, 231, 1)",
+                width: 2,
+              },
+              areaStyle: {
+                color: {
+                  type: "linear",
+                  x: 0,
+                  y: 0,
+                  x2: 0,
+                  y2: 1,
+                  colorStops: [
+                    {
+                      offset: 0,
+                      color: "rgba(87, 181, 231, 0.1)",
+                    },
+                    {
+                      offset: 1,
+                      color: "rgba(87, 181, 231, 0.01)",
+                    },
+                  ],
+                },
+              },
+              symbol: "none",
+            },
+          ],
+          tooltip: {
+            trigger: "axis",
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            borderColor: "#e2e8f0",
+            textStyle: {
+              color: "#1f2937",
+            },
+          },
+        };
+
+        voiceChart.setOption(option);
+
+        window.addEventListener("resize", function () {
+          voiceChart.resize();
+        });
+      });
+    </script>
+  </body>
+</html>

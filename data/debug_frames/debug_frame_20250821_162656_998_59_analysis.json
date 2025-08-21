@@ -1,0 +1,59 @@
+{
+  "analysis_timestamp": "2025-08-21T16:26:57.040094",
+  "frame_info": {
+    "frame_count": 59,
+    "original_size": "1280x720",
+    "processed_size": "640x360",
+    "debug_path": "data/debug_frames/debug_frame_20250821_162656_998_59.jpg",
+    "processed_debug_path": "data/debug_frames/debug_frame_20250821_162656_998_59_processed.jpg"
+  },
+  "image_quality": {
+    "resolution": "1280x720",
+    "brightness": {
+      "mean": 159.63125,
+      "std": 56.01133269429474,
+      "is_too_dark": false,
+      "is_too_bright": false
+    },
+    "contrast": {
+      "laplacian_variance": 53.93725317169826,
+      "is_blurry": true
+    },
+    "color_balance": {
+      "blue_mean": 145.35363715277776,
+      "green_mean": 155.06684244791666,
+      "red_mean": 174.0668999565972
+    },
+    "potential_issues": [
+      "图像模糊"
+    ]
+  },
+  "deepface_config": {
+    "detector_backend": "opencv",
+    "enforce_detection": false,
+    "actions": [
+      "emotion"
+    ]
+  },
+  "deepface_result": {
+    "dominant_emotion": "happy",
+    "dominant_score": 99.37503814697266,
+    "all_emotions": {
+      "angry": 0.5859982967376709,
+      "disgust": 4.045346599923505e-07,
+      "fear": 0.005308337975293398,
+      "happy": 99.37503814697266,
+      "sad": 8.602447633165866e-05,
+      "surprise": 0.002351453062146902,
+      "neutral": 0.03120957687497139
+    }
+  },
+  "problem_analysis": {
+    "is_consistent_angry": false,
+    "score_very_high": true,
+    "emotions_distribution": 7,
+    "potential_issues": [
+      "情绪置信度过高，可能检测有误"
+    ]
+  }
+}

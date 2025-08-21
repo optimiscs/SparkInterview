@@ -4,14 +4,28 @@
  */
 
 document.addEventListener('DOMContentLoaded', async function() {
+    // 获取页面UI元素
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
     const messagesContainer = document.getElementById('chat-messages-container');
     const newInterviewBtn = document.getElementById('new-interview-btn');
+    const sessionsListContainer = document.getElementById('sessions-list-container');
+    const sessionSearchInput = document.getElementById('session-search-input');
+    const aiSubtitleText = document.getElementById('ai-subtitle-text');
 
-    // 聊天状态管理 - 简化版本
+    // 录音相关元素
+    const voiceRecordBtn = document.querySelector('.mic-pulse');
+    
+    // 聊天状态管理
     let isProcessing = false;
     let currentSessionId = localStorage.getItem('current_session_id') || null;
+    let isRecording = false;
+    let allSessions = []; // 存储所有会话数据用于搜索
+    
+    // 音频发送策略 - 实时小包模式（优化识别实时性）
+    let audioBuffer = [];           // 累积音频数据
+    let bufferCount = 0;           // 当前缓冲区计数
+    const BUFFERS_PER_PACKET = 1;  // 1个缓冲区立即发送 (约0.5秒，提高实时性)
 
     // 初始化应用
     await initializeApp();
@@ -209,6 +223,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             const sessions = await loadUserSessions();
             console.log(`📋 找到 ${sessions.length} 个会话`);
             
+            // 存储会话数据用于搜索
+            allSessions = sessions;
+            
             if (sessions.length === 0) {
                 // 新用户或没有会话 - 显示欢迎界面
                 renderWelcomeInterface();
@@ -218,12 +235,200 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
             
             // 渲染左侧会话列表
-            renderSessionList(sessions);
+            renderSessionsList(sessions);
         } catch (error) {
             console.error('❌ 渲染用户界面失败:', error);
             // 降级到欢迎界面
             renderWelcomeInterface();
         }
+    }
+    
+    /**
+     * 渲染会话列表到左侧容器
+     */
+    function renderSessionsList(sessions) {
+        if (!sessionsListContainer) {
+            console.warn('未找到会话列表容器');
+            return;
+        }
+
+        if (sessions.length === 0) {
+            sessionsListContainer.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-8 text-center">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                        <i class="ri-chat-3-line text-gray-400 text-xl"></i>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-1">暂无面试记录</p>
+                    <p class="text-xs text-gray-400">点击上方按钮开始新面试</p>
+                </div>
+            `;
+            return;
+        }
+
+        // 清空容器
+        sessionsListContainer.innerHTML = '';
+
+        // 渲染每个会话
+        sessions.forEach((session, index) => {
+            const isActive = session.session_id === currentSessionId;
+            const createdTime = new Date(session.created_at);
+            const timeDisplay = formatTimeAgo(createdTime);
+            
+            // 计算面试时长
+            const durationMinutes = session.duration ? Math.ceil(session.duration / 60) : 0;
+            
+            // 根据会话状态确定状态显示
+            let statusBadge = 'bg-green-100 text-green-600';
+            let statusText = '已完成';
+            
+            if (!session.interview_ended) {
+                if (isActive) {
+                    statusBadge = 'bg-blue-100 text-blue-600';
+                    statusText = '进行中';
+                } else {
+                    statusBadge = 'bg-gray-100 text-gray-600';
+                    statusText = '待继续';
+                }
+            }
+
+            // 技术领域图标映射
+            const fieldIcons = {
+                '人工智能': 'ri-robot-line',
+                '后端开发': 'ri-server-line',
+                '前端开发': 'ri-layout-line',
+                '全栈开发': 'ri-stack-line',
+                '数据科学': 'ri-bar-chart-line',
+                '机器学习': 'ri-brain-line',
+                '计算机视觉': 'ri-eye-line',
+                '自然语言处理': 'ri-chat-3-line'
+            };
+            const iconClass = fieldIcons[session.target_field] || 'ri-briefcase-line';
+
+            const sessionDiv = document.createElement('div');
+            sessionDiv.className = `session-item bg-white rounded-lg p-3 border border-gray-200 cursor-pointer hover:shadow-md transition-all duration-200 group ${
+                isActive ? 'ring-2 ring-primary bg-blue-50 border-primary' : ''
+            }`;
+            
+            sessionDiv.innerHTML = `
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="w-8 h-8 ${isActive ? 'bg-primary' : 'bg-blue-500'} rounded-full flex items-center justify-center">
+                        <i class="${iconClass} text-white text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-sm font-medium text-gray-900">${session.target_position || '面试会话'}</h3>
+                        <p class="text-xs text-gray-500">${timeDisplay}</p>
+                    </div>
+                    <button class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity delete-session" data-session-id="${session.session_id}">
+                        <i class="ri-delete-bin-line text-gray-400 hover:text-red-500"></i>
+                    </button>
+                </div>
+                <div class="text-xs text-gray-600">
+                    <span class="inline-block ${statusBadge} px-2 py-1 rounded-full mr-2">${statusText}</span>
+                    <span class="text-gray-500">
+                        ${session.message_count || 0}条消息${durationMinutes > 0 ? ` • ${durationMinutes}分钟` : ''}
+                    </span>
+                </div>
+                <div class="text-xs text-gray-500 mt-1">
+                    ${session.target_field || '技术面试'}
+                </div>
+            `;
+            
+            // 点击切换会话
+            sessionDiv.addEventListener('click', (e) => {
+                if (!e.target.closest('.delete-session')) {
+                    switchToSession(session.session_id);
+                }
+            });
+            
+            // 删除会话事件
+            const deleteBtn = sessionDiv.querySelector('.delete-session');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showDeleteSessionModal(session.session_id, session.target_position);
+                });
+            }
+            
+            sessionsListContainer.appendChild(sessionDiv);
+        });
+    }
+    
+    /**
+     * 显示删除会话确认模态框
+     */
+    function showDeleteSessionModal(sessionId, sessionName) {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+                <div class="p-6">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                            <i class="ri-delete-bin-line text-red-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">删除会话</h3>
+                            <p class="text-sm text-gray-600">此操作无法撤销</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-700 mb-6">
+                        确定要删除面试会话 <span class="font-medium">"${sessionName || '未命名会话'}"</span> 吗？
+                        这将永久删除所有相关的对话记录和数据。
+                    </p>
+                    
+                    <div class="flex justify-end space-x-3">
+                        <button class="cancel-delete px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                            取消
+                        </button>
+                        <button class="confirm-delete px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                            确认删除
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // 绑定事件
+        modal.querySelector('.cancel-delete').addEventListener('click', () => {
+            modal.remove();
+        });
+
+        modal.querySelector('.confirm-delete').addEventListener('click', async () => {
+            try {
+                await deleteSession(sessionId);
+                modal.remove();
+            } catch (error) {
+                console.error('删除会话失败:', error);
+                showSystemMessage('删除会话失败: ' + error.message, 'error');
+            }
+        });
+
+        // 点击背景关闭
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+
+        document.body.appendChild(modal);
+    }
+    
+    /**
+     * 格式化时间显示
+     */
+    function formatTimeAgo(date) {
+        const now = new Date();
+        const diffHours = Math.floor((now - date) / (1000 * 60 * 60));
+        
+        if (diffHours < 1) return '刚刚创建';
+        if (diffHours < 24) return `${diffHours}小时前`;
+        
+        const diffDays = Math.floor(diffHours / 24);
+        if (diffDays === 1) return '昨天';
+        if (diffDays < 7) return `${diffDays}天前`;
+        
+        return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
     }
 
     /**
@@ -275,6 +480,543 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
             });
         }
+        
+        // 录音按钮
+        if (voiceRecordBtn) {
+            voiceRecordBtn.addEventListener('click', toggleRecording);
+        }
+        
+        // 会话搜索功能
+        if (sessionSearchInput) {
+            sessionSearchInput.addEventListener('input', (e) => {
+                searchSessions(e.target.value);
+            });
+        }
+    }
+    
+    // ==================== 语音识别集成 ====================
+    
+    // 语音识别相关变量
+    let voiceSession = null;
+    let voiceWebSocket = null;
+    let isVoiceConnected = false;
+    let currentThinkingMessageId = null;
+    
+    /**
+     * 切换录音状态
+     */
+    async function toggleRecording() {
+        if (isRecording) {
+            await stopRecording();
+        } else {
+            await startRecording();
+        }
+    }
+    
+    /**
+     * 开始录音
+     */
+    async function startRecording() {
+        if (!currentSessionId) {
+            showSystemMessage('请先创建面试会话', 'error');
+            return;
+        }
+        
+        try {
+            console.log('🎤 开始录音...');
+            
+            // 创建语音识别会话
+            await createVoiceSession();
+            
+            // 请求麦克风权限
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    sampleRate: 16000,
+                    channelCount: 1,
+                    echoCancellation: true,
+                    noiseSuppression: true
+                }
+            });
+            
+            // 使用AudioContext获取PCM数据而不是MediaRecorder
+            // 创建AudioContext进行实时音频处理
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)({
+                sampleRate: 16000
+            });
+            
+            const source = audioContext.createMediaStreamSource(stream);
+            const processor = audioContext.createScriptProcessor(4096, 1, 1);
+            
+            processor.onaudioprocess = (event) => {
+                if (!isRecording) return;
+                
+                const inputData = event.inputBuffer.getChannelData(0);
+                
+                // 转换为16位PCM并添加到缓冲区
+                const pcmData = convertToPCM16(inputData);
+                audioBuffer.push(pcmData);
+                bufferCount++;
+                
+                // 累积4个缓冲区后发送 (约2秒的音频)
+                if (bufferCount >= BUFFERS_PER_PACKET) {
+                    // 合并所有缓冲区数据
+                    const totalLength = audioBuffer.reduce((sum, arr) => sum + arr.length, 0);
+                    const mergedBuffer = new Uint8Array(totalLength);
+                    
+                    let offset = 0;
+                    for (const buffer of audioBuffer) {
+                        mergedBuffer.set(buffer, offset);
+                        offset += buffer.length;
+                    }
+                    
+                    // 发送大包数据
+                    if (voiceWebSocket && isVoiceConnected) {
+                        voiceWebSocket.send(mergedBuffer.buffer);
+                        console.log(`📤 发送2秒音频包: ${mergedBuffer.length} bytes (${BUFFERS_PER_PACKET}个缓冲区)`);
+                    }
+                    
+                    // 重置缓冲区
+                    audioBuffer = [];
+                    bufferCount = 0;
+                }
+            };
+            
+            source.connect(processor);
+            processor.connect(audioContext.destination);
+            
+            // 保存引用以便停止时断开
+            window.currentAudioContext = audioContext;
+            window.currentProcessor = processor;
+            
+            isRecording = true;
+            console.log('✅ PCM音频处理器已启动');
+            
+            // 更新UI
+            updateRecordingUI(true);
+            
+            // 连接语音识别WebSocket
+            await connectVoiceWebSocket();
+            
+            // 启动语调分析
+            if (typeof startVoiceToneAnalysis === 'function' && voiceSession) {
+                startVoiceToneAnalysis(voiceSession.session_id);
+            }
+            
+        } catch (error) {
+            console.error('❌ 开始录音失败:', error);
+            showSystemMessage(`录音失败: ${error.message}`, 'error');
+            isRecording = false;
+            updateRecordingUI(false);
+        }
+    }
+    
+    /**
+     * 停止录音 - 触发LangGraph感知节点
+     */
+    async function stopRecording() {
+        try {
+            console.log('🎤 前端主动停止录音 - 将触发LangGraph感知节点');
+            isRecording = false;
+            
+            // 发送剩余的缓冲区数据 (如果有的话)
+            if (audioBuffer.length > 0 && voiceWebSocket && isVoiceConnected) {
+                const totalLength = audioBuffer.reduce((sum, arr) => sum + arr.length, 0);
+                const mergedBuffer = new Uint8Array(totalLength);
+                
+                let offset = 0;
+                for (const buffer of audioBuffer) {
+                    mergedBuffer.set(buffer, offset);
+                    offset += buffer.length;
+                }
+                
+                voiceWebSocket.send(mergedBuffer.buffer);
+                console.log(`📤 发送剩余音频数据: ${mergedBuffer.length} bytes (${audioBuffer.length}个缓冲区)`);
+            }
+            
+            // 清理音频缓冲区
+            audioBuffer = [];
+            bufferCount = 0;
+            
+            // 断开AudioContext连接
+            if (window.currentProcessor) {
+                window.currentProcessor.disconnect();
+                window.currentProcessor = null;
+            }
+            
+            if (window.currentAudioContext) {
+                await window.currentAudioContext.close();
+                window.currentAudioContext = null;
+            }
+            
+            // 🎯 关键修改：发送stop命令现在将触发后端LangGraph感知节点
+            if (voiceWebSocket && isVoiceConnected) {
+                console.log('📤 发送停止录音命令 - 后端将触发LangGraph感知节点');
+                voiceWebSocket.send(JSON.stringify({ command: 'stop' }));
+                
+                // 更新UI状态，显示AI正在分析
+                updateAISubtitle('🤖 录音已停止，AI正在进行语音分析和情感感知...');
+            }
+            
+            // 更新录音UI状态
+            updateRecordingUI(false);
+            
+            // 停止语调分析
+            if (typeof stopVoiceToneAnalysis === 'function') {
+                stopVoiceToneAnalysis();
+            }
+            
+        } catch (error) {
+            console.error('❌ 停止录音失败:', error);
+        }
+    }
+    
+    /**
+     * 创建语音识别会话
+     */
+    async function createVoiceSession() {
+        try {
+            const userData = localStorage.getItem('current_user');
+            const user = userData ? JSON.parse(userData) : { id: 'unknown' };
+            
+            const response = await callAPI('/voice/create-session', 'POST', {
+                user_id: user.id,
+                interview_session_id: currentSessionId,
+                session_id: `voice_${currentSessionId}_${Date.now()}`
+            });
+            
+            if (response.success) {
+                voiceSession = response;
+                console.log('✅ 语音会话创建成功:', voiceSession.session_id);
+            } else {
+                throw new Error(response.message || '创建语音会话失败');
+            }
+            
+        } catch (error) {
+            console.error('❌ 创建语音会话失败:', error);
+            throw error;
+        }
+    }
+    
+    /**
+     * 连接语音识别WebSocket
+     */
+    async function connectVoiceWebSocket() {
+        try {
+            if (!voiceSession) {
+                throw new Error('语音会话未创建');
+            }
+            
+            const wsUrl = `ws://localhost:8000/api/v1/voice/recognition/${voiceSession.session_id}`;
+            voiceWebSocket = new WebSocket(wsUrl);
+            
+            voiceWebSocket.onopen = () => {
+                console.log('🔗 语音识别WebSocket连接成功');
+                isVoiceConnected = true;
+                
+                // 发送开始录音命令
+                voiceWebSocket.send(JSON.stringify({ command: 'start' }));
+            };
+            
+            voiceWebSocket.onmessage = (event) => {
+                handleVoiceMessage(JSON.parse(event.data));
+            };
+            
+            voiceWebSocket.onclose = () => {
+                console.log('🔌 语音识别WebSocket连接关闭');
+                isVoiceConnected = false;
+            };
+            
+            voiceWebSocket.onerror = (error) => {
+                console.error('❌ 语音识别WebSocket错误:', error);
+                isVoiceConnected = false;
+            };
+            
+        } catch (error) {
+            console.error('❌ 连接语音WebSocket失败:', error);
+            throw error;
+        }
+    }
+    
+    /**
+     * 将Float32Array转换为16位PCM数据
+     */
+    function convertToPCM16(float32Array) {
+        const buffer = new ArrayBuffer(float32Array.length * 2);
+        const view = new DataView(buffer);
+        let offset = 0;
+        
+        for (let i = 0; i < float32Array.length; i++, offset += 2) {
+            const sample = Math.max(-1, Math.min(1, float32Array[i]));
+            view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
+        }
+        
+        return new Uint8Array(buffer);
+    }
+    
+    /**
+     * 处理语音识别消息
+     */
+    function handleVoiceMessage(message) {
+        console.log('🎯 语音识别消息:', message);
+        
+        switch (message.type) {
+            case 'result':
+                if (message.is_final) {
+                    // 最终识别结果
+                    console.log('📝 最终识别文本:', message.text);
+                    updateAISubtitle(`识别完成: ${message.text}`);
+                    updateUserSubtitle(`识别完成: ${message.text}`);
+                    
+                    // 显示用户语音消息到聊天界面
+                    displayLangGraphMessage({
+                        role: 'user',
+                        content: message.text,
+                        timestamp: new Date().toISOString(),
+                        source: 'voice'
+                    });
+                    
+                    // 显示AI思考状态
+                    currentThinkingMessageId = showThinkingMessage();
+                } else {
+                    // 实时识别结果 - 同时在AI区域和用户区域显示
+                    const recognitionText = message.text || '正在识别...';
+                    updateAISubtitle(`🎤 ${recognitionText}`);
+                    updateUserSubtitle(recognitionText, true); // 表示用户正在说话
+                }
+                break;
+                
+            case 'final_result':
+                // 讯飞识别的最终结果（但不触发LangGraph）
+                console.log('✅ 讯飞识别结果:', message.text);
+                const finalText = message.text || '等待识别完成...';
+                updateAISubtitle(`识别: ${finalText}`);
+                updateUserSubtitle(`识别: ${finalText}`);
+                // 注意：不再在这里触发LangGraph，等待前端停止录音时触发
+                break;
+                
+            case 'recording_stopped':
+                // 🎯 新增：前端停止录音触发的消息类型
+                console.log('🛑 录音已停止，完整识别文本:', message.text);
+                const stoppedText = message.text || '未识别到内容';
+                updateAISubtitle(`录音完成: ${stoppedText}`);
+                updateUserSubtitle(`录音完成: ${stoppedText}`);
+                
+                if (message.text && message.text.trim()) {
+                    // 显示用户语音消息到聊天界面
+                    displayLangGraphMessage({
+                        role: 'user',
+                        content: message.text,
+                        timestamp: new Date().toISOString(),
+                        source: 'voice'
+                    });
+                    
+                    // 显示AI思考状态
+                    currentThinkingMessageId = showThinkingMessage();
+                    updateAISubtitle('🧠 AI正在进行深度分析和情感感知...');
+                    updateUserSubtitle('AI正在分析您的回答...');
+                    
+                    console.log('🚀 录音停止已触发LangGraph感知节点处理');
+                } else {
+                    updateAISubtitle('未识别到有效语音内容');
+                    updateUserSubtitle('未识别到有效语音内容');
+                }
+                break;
+                
+            case 'voice_analysis':
+                // 接收到语调分析数据
+                console.log('🎼 接收到语调分析数据:', message.data);
+                
+                // 转发给语调分析器处理
+                if (typeof handleVoiceToneAnalysis === 'function') {
+                    handleVoiceToneAnalysis(message);
+                } else {
+                    console.warn('⚠️ handleVoiceToneAnalysis函数未找到');
+                }
+                break;
+                
+            case 'ai_response':
+                // 接收到AI回复 (如果后端直接集成了LangGraph)
+                console.log('🤖 接收到AI回复:', message.message);
+                
+                // 移除思考消息
+                if (currentThinkingMessageId) {
+                    removeThinkingMessage(currentThinkingMessageId);
+                    currentThinkingMessageId = null;
+                }
+                
+                // 显示AI回复消息
+                displayLangGraphMessage({
+                    role: 'assistant',
+                    content: message.message,
+                    timestamp: new Date().toISOString(),
+                    user_profile: message.user_profile,
+                    completeness_score: message.completeness_score,
+                    missing_info: message.missing_info,
+                    user_emotion: message.user_emotion,
+                    decision: message.decision,
+                    interview_stage: message.interview_stage
+                });
+                
+                // 更新字幕显示AI回复 - 同时显示在所有字幕区域
+                updateAllSubtitles(message.message, true);
+                
+                // 更新智能体状态面板
+                updateAgentStatusPanel({
+                    user_profile: message.user_profile,
+                    completeness_score: message.completeness_score,
+                    missing_info: message.missing_info,
+                    user_emotion: message.user_emotion,
+                    decision: message.decision,
+                    interview_stage: message.interview_stage
+                });
+                break;
+                
+            case 'error':
+                console.error('❌ 语音识别错误:', message.message);
+                showSystemMessage(`语音识别错误: ${message.message}`, 'error');
+                updateAISubtitle('语音识别出错');
+                
+                // 移除思考消息
+                if (currentThinkingMessageId) {
+                    removeThinkingMessage(currentThinkingMessageId);
+                    currentThinkingMessageId = null;
+                }
+                break;
+                
+            case 'status':
+                console.log('📊 语音识别状态:', message.status);
+                if (message.status === 'recording') {
+                    updateAISubtitle('🎤 开始录音...');
+                }
+                break;
+        }
+    }
+    
+    /**
+     * 将语音识别文本发送到LangGraph
+     */
+    async function sendVoiceTextToLangGraph(text) {
+        try {
+            console.log('🤖 发送语音文本到LangGraph:', text);
+            
+            // 调用LangGraph消息API
+            const data = await callAPI('/langgraph-chat/message', 'POST', {
+                session_id: currentSessionId,
+                message: text
+            });
+            
+            // 移除思考消息
+            if (currentThinkingMessageId) {
+                removeThinkingMessage(currentThinkingMessageId);
+                currentThinkingMessageId = null;
+            }
+            
+            if (data.success) {
+                // 显示AI回复
+                displayLangGraphMessage({
+                    role: 'assistant',
+                    content: data.message,
+                    timestamp: new Date().toISOString(),
+                    user_profile: data.user_profile,
+                    completeness_score: data.completeness_score,
+                    missing_info: data.missing_info,
+                    user_emotion: data.user_emotion,
+                    decision: data.decision,
+                    interview_stage: data.interview_stage
+                });
+                
+                // 更新字幕显示AI回复 - 同时显示在所有字幕区域
+                updateAllSubtitles(data.message, true);
+                
+                // 更新智能体状态
+                updateAgentStatusPanel({
+                    user_profile: data.user_profile,
+                    completeness_score: data.completeness_score,
+                    missing_info: data.missing_info,
+                    user_emotion: data.user_emotion,
+                    decision: data.decision,
+                    interview_stage: data.interview_stage
+                });
+                
+            } else {
+                showSystemMessage(`处理语音消息失败: ${data.message}`, 'error');
+                updateAISubtitle('处理失败');
+            }
+            
+        } catch (error) {
+            console.error('❌ 发送语音文本到LangGraph失败:', error);
+            showSystemMessage(`处理语音消息失败: ${error.message}`, 'error');
+            updateAISubtitle('处理出错');
+            
+            // 移除思考消息
+            if (currentThinkingMessageId) {
+                removeThinkingMessage(currentThinkingMessageId);
+                currentThinkingMessageId = null;
+            }
+        }
+    }
+    
+    /**
+     * 更新录音UI状态
+     */
+    function updateRecordingUI(recording) {
+        if (!voiceRecordBtn) return;
+        
+        if (recording) {
+            voiceRecordBtn.classList.add('mic-pulse');
+            voiceRecordBtn.classList.add('bg-red-500');
+            voiceRecordBtn.classList.remove('bg-primary');
+            voiceRecordBtn.innerHTML = '<i class="ri-stop-line text-white text-xl"></i>';
+            
+            // 更新字幕显示录音状态
+            updateAISubtitle('🎤 正在录音(实时模式)...');
+            updateUserSubtitle('正在录音...', true);
+            
+            // 🎯 新增：根据录音状态切换视频主次位置
+            if (typeof window.updateMainViewByRecording === 'function') {
+                window.updateMainViewByRecording(true);
+                console.log('📹 录音开始 - 用户切换到主位置');
+            }
+        } else {
+            voiceRecordBtn.classList.remove('mic-pulse');
+            voiceRecordBtn.classList.remove('bg-red-500');
+            voiceRecordBtn.classList.add('bg-primary');
+            voiceRecordBtn.innerHTML = '<i class="ri-mic-line text-white text-xl"></i>';
+            
+            updateAISubtitle('录音已停止，等待AI回复...');
+            updateUserSubtitle('录音已停止，等待AI回复...');
+            
+            // 🎯 新增：录音停止后延迟切换到AI主位置
+            if (typeof window.updateMainViewByRecording === 'function') {
+                // 延迟2秒切换，给用户一点反应时间
+                setTimeout(() => {
+                    window.updateMainViewByRecording(false);
+                    console.log('📹 录音结束 - AI切换到主位置');
+                }, 2000);
+            }
+        }
+    }
+    
+    /**
+     * 搜索会话
+     */
+    function searchSessions(searchTerm) {
+        if (!searchTerm.trim()) {
+            // 如果搜索词为空，显示所有会话
+            renderSessionsList(allSessions);
+            return;
+        }
+
+        const filteredSessions = allSessions.filter(session => {
+            const searchString = searchTerm.toLowerCase();
+            return (
+                (session.target_position || '').toLowerCase().includes(searchString) ||
+                (session.target_field || '').toLowerCase().includes(searchString) ||
+                (session.session_id || '').toLowerCase().includes(searchString)
+            );
+        });
+
+        renderSessionsList(filteredSessions);
     }
 
     // ==================== 简化的会话管理 ====================
@@ -354,7 +1096,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 // 重新加载并更新左侧会话列表
                 try {
                     const sessions = await loadUserSessions();
-                    renderSessionList(sessions);
+                    allSessions = sessions; // 更新会话数据
+                    renderSessionsList(sessions);
                     console.log('✅ 会话列表已更新');
                 } catch (error) {
                     console.warn('⚠️ 更新会话列表失败:', error);
@@ -444,7 +1187,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             // 重新渲染会话列表以更新活跃状态
             const sessions = await loadUserSessions();
-            renderSessionList(sessions);
+            allSessions = sessions; // 更新会话数据
+            renderSessionsList(sessions);
             
             // 更新智能体状态面板
             updateAgentStatusPanel({
@@ -525,7 +1269,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             // 重新加载并渲染会话列表
             const sessions = await loadUserSessions();
-            renderSessionList(sessions);
+            allSessions = sessions; // 更新会话数据
+            renderSessionsList(sessions);
             
             showSystemMessage('会话已删除', 'success');
             console.log(`✅ 成功删除会话: ${sessionId}`);
@@ -794,6 +1539,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                     ${messageData.completeness_score !== undefined ? `<span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">完整度${Math.round(messageData.completeness_score * 100)}%</span>` : ''}
                 </div>
             `;
+            
+            // 更新AI字幕 - 如果是AI消息则同时显示在所有字幕区域
+            updateAllSubtitles(messageData.content, true);
         }
         
         messageDiv.innerHTML = `
@@ -808,6 +1556,59 @@ document.addEventListener('DOMContentLoaded', async function() {
         
         messagesContainer.appendChild(messageDiv);
         scrollToBottom();
+    }
+    
+    /**
+     * 更新AI字幕 - 同时更新主位置和次位置的AI字幕
+     */
+    function updateAISubtitle(text) {
+        // 更新AI数字人主位置字幕
+        if (aiSubtitleText) {
+            aiSubtitleText.textContent = text;
+        }
+        
+        // 更新AI数字人次位置字幕
+        const aiSubtitleSecondary = document.getElementById('ai-subtitle-secondary');
+        if (aiSubtitleSecondary) {
+            aiSubtitleSecondary.textContent = text;
+        }
+        
+        console.log('📺 AI字幕已更新:', text.substring(0, 50) + '...');
+    }
+    
+    /**
+     * 更新所有字幕区域 - AI回复时同时更新所有字幕显示
+     */
+    function updateAllSubtitles(text, isAIResponse = false) {
+        if (isAIResponse) {
+            // AI回复时，更新所有位置的字幕
+            updateAISubtitle(text);
+            
+            // 同时在用户字幕区域显示AI回复（带AI前缀）
+            const userSubtitleText = document.getElementById('user-subtitle-text');
+            if (userSubtitleText) {
+                userSubtitleText.textContent = `🤖 AI: ${text}`;
+            }
+            
+            console.log('🗣️ AI回复同时显示在所有字幕区域');
+        } else {
+            // 用户语音识别结果只显示在AI字幕区域
+            updateAISubtitle(text);
+        }
+    }
+    
+    /**
+     * 更新用户字幕 - 用户录音和语音识别时的状态显示
+     */
+    function updateUserSubtitle(text, isUserSpeaking = false) {
+        const userSubtitleText = document.getElementById('user-subtitle-text');
+        if (userSubtitleText) {
+            if (isUserSpeaking) {
+                userSubtitleText.textContent = `🎤 ${text}`;
+            } else {
+                userSubtitleText.textContent = text;
+            }
+        }
     }
 
     function showThinkingMessage() {
@@ -942,91 +1743,325 @@ document.addEventListener('DOMContentLoaded', async function() {
     // ==================== 智能体状态面板 ====================
 
     function initializeAgentStatusPanel() {
-        // 更新右侧分析面板为智能体状态
+        // 纯JS逻辑初始化，HTML结构已在interview.html中定义
+        console.log('🤖 初始化智能体状态面板（纯JS逻辑）');
+        
+        // 绑定面板模式切换事件
+        bindPanelModeToggle();
+        
+        // 绑定展开面板按钮事件
+        bindExpandPanelButton();
+        
+        // 绑定右侧边缘鼠标感应事件
+        bindRightEdgeHover();
+        
+        console.log('✅ 智能体状态面板初始化完成');
+    }
+    
+    /**
+     * 绑定展开面板按钮功能
+     */
+    function bindExpandPanelButton() {
+        const expandPanelButton = document.getElementById('expandPanelButton');
+        if (expandPanelButton) {
+            // 如果有展开按钮，为其绑定点击事件
+            const expandBtn = expandPanelButton.querySelector('button');
+            if (expandBtn) {
+                expandBtn.addEventListener('click', function() {
+                    const panel = document.getElementById('analysisPanel');
+                    const expandButton = document.getElementById('expandPanelButton');
+                    
+                    if (panel && expandButton) {
+                        // 显示面板
+                        panel.style.width = '24rem';
+                        panel.style.opacity = '1';
+                        panel.style.display = 'block';
+                        
+                        // 隐藏展开按钮
+                        expandButton.style.opacity = '0';
+                        expandButton.style.transform = 'translateY(-50%) translateX(100%)';
+                        
+                        // 更新折叠按钮图标
+                        const toggleIcon = document.querySelector('#togglePanel i');
+                        if (toggleIcon) {
+                            toggleIcon.className = 'ri-arrow-right-line text-gray-600';
+                        }
+                        
+                        console.log('🔄 面板已通过展开按钮打开');
+                    }
+                });
+            }
+        }
+    }
+    
+    /**
+     * 绑定右侧边缘鼠标感应功能
+     */
+    function bindRightEdgeHover() {
+        const rightEdgeHover = document.getElementById('rightEdgeHover');
+        const expandPanelButton = document.getElementById('expandPanelButton');
+        let hoverTimeout = null;
+        
+        if (rightEdgeHover && expandPanelButton) {
+            console.log('🖱️ 绑定右侧边缘鼠标感应事件');
+            
+            // 鼠标进入右边缘区域
+            rightEdgeHover.addEventListener('mouseenter', function() {
+                const panel = document.getElementById('analysisPanel');
+                const isPanelVisible = panel && !panel.classList.contains('hidden') && 
+                                     panel.style.width !== '0px' && panel.style.display !== 'none';
+                
+                if (!isPanelVisible) {
+                    clearTimeout(hoverTimeout);
+                    showExpandButton();
+                    console.log('👆 鼠标进入右边缘，显示展开按钮');
+                }
+            });
+            
+            // 鼠标离开右边缘区域
+            rightEdgeHover.addEventListener('mouseleave', function() {
+                const panel = document.getElementById('analysisPanel');
+                const isPanelVisible = panel && !panel.classList.contains('hidden') && 
+                                     panel.style.width !== '0px' && panel.style.display !== 'none';
+                
+                if (!isPanelVisible) {
+                    hoverTimeout = setTimeout(() => {
+                        hideExpandButton();
+                        console.log('👈 鼠标离开右边缘，隐藏展开按钮');
+                    }, 500); // 500ms延迟隐藏，给用户时间点击
+                }
+            });
+            
+            // 鼠标进入展开按钮区域时取消隐藏
+            expandPanelButton.addEventListener('mouseenter', function() {
+                const panel = document.getElementById('analysisPanel');
+                const isPanelVisible = panel && !panel.classList.contains('hidden') && 
+                                     panel.style.width !== '0px' && panel.style.display !== 'none';
+                
+                if (!isPanelVisible) {
+                    clearTimeout(hoverTimeout);
+                    console.log('👆 鼠标进入展开按钮，保持显示');
+                }
+            });
+            
+            // 鼠标离开展开按钮区域时延迟隐藏
+            expandPanelButton.addEventListener('mouseleave', function() {
+                const panel = document.getElementById('analysisPanel');
+                const isPanelVisible = panel && !panel.classList.contains('hidden') && 
+                                     panel.style.width !== '0px' && panel.style.display !== 'none';
+                
+                if (!isPanelVisible) {
+                    hoverTimeout = setTimeout(() => {
+                        hideExpandButton();
+                        console.log('👈 鼠标离开展开按钮，隐藏');
+                    }, 300);
+                }
+            });
+        }
+        
+        /**
+         * 显示展开按钮
+         */
+        function showExpandButton() {
+            if (expandPanelButton) {
+                expandPanelButton.style.opacity = '1';
+                expandPanelButton.style.transform = 'translateY(-50%) translateX(0)';
+            }
+        }
+        
+        /**
+         * 隐藏展开按钮
+         */
+        function hideExpandButton() {
+            if (expandPanelButton) {
+                expandPanelButton.style.opacity = '0';
+                expandPanelButton.style.transform = 'translateY(-50%) translateX(100%)';
+            }
+        }
+    }
+    
+    /**
+     * 绑定面板模式切换功能
+     */
+    function bindPanelModeToggle() {
+        // 使用事件委托来确保新创建的按钮也能响应事件
         const analysisPanel = document.getElementById('analysisPanel');
+        
         if (analysisPanel) {
-            // 保持原有的折叠功能
-            const collapseToggle = analysisPanel.querySelector('#collapseToggle');
+            console.log('🔗 使用事件委托绑定面板模式切换');
             
-            // 替换内容为智能体状态面板
-            analysisPanel.innerHTML = `
-                <div class="relative">
-                    <button id="collapseToggle" class="absolute -left-8 top-1/2 -translate-y-1/2 w-8 h-16 bg-gray-50 border border-l-0 border-gray-100 rounded-l-lg flex items-center justify-center transition-colors hover:bg-gray-100 !rounded-none">
-                        <i class="ri-arrow-right-s-line text-gray-600 transition-transform duration-300"></i>
-                    </button>
-                    <div class="p-4 border-b border-gray-100">
-                        <h3 class="text-lg font-semibold text-gray-900 flex items-center space-x-2">
-                            <i class="ri-robot-line text-blue-600"></i>
-                            <span>LangGraph智能体</span>
-                        </h3>
-                    </div>
-                </div>
-                <div class="flex-1 overflow-y-auto p-4 space-y-4">
-                    <!-- 感知状态 -->
-                    <div class="bg-white rounded-lg p-4 border border-gray-200">
-                        <div class="flex items-center space-x-2 mb-3">
-                            <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                                <i class="ri-eye-line text-blue-600 text-sm"></i>
-                            </div>
-                            <h4 class="text-sm font-medium text-gray-900">🧠 感知层</h4>
-                        </div>
-                        <div id="perception-status" class="space-y-2 text-xs">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">信息完整度:</span>
-                                <span id="completeness-score" class="font-medium text-blue-600">0%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div id="completeness-bar" class="bg-gradient-to-r from-red-400 via-yellow-400 to-green-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
-                            </div>
-                            <div id="user-emotion" class="text-gray-600">
-                                <span>用户情绪:</span>
-                                <span id="emotion-display" class="ml-1 px-2 py-0.5 bg-gray-100 rounded text-gray-700">未知</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 决策状态 -->
-                    <div class="bg-white rounded-lg p-4 border border-gray-200">
-                        <div class="flex items-center space-x-2 mb-3">
-                            <div class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
-                                <i class="ri-brain-line text-purple-600 text-sm"></i>
-                            </div>
-                            <h4 class="text-sm font-medium text-gray-900">🤖 决策层</h4>
-                        </div>
-                        <div id="decision-status" class="space-y-2 text-xs">
-                            <div>
-                                <span class="text-gray-600">当前策略:</span>
-                                <span id="decision-action" class="ml-1 px-2 py-0.5 bg-purple-100 text-purple-800 rounded">等待中</span>
-                            </div>
-                            <div id="decision-reasoning" class="text-gray-600 text-xs">
-                                <span class="font-medium">推理:</span>
-                                <div id="reasoning-text" class="mt-1 text-gray-500">等待用户输入...</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 行动状态 -->
-                    <div class="bg-white rounded-lg p-4 border border-gray-200">
-                        <div class="flex items-center space-x-2 mb-3">
-                            <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                                <i class="ri-flashlight-line text-green-600 text-sm"></i>
-                            </div>
-                            <h4 class="text-sm font-medium text-gray-900">⚡ 行动层</h4>
-                        </div>
-                        <div id="action-status" class="space-y-2 text-xs">
-                            <div id="recent-actions" class="text-gray-600">
-                                <span class="font-medium">最近行动:</span>
-                                <div id="action-timeline" class="mt-1 space-y-1 text-gray-500">
-                                    <div class="text-center py-2">暂无行动记录</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
+            // 移除之前可能存在的事件监听器，避免重复绑定
+            const existingHandler = analysisPanel._panelModeHandler;
+            if (existingHandler) {
+                analysisPanel.removeEventListener('click', existingHandler);
+            }
             
-            // 重新绑定折叠功能
-            bindCollapsePanelToggle();
+            // 定义事件处理函数
+            const handlePanelModeClick = (event) => {
+                const target = event.target;
+                
+                // 检查点击的是否是模式切换按钮
+                if (target.id === 'mode-analysis' || target.closest('#mode-analysis')) {
+                    switchToAnalysisMode();
+                    event.stopPropagation(); // 阻止事件冒泡
+                } else if (target.id === 'mode-agent' || target.closest('#mode-agent')) {
+                    switchToAgentMode();
+                    event.stopPropagation(); // 阻止事件冒泡
+                }
+            };
+            
+            // 保存处理函数引用，便于后续移除
+            analysisPanel._panelModeHandler = handlePanelModeClick;
+            
+            // 添加事件委托
+            analysisPanel.addEventListener('click', handlePanelModeClick);
+        }
+        
+        /**
+         * 切换到教练分析模式
+         */
+        function switchToAnalysisMode() {
+            const modeAnalysisBtn = document.getElementById('mode-analysis');
+            const modeAgentBtn = document.getElementById('mode-agent');
+            const analysisContent = document.getElementById('analysis-content');
+            const agentContent = document.getElementById('agent-content');
+            const panelModeIcon = document.getElementById('panel-mode-icon');
+            const panelModeTitle = document.getElementById('panel-mode-title');
+            
+            console.log('🎯 正在切换到教练分析模式...');
+            
+            // 更新按钮状态
+            if (modeAnalysisBtn) {
+                modeAnalysisBtn.className = 'px-3 py-1 text-xs rounded-md bg-white text-gray-900 shadow-sm transition-all';
+            }
+            if (modeAgentBtn) {
+                modeAgentBtn.className = 'px-3 py-1 text-xs rounded-md text-gray-600 hover:text-gray-900 transition-all';
+            }
+            
+            // 切换内容显示
+            if (analysisContent) {
+                analysisContent.classList.remove('hidden');
+                console.log('✅ 教练分析内容已显示');
+            }
+            if (agentContent) {
+                agentContent.classList.add('hidden');
+                console.log('✅ 智能体内容已隐藏');
+            }
+            
+            // 更新标题和图标
+            if (panelModeIcon) panelModeIcon.className = 'ri-brain-line text-primary';
+            if (panelModeTitle) panelModeTitle.textContent = 'AI 教练分析';
+            
+            console.log('🎯 已切换到教练分析模式');
+        }
+        
+        /**
+         * 切换到智能体模式
+         */
+        function switchToAgentMode() {
+            const modeAnalysisBtn = document.getElementById('mode-analysis');
+            const modeAgentBtn = document.getElementById('mode-agent');
+            const analysisContent = document.getElementById('analysis-content');
+            const agentContent = document.getElementById('agent-content');
+            const panelModeIcon = document.getElementById('panel-mode-icon');
+            const panelModeTitle = document.getElementById('panel-mode-title');
+            
+            console.log('🤖 正在切换到智能体模式...');
+            
+            // 更新按钮状态
+            if (modeAgentBtn) {
+                modeAgentBtn.className = 'px-3 py-1 text-xs rounded-md bg-white text-gray-900 shadow-sm transition-all';
+            }
+            if (modeAnalysisBtn) {
+                modeAnalysisBtn.className = 'px-3 py-1 text-xs rounded-md text-gray-600 hover:text-gray-900 transition-all';
+            }
+            
+            // 切换内容显示
+            if (agentContent) {
+                agentContent.classList.remove('hidden');
+                console.log('✅ 智能体内容已显示');
+            }
+            if (analysisContent) {
+                analysisContent.classList.add('hidden');
+                console.log('✅ 教练分析内容已隐藏');
+            }
+            
+            // 更新标题和图标
+            if (panelModeIcon) panelModeIcon.className = 'ri-robot-line text-blue-600';
+            if (panelModeTitle) panelModeTitle.textContent = 'LangGraph智能体';
+            
+            console.log('🤖 已切换到智能体模式');
+        }
+        
+        // 使用事件委托来绑定面板折叠按钮，确保DOM更新后仍能工作
+        if (analysisPanel) {
+            // 移除之前可能存在的面板切换事件监听器
+            const existingToggleHandler = analysisPanel._panelToggleHandler;
+            if (existingToggleHandler) {
+                analysisPanel.removeEventListener('click', existingToggleHandler);
+            }
+            
+            // 定义面板切换事件处理函数
+            const handleTogglePanelClick = (event) => {
+                const target = event.target;
+                
+                // 检查点击的是否是面板切换按钮
+                if (target.id === 'togglePanel' || target.closest('#togglePanel')) {
+                    togglePanelVisibility();
+                    event.stopPropagation(); // 阻止事件冒泡
+                }
+            };
+            
+            // 保存处理函数引用
+            analysisPanel._panelToggleHandler = handleTogglePanelClick;
+            
+            // 添加事件委托
+            analysisPanel.addEventListener('click', handleTogglePanelClick);
+            
+            console.log('🔄 使用事件委托绑定面板切换按钮');
+        }
+        
+        /**
+         * 切换面板显示/隐藏状态
+         */
+        function togglePanelVisibility() {
+            const panel = document.getElementById('analysisPanel');
+            const expandButton = document.getElementById('expandPanelButton');
+            const toggleBtn = document.getElementById('togglePanel');
+            const icon = toggleBtn?.querySelector('i');
+            
+            if (panel && expandButton) {
+                // 判断面板当前是否可见
+                const isVisible = panel.style.width !== '0px' && 
+                                panel.style.display !== 'none' && 
+                                !panel.classList.contains('hidden');
+                
+                if (isVisible) {
+                    // 隐藏面板
+                    panel.style.width = '0px';
+                    panel.style.opacity = '0';
+                    panel.style.display = 'none';
+                    if (icon) icon.className = 'ri-arrow-left-line text-gray-600';
+                    
+                    // 确保展开按钮初始状态为隐藏
+                    expandButton.style.opacity = '0';
+                    expandButton.style.transform = 'translateY(-50%) translateX(100%)';
+                    
+                    console.log('🔄 面板已收起，展开按钮待激活');
+                } else {
+                    // 显示面板
+                    panel.style.width = '24rem';
+                    panel.style.opacity = '1';
+                    panel.style.display = 'block';
+                    if (icon) icon.className = 'ri-arrow-right-line text-gray-600';
+                    
+                    // 面板展开时隐藏展开按钮
+                    expandButton.style.opacity = '0';
+                    expandButton.style.transform = 'translateY(-50%) translateX(100%)';
+                    
+                    console.log('🔄 面板已展开');
+                }
+            }
         }
     }
 
@@ -1155,18 +2190,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         return classes[actionType] || 'bg-gray-100 text-gray-800';
     }
 
-    function bindCollapsePanelToggle() {
-        const collapseToggle = document.getElementById('collapseToggle');
-        if (collapseToggle) {
-            collapseToggle.addEventListener('click', function() {
-                // 简化的折叠功能
-                const panel = document.getElementById('analysisPanel');
-                if (panel) {
-                    panel.classList.toggle('collapsed');
-                }
-            });
-        }
-    }
+
 
     // ==================== UI渲染函数 ====================
 
