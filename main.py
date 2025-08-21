@@ -98,6 +98,26 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning(f"⚠️ 持久化管理器初始化失败，使用传统方式: {e}")
         app.state.persistence_available = False
+
+    # 启动时尝试自动同步学习资源到向量库（可关闭 AUTO_INGEST_LEARNING_RESOURCES）
+    try:
+        AUTO = os.environ.get("AUTO_INGEST_LEARNING_RESOURCES", "true").lower() == "true"
+        data_path = os.environ.get("LEARNING_RESOURCES_JSON", "data/learning_resources/learning_resources.json")
+        if AUTO and os.path.exists(data_path):
+            from src.tools.vector_search import create_learning_resource_manager
+            import json
+            lrm = create_learning_resource_manager()
+            with open(data_path, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+                if isinstance(raw, list) and raw:
+                    result = lrm.upsert_resources(raw, source="user_json_v1", version=os.environ.get("RES_VER","startup"), remove_stale=False)
+                    logger.info(f"✅ 学习资源已自动同步到向量库: upsert={result['upserted']}, removed={result['removed']}")
+                else:
+                    logger.info("ℹ️ 学习资源文件为空，跳过同步")
+        else:
+            logger.info("ℹ️ 跳过自动学习资源入库(配置关闭或文件不存在)")
+    except Exception as e:
+        logger.warning(f"⚠️ 自动同步学习资源失败: {e}")
     
     # 初始化实时多模态分析器
     try:

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>能力评估 - 动态题库</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#2196F3',secondary:'#FF5722'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<style>
+body { font-family: "Noto Sans SC", "Roboto", sans-serif; }
+.question-card { transition: box-shadow .2s ease; }
+.question-card:focus-within { box-shadow: 0 0 0 3px rgba(33,150,243,.15); }
+.choice-item { transition: border-color .15s ease, background-color .15s ease; }
+.choice-item.active { border-color: #2196F3; background-color: rgba(33,150,243,.05); }
+.mono { font-family: 'Menlo','Monaco','Courier New',monospace; }
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+<div id="navbar-container"></div>
+
+<main class="container mx-auto px-4 py-6">
+  <div class="mb-6">
+    <a href="./assessment-options.html" class="text-sm text-gray-500 hover:text-primary">← 返回能力评估中心</a>
+  </div>
+
+  <div id="intro-section" class="bg-white rounded-lg shadow-sm p-6">
+    <div class="flex items-start justify-between">
+      <div>
+        <h1 id="assessment-title" class="text-xl font-semibold text-gray-900 mb-2">能力评估</h1>
+        <p id="assessment-desc" class="text-gray-600 text-sm">请先阅读说明并选择难度，点击开始后进入答题。</p>
+      </div>
+      <div class="flex items-center space-x-3">
+        <label class="text-sm text-gray-600">难度</label>
+        <select id="difficulty-select" class="appearance-none pl-3 pr-8 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 text-sm bg-white">
+          <option value="junior">初级</option>
+          <option value="middle" selected>中级</option>
+          <option value="senior">高级</option>
+        </select>
+      </div>
+    </div>
+    <div class="mt-4 p-4 bg-primary/5 border border-primary/20 rounded-lg">
+      <h2 class="font-medium text-gray-900 mb-2">评估说明</h2>
+      <p id="instructions" class="text-sm text-gray-700">加载中...</p>
+    </div>
+    <div class="mt-4 flex items-center justify-between">
+      <div class="text-sm text-gray-500">预计时长：<span id="time-limit">--</span> 分钟</div>
+      <button id="start-btn" class="px-5 py-2 bg-primary text-white rounded-button text-sm">开始评估</button>
+    </div>
+  </div>
+
+  <div id="exam-section" class="hidden">
+    <div class="bg-white rounded-lg shadow-sm p-4 mb-4 flex items-center justify-between">
+      <div class="text-sm text-gray-700">进度：<span id="progress-text">0/0</span></div>
+      <div class="flex items-center space-x-2">
+        <i class="ri-time-line text-primary"></i>
+        <span id="timer-text" class="text-sm font-medium">--:--</span>
+      </div>
+    </div>
+
+    <div id="question-container" class="bg-white rounded-lg shadow-sm p-6 question-card"></div>
+
+    <div class="mt-4 flex items-center justify-between">
+      <button id="prev-btn" class="px-4 py-2 border border-gray-200 rounded-button bg-white text-gray-700">上一题</button>
+      <div class="space-x-2">
+        <button id="save-btn" class="px-4 py-2 border border-gray-200 rounded-button bg-white text-gray-700">保存当前题</button>
+        <button id="next-btn" class="px-4 py-2 bg-primary text-white rounded-button">下一题</button>
+      </div>
+    </div>
+
+    <div id="submit-bar" class="hidden mt-6 text-center">
+      <button id="submit-btn" class="px-6 py-3 bg-primary text-white rounded-button">提交评估</button>
+      <p class="mt-2 text-sm text-gray-500">提交后将无法修改答案</p>
+    </div>
+  </div>
+
+  <div id="result-section" class="hidden bg-white rounded-lg shadow-sm p-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-3">评估结果</h2>
+    <div class="text-gray-700 mb-2">分数：<span id="result-score" class="font-medium">--</span></div>
+    <div class="text-gray-700 mb-2">等级：<span id="result-level" class="font-medium">--</span></div>
+    <div class="mt-3">
+      <h3 class="font-medium text-gray-900 mb-2">分析</h3>
+      <pre id="result-analysis" class="whitespace-pre-wrap text-sm text-gray-700"></pre>
+    </div>
+    <div class="mt-3">
+      <h3 class="font-medium text-gray-900 mb-2">改进建议</h3>
+      <ul id="result-suggestions" class="list-disc pl-5 text-sm text-gray-700"></ul>
+    </div>
+    <div class="mt-6 text-center">
+      <a href="./assessment-options.html" class="text-primary">返回能力评估中心</a>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-4 right-4 px-4 py-3 bg-green-50 border border-green-200 text-green-700 rounded-lg shadow hidden"></div>
+</main>
+
+<script src="./js/auth-manager.js"></script>
+<script src="./components/navbar.js"></script>
+<script src="./js/assessment.js"></script>
+
+</body>
+</html>
+

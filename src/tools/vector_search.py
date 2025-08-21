@@ -5,6 +5,7 @@
 import json
 import uuid
 from typing import List, Dict, Any, Optional
+import hashlib
 import chromadb
 from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
@@ -272,6 +273,80 @@ class LearningResourceManager:
             ids=ids,
             embeddings=embeddings
         )
+
+    def upsert_resources(
+        self,
+        resources: List[Dict[str, Any]],
+        source: str = "user_json_v1",
+        version: str = "v1",
+        remove_stale: bool = False
+    ) -> Dict[str, Any]:
+        """批量Upsert学习资源（稳定ID、可选清理未出现旧条目）
+
+        - 稳定ID优先使用入参的 id；否则以 title|url 计算sha1前缀
+        - metadata 写入 description/field/keywords/image/source/version
+        - 向量文本: 标题 + 描述 + 关键词
+        """
+
+        collection = self.vector_tool.client.get_collection(self.collection_name)
+
+        documents: List[str] = []
+        metadatas: List[Dict[str, Any]] = []
+        ids: List[str] = []
+
+        for resource in resources:
+            # 稳定ID
+            if resource.get("id"):
+                rid = str(resource["id"]) 
+            else:
+                base = f"{resource.get('title','')}|{resource.get('url','')}"
+                rid = f"lr_{hashlib.sha1(base.encode('utf-8')).hexdigest()[:24]}"
+
+            # 文档内容（标题+描述+关键词）
+            keywords = resource.get("keywords", "")
+            if isinstance(keywords, list):
+                keywords = ",".join([str(x) for x in keywords])
+            doc_text = f"{resource.get('title','')} {resource.get('description','')} {keywords}".strip()
+
+            # 元数据
+            metadata = {
+                "title": resource.get("title", ""),
+                "url": resource.get("url", ""),
+                "type": resource.get("type", "article"),
+                "competency": resource.get("competency", "general"),
+                "difficulty": resource.get("difficulty", "beginner"),
+                "description": resource.get("description", ""),
+                "field": resource.get("field", ""),
+                "keywords": keywords,
+                "image": resource.get("image") or resource.get("Image") or "",
+                "source": source,
+                "version": version,
+            }
+
+            documents.append(doc_text)
+            metadatas.append(metadata)
+            ids.append(rid)
+
+        embeddings = self.vector_tool.encoder.encode(documents).tolist()
+
+        collection.upsert(
+            documents=documents,
+            metadatas=metadatas,
+            ids=ids,
+            embeddings=embeddings,
+        )
+
+        removed = 0
+        if remove_stale and source:
+            existing = collection.get(where={"source": {"$eq": source}})
+            exist_ids = set(existing.get("ids", []) or [])
+            keep_ids = set(ids)
+            to_delete = list(exist_ids - keep_ids)
+            if to_delete:
+                collection.delete(ids=to_delete)
+                removed = len(to_delete)
+
+        return {"upserted": len(ids), "removed": removed}
     
     def search_resources(
         self, 
