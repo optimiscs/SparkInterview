@@ -504,7 +504,11 @@ async def get_learning_path(
             "url": resource_metadata.get("url", ""),
             "type": resource_metadata.get("type", "article"),
             "competency": resource_metadata.get("competency", ""),
-            "difficulty": resource_metadata.get("difficulty", "beginner")
+            "difficulty": resource_metadata.get("difficulty", "beginner"),
+            # 扩展字段，便于前端展示
+            "image": resource_metadata.get("image", ""),
+            "field": resource_metadata.get("field", ""),
+            "keywords": resource_metadata.get("keywords", "")
         })
     
     return LearningPathResponse(
