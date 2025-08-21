@@ -46,6 +46,14 @@ ASSESSMENT_QUESTIONS = {
             "content": "请设计一个简单的URL短链接服务，说明核心组件和工作流程。",
             "options": None,
             "max_words": 300
+        },
+        {
+            "id": "tech_code_1",
+            "type": "code",
+            "title": "编码实现",
+            "content": "请使用任意一种编程语言实现一个 LRUCache，支持 get 与 put 操作，尽量保证两种操作的时间复杂度为 O(1)。",
+            "options": None,
+            "max_words": None
         }
     ],
     
@@ -358,6 +366,17 @@ def analyze_assessment_result(session: Dict[str, Any]) -> Dict[str, Any]:
                 if len(answer.strip()) > 50:
                     quality_bonus += 15
                 if len(answer.strip()) > 150:
+                    quality_bonus += 10
+            elif question["type"] == "code":
+                # 代码题根据代码长度与是否包含常见关键词给予加分（简化）
+                code_text = answer.strip()
+                if len(code_text) > 50:
+                    quality_bonus += 10
+        
+                # 简单关键词判断（不区分语言）
+                lowered = code_text.lower()
+                keywords = ["class", "struct", "map", "dict", "linked", "node", "cache", "lru", "get(", "put("]
+                if any(k in lowered for k in keywords):
                     quality_bonus += 10
     
     # 计算最终分数

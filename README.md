@@ -133,6 +133,56 @@ python main.py
 - 面试题库（按领域、难度分类）
 - 学习资源库（按能力维度分类）
 
+#### 学习资源向量化入库
+
+数据文件：`data/learning_resources/learning_resources.json`
+
+必填字段：`title, description, url, type, competency, difficulty`
+
+- `type`: `article|video|course|book|website|project|tool|practice`
+- `competency`: `professional_knowledge|skill_match|communication_ability|logical_thinking|stress_resilience`
+- `difficulty`: `beginner|intermediate|advanced`
+
+可选字段：`field|keywords(array|string)|image(Image)`（进入元数据与展示）
+
+一键入库脚本：
+
+```bash
+pip install -r requirements.txt
+python scripts/ingest_learning_resources.py --path data/learning_resources/learning_resources.json --version 20250820
+
+# 同步删除同一来源中本次未出现的旧资源
+python scripts/ingest_learning_resources.py --version 20250820 --remove-stale
+```
+
+验证：
+
+```bash
+# 统计集合条数
+python -c "import chromadb;from chromadb.config import Settings;c=chromadb.PersistentClient(path='./data/chroma_db',settings=Settings(allow_reset=True,anonymized_telemetry=False));print(len(c.get_collection('learning_resources').get()['ids']))"
+
+# 试检索
+python -c "from src.tools.vector_search import create_learning_resource_manager;l=create_learning_resource_manager();print(l.search_resources('logical_thinking',3))"
+```
+
+#### 启动即自动入库与检查更新
+
+为避免每次手动执行脚本，系统启动时会自动尝试将 `data/learning_resources/learning_resources.json` 同步到向量库（可关闭）：
+
+- 环境变量控制：
+  - `AUTO_INGEST_LEARNING_RESOURCES=true`（默认true）
+  - `LEARNING_RESOURCES_JSON=./data/learning_resources/learning_resources.json`
+  - `RES_VER=startup`（可指定批次号）
+
+逻辑位于 `main.py` 应用启动阶段，调用 `LearningResourceManager.upsert_resources()`：
+
+- 稳定ID（优先使用`id`，否则以`title|url`生成sha1前缀）
+- 向量文本：`title + description + keywords`
+- 元数据：`title/url/type/competency/difficulty/description/field/keywords/image/source/version`
+- `remove_stale` 默认关闭，如需定期清理请改为执行脚本带 `--remove-stale`
+
+如需关闭该自动行为：在 `config.env` 或环境变量中设置 `AUTO_INGEST_LEARNING_RESOURCES=false`。
+
 ## 📁 项目结构
 
 ```
