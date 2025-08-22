@@ -148,6 +148,9 @@ class InterviewCompletionManager {
                     localStorage.setItem(`report_id_${this.currentSessionId}`, response.report_id);
                 }
                 
+                // 触发面试结束事件，通知状态管理器
+                this.dispatchInterviewEndEvent(response.summary_message, response.report_id);
+                
                 this.showMessage('✅ 面试已结束，报告已生成', 'success');
                 
             } else {
@@ -344,6 +347,9 @@ class InterviewCompletionManager {
             if (responseData.report_id) {
                 localStorage.setItem(`report_id_${this.currentSessionId}`, responseData.report_id);
             }
+            
+            // 触发面试结束事件，通知状态管理器
+            this.dispatchInterviewEndEvent(responseData.summary_message, responseData.report_id);
         }
     }
     
@@ -470,6 +476,27 @@ class InterviewCompletionManager {
                 messageDiv.remove();
             }
         }, 3000);
+    }
+    
+    /**
+     * 触发面试结束事件
+     */
+    dispatchInterviewEndEvent(summaryMessage = null, reportId = null) {
+        const event = new CustomEvent('interviewEnded', {
+            detail: {
+                sessionId: this.currentSessionId,
+                reportId: reportId,
+                summaryMessage: summaryMessage,
+                timestamp: Date.now()
+            }
+        });
+        
+        document.dispatchEvent(event);
+        console.log('📡 面试结束事件已触发:', {
+            sessionId: this.currentSessionId,
+            reportId,
+            summaryMessage
+        });
     }
     
     /**

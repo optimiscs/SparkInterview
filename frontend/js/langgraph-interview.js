@@ -525,6 +525,16 @@ document.addEventListener('DOMContentLoaded', async function() {
         try {
             console.log('🎤 开始录音...');
             
+            // 🤖 中断数字人播放 - 避免录音时的声音冲突
+            if (typeof window.interruptAvatar === 'function') {
+                try {
+                    await window.interruptAvatar();
+                    console.log('⏸️ 已中断数字人播放，准备开始录音');
+                } catch (error) {
+                    console.warn('⚠️ 中断数字人播放失败，继续录音:', error);
+                }
+            }
+            
             // 创建语音识别会话
             await createVoiceSession();
             
@@ -1070,8 +1080,31 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             if (result.success) {
                 // 保存当前会话信息
+                const previousSessionId = currentSessionId;
                 currentSessionId = result.session_id;
                 localStorage.setItem('current_session_id', currentSessionId);
+                
+                // 触发会话切换事件，通知状态管理器
+                const sessionSwitchedEvent = new CustomEvent('sessionSwitched', {
+                    detail: {
+                        sessionId: currentSessionId,
+                        previousSessionId: previousSessionId,
+                        timestamp: Date.now(),
+                        isNewSession: true
+                    }
+                });
+                document.dispatchEvent(sessionSwitchedEvent);
+                
+                // 触发新会话创建事件，通知欢迎界面管理器
+                const newSessionEvent = new CustomEvent('newSessionCreated', {
+                    detail: {
+                        sessionId: currentSessionId,
+                        timestamp: Date.now()
+                    }
+                });
+                document.dispatchEvent(newSessionEvent);
+                
+                console.log('📡 新会话创建事件已触发:', { sessionId: currentSessionId });
                 
                 // 清空消息容器并显示欢迎消息
                 messagesContainer.innerHTML = '';
@@ -1137,6 +1170,17 @@ document.addEventListener('DOMContentLoaded', async function() {
             const previousSessionId = currentSessionId;
             currentSessionId = sessionId;
             localStorage.setItem('current_session_id', sessionId);
+            
+            // 触发会话切换事件，通知状态管理器
+            const event = new CustomEvent('sessionSwitched', {
+                detail: {
+                    sessionId: sessionId,
+                    previousSessionId: previousSessionId,
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
+            console.log('📡 会话切换事件已触发:', { from: previousSessionId, to: sessionId });
             
             // 清空消息容器
             messagesContainer.innerHTML = '';
@@ -1591,10 +1635,57 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
             
             console.log('🗣️ AI回复同时显示在所有字幕区域');
+            
+            // 🤖 数字人朗读功能 - AI回复时触发数字人播放
+            if (text && text.trim() && typeof window.speakText === 'function') {
+                try {
+                    console.log('🎤 触发数字人朗读:', text.substring(0, 50) + (text.length > 50 ? '...' : ''));
+                    
+                    // 清理文本，移除特殊标记
+                    const cleanText = cleanTextForSpeech(text);
+                    
+                    if (cleanText && cleanText.trim()) {
+                        // 调用数字人朗读
+                        window.speakText(cleanText, {
+                            interruptible: true, // 允许中断
+                            voice: 'x4_yuexiaoni_assist', // 悦小妮助手
+                            speed: 50,
+                            volume: 80
+                        }).then(requestId => {
+                            console.log('✅ 数字人朗读请求已发送:', requestId);
+                        }).catch(error => {
+                            console.error('❌ 数字人朗读失败:', error);
+                        });
+                    }
+                } catch (error) {
+                    console.error('❌ 调用数字人朗读功能失败:', error);
+                }
+            }
         } else {
             // 用户语音识别结果只显示在AI字幕区域
             updateAISubtitle(text);
         }
+    }
+    
+    /**
+     * 清理文本用于语音播放
+     */
+    function cleanTextForSpeech(text) {
+        if (!text) return '';
+        
+        return text
+            // 移除HTML标签
+            .replace(/<[^>]*>/g, '')
+            // 移除Markdown标记
+            .replace(/\*\*(.*?)\*\*/g, '$1')
+            .replace(/\*(.*?)\*/g, '$1')
+            .replace(/`(.*?)`/g, '$1')
+            // 移除特殊符号
+            .replace(/[#*`\[\]]/g, '')
+            // 替换多个空格为单个空格
+            .replace(/\s+/g, ' ')
+            // 去除首尾空格
+            .trim();
     }
     
     /**

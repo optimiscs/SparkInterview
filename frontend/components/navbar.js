@@ -122,7 +122,7 @@ class NavbarComponent {
                                 </div>
                                 首页
                             </a>
-                            <a href="${this.getLinkPath('frontend/interview_agent.html')}" class="flex items-center px-3 py-2 text-sm font-medium ${currentPage === 'interview' ? 'text-primary' : 'text-gray-700 hover:text-gray-900'}">
+                            <a href="${this.getLinkPath('frontend/interview.html')}" class="flex items-center px-3 py-2 text-sm font-medium ${currentPage === 'interview' ? 'text-primary' : 'text-gray-700 hover:text-gray-900'}">
                                 <div class="w-5 h-5 flex items-center justify-center mr-2">
                                     <i class="ri-video-chat-line"></i>
                                 </div>

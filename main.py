@@ -527,7 +527,7 @@ async def get_architecture_info():
                 }
             },
             "communication_protocols": {
-                "mcp": {
+              "mcp": {
                     "description": "Model Context Protocol",
                     "enabled": getattr(app.state, 'mcp_enabled', False),
                     "features": ["工具注册", "资源管理", "标准化接口"]

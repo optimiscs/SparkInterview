@@ -11,6 +11,34 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- 讯飞星火数字人SDK -->
+<script type="module">
+    // 导入数字人SDK和相关类型
+    import Avatar, { SDKEvents, PlayerEvents, RecorderEvents, UserMedia } from './avatar-sdk-web_3.1.2.1002/index.js';
+    
+    // 将SDK和事件类型暴露到全局作用域
+    window.IAvatarPlatform = Avatar;
+    window.AvatarPlatform = Avatar;
+    window.SDKEvents = SDKEvents;
+    window.PlayerEvents = PlayerEvents;
+    window.RecorderEvents = RecorderEvents;
+    window.UserMedia = UserMedia;
+    
+    console.log('🤖 数字人SDK已加载:', typeof Avatar);
+    console.log('📡 SDK事件类型已加载:', !!SDKEvents);
+    
+    // 触发自定义事件通知SDK已加载
+    window.dispatchEvent(new CustomEvent('avatarSDKLoaded', { 
+        detail: { 
+            Avatar, 
+            SDKEvents, 
+            PlayerEvents, 
+            RecorderEvents, 
+            UserMedia 
+        } 
+    }));
+</script>
 <script>
 tailwind.config = {
 theme: {
@@ -70,7 +98,32 @@ background: #4f4f4f;
 background: #264f78;
 }
 .video-container {
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: #ffffff;
+border: 1px solid #e5e7eb;
+box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+#ai-video-main {
+/* 限制数字人容器高度，为字幕区域预留空间 */
+position: relative;
+display: flex;
+flex-direction: column;
+}
+#ai-video-main .subtitle-overlay {
+/* 确保字幕区域始终可见 */
+z-index: 10;
+position: absolute;
+bottom: 0;
+left: 0;
+right: 0;
+flex-shrink: 0;
+}
+/* 数字人内容区域样式调整 */
+#ai-video-main > div:not(.subtitle-overlay) {
+flex: 1;
+display: flex;
+align-items: center;
+justify-content: center;
+min-height: 0;
 }
 .glass-effect {
 background: rgba(255, 255, 255, 0.95);
@@ -93,7 +146,12 @@ animation: pulse 2s infinite;
 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
 }
 .subtitle-overlay {
-background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%);
+background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.9) 100%);
+}
+.subtitle-overlay .bg-black {
+/* 增强字幕背景的对比度 */
+background-color: rgba(0, 0, 0, 0.85) !important;
+backdrop-filter: blur(4px);
 }
 .fullscreen-mode {
 position: fixed !important;
@@ -213,13 +271,89 @@ pointer-events: all;
 </div>
 
 <!-- 主内容区域 -->
-<div class="flex-1 relative bg-gradient-to-br from-slate-900 to-slate-800">
+<div class="flex-1 relative ">
 <!-- 主位置区域 -->
 <div id="main-stage" class="absolute inset-4 rounded-xl overflow-hidden">
-<!-- AI 数字人视频 (默认主位置) -->
+
+<!-- 欢迎界面 (默认显示) -->
+<div id="welcome-interface" class="w-full h-full relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
+<div class="text-center max-w-4xl mx-auto px-8">
+<!-- 主标题区域 -->
+<div class="mb-12">
+<div class="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+<i class="ri-user-heart-line text-white text-4xl"></i>
+</div>
+<h1 class="text-4xl font-bold text-gray-900 mb-4">
+欢迎来到 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">AI 面试官</span>
+</h1>
+<p class="text-xl text-gray-600 leading-relaxed">
+基于讯飞星火大模型的智能面试平台，为您提供专业、全面的面试体验
+</p>
+</div>
+
+<!-- 功能特性卡片 -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
+<div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+<i class="ri-brain-line text-blue-600 text-xl"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900 mb-2">智能对话</h3>
+<p class="text-gray-600 text-sm">AI面试官实时互动，模拟真实面试场景</p>
+</div>
+
+<div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
+<div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+<i class="ri-eye-line text-green-600 text-xl"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900 mb-2">多模态分析</h3>
+<p class="text-gray-600 text-sm">实时分析语音语调、体态表情和回答质量</p>
+</div>
+
+<div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
+<div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+<i class="ri-file-text-line text-purple-600 text-xl"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900 mb-2">智能报告</h3>
+<p class="text-gray-600 text-sm">生成详细的面试评估报告和改进建议</p>
+</div>
+</div>
+
+<!-- 操作按钮区域 -->
+<div class="space-y-4">
+<button id="welcome-start-interview" class="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold text-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+<i class="ri-play-circle-line mr-2"></i>
+开始新面试
+</button>
+
+<div class="flex items-center justify-center space-x-6 text-sm text-gray-500">
+<div class="flex items-center">
+<i class="ri-time-line mr-1"></i>
+<span>15-30分钟</span>
+</div>
+<div class="flex items-center">
+<i class="ri-shield-check-line mr-1"></i>
+<span>安全保密</span>
+</div>
+<div class="flex items-center">
+<i class="ri-award-line mr-1"></i>
+<span>专业评估</span>
+</div>
+</div>
+</div>
+
+<!-- 底部提示 -->
+<div class="mt-8 p-4 bg-blue-50/50 rounded-lg border border-blue-100">
+<p class="text-sm text-blue-800">
+<i class="ri-lightbulb-line mr-1"></i>
+提示：您可以在左侧选择历史面试记录，或者点击上方按钮开始新的面试体验
+</p>
+</div>
+</div>
+</div>
+
+<!-- AI 数字人视频 (SDK集成) -->
 <div id="ai-video-main" class="w-full h-full relative video-container">
-<img src="https://readdy.ai/api/search-image?query=professional%20female%20AI%20interviewer%20with%20natural%20expressions%2C%20modern%20office%20background%2C%20clean%20lighting%2C%20realistic%20digital%20human%2C%20friendly%20and%20confident%20demeanor%2C%20business%20attire%2C%20eye%20contact%20with%20camera&width=800&height=600&seq=ai-interviewer-main&orientation=landscape"
-alt="AI面试官" class="w-full h-full object-cover object-top">
+<!-- 数字人将通过SDK动态加载到这里 -->
 <!-- 实时字幕区域 -->
 <div class="absolute bottom-0 left-0 right-0 subtitle-overlay p-6">
 <div class="bg-black bg-opacity-60 rounded-lg p-3">
@@ -319,8 +453,10 @@ alt="AI面试官" class="w-full h-full object-cover object-top">
 <div id="secondary-stage" class="absolute top-6 right-6 w-80 h-60 rounded-lg overflow-hidden shadow-xl transition-all duration-300 hidden">
 <!-- AI 数字人小窗 -->
 <div id="ai-video-secondary" class="w-full h-full relative video-container hidden">
-<img src="https://readdy.ai/api/search-image?query=professional%20female%20AI%20interviewer%20with%20natural%20expressions%2C%20modern%20office%20background%2C%20clean%20lighting%2C%20realistic%20digital%20human%2C%20friendly%20and%20confident%20demeanor%2C%20business%20attire%2C%20eye%20contact%20with%20camera&width=400&height=300&seq=ai-interviewer-secondary&orientation=landscape"
-alt="AI面试官" class="w-full h-full object-cover object-top">
+<!-- 数字人小窗将显示缩略视图 -->
+<div class="w-full h-full bg-white border border-gray-200 flex items-center justify-center">
+    <div class="text-gray-700 text-sm">AI面试官</div>
+</div>
 <!-- 小窗字幕 -->
 <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 p-2">
 <p class="text-white text-xs leading-relaxed" id="ai-subtitle-secondary">AI面试官</p>
@@ -1264,10 +1400,23 @@ document.addEventListener('DOMContentLoaded', function() {
         <script src="./js/voice-tone-analyzer.js"></script>
         <!-- 体态语言分析器脚本 -->
         <script src="./js/body-language-analyzer.js"></script>
+        <!-- 面试结束状态管理器脚本 -->
+        <script src="./js/interview-end-state-manager.js"></script>
+        <!-- 欢迎界面管理器脚本 -->
+        <script src="./js/welcome-interface-manager.js"></script>
         
-        <!-- 面板切换脚本 -->
-        <script src="./js/panel-toggle.js"></script>
-      
-    
+        
+        <!-- 数字人SDK集成管理器 -->
+        <script src="./js/avatar-integration-manager.js"></script>
+        
+        <!-- 数字人系统诊断工具 -->
+        <script src="./js/avatar-diagnostic.js"></script>
+        
+        <!-- 数字人调试助手 -->
+        <script src="./js/avatar-debug-helper.js"></script>
+        
+        <!-- 数字人快速测试脚本 -->
+        <script src="./js/avatar-quick-test.js"></script>
+        
 </body>
-</html></html>
+</html>

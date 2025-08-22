@@ -206,7 +206,7 @@ class LangGraphStarter:
         print(f"🌐 Web界面: http://localhost:{port}")
         print(f"📊 API文档: http://localhost:{port}/docs")
         print(f"🤖 LangGraph演示: http://localhost:{port}/frontend/langgraph-demo.html")
-        print(f"📋 原有界面: http://localhost:{port}/frontend/interview_agent.html")
+        print(f"📋 原有界面: http://localhost:{port}/frontend/interview.html")
         print("\\n🔧 API端点:")
         print("   POST /api/v1/langgraph-chat/start - 启动智能体")
         print("   POST /api/v1/langgraph-chat/message - 发送消息")
